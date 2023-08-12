@@ -8,13 +8,13 @@ export interface Record {
   name: string;
   /** pub_key represents a public key in any format */
   pubKey: Any | undefined;
-  /** local stores the public information about a locally stored key */
+  /** local stores the private key locally. */
   local?: Record_Local | undefined;
-  /** ledger stores the public information about a Ledger key */
+  /** ledger stores the information about a Ledger key. */
   ledger?: Record_Ledger | undefined;
-  /** Multi does not store any information. */
+  /** Multi does not store any other information. */
   multi?: Record_Multi | undefined;
-  /** Offline does not store any information. */
+  /** Offline does not store any other information. */
   offline?: Record_Offline | undefined;
 }
 export interface RecordProtoMsg {
@@ -27,13 +27,13 @@ export interface RecordAmino {
   name: string;
   /** pub_key represents a public key in any format */
   pub_key?: AnyAmino | undefined;
-  /** local stores the public information about a locally stored key */
+  /** local stores the private key locally. */
   local?: Record_LocalAmino | undefined;
-  /** ledger stores the public information about a Ledger key */
+  /** ledger stores the information about a Ledger key. */
   ledger?: Record_LedgerAmino | undefined;
-  /** Multi does not store any information. */
+  /** Multi does not store any other information. */
   multi?: Record_MultiAmino | undefined;
-  /** Offline does not store any information. */
+  /** Offline does not store any other information. */
   offline?: Record_OfflineAmino | undefined;
 }
 export interface RecordAminoMsg {
@@ -55,7 +55,6 @@ export interface RecordSDKType {
  */
 export interface Record_Local {
   privKey: Any | undefined;
-  privKeyType: string;
 }
 export interface Record_LocalProtoMsg {
   typeUrl: "/cosmos.crypto.keyring.v1.Local";
@@ -67,7 +66,6 @@ export interface Record_LocalProtoMsg {
  */
 export interface Record_LocalAmino {
   priv_key?: AnyAmino | undefined;
-  priv_key_type: string;
 }
 export interface Record_LocalAminoMsg {
   type: "cosmos-sdk/Local";
@@ -79,7 +77,6 @@ export interface Record_LocalAminoMsg {
  */
 export interface Record_LocalSDKType {
   priv_key: AnySDKType | undefined;
-  priv_key_type: string;
 }
 /** Ledger item */
 export interface Record_Ledger {
@@ -132,7 +129,7 @@ export interface Record_OfflineSDKType {}
 function createBaseRecord(): Record {
   return {
     name: "",
-    pubKey: undefined,
+    pubKey: Any.fromPartial({}),
     local: undefined,
     ledger: undefined,
     multi: undefined,
@@ -289,8 +286,7 @@ export const Record = {
 };
 function createBaseRecord_Local(): Record_Local {
   return {
-    privKey: undefined,
-    privKeyType: ""
+    privKey: Any.fromPartial({})
   };
 }
 export const Record_Local = {
@@ -299,9 +295,6 @@ export const Record_Local = {
   encode(message: Record_Local, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.privKey !== undefined) {
       Any.encode(message.privKey, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.privKeyType !== "") {
-      writer.uint32(18).string(message.privKeyType);
     }
     return writer;
   },
@@ -315,9 +308,6 @@ export const Record_Local = {
         case 1:
           message.privKey = Any.decode(reader, reader.uint32());
           break;
-        case 2:
-          message.privKeyType = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -327,44 +317,37 @@ export const Record_Local = {
   },
   fromJSON(object: any): Record_Local {
     return {
-      privKey: isSet(object.privKey) ? Any.fromJSON(object.privKey) : undefined,
-      privKeyType: isSet(object.privKeyType) ? String(object.privKeyType) : ""
+      privKey: isSet(object.privKey) ? Any.fromJSON(object.privKey) : undefined
     };
   },
   toJSON(message: Record_Local): unknown {
     const obj: any = {};
     message.privKey !== undefined && (obj.privKey = message.privKey ? Any.toJSON(message.privKey) : undefined);
-    message.privKeyType !== undefined && (obj.privKeyType = message.privKeyType);
     return obj;
   },
   fromPartial(object: DeepPartial<Record_Local>): Record_Local {
     const message = createBaseRecord_Local();
     message.privKey = object.privKey !== undefined && object.privKey !== null ? Any.fromPartial(object.privKey) : undefined;
-    message.privKeyType = object.privKeyType ?? "";
     return message;
   },
   fromSDK(object: Record_LocalSDKType): Record_Local {
     return {
-      privKey: object.priv_key ? Any.fromSDK(object.priv_key) : undefined,
-      privKeyType: object?.priv_key_type
+      privKey: object.priv_key ? Any.fromSDK(object.priv_key) : undefined
     };
   },
   toSDK(message: Record_Local): Record_LocalSDKType {
     const obj: any = {};
     message.privKey !== undefined && (obj.priv_key = message.privKey ? Any.toSDK(message.privKey) : undefined);
-    obj.priv_key_type = message.privKeyType;
     return obj;
   },
   fromAmino(object: Record_LocalAmino): Record_Local {
     return {
-      privKey: object?.priv_key ? Any.fromAmino(object.priv_key) : undefined,
-      privKeyType: object.priv_key_type
+      privKey: object?.priv_key ? Any.fromAmino(object.priv_key) : undefined
     };
   },
   toAmino(message: Record_Local): Record_LocalAmino {
     const obj: any = {};
     obj.priv_key = message.privKey ? Any.toAmino(message.privKey) : undefined;
-    obj.priv_key_type = message.privKeyType;
     return obj;
   },
   fromAminoMsg(object: Record_LocalAminoMsg): Record_Local {

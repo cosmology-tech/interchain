@@ -1,8 +1,8 @@
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { ConsensusParams, ConsensusParamsAmino, ConsensusParamsSDKType } from "../types/params";
-import { Header, HeaderAmino, HeaderSDKType } from "../types/types";
 import { ProofOps, ProofOpsAmino, ProofOpsSDKType } from "../crypto/proof";
 import { PublicKey, PublicKeyAmino, PublicKeySDKType } from "../crypto/keys";
+import { BlockIDFlag, blockIDFlagFromJSON, blockIDFlagToJSON } from "../types/validator";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, DeepPartial, toTimestamp, fromTimestamp, bytesFromBase64, base64FromBytes } from "../../helpers";
 export enum CheckTxType {
@@ -199,6 +199,50 @@ export function responseProcessProposal_ProposalStatusToJSON(object: ResponsePro
       return "UNRECOGNIZED";
   }
 }
+export enum ResponseVerifyVoteExtension_VerifyStatus {
+  UNKNOWN = 0,
+  ACCEPT = 1,
+  /**
+   * REJECT - Rejecting the vote extension will reject the entire precommit by the sender.
+   * Incorrectly implementing this thus has liveness implications as it may affect
+   * CometBFT's ability to receive 2/3+ valid votes to finalize the block.
+   * Honest nodes should never be rejected.
+   */
+  REJECT = 2,
+  UNRECOGNIZED = -1,
+}
+export const ResponseVerifyVoteExtension_VerifyStatusSDKType = ResponseVerifyVoteExtension_VerifyStatus;
+export const ResponseVerifyVoteExtension_VerifyStatusAmino = ResponseVerifyVoteExtension_VerifyStatus;
+export function responseVerifyVoteExtension_VerifyStatusFromJSON(object: any): ResponseVerifyVoteExtension_VerifyStatus {
+  switch (object) {
+    case 0:
+    case "UNKNOWN":
+      return ResponseVerifyVoteExtension_VerifyStatus.UNKNOWN;
+    case 1:
+    case "ACCEPT":
+      return ResponseVerifyVoteExtension_VerifyStatus.ACCEPT;
+    case 2:
+    case "REJECT":
+      return ResponseVerifyVoteExtension_VerifyStatus.REJECT;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return ResponseVerifyVoteExtension_VerifyStatus.UNRECOGNIZED;
+  }
+}
+export function responseVerifyVoteExtension_VerifyStatusToJSON(object: ResponseVerifyVoteExtension_VerifyStatus): string {
+  switch (object) {
+    case ResponseVerifyVoteExtension_VerifyStatus.UNKNOWN:
+      return "UNKNOWN";
+    case ResponseVerifyVoteExtension_VerifyStatus.ACCEPT:
+      return "ACCEPT";
+    case ResponseVerifyVoteExtension_VerifyStatus.REJECT:
+      return "REJECT";
+    case ResponseVerifyVoteExtension_VerifyStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 export enum MisbehaviorType {
   UNKNOWN = 0,
   DUPLICATE_VOTE = 1,
@@ -243,10 +287,7 @@ export interface Request {
   info?: RequestInfo | undefined;
   initChain?: RequestInitChain | undefined;
   query?: RequestQuery | undefined;
-  beginBlock?: RequestBeginBlock | undefined;
   checkTx?: RequestCheckTx | undefined;
-  deliverTx?: RequestDeliverTx | undefined;
-  endBlock?: RequestEndBlock | undefined;
   commit?: RequestCommit | undefined;
   listSnapshots?: RequestListSnapshots | undefined;
   offerSnapshot?: RequestOfferSnapshot | undefined;
@@ -254,6 +295,9 @@ export interface Request {
   applySnapshotChunk?: RequestApplySnapshotChunk | undefined;
   prepareProposal?: RequestPrepareProposal | undefined;
   processProposal?: RequestProcessProposal | undefined;
+  extendVote?: RequestExtendVote | undefined;
+  verifyVoteExtension?: RequestVerifyVoteExtension | undefined;
+  finalizeBlock?: RequestFinalizeBlock | undefined;
 }
 export interface RequestProtoMsg {
   typeUrl: "/tendermint.abci.Request";
@@ -265,10 +309,7 @@ export interface RequestAmino {
   info?: RequestInfoAmino | undefined;
   init_chain?: RequestInitChainAmino | undefined;
   query?: RequestQueryAmino | undefined;
-  begin_block?: RequestBeginBlockAmino | undefined;
   check_tx?: RequestCheckTxAmino | undefined;
-  deliver_tx?: RequestDeliverTxAmino | undefined;
-  end_block?: RequestEndBlockAmino | undefined;
   commit?: RequestCommitAmino | undefined;
   list_snapshots?: RequestListSnapshotsAmino | undefined;
   offer_snapshot?: RequestOfferSnapshotAmino | undefined;
@@ -276,6 +317,9 @@ export interface RequestAmino {
   apply_snapshot_chunk?: RequestApplySnapshotChunkAmino | undefined;
   prepare_proposal?: RequestPrepareProposalAmino | undefined;
   process_proposal?: RequestProcessProposalAmino | undefined;
+  extend_vote?: RequestExtendVoteAmino | undefined;
+  verify_vote_extension?: RequestVerifyVoteExtensionAmino | undefined;
+  finalize_block?: RequestFinalizeBlockAmino | undefined;
 }
 export interface RequestAminoMsg {
   type: "/tendermint.abci.Request";
@@ -287,10 +331,7 @@ export interface RequestSDKType {
   info?: RequestInfoSDKType | undefined;
   init_chain?: RequestInitChainSDKType | undefined;
   query?: RequestQuerySDKType | undefined;
-  begin_block?: RequestBeginBlockSDKType | undefined;
   check_tx?: RequestCheckTxSDKType | undefined;
-  deliver_tx?: RequestDeliverTxSDKType | undefined;
-  end_block?: RequestEndBlockSDKType | undefined;
   commit?: RequestCommitSDKType | undefined;
   list_snapshots?: RequestListSnapshotsSDKType | undefined;
   offer_snapshot?: RequestOfferSnapshotSDKType | undefined;
@@ -298,6 +339,9 @@ export interface RequestSDKType {
   apply_snapshot_chunk?: RequestApplySnapshotChunkSDKType | undefined;
   prepare_proposal?: RequestPrepareProposalSDKType | undefined;
   process_proposal?: RequestProcessProposalSDKType | undefined;
+  extend_vote?: RequestExtendVoteSDKType | undefined;
+  verify_vote_extension?: RequestVerifyVoteExtensionSDKType | undefined;
+  finalize_block?: RequestFinalizeBlockSDKType | undefined;
 }
 export interface RequestEcho {
   message: string;
@@ -411,32 +455,6 @@ export interface RequestQuerySDKType {
   height: bigint;
   prove: boolean;
 }
-export interface RequestBeginBlock {
-  hash: Uint8Array;
-  header: Header | undefined;
-  lastCommitInfo: CommitInfo | undefined;
-  byzantineValidators: Misbehavior[];
-}
-export interface RequestBeginBlockProtoMsg {
-  typeUrl: "/tendermint.abci.RequestBeginBlock";
-  value: Uint8Array;
-}
-export interface RequestBeginBlockAmino {
-  hash: Uint8Array;
-  header?: HeaderAmino | undefined;
-  last_commit_info?: CommitInfoAmino | undefined;
-  byzantine_validators: MisbehaviorAmino[];
-}
-export interface RequestBeginBlockAminoMsg {
-  type: "/tendermint.abci.RequestBeginBlock";
-  value: RequestBeginBlockAmino;
-}
-export interface RequestBeginBlockSDKType {
-  hash: Uint8Array;
-  header: HeaderSDKType | undefined;
-  last_commit_info: CommitInfoSDKType | undefined;
-  byzantine_validators: MisbehaviorSDKType[];
-}
 export interface RequestCheckTx {
   tx: Uint8Array;
   type: CheckTxType;
@@ -456,40 +474,6 @@ export interface RequestCheckTxAminoMsg {
 export interface RequestCheckTxSDKType {
   tx: Uint8Array;
   type: CheckTxType;
-}
-export interface RequestDeliverTx {
-  tx: Uint8Array;
-}
-export interface RequestDeliverTxProtoMsg {
-  typeUrl: "/tendermint.abci.RequestDeliverTx";
-  value: Uint8Array;
-}
-export interface RequestDeliverTxAmino {
-  tx: Uint8Array;
-}
-export interface RequestDeliverTxAminoMsg {
-  type: "/tendermint.abci.RequestDeliverTx";
-  value: RequestDeliverTxAmino;
-}
-export interface RequestDeliverTxSDKType {
-  tx: Uint8Array;
-}
-export interface RequestEndBlock {
-  height: bigint;
-}
-export interface RequestEndBlockProtoMsg {
-  typeUrl: "/tendermint.abci.RequestEndBlock";
-  value: Uint8Array;
-}
-export interface RequestEndBlockAmino {
-  height: string;
-}
-export interface RequestEndBlockAminoMsg {
-  type: "/tendermint.abci.RequestEndBlock";
-  value: RequestEndBlockAmino;
-}
-export interface RequestEndBlockSDKType {
-  height: bigint;
 }
 export interface RequestCommit {}
 export interface RequestCommitProtoMsg {
@@ -687,6 +671,108 @@ export interface RequestProcessProposalSDKType {
   next_validators_hash: Uint8Array;
   proposer_address: Uint8Array;
 }
+/** Extends a vote with application-injected data */
+export interface RequestExtendVote {
+  /** the hash of the block  that this vote may be referring to */
+  hash: Uint8Array;
+  /** the height of the extended vote */
+  height: bigint;
+}
+export interface RequestExtendVoteProtoMsg {
+  typeUrl: "/tendermint.abci.RequestExtendVote";
+  value: Uint8Array;
+}
+/** Extends a vote with application-injected data */
+export interface RequestExtendVoteAmino {
+  /** the hash of the block  that this vote may be referring to */
+  hash: Uint8Array;
+  /** the height of the extended vote */
+  height: string;
+}
+export interface RequestExtendVoteAminoMsg {
+  type: "/tendermint.abci.RequestExtendVote";
+  value: RequestExtendVoteAmino;
+}
+/** Extends a vote with application-injected data */
+export interface RequestExtendVoteSDKType {
+  hash: Uint8Array;
+  height: bigint;
+}
+/** Verify the vote extension */
+export interface RequestVerifyVoteExtension {
+  /** the hash of the block that this received vote corresponds to */
+  hash: Uint8Array;
+  /** the validator that signed the vote extension */
+  validatorAddress: Uint8Array;
+  height: bigint;
+  voteExtension: Uint8Array;
+}
+export interface RequestVerifyVoteExtensionProtoMsg {
+  typeUrl: "/tendermint.abci.RequestVerifyVoteExtension";
+  value: Uint8Array;
+}
+/** Verify the vote extension */
+export interface RequestVerifyVoteExtensionAmino {
+  /** the hash of the block that this received vote corresponds to */
+  hash: Uint8Array;
+  /** the validator that signed the vote extension */
+  validator_address: Uint8Array;
+  height: string;
+  vote_extension: Uint8Array;
+}
+export interface RequestVerifyVoteExtensionAminoMsg {
+  type: "/tendermint.abci.RequestVerifyVoteExtension";
+  value: RequestVerifyVoteExtensionAmino;
+}
+/** Verify the vote extension */
+export interface RequestVerifyVoteExtensionSDKType {
+  hash: Uint8Array;
+  validator_address: Uint8Array;
+  height: bigint;
+  vote_extension: Uint8Array;
+}
+export interface RequestFinalizeBlock {
+  txs: Uint8Array[];
+  decidedLastCommit: CommitInfo | undefined;
+  misbehavior: Misbehavior[];
+  /** hash is the merkle root hash of the fields of the decided block. */
+  hash: Uint8Array;
+  height: bigint;
+  time: Date | undefined;
+  nextValidatorsHash: Uint8Array;
+  /** proposer_address is the address of the public key of the original proposer of the block. */
+  proposerAddress: Uint8Array;
+}
+export interface RequestFinalizeBlockProtoMsg {
+  typeUrl: "/tendermint.abci.RequestFinalizeBlock";
+  value: Uint8Array;
+}
+export interface RequestFinalizeBlockAmino {
+  txs: Uint8Array[];
+  decided_last_commit?: CommitInfoAmino | undefined;
+  misbehavior: MisbehaviorAmino[];
+  /** hash is the merkle root hash of the fields of the decided block. */
+  hash: Uint8Array;
+  height: string;
+  time?: Date | undefined;
+  next_validators_hash: Uint8Array;
+  /** proposer_address is the address of the public key of the original proposer of the block. */
+  proposer_address: Uint8Array;
+}
+export interface RequestFinalizeBlockAminoMsg {
+  type: "/tendermint.abci.RequestFinalizeBlock";
+  value: RequestFinalizeBlockAmino;
+}
+export interface RequestFinalizeBlockSDKType {
+  txs: Uint8Array[];
+  decided_last_commit: CommitInfoSDKType | undefined;
+  misbehavior: MisbehaviorSDKType[];
+  hash: Uint8Array;
+  height: bigint;
+  time: Date | undefined;
+  next_validators_hash: Uint8Array;
+  proposer_address: Uint8Array;
+}
 export interface Response {
   exception?: ResponseException | undefined;
   echo?: ResponseEcho | undefined;
@@ -694,10 +780,7 @@ export interface Response {
   info?: ResponseInfo | undefined;
   initChain?: ResponseInitChain | undefined;
   query?: ResponseQuery | undefined;
-  beginBlock?: ResponseBeginBlock | undefined;
   checkTx?: ResponseCheckTx | undefined;
-  deliverTx?: ResponseDeliverTx | undefined;
-  endBlock?: ResponseEndBlock | undefined;
   commit?: ResponseCommit | undefined;
   listSnapshots?: ResponseListSnapshots | undefined;
   offerSnapshot?: ResponseOfferSnapshot | undefined;
@@ -705,6 +788,9 @@ export interface Response {
   applySnapshotChunk?: ResponseApplySnapshotChunk | undefined;
   prepareProposal?: ResponsePrepareProposal | undefined;
   processProposal?: ResponseProcessProposal | undefined;
+  extendVote?: ResponseExtendVote | undefined;
+  verifyVoteExtension?: ResponseVerifyVoteExtension | undefined;
+  finalizeBlock?: ResponseFinalizeBlock | undefined;
 }
 export interface ResponseProtoMsg {
   typeUrl: "/tendermint.abci.Response";
@@ -717,10 +803,7 @@ export interface ResponseAmino {
   info?: ResponseInfoAmino | undefined;
   init_chain?: ResponseInitChainAmino | undefined;
   query?: ResponseQueryAmino | undefined;
-  begin_block?: ResponseBeginBlockAmino | undefined;
   check_tx?: ResponseCheckTxAmino | undefined;
-  deliver_tx?: ResponseDeliverTxAmino | undefined;
-  end_block?: ResponseEndBlockAmino | undefined;
   commit?: ResponseCommitAmino | undefined;
   list_snapshots?: ResponseListSnapshotsAmino | undefined;
   offer_snapshot?: ResponseOfferSnapshotAmino | undefined;
@@ -728,6 +811,9 @@ export interface ResponseAmino {
   apply_snapshot_chunk?: ResponseApplySnapshotChunkAmino | undefined;
   prepare_proposal?: ResponsePrepareProposalAmino | undefined;
   process_proposal?: ResponseProcessProposalAmino | undefined;
+  extend_vote?: ResponseExtendVoteAmino | undefined;
+  verify_vote_extension?: ResponseVerifyVoteExtensionAmino | undefined;
+  finalize_block?: ResponseFinalizeBlockAmino | undefined;
 }
 export interface ResponseAminoMsg {
   type: "/tendermint.abci.Response";
@@ -740,10 +826,7 @@ export interface ResponseSDKType {
   info?: ResponseInfoSDKType | undefined;
   init_chain?: ResponseInitChainSDKType | undefined;
   query?: ResponseQuerySDKType | undefined;
-  begin_block?: ResponseBeginBlockSDKType | undefined;
   check_tx?: ResponseCheckTxSDKType | undefined;
-  deliver_tx?: ResponseDeliverTxSDKType | undefined;
-  end_block?: ResponseEndBlockSDKType | undefined;
   commit?: ResponseCommitSDKType | undefined;
   list_snapshots?: ResponseListSnapshotsSDKType | undefined;
   offer_snapshot?: ResponseOfferSnapshotSDKType | undefined;
@@ -751,6 +834,9 @@ export interface ResponseSDKType {
   apply_snapshot_chunk?: ResponseApplySnapshotChunkSDKType | undefined;
   prepare_proposal?: ResponsePrepareProposalSDKType | undefined;
   process_proposal?: ResponseProcessProposalSDKType | undefined;
+  extend_vote?: ResponseExtendVoteSDKType | undefined;
+  verify_vote_extension?: ResponseVerifyVoteExtensionSDKType | undefined;
+  finalize_block?: ResponseFinalizeBlockSDKType | undefined;
 }
 /** nondeterministic */
 export interface ResponseException {
@@ -897,23 +983,6 @@ export interface ResponseQuerySDKType {
   height: bigint;
   codespace: string;
 }
-export interface ResponseBeginBlock {
-  events: Event[];
-}
-export interface ResponseBeginBlockProtoMsg {
-  typeUrl: "/tendermint.abci.ResponseBeginBlock";
-  value: Uint8Array;
-}
-export interface ResponseBeginBlockAmino {
-  events: EventAmino[];
-}
-export interface ResponseBeginBlockAminoMsg {
-  type: "/tendermint.abci.ResponseBeginBlock";
-  value: ResponseBeginBlockAmino;
-}
-export interface ResponseBeginBlockSDKType {
-  events: EventSDKType[];
-}
 export interface ResponseCheckTx {
   code: number;
   data: Uint8Array;
@@ -925,13 +994,6 @@ export interface ResponseCheckTx {
   gasUsed: bigint;
   events: Event[];
   codespace: string;
-  sender: string;
-  priority: bigint;
-  /**
-   * mempool_error is set by Tendermint.
-   * ABCI applictions creating a ResponseCheckTX should not set mempool_error.
-   */
-  mempoolError: string;
 }
 export interface ResponseCheckTxProtoMsg {
   typeUrl: "/tendermint.abci.ResponseCheckTx";
@@ -948,13 +1010,6 @@ export interface ResponseCheckTxAmino {
   gas_used: string;
   events: EventAmino[];
   codespace: string;
-  sender: string;
-  priority: string;
-  /**
-   * mempool_error is set by Tendermint.
-   * ABCI applictions creating a ResponseCheckTX should not set mempool_error.
-   */
-  mempool_error: string;
 }
 export interface ResponseCheckTxAminoMsg {
   type: "/tendermint.abci.ResponseCheckTx";
@@ -969,78 +1024,8 @@ export interface ResponseCheckTxSDKType {
   gas_used: bigint;
   events: EventSDKType[];
   codespace: string;
-  sender: string;
-  priority: bigint;
-  mempool_error: string;
-}
-export interface ResponseDeliverTx {
-  code: number;
-  data: Uint8Array;
-  /** nondeterministic */
-  log: string;
-  /** nondeterministic */
-  info: string;
-  gasWanted: bigint;
-  gasUsed: bigint;
-  events: Event[];
-  codespace: string;
-}
-export interface ResponseDeliverTxProtoMsg {
-  typeUrl: "/tendermint.abci.ResponseDeliverTx";
-  value: Uint8Array;
-}
-export interface ResponseDeliverTxAmino {
-  code: number;
-  data: Uint8Array;
-  /** nondeterministic */
-  log: string;
-  /** nondeterministic */
-  info: string;
-  gas_wanted: string;
-  gas_used: string;
-  events: EventAmino[];
-  codespace: string;
-}
-export interface ResponseDeliverTxAminoMsg {
-  type: "/tendermint.abci.ResponseDeliverTx";
-  value: ResponseDeliverTxAmino;
-}
-export interface ResponseDeliverTxSDKType {
-  code: number;
-  data: Uint8Array;
-  log: string;
-  info: string;
-  gas_wanted: bigint;
-  gas_used: bigint;
-  events: EventSDKType[];
-  codespace: string;
-}
-export interface ResponseEndBlock {
-  validatorUpdates: ValidatorUpdate[];
-  consensusParamUpdates: ConsensusParams | undefined;
-  events: Event[];
-}
-export interface ResponseEndBlockProtoMsg {
-  typeUrl: "/tendermint.abci.ResponseEndBlock";
-  value: Uint8Array;
-}
-export interface ResponseEndBlockAmino {
-  validator_updates: ValidatorUpdateAmino[];
-  consensus_param_updates?: ConsensusParamsAmino | undefined;
-  events: EventAmino[];
-}
-export interface ResponseEndBlockAminoMsg {
-  type: "/tendermint.abci.ResponseEndBlock";
-  value: ResponseEndBlockAmino;
-}
-export interface ResponseEndBlockSDKType {
-  validator_updates: ValidatorUpdateSDKType[];
-  consensus_param_updates: ConsensusParamsSDKType | undefined;
-  events: EventSDKType[];
 }
 export interface ResponseCommit {
-  /** reserve 1 */
-  data: Uint8Array;
   retainHeight: bigint;
 }
 export interface ResponseCommitProtoMsg {
@@ -1048,8 +1033,6 @@ export interface ResponseCommitProtoMsg {
   value: Uint8Array;
 }
 export interface ResponseCommitAmino {
-  /** reserve 1 */
-  data: Uint8Array;
   retain_height: string;
 }
 export interface ResponseCommitAminoMsg {
@@ -1057,7 +1040,6 @@ export interface ResponseCommitAminoMsg {
   value: ResponseCommitAmino;
 }
 export interface ResponseCommitSDKType {
-  data: Uint8Array;
   retain_height: bigint;
 }
 export interface ResponseListSnapshots {
@@ -1172,6 +1154,87 @@ export interface ResponseProcessProposalAminoMsg {
 export interface ResponseProcessProposalSDKType {
   status: ResponseProcessProposal_ProposalStatus;
 }
+export interface ResponseExtendVote {
+  voteExtension: Uint8Array;
+}
+export interface ResponseExtendVoteProtoMsg {
+  typeUrl: "/tendermint.abci.ResponseExtendVote";
+  value: Uint8Array;
+}
+export interface ResponseExtendVoteAmino {
+  vote_extension: Uint8Array;
+}
+export interface ResponseExtendVoteAminoMsg {
+  type: "/tendermint.abci.ResponseExtendVote";
+  value: ResponseExtendVoteAmino;
+}
+export interface ResponseExtendVoteSDKType {
+  vote_extension: Uint8Array;
+}
+export interface ResponseVerifyVoteExtension {
+  status: ResponseVerifyVoteExtension_VerifyStatus;
+}
+export interface ResponseVerifyVoteExtensionProtoMsg {
+  typeUrl: "/tendermint.abci.ResponseVerifyVoteExtension";
+  value: Uint8Array;
+}
+export interface ResponseVerifyVoteExtensionAmino {
+  status: ResponseVerifyVoteExtension_VerifyStatus;
+}
+export interface ResponseVerifyVoteExtensionAminoMsg {
+  type: "/tendermint.abci.ResponseVerifyVoteExtension";
+  value: ResponseVerifyVoteExtensionAmino;
+}
+export interface ResponseVerifyVoteExtensionSDKType {
+  status: ResponseVerifyVoteExtension_VerifyStatus;
+}
+export interface ResponseFinalizeBlock {
+  /** set of block events emmitted as part of executing the block */
+  events: Event[];
+  /**
+   * the result of executing each transaction including the events
+   * the particular transction emitted. This should match the order
+   * of the transactions delivered in the block itself
+   */
+  txResults: ExecTxResult[];
+  /** a list of updates to the validator set. These will reflect the validator set at current height + 2. */
+  validatorUpdates: ValidatorUpdate[];
+  /** updates to the consensus params, if any. */
+  consensusParamUpdates: ConsensusParams | undefined;
+  /** app_hash is the hash of the applications' state which is used to confirm that execution of the transactions was deterministic. It is up to the application to decide which algorithm to use. */
+  appHash: Uint8Array;
+}
+export interface ResponseFinalizeBlockProtoMsg {
+  typeUrl: "/tendermint.abci.ResponseFinalizeBlock";
+  value: Uint8Array;
+}
+export interface ResponseFinalizeBlockAmino {
+  /** set of block events emmitted as part of executing the block */
+  events: EventAmino[];
+  /**
+   * the result of executing each transaction including the events
+   * the particular transction emitted. This should match the order
+   * of the transactions delivered in the block itself
+   */
+  tx_results: ExecTxResultAmino[];
+  /** a list of updates to the validator set. These will reflect the validator set at current height + 2. */
+  validator_updates: ValidatorUpdateAmino[];
+  /** updates to the consensus params, if any. */
+  consensus_param_updates?: ConsensusParamsAmino | undefined;
+  /** app_hash is the hash of the applications' state which is used to confirm that execution of the transactions was deterministic. It is up to the application to decide which algorithm to use. */
+  app_hash: Uint8Array;
+}
+export interface ResponseFinalizeBlockAminoMsg {
+  type: "/tendermint.abci.ResponseFinalizeBlock";
+  value: ResponseFinalizeBlockAmino;
+}
+export interface ResponseFinalizeBlockSDKType {
+  events: EventSDKType[];
+  tx_results: ExecTxResultSDKType[];
+  validator_updates: ValidatorUpdateSDKType[];
+  consensus_param_updates: ConsensusParamsSDKType | undefined;
+  app_hash: Uint8Array;
+}
 export interface CommitInfo {
   round: number;
   votes: VoteInfo[];
@@ -1192,6 +1255,11 @@ export interface CommitInfoSDKType {
   round: number;
   votes: VoteInfoSDKType[];
 }
+/**
+ * ExtendedCommitInfo is similar to CommitInfo except that it is only used in
+ * the PrepareProposal request such that CometBFT can provide vote extensions
+ * to the application.
+ */
 export interface ExtendedCommitInfo {
   /** The round at which the block proposer decided in the previous height. */
   round: number;
@@ -1205,6 +1273,11 @@ export interface ExtendedCommitInfoProtoMsg {
   typeUrl: "/tendermint.abci.ExtendedCommitInfo";
   value: Uint8Array;
 }
+/**
+ * ExtendedCommitInfo is similar to CommitInfo except that it is only used in
+ * the PrepareProposal request such that CometBFT can provide vote extensions
+ * to the application.
+ */
 export interface ExtendedCommitInfoAmino {
   /** The round at which the block proposer decided in the previous height. */
   round: number;
@@ -1218,13 +1291,18 @@ export interface ExtendedCommitInfoAminoMsg {
   type: "/tendermint.abci.ExtendedCommitInfo";
   value: ExtendedCommitInfoAmino;
 }
+/**
+ * ExtendedCommitInfo is similar to CommitInfo except that it is only used in
+ * the PrepareProposal request such that CometBFT can provide vote extensions
+ * to the application.
+ */
 export interface ExtendedCommitInfoSDKType {
   round: number;
   votes: ExtendedVoteInfoSDKType[];
 }
 /**
  * Event allows application developers to attach additional information to
- * ResponseBeginBlock, ResponseEndBlock, ResponseCheckTx and ResponseDeliverTx.
+ * ResponseFinalizeBlock and ResponseCheckTx.
  * Later, transactions may be queried using these events.
  */
 export interface Event {
@@ -1237,7 +1315,7 @@ export interface EventProtoMsg {
 }
 /**
  * Event allows application developers to attach additional information to
- * ResponseBeginBlock, ResponseEndBlock, ResponseCheckTx and ResponseDeliverTx.
+ * ResponseFinalizeBlock and ResponseCheckTx.
  * Later, transactions may be queried using these events.
  */
 export interface EventAmino {
@@ -1250,7 +1328,7 @@ export interface EventAminoMsg {
 }
 /**
  * Event allows application developers to attach additional information to
- * ResponseBeginBlock, ResponseEndBlock, ResponseCheckTx and ResponseDeliverTx.
+ * ResponseFinalizeBlock and ResponseCheckTx.
  * Later, transactions may be queried using these events.
  */
 export interface EventSDKType {
@@ -1286,6 +1364,63 @@ export interface EventAttributeSDKType {
   index: boolean;
 }
 /**
+ * ExecTxResult contains results of executing one individual transaction.
+ * 
+ * * Its structure is equivalent to #ResponseDeliverTx which will be deprecated/deleted
+ */
+export interface ExecTxResult {
+  code: number;
+  data: Uint8Array;
+  /** nondeterministic */
+  log: string;
+  /** nondeterministic */
+  info: string;
+  gasWanted: bigint;
+  gasUsed: bigint;
+  events: Event[];
+  codespace: string;
+}
+export interface ExecTxResultProtoMsg {
+  typeUrl: "/tendermint.abci.ExecTxResult";
+  value: Uint8Array;
+}
+/**
+ * ExecTxResult contains results of executing one individual transaction.
+ * 
+ * * Its structure is equivalent to #ResponseDeliverTx which will be deprecated/deleted
+ */
+export interface ExecTxResultAmino {
+  code: number;
+  data: Uint8Array;
+  /** nondeterministic */
+  log: string;
+  /** nondeterministic */
+  info: string;
+  gas_wanted: string;
+  gas_used: string;
+  events: EventAmino[];
+  codespace: string;
+}
+export interface ExecTxResultAminoMsg {
+  type: "/tendermint.abci.ExecTxResult";
+  value: ExecTxResultAmino;
+}
+/**
+ * ExecTxResult contains results of executing one individual transaction.
+ * 
+ * * Its structure is equivalent to #ResponseDeliverTx which will be deprecated/deleted
+ */
+export interface ExecTxResultSDKType {
+  code: number;
+  data: Uint8Array;
+  log: string;
+  info: string;
+  gas_wanted: bigint;
+  gas_used: bigint;
+  events: EventSDKType[];
+  codespace: string;
+}
+/**
  * TxResult contains results of executing the transaction.
  * 
  * One usage is indexing transaction results.
@@ -1294,7 +1429,7 @@ export interface TxResult {
   height: bigint;
   index: number;
   tx: Uint8Array;
-  result: ResponseDeliverTx | undefined;
+  result: ExecTxResult | undefined;
 }
 export interface TxResultProtoMsg {
   typeUrl: "/tendermint.abci.TxResult";
@@ -1309,7 +1444,7 @@ export interface TxResultAmino {
   height: string;
   index: number;
   tx: Uint8Array;
-  result?: ResponseDeliverTxAmino | undefined;
+  result?: ExecTxResultAmino | undefined;
 }
 export interface TxResultAminoMsg {
   type: "/tendermint.abci.TxResult";
@@ -1324,9 +1459,8 @@ export interface TxResultSDKType {
   height: bigint;
   index: number;
   tx: Uint8Array;
-  result: ResponseDeliverTxSDKType | undefined;
+  result: ExecTxResultSDKType | undefined;
 }
-/** Validator */
 export interface Validator {
   /**
    * The first 20 bytes of SHA256(public key)
@@ -1340,7 +1474,6 @@ export interface ValidatorProtoMsg {
   typeUrl: "/tendermint.abci.Validator";
   value: Uint8Array;
 }
-/** Validator */
 export interface ValidatorAmino {
   /**
    * The first 20 bytes of SHA256(public key)
@@ -1354,12 +1487,10 @@ export interface ValidatorAminoMsg {
   type: "/tendermint.abci.Validator";
   value: ValidatorAmino;
 }
-/** Validator */
 export interface ValidatorSDKType {
   address: Uint8Array;
   power: bigint;
 }
-/** ValidatorUpdate */
 export interface ValidatorUpdate {
   pubKey: PublicKey | undefined;
   power: bigint;
@@ -1368,7 +1499,6 @@ export interface ValidatorUpdateProtoMsg {
   typeUrl: "/tendermint.abci.ValidatorUpdate";
   value: Uint8Array;
 }
-/** ValidatorUpdate */
 export interface ValidatorUpdateAmino {
   pub_key?: PublicKeyAmino | undefined;
   power: string;
@@ -1377,49 +1507,53 @@ export interface ValidatorUpdateAminoMsg {
   type: "/tendermint.abci.ValidatorUpdate";
   value: ValidatorUpdateAmino;
 }
-/** ValidatorUpdate */
 export interface ValidatorUpdateSDKType {
   pub_key: PublicKeySDKType | undefined;
   power: bigint;
 }
-/** VoteInfo */
 export interface VoteInfo {
   validator: Validator | undefined;
-  signedLastBlock: boolean;
+  blockIdFlag: BlockIDFlag;
 }
 export interface VoteInfoProtoMsg {
   typeUrl: "/tendermint.abci.VoteInfo";
   value: Uint8Array;
 }
-/** VoteInfo */
 export interface VoteInfoAmino {
   validator?: ValidatorAmino | undefined;
-  signed_last_block: boolean;
+  block_id_flag: BlockIDFlag;
 }
 export interface VoteInfoAminoMsg {
   type: "/tendermint.abci.VoteInfo";
   value: VoteInfoAmino;
 }
-/** VoteInfo */
 export interface VoteInfoSDKType {
   validator: ValidatorSDKType | undefined;
-  signed_last_block: boolean;
+  block_id_flag: BlockIDFlag;
 }
 export interface ExtendedVoteInfo {
+  /** The validator that sent the vote. */
   validator: Validator | undefined;
-  signedLastBlock: boolean;
-  /** Reserved for future use */
+  /** Non-deterministic extension provided by the sending validator's application. */
   voteExtension: Uint8Array;
+  /** Vote extension signature created by CometBFT */
+  extensionSignature: Uint8Array;
+  /** block_id_flag indicates whether the validator voted for a block, nil, or did not vote at all */
+  blockIdFlag: BlockIDFlag;
 }
 export interface ExtendedVoteInfoProtoMsg {
   typeUrl: "/tendermint.abci.ExtendedVoteInfo";
   value: Uint8Array;
 }
 export interface ExtendedVoteInfoAmino {
+  /** The validator that sent the vote. */
   validator?: ValidatorAmino | undefined;
-  signed_last_block: boolean;
-  /** Reserved for future use */
+  /** Non-deterministic extension provided by the sending validator's application. */
   vote_extension: Uint8Array;
+  /** Vote extension signature created by CometBFT */
+  extension_signature: Uint8Array;
+  /** block_id_flag indicates whether the validator voted for a block, nil, or did not vote at all */
+  block_id_flag: BlockIDFlag;
 }
 export interface ExtendedVoteInfoAminoMsg {
   type: "/tendermint.abci.ExtendedVoteInfo";
@@ -1427,8 +1561,9 @@ export interface ExtendedVoteInfoAminoMsg {
 }
 export interface ExtendedVoteInfoSDKType {
   validator: ValidatorSDKType | undefined;
-  signed_last_block: boolean;
   vote_extension: Uint8Array;
+  extension_signature: Uint8Array;
+  block_id_flag: BlockIDFlag;
 }
 export interface Misbehavior {
   type: MisbehaviorType;
@@ -1521,17 +1656,17 @@ function createBaseRequest(): Request {
     info: undefined,
     initChain: undefined,
     query: undefined,
-    beginBlock: undefined,
     checkTx: undefined,
-    deliverTx: undefined,
-    endBlock: undefined,
     commit: undefined,
     listSnapshots: undefined,
     offerSnapshot: undefined,
     loadSnapshotChunk: undefined,
     applySnapshotChunk: undefined,
     prepareProposal: undefined,
-    processProposal: undefined
+    processProposal: undefined,
+    extendVote: undefined,
+    verifyVoteExtension: undefined,
+    finalizeBlock: undefined
   };
 }
 export const Request = {
@@ -1552,17 +1687,8 @@ export const Request = {
     if (message.query !== undefined) {
       RequestQuery.encode(message.query, writer.uint32(50).fork()).ldelim();
     }
-    if (message.beginBlock !== undefined) {
-      RequestBeginBlock.encode(message.beginBlock, writer.uint32(58).fork()).ldelim();
-    }
     if (message.checkTx !== undefined) {
       RequestCheckTx.encode(message.checkTx, writer.uint32(66).fork()).ldelim();
-    }
-    if (message.deliverTx !== undefined) {
-      RequestDeliverTx.encode(message.deliverTx, writer.uint32(74).fork()).ldelim();
-    }
-    if (message.endBlock !== undefined) {
-      RequestEndBlock.encode(message.endBlock, writer.uint32(82).fork()).ldelim();
     }
     if (message.commit !== undefined) {
       RequestCommit.encode(message.commit, writer.uint32(90).fork()).ldelim();
@@ -1584,6 +1710,15 @@ export const Request = {
     }
     if (message.processProposal !== undefined) {
       RequestProcessProposal.encode(message.processProposal, writer.uint32(138).fork()).ldelim();
+    }
+    if (message.extendVote !== undefined) {
+      RequestExtendVote.encode(message.extendVote, writer.uint32(146).fork()).ldelim();
+    }
+    if (message.verifyVoteExtension !== undefined) {
+      RequestVerifyVoteExtension.encode(message.verifyVoteExtension, writer.uint32(154).fork()).ldelim();
+    }
+    if (message.finalizeBlock !== undefined) {
+      RequestFinalizeBlock.encode(message.finalizeBlock, writer.uint32(162).fork()).ldelim();
     }
     return writer;
   },
@@ -1609,17 +1744,8 @@ export const Request = {
         case 6:
           message.query = RequestQuery.decode(reader, reader.uint32());
           break;
-        case 7:
-          message.beginBlock = RequestBeginBlock.decode(reader, reader.uint32());
-          break;
         case 8:
           message.checkTx = RequestCheckTx.decode(reader, reader.uint32());
-          break;
-        case 9:
-          message.deliverTx = RequestDeliverTx.decode(reader, reader.uint32());
-          break;
-        case 10:
-          message.endBlock = RequestEndBlock.decode(reader, reader.uint32());
           break;
         case 11:
           message.commit = RequestCommit.decode(reader, reader.uint32());
@@ -1642,6 +1768,15 @@ export const Request = {
         case 17:
           message.processProposal = RequestProcessProposal.decode(reader, reader.uint32());
           break;
+        case 18:
+          message.extendVote = RequestExtendVote.decode(reader, reader.uint32());
+          break;
+        case 19:
+          message.verifyVoteExtension = RequestVerifyVoteExtension.decode(reader, reader.uint32());
+          break;
+        case 20:
+          message.finalizeBlock = RequestFinalizeBlock.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1656,17 +1791,17 @@ export const Request = {
       info: isSet(object.info) ? RequestInfo.fromJSON(object.info) : undefined,
       initChain: isSet(object.initChain) ? RequestInitChain.fromJSON(object.initChain) : undefined,
       query: isSet(object.query) ? RequestQuery.fromJSON(object.query) : undefined,
-      beginBlock: isSet(object.beginBlock) ? RequestBeginBlock.fromJSON(object.beginBlock) : undefined,
       checkTx: isSet(object.checkTx) ? RequestCheckTx.fromJSON(object.checkTx) : undefined,
-      deliverTx: isSet(object.deliverTx) ? RequestDeliverTx.fromJSON(object.deliverTx) : undefined,
-      endBlock: isSet(object.endBlock) ? RequestEndBlock.fromJSON(object.endBlock) : undefined,
       commit: isSet(object.commit) ? RequestCommit.fromJSON(object.commit) : undefined,
       listSnapshots: isSet(object.listSnapshots) ? RequestListSnapshots.fromJSON(object.listSnapshots) : undefined,
       offerSnapshot: isSet(object.offerSnapshot) ? RequestOfferSnapshot.fromJSON(object.offerSnapshot) : undefined,
       loadSnapshotChunk: isSet(object.loadSnapshotChunk) ? RequestLoadSnapshotChunk.fromJSON(object.loadSnapshotChunk) : undefined,
       applySnapshotChunk: isSet(object.applySnapshotChunk) ? RequestApplySnapshotChunk.fromJSON(object.applySnapshotChunk) : undefined,
       prepareProposal: isSet(object.prepareProposal) ? RequestPrepareProposal.fromJSON(object.prepareProposal) : undefined,
-      processProposal: isSet(object.processProposal) ? RequestProcessProposal.fromJSON(object.processProposal) : undefined
+      processProposal: isSet(object.processProposal) ? RequestProcessProposal.fromJSON(object.processProposal) : undefined,
+      extendVote: isSet(object.extendVote) ? RequestExtendVote.fromJSON(object.extendVote) : undefined,
+      verifyVoteExtension: isSet(object.verifyVoteExtension) ? RequestVerifyVoteExtension.fromJSON(object.verifyVoteExtension) : undefined,
+      finalizeBlock: isSet(object.finalizeBlock) ? RequestFinalizeBlock.fromJSON(object.finalizeBlock) : undefined
     };
   },
   toJSON(message: Request): unknown {
@@ -1676,10 +1811,7 @@ export const Request = {
     message.info !== undefined && (obj.info = message.info ? RequestInfo.toJSON(message.info) : undefined);
     message.initChain !== undefined && (obj.initChain = message.initChain ? RequestInitChain.toJSON(message.initChain) : undefined);
     message.query !== undefined && (obj.query = message.query ? RequestQuery.toJSON(message.query) : undefined);
-    message.beginBlock !== undefined && (obj.beginBlock = message.beginBlock ? RequestBeginBlock.toJSON(message.beginBlock) : undefined);
     message.checkTx !== undefined && (obj.checkTx = message.checkTx ? RequestCheckTx.toJSON(message.checkTx) : undefined);
-    message.deliverTx !== undefined && (obj.deliverTx = message.deliverTx ? RequestDeliverTx.toJSON(message.deliverTx) : undefined);
-    message.endBlock !== undefined && (obj.endBlock = message.endBlock ? RequestEndBlock.toJSON(message.endBlock) : undefined);
     message.commit !== undefined && (obj.commit = message.commit ? RequestCommit.toJSON(message.commit) : undefined);
     message.listSnapshots !== undefined && (obj.listSnapshots = message.listSnapshots ? RequestListSnapshots.toJSON(message.listSnapshots) : undefined);
     message.offerSnapshot !== undefined && (obj.offerSnapshot = message.offerSnapshot ? RequestOfferSnapshot.toJSON(message.offerSnapshot) : undefined);
@@ -1687,6 +1819,9 @@ export const Request = {
     message.applySnapshotChunk !== undefined && (obj.applySnapshotChunk = message.applySnapshotChunk ? RequestApplySnapshotChunk.toJSON(message.applySnapshotChunk) : undefined);
     message.prepareProposal !== undefined && (obj.prepareProposal = message.prepareProposal ? RequestPrepareProposal.toJSON(message.prepareProposal) : undefined);
     message.processProposal !== undefined && (obj.processProposal = message.processProposal ? RequestProcessProposal.toJSON(message.processProposal) : undefined);
+    message.extendVote !== undefined && (obj.extendVote = message.extendVote ? RequestExtendVote.toJSON(message.extendVote) : undefined);
+    message.verifyVoteExtension !== undefined && (obj.verifyVoteExtension = message.verifyVoteExtension ? RequestVerifyVoteExtension.toJSON(message.verifyVoteExtension) : undefined);
+    message.finalizeBlock !== undefined && (obj.finalizeBlock = message.finalizeBlock ? RequestFinalizeBlock.toJSON(message.finalizeBlock) : undefined);
     return obj;
   },
   fromPartial(object: DeepPartial<Request>): Request {
@@ -1696,10 +1831,7 @@ export const Request = {
     message.info = object.info !== undefined && object.info !== null ? RequestInfo.fromPartial(object.info) : undefined;
     message.initChain = object.initChain !== undefined && object.initChain !== null ? RequestInitChain.fromPartial(object.initChain) : undefined;
     message.query = object.query !== undefined && object.query !== null ? RequestQuery.fromPartial(object.query) : undefined;
-    message.beginBlock = object.beginBlock !== undefined && object.beginBlock !== null ? RequestBeginBlock.fromPartial(object.beginBlock) : undefined;
     message.checkTx = object.checkTx !== undefined && object.checkTx !== null ? RequestCheckTx.fromPartial(object.checkTx) : undefined;
-    message.deliverTx = object.deliverTx !== undefined && object.deliverTx !== null ? RequestDeliverTx.fromPartial(object.deliverTx) : undefined;
-    message.endBlock = object.endBlock !== undefined && object.endBlock !== null ? RequestEndBlock.fromPartial(object.endBlock) : undefined;
     message.commit = object.commit !== undefined && object.commit !== null ? RequestCommit.fromPartial(object.commit) : undefined;
     message.listSnapshots = object.listSnapshots !== undefined && object.listSnapshots !== null ? RequestListSnapshots.fromPartial(object.listSnapshots) : undefined;
     message.offerSnapshot = object.offerSnapshot !== undefined && object.offerSnapshot !== null ? RequestOfferSnapshot.fromPartial(object.offerSnapshot) : undefined;
@@ -1707,6 +1839,9 @@ export const Request = {
     message.applySnapshotChunk = object.applySnapshotChunk !== undefined && object.applySnapshotChunk !== null ? RequestApplySnapshotChunk.fromPartial(object.applySnapshotChunk) : undefined;
     message.prepareProposal = object.prepareProposal !== undefined && object.prepareProposal !== null ? RequestPrepareProposal.fromPartial(object.prepareProposal) : undefined;
     message.processProposal = object.processProposal !== undefined && object.processProposal !== null ? RequestProcessProposal.fromPartial(object.processProposal) : undefined;
+    message.extendVote = object.extendVote !== undefined && object.extendVote !== null ? RequestExtendVote.fromPartial(object.extendVote) : undefined;
+    message.verifyVoteExtension = object.verifyVoteExtension !== undefined && object.verifyVoteExtension !== null ? RequestVerifyVoteExtension.fromPartial(object.verifyVoteExtension) : undefined;
+    message.finalizeBlock = object.finalizeBlock !== undefined && object.finalizeBlock !== null ? RequestFinalizeBlock.fromPartial(object.finalizeBlock) : undefined;
     return message;
   },
   fromSDK(object: RequestSDKType): Request {
@@ -1716,17 +1851,17 @@ export const Request = {
       info: object.info ? RequestInfo.fromSDK(object.info) : undefined,
       initChain: object.init_chain ? RequestInitChain.fromSDK(object.init_chain) : undefined,
       query: object.query ? RequestQuery.fromSDK(object.query) : undefined,
-      beginBlock: object.begin_block ? RequestBeginBlock.fromSDK(object.begin_block) : undefined,
       checkTx: object.check_tx ? RequestCheckTx.fromSDK(object.check_tx) : undefined,
-      deliverTx: object.deliver_tx ? RequestDeliverTx.fromSDK(object.deliver_tx) : undefined,
-      endBlock: object.end_block ? RequestEndBlock.fromSDK(object.end_block) : undefined,
       commit: object.commit ? RequestCommit.fromSDK(object.commit) : undefined,
       listSnapshots: object.list_snapshots ? RequestListSnapshots.fromSDK(object.list_snapshots) : undefined,
       offerSnapshot: object.offer_snapshot ? RequestOfferSnapshot.fromSDK(object.offer_snapshot) : undefined,
       loadSnapshotChunk: object.load_snapshot_chunk ? RequestLoadSnapshotChunk.fromSDK(object.load_snapshot_chunk) : undefined,
       applySnapshotChunk: object.apply_snapshot_chunk ? RequestApplySnapshotChunk.fromSDK(object.apply_snapshot_chunk) : undefined,
       prepareProposal: object.prepare_proposal ? RequestPrepareProposal.fromSDK(object.prepare_proposal) : undefined,
-      processProposal: object.process_proposal ? RequestProcessProposal.fromSDK(object.process_proposal) : undefined
+      processProposal: object.process_proposal ? RequestProcessProposal.fromSDK(object.process_proposal) : undefined,
+      extendVote: object.extend_vote ? RequestExtendVote.fromSDK(object.extend_vote) : undefined,
+      verifyVoteExtension: object.verify_vote_extension ? RequestVerifyVoteExtension.fromSDK(object.verify_vote_extension) : undefined,
+      finalizeBlock: object.finalize_block ? RequestFinalizeBlock.fromSDK(object.finalize_block) : undefined
     };
   },
   toSDK(message: Request): RequestSDKType {
@@ -1736,10 +1871,7 @@ export const Request = {
     message.info !== undefined && (obj.info = message.info ? RequestInfo.toSDK(message.info) : undefined);
     message.initChain !== undefined && (obj.init_chain = message.initChain ? RequestInitChain.toSDK(message.initChain) : undefined);
     message.query !== undefined && (obj.query = message.query ? RequestQuery.toSDK(message.query) : undefined);
-    message.beginBlock !== undefined && (obj.begin_block = message.beginBlock ? RequestBeginBlock.toSDK(message.beginBlock) : undefined);
     message.checkTx !== undefined && (obj.check_tx = message.checkTx ? RequestCheckTx.toSDK(message.checkTx) : undefined);
-    message.deliverTx !== undefined && (obj.deliver_tx = message.deliverTx ? RequestDeliverTx.toSDK(message.deliverTx) : undefined);
-    message.endBlock !== undefined && (obj.end_block = message.endBlock ? RequestEndBlock.toSDK(message.endBlock) : undefined);
     message.commit !== undefined && (obj.commit = message.commit ? RequestCommit.toSDK(message.commit) : undefined);
     message.listSnapshots !== undefined && (obj.list_snapshots = message.listSnapshots ? RequestListSnapshots.toSDK(message.listSnapshots) : undefined);
     message.offerSnapshot !== undefined && (obj.offer_snapshot = message.offerSnapshot ? RequestOfferSnapshot.toSDK(message.offerSnapshot) : undefined);
@@ -1747,6 +1879,9 @@ export const Request = {
     message.applySnapshotChunk !== undefined && (obj.apply_snapshot_chunk = message.applySnapshotChunk ? RequestApplySnapshotChunk.toSDK(message.applySnapshotChunk) : undefined);
     message.prepareProposal !== undefined && (obj.prepare_proposal = message.prepareProposal ? RequestPrepareProposal.toSDK(message.prepareProposal) : undefined);
     message.processProposal !== undefined && (obj.process_proposal = message.processProposal ? RequestProcessProposal.toSDK(message.processProposal) : undefined);
+    message.extendVote !== undefined && (obj.extend_vote = message.extendVote ? RequestExtendVote.toSDK(message.extendVote) : undefined);
+    message.verifyVoteExtension !== undefined && (obj.verify_vote_extension = message.verifyVoteExtension ? RequestVerifyVoteExtension.toSDK(message.verifyVoteExtension) : undefined);
+    message.finalizeBlock !== undefined && (obj.finalize_block = message.finalizeBlock ? RequestFinalizeBlock.toSDK(message.finalizeBlock) : undefined);
     return obj;
   },
   fromAmino(object: RequestAmino): Request {
@@ -1756,17 +1891,17 @@ export const Request = {
       info: object?.info ? RequestInfo.fromAmino(object.info) : undefined,
       initChain: object?.init_chain ? RequestInitChain.fromAmino(object.init_chain) : undefined,
       query: object?.query ? RequestQuery.fromAmino(object.query) : undefined,
-      beginBlock: object?.begin_block ? RequestBeginBlock.fromAmino(object.begin_block) : undefined,
       checkTx: object?.check_tx ? RequestCheckTx.fromAmino(object.check_tx) : undefined,
-      deliverTx: object?.deliver_tx ? RequestDeliverTx.fromAmino(object.deliver_tx) : undefined,
-      endBlock: object?.end_block ? RequestEndBlock.fromAmino(object.end_block) : undefined,
       commit: object?.commit ? RequestCommit.fromAmino(object.commit) : undefined,
       listSnapshots: object?.list_snapshots ? RequestListSnapshots.fromAmino(object.list_snapshots) : undefined,
       offerSnapshot: object?.offer_snapshot ? RequestOfferSnapshot.fromAmino(object.offer_snapshot) : undefined,
       loadSnapshotChunk: object?.load_snapshot_chunk ? RequestLoadSnapshotChunk.fromAmino(object.load_snapshot_chunk) : undefined,
       applySnapshotChunk: object?.apply_snapshot_chunk ? RequestApplySnapshotChunk.fromAmino(object.apply_snapshot_chunk) : undefined,
       prepareProposal: object?.prepare_proposal ? RequestPrepareProposal.fromAmino(object.prepare_proposal) : undefined,
-      processProposal: object?.process_proposal ? RequestProcessProposal.fromAmino(object.process_proposal) : undefined
+      processProposal: object?.process_proposal ? RequestProcessProposal.fromAmino(object.process_proposal) : undefined,
+      extendVote: object?.extend_vote ? RequestExtendVote.fromAmino(object.extend_vote) : undefined,
+      verifyVoteExtension: object?.verify_vote_extension ? RequestVerifyVoteExtension.fromAmino(object.verify_vote_extension) : undefined,
+      finalizeBlock: object?.finalize_block ? RequestFinalizeBlock.fromAmino(object.finalize_block) : undefined
     };
   },
   toAmino(message: Request): RequestAmino {
@@ -1776,10 +1911,7 @@ export const Request = {
     obj.info = message.info ? RequestInfo.toAmino(message.info) : undefined;
     obj.init_chain = message.initChain ? RequestInitChain.toAmino(message.initChain) : undefined;
     obj.query = message.query ? RequestQuery.toAmino(message.query) : undefined;
-    obj.begin_block = message.beginBlock ? RequestBeginBlock.toAmino(message.beginBlock) : undefined;
     obj.check_tx = message.checkTx ? RequestCheckTx.toAmino(message.checkTx) : undefined;
-    obj.deliver_tx = message.deliverTx ? RequestDeliverTx.toAmino(message.deliverTx) : undefined;
-    obj.end_block = message.endBlock ? RequestEndBlock.toAmino(message.endBlock) : undefined;
     obj.commit = message.commit ? RequestCommit.toAmino(message.commit) : undefined;
     obj.list_snapshots = message.listSnapshots ? RequestListSnapshots.toAmino(message.listSnapshots) : undefined;
     obj.offer_snapshot = message.offerSnapshot ? RequestOfferSnapshot.toAmino(message.offerSnapshot) : undefined;
@@ -1787,6 +1919,9 @@ export const Request = {
     obj.apply_snapshot_chunk = message.applySnapshotChunk ? RequestApplySnapshotChunk.toAmino(message.applySnapshotChunk) : undefined;
     obj.prepare_proposal = message.prepareProposal ? RequestPrepareProposal.toAmino(message.prepareProposal) : undefined;
     obj.process_proposal = message.processProposal ? RequestProcessProposal.toAmino(message.processProposal) : undefined;
+    obj.extend_vote = message.extendVote ? RequestExtendVote.toAmino(message.extendVote) : undefined;
+    obj.verify_vote_extension = message.verifyVoteExtension ? RequestVerifyVoteExtension.toAmino(message.verifyVoteExtension) : undefined;
+    obj.finalize_block = message.finalizeBlock ? RequestFinalizeBlock.toAmino(message.finalizeBlock) : undefined;
     return obj;
   },
   fromAminoMsg(object: RequestAminoMsg): Request {
@@ -2074,7 +2209,7 @@ export const RequestInfo = {
 };
 function createBaseRequestInitChain(): RequestInitChain {
   return {
-    time: undefined,
+    time: new Date(),
     chainId: "",
     consensusParams: ConsensusParams.fromPartial({}),
     validators: [],
@@ -2358,141 +2493,6 @@ export const RequestQuery = {
     };
   }
 };
-function createBaseRequestBeginBlock(): RequestBeginBlock {
-  return {
-    hash: new Uint8Array(),
-    header: Header.fromPartial({}),
-    lastCommitInfo: CommitInfo.fromPartial({}),
-    byzantineValidators: []
-  };
-}
-export const RequestBeginBlock = {
-  typeUrl: "/tendermint.abci.RequestBeginBlock",
-  encode(message: RequestBeginBlock, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.hash.length !== 0) {
-      writer.uint32(10).bytes(message.hash);
-    }
-    if (message.header !== undefined) {
-      Header.encode(message.header, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.lastCommitInfo !== undefined) {
-      CommitInfo.encode(message.lastCommitInfo, writer.uint32(26).fork()).ldelim();
-    }
-    for (const v of message.byzantineValidators) {
-      Misbehavior.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): RequestBeginBlock {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRequestBeginBlock();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.hash = reader.bytes();
-          break;
-        case 2:
-          message.header = Header.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.lastCommitInfo = CommitInfo.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.byzantineValidators.push(Misbehavior.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): RequestBeginBlock {
-    return {
-      hash: isSet(object.hash) ? bytesFromBase64(object.hash) : new Uint8Array(),
-      header: isSet(object.header) ? Header.fromJSON(object.header) : undefined,
-      lastCommitInfo: isSet(object.lastCommitInfo) ? CommitInfo.fromJSON(object.lastCommitInfo) : undefined,
-      byzantineValidators: Array.isArray(object?.byzantineValidators) ? object.byzantineValidators.map((e: any) => Misbehavior.fromJSON(e)) : []
-    };
-  },
-  toJSON(message: RequestBeginBlock): unknown {
-    const obj: any = {};
-    message.hash !== undefined && (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
-    message.header !== undefined && (obj.header = message.header ? Header.toJSON(message.header) : undefined);
-    message.lastCommitInfo !== undefined && (obj.lastCommitInfo = message.lastCommitInfo ? CommitInfo.toJSON(message.lastCommitInfo) : undefined);
-    if (message.byzantineValidators) {
-      obj.byzantineValidators = message.byzantineValidators.map(e => e ? Misbehavior.toJSON(e) : undefined);
-    } else {
-      obj.byzantineValidators = [];
-    }
-    return obj;
-  },
-  fromPartial(object: DeepPartial<RequestBeginBlock>): RequestBeginBlock {
-    const message = createBaseRequestBeginBlock();
-    message.hash = object.hash ?? new Uint8Array();
-    message.header = object.header !== undefined && object.header !== null ? Header.fromPartial(object.header) : undefined;
-    message.lastCommitInfo = object.lastCommitInfo !== undefined && object.lastCommitInfo !== null ? CommitInfo.fromPartial(object.lastCommitInfo) : undefined;
-    message.byzantineValidators = object.byzantineValidators?.map(e => Misbehavior.fromPartial(e)) || [];
-    return message;
-  },
-  fromSDK(object: RequestBeginBlockSDKType): RequestBeginBlock {
-    return {
-      hash: object?.hash,
-      header: object.header ? Header.fromSDK(object.header) : undefined,
-      lastCommitInfo: object.last_commit_info ? CommitInfo.fromSDK(object.last_commit_info) : undefined,
-      byzantineValidators: Array.isArray(object?.byzantine_validators) ? object.byzantine_validators.map((e: any) => Misbehavior.fromSDK(e)) : []
-    };
-  },
-  toSDK(message: RequestBeginBlock): RequestBeginBlockSDKType {
-    const obj: any = {};
-    obj.hash = message.hash;
-    message.header !== undefined && (obj.header = message.header ? Header.toSDK(message.header) : undefined);
-    message.lastCommitInfo !== undefined && (obj.last_commit_info = message.lastCommitInfo ? CommitInfo.toSDK(message.lastCommitInfo) : undefined);
-    if (message.byzantineValidators) {
-      obj.byzantine_validators = message.byzantineValidators.map(e => e ? Misbehavior.toSDK(e) : undefined);
-    } else {
-      obj.byzantine_validators = [];
-    }
-    return obj;
-  },
-  fromAmino(object: RequestBeginBlockAmino): RequestBeginBlock {
-    return {
-      hash: object.hash,
-      header: object?.header ? Header.fromAmino(object.header) : undefined,
-      lastCommitInfo: object?.last_commit_info ? CommitInfo.fromAmino(object.last_commit_info) : undefined,
-      byzantineValidators: Array.isArray(object?.byzantine_validators) ? object.byzantine_validators.map((e: any) => Misbehavior.fromAmino(e)) : []
-    };
-  },
-  toAmino(message: RequestBeginBlock): RequestBeginBlockAmino {
-    const obj: any = {};
-    obj.hash = message.hash;
-    obj.header = message.header ? Header.toAmino(message.header) : undefined;
-    obj.last_commit_info = message.lastCommitInfo ? CommitInfo.toAmino(message.lastCommitInfo) : undefined;
-    if (message.byzantineValidators) {
-      obj.byzantine_validators = message.byzantineValidators.map(e => e ? Misbehavior.toAmino(e) : undefined);
-    } else {
-      obj.byzantine_validators = [];
-    }
-    return obj;
-  },
-  fromAminoMsg(object: RequestBeginBlockAminoMsg): RequestBeginBlock {
-    return RequestBeginBlock.fromAmino(object.value);
-  },
-  fromProtoMsg(message: RequestBeginBlockProtoMsg): RequestBeginBlock {
-    return RequestBeginBlock.decode(message.value);
-  },
-  toProto(message: RequestBeginBlock): Uint8Array {
-    return RequestBeginBlock.encode(message).finish();
-  },
-  toProtoMsg(message: RequestBeginBlock): RequestBeginBlockProtoMsg {
-    return {
-      typeUrl: "/tendermint.abci.RequestBeginBlock",
-      value: RequestBeginBlock.encode(message).finish()
-    };
-  }
-};
 function createBaseRequestCheckTx(): RequestCheckTx {
   return {
     tx: new Uint8Array(),
@@ -2585,168 +2585,6 @@ export const RequestCheckTx = {
     return {
       typeUrl: "/tendermint.abci.RequestCheckTx",
       value: RequestCheckTx.encode(message).finish()
-    };
-  }
-};
-function createBaseRequestDeliverTx(): RequestDeliverTx {
-  return {
-    tx: new Uint8Array()
-  };
-}
-export const RequestDeliverTx = {
-  typeUrl: "/tendermint.abci.RequestDeliverTx",
-  encode(message: RequestDeliverTx, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.tx.length !== 0) {
-      writer.uint32(10).bytes(message.tx);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): RequestDeliverTx {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRequestDeliverTx();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.tx = reader.bytes();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): RequestDeliverTx {
-    return {
-      tx: isSet(object.tx) ? bytesFromBase64(object.tx) : new Uint8Array()
-    };
-  },
-  toJSON(message: RequestDeliverTx): unknown {
-    const obj: any = {};
-    message.tx !== undefined && (obj.tx = base64FromBytes(message.tx !== undefined ? message.tx : new Uint8Array()));
-    return obj;
-  },
-  fromPartial(object: DeepPartial<RequestDeliverTx>): RequestDeliverTx {
-    const message = createBaseRequestDeliverTx();
-    message.tx = object.tx ?? new Uint8Array();
-    return message;
-  },
-  fromSDK(object: RequestDeliverTxSDKType): RequestDeliverTx {
-    return {
-      tx: object?.tx
-    };
-  },
-  toSDK(message: RequestDeliverTx): RequestDeliverTxSDKType {
-    const obj: any = {};
-    obj.tx = message.tx;
-    return obj;
-  },
-  fromAmino(object: RequestDeliverTxAmino): RequestDeliverTx {
-    return {
-      tx: object.tx
-    };
-  },
-  toAmino(message: RequestDeliverTx): RequestDeliverTxAmino {
-    const obj: any = {};
-    obj.tx = message.tx;
-    return obj;
-  },
-  fromAminoMsg(object: RequestDeliverTxAminoMsg): RequestDeliverTx {
-    return RequestDeliverTx.fromAmino(object.value);
-  },
-  fromProtoMsg(message: RequestDeliverTxProtoMsg): RequestDeliverTx {
-    return RequestDeliverTx.decode(message.value);
-  },
-  toProto(message: RequestDeliverTx): Uint8Array {
-    return RequestDeliverTx.encode(message).finish();
-  },
-  toProtoMsg(message: RequestDeliverTx): RequestDeliverTxProtoMsg {
-    return {
-      typeUrl: "/tendermint.abci.RequestDeliverTx",
-      value: RequestDeliverTx.encode(message).finish()
-    };
-  }
-};
-function createBaseRequestEndBlock(): RequestEndBlock {
-  return {
-    height: BigInt(0)
-  };
-}
-export const RequestEndBlock = {
-  typeUrl: "/tendermint.abci.RequestEndBlock",
-  encode(message: RequestEndBlock, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.height !== BigInt(0)) {
-      writer.uint32(8).int64(message.height);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): RequestEndBlock {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRequestEndBlock();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.height = reader.int64();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): RequestEndBlock {
-    return {
-      height: isSet(object.height) ? BigInt(object.height.toString()) : BigInt(0)
-    };
-  },
-  toJSON(message: RequestEndBlock): unknown {
-    const obj: any = {};
-    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
-    return obj;
-  },
-  fromPartial(object: DeepPartial<RequestEndBlock>): RequestEndBlock {
-    const message = createBaseRequestEndBlock();
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
-    return message;
-  },
-  fromSDK(object: RequestEndBlockSDKType): RequestEndBlock {
-    return {
-      height: object?.height
-    };
-  },
-  toSDK(message: RequestEndBlock): RequestEndBlockSDKType {
-    const obj: any = {};
-    obj.height = message.height;
-    return obj;
-  },
-  fromAmino(object: RequestEndBlockAmino): RequestEndBlock {
-    return {
-      height: BigInt(object.height)
-    };
-  },
-  toAmino(message: RequestEndBlock): RequestEndBlockAmino {
-    const obj: any = {};
-    obj.height = message.height ? message.height.toString() : undefined;
-    return obj;
-  },
-  fromAminoMsg(object: RequestEndBlockAminoMsg): RequestEndBlock {
-    return RequestEndBlock.fromAmino(object.value);
-  },
-  fromProtoMsg(message: RequestEndBlockProtoMsg): RequestEndBlock {
-    return RequestEndBlock.decode(message.value);
-  },
-  toProto(message: RequestEndBlock): Uint8Array {
-    return RequestEndBlock.encode(message).finish();
-  },
-  toProtoMsg(message: RequestEndBlock): RequestEndBlockProtoMsg {
-    return {
-      typeUrl: "/tendermint.abci.RequestEndBlock",
-      value: RequestEndBlock.encode(message).finish()
     };
   }
 };
@@ -3196,7 +3034,7 @@ function createBaseRequestPrepareProposal(): RequestPrepareProposal {
     localLastCommit: ExtendedCommitInfo.fromPartial({}),
     misbehavior: [],
     height: BigInt(0),
-    time: undefined,
+    time: new Date(),
     nextValidatorsHash: new Uint8Array(),
     proposerAddress: new Uint8Array()
   };
@@ -3399,7 +3237,7 @@ function createBaseRequestProcessProposal(): RequestProcessProposal {
     misbehavior: [],
     hash: new Uint8Array(),
     height: BigInt(0),
-    time: undefined,
+    time: new Date(),
     nextValidatorsHash: new Uint8Array(),
     proposerAddress: new Uint8Array()
   };
@@ -3595,6 +3433,427 @@ export const RequestProcessProposal = {
     };
   }
 };
+function createBaseRequestExtendVote(): RequestExtendVote {
+  return {
+    hash: new Uint8Array(),
+    height: BigInt(0)
+  };
+}
+export const RequestExtendVote = {
+  typeUrl: "/tendermint.abci.RequestExtendVote",
+  encode(message: RequestExtendVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hash.length !== 0) {
+      writer.uint32(10).bytes(message.hash);
+    }
+    if (message.height !== BigInt(0)) {
+      writer.uint32(16).int64(message.height);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestExtendVote {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestExtendVote();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.hash = reader.bytes();
+          break;
+        case 2:
+          message.height = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): RequestExtendVote {
+    return {
+      hash: isSet(object.hash) ? bytesFromBase64(object.hash) : new Uint8Array(),
+      height: isSet(object.height) ? BigInt(object.height.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: RequestExtendVote): unknown {
+    const obj: any = {};
+    message.hash !== undefined && (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
+    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: DeepPartial<RequestExtendVote>): RequestExtendVote {
+    const message = createBaseRequestExtendVote();
+    message.hash = object.hash ?? new Uint8Array();
+    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
+    return message;
+  },
+  fromSDK(object: RequestExtendVoteSDKType): RequestExtendVote {
+    return {
+      hash: object?.hash,
+      height: object?.height
+    };
+  },
+  toSDK(message: RequestExtendVote): RequestExtendVoteSDKType {
+    const obj: any = {};
+    obj.hash = message.hash;
+    obj.height = message.height;
+    return obj;
+  },
+  fromAmino(object: RequestExtendVoteAmino): RequestExtendVote {
+    return {
+      hash: object.hash,
+      height: BigInt(object.height)
+    };
+  },
+  toAmino(message: RequestExtendVote): RequestExtendVoteAmino {
+    const obj: any = {};
+    obj.hash = message.hash;
+    obj.height = message.height ? message.height.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: RequestExtendVoteAminoMsg): RequestExtendVote {
+    return RequestExtendVote.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RequestExtendVoteProtoMsg): RequestExtendVote {
+    return RequestExtendVote.decode(message.value);
+  },
+  toProto(message: RequestExtendVote): Uint8Array {
+    return RequestExtendVote.encode(message).finish();
+  },
+  toProtoMsg(message: RequestExtendVote): RequestExtendVoteProtoMsg {
+    return {
+      typeUrl: "/tendermint.abci.RequestExtendVote",
+      value: RequestExtendVote.encode(message).finish()
+    };
+  }
+};
+function createBaseRequestVerifyVoteExtension(): RequestVerifyVoteExtension {
+  return {
+    hash: new Uint8Array(),
+    validatorAddress: new Uint8Array(),
+    height: BigInt(0),
+    voteExtension: new Uint8Array()
+  };
+}
+export const RequestVerifyVoteExtension = {
+  typeUrl: "/tendermint.abci.RequestVerifyVoteExtension",
+  encode(message: RequestVerifyVoteExtension, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.hash.length !== 0) {
+      writer.uint32(10).bytes(message.hash);
+    }
+    if (message.validatorAddress.length !== 0) {
+      writer.uint32(18).bytes(message.validatorAddress);
+    }
+    if (message.height !== BigInt(0)) {
+      writer.uint32(24).int64(message.height);
+    }
+    if (message.voteExtension.length !== 0) {
+      writer.uint32(34).bytes(message.voteExtension);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestVerifyVoteExtension {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestVerifyVoteExtension();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.hash = reader.bytes();
+          break;
+        case 2:
+          message.validatorAddress = reader.bytes();
+          break;
+        case 3:
+          message.height = reader.int64();
+          break;
+        case 4:
+          message.voteExtension = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): RequestVerifyVoteExtension {
+    return {
+      hash: isSet(object.hash) ? bytesFromBase64(object.hash) : new Uint8Array(),
+      validatorAddress: isSet(object.validatorAddress) ? bytesFromBase64(object.validatorAddress) : new Uint8Array(),
+      height: isSet(object.height) ? BigInt(object.height.toString()) : BigInt(0),
+      voteExtension: isSet(object.voteExtension) ? bytesFromBase64(object.voteExtension) : new Uint8Array()
+    };
+  },
+  toJSON(message: RequestVerifyVoteExtension): unknown {
+    const obj: any = {};
+    message.hash !== undefined && (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
+    message.validatorAddress !== undefined && (obj.validatorAddress = base64FromBytes(message.validatorAddress !== undefined ? message.validatorAddress : new Uint8Array()));
+    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
+    message.voteExtension !== undefined && (obj.voteExtension = base64FromBytes(message.voteExtension !== undefined ? message.voteExtension : new Uint8Array()));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<RequestVerifyVoteExtension>): RequestVerifyVoteExtension {
+    const message = createBaseRequestVerifyVoteExtension();
+    message.hash = object.hash ?? new Uint8Array();
+    message.validatorAddress = object.validatorAddress ?? new Uint8Array();
+    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
+    message.voteExtension = object.voteExtension ?? new Uint8Array();
+    return message;
+  },
+  fromSDK(object: RequestVerifyVoteExtensionSDKType): RequestVerifyVoteExtension {
+    return {
+      hash: object?.hash,
+      validatorAddress: object?.validator_address,
+      height: object?.height,
+      voteExtension: object?.vote_extension
+    };
+  },
+  toSDK(message: RequestVerifyVoteExtension): RequestVerifyVoteExtensionSDKType {
+    const obj: any = {};
+    obj.hash = message.hash;
+    obj.validator_address = message.validatorAddress;
+    obj.height = message.height;
+    obj.vote_extension = message.voteExtension;
+    return obj;
+  },
+  fromAmino(object: RequestVerifyVoteExtensionAmino): RequestVerifyVoteExtension {
+    return {
+      hash: object.hash,
+      validatorAddress: object.validator_address,
+      height: BigInt(object.height),
+      voteExtension: object.vote_extension
+    };
+  },
+  toAmino(message: RequestVerifyVoteExtension): RequestVerifyVoteExtensionAmino {
+    const obj: any = {};
+    obj.hash = message.hash;
+    obj.validator_address = message.validatorAddress;
+    obj.height = message.height ? message.height.toString() : undefined;
+    obj.vote_extension = message.voteExtension;
+    return obj;
+  },
+  fromAminoMsg(object: RequestVerifyVoteExtensionAminoMsg): RequestVerifyVoteExtension {
+    return RequestVerifyVoteExtension.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RequestVerifyVoteExtensionProtoMsg): RequestVerifyVoteExtension {
+    return RequestVerifyVoteExtension.decode(message.value);
+  },
+  toProto(message: RequestVerifyVoteExtension): Uint8Array {
+    return RequestVerifyVoteExtension.encode(message).finish();
+  },
+  toProtoMsg(message: RequestVerifyVoteExtension): RequestVerifyVoteExtensionProtoMsg {
+    return {
+      typeUrl: "/tendermint.abci.RequestVerifyVoteExtension",
+      value: RequestVerifyVoteExtension.encode(message).finish()
+    };
+  }
+};
+function createBaseRequestFinalizeBlock(): RequestFinalizeBlock {
+  return {
+    txs: [],
+    decidedLastCommit: CommitInfo.fromPartial({}),
+    misbehavior: [],
+    hash: new Uint8Array(),
+    height: BigInt(0),
+    time: new Date(),
+    nextValidatorsHash: new Uint8Array(),
+    proposerAddress: new Uint8Array()
+  };
+}
+export const RequestFinalizeBlock = {
+  typeUrl: "/tendermint.abci.RequestFinalizeBlock",
+  encode(message: RequestFinalizeBlock, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.txs) {
+      writer.uint32(10).bytes(v!);
+    }
+    if (message.decidedLastCommit !== undefined) {
+      CommitInfo.encode(message.decidedLastCommit, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.misbehavior) {
+      Misbehavior.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.hash.length !== 0) {
+      writer.uint32(34).bytes(message.hash);
+    }
+    if (message.height !== BigInt(0)) {
+      writer.uint32(40).int64(message.height);
+    }
+    if (message.time !== undefined) {
+      Timestamp.encode(toTimestamp(message.time), writer.uint32(50).fork()).ldelim();
+    }
+    if (message.nextValidatorsHash.length !== 0) {
+      writer.uint32(58).bytes(message.nextValidatorsHash);
+    }
+    if (message.proposerAddress.length !== 0) {
+      writer.uint32(66).bytes(message.proposerAddress);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RequestFinalizeBlock {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestFinalizeBlock();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.txs.push(reader.bytes());
+          break;
+        case 2:
+          message.decidedLastCommit = CommitInfo.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.misbehavior.push(Misbehavior.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.hash = reader.bytes();
+          break;
+        case 5:
+          message.height = reader.int64();
+          break;
+        case 6:
+          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 7:
+          message.nextValidatorsHash = reader.bytes();
+          break;
+        case 8:
+          message.proposerAddress = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): RequestFinalizeBlock {
+    return {
+      txs: Array.isArray(object?.txs) ? object.txs.map((e: any) => bytesFromBase64(e)) : [],
+      decidedLastCommit: isSet(object.decidedLastCommit) ? CommitInfo.fromJSON(object.decidedLastCommit) : undefined,
+      misbehavior: Array.isArray(object?.misbehavior) ? object.misbehavior.map((e: any) => Misbehavior.fromJSON(e)) : [],
+      hash: isSet(object.hash) ? bytesFromBase64(object.hash) : new Uint8Array(),
+      height: isSet(object.height) ? BigInt(object.height.toString()) : BigInt(0),
+      time: isSet(object.time) ? new Date(object.time) : undefined,
+      nextValidatorsHash: isSet(object.nextValidatorsHash) ? bytesFromBase64(object.nextValidatorsHash) : new Uint8Array(),
+      proposerAddress: isSet(object.proposerAddress) ? bytesFromBase64(object.proposerAddress) : new Uint8Array()
+    };
+  },
+  toJSON(message: RequestFinalizeBlock): unknown {
+    const obj: any = {};
+    if (message.txs) {
+      obj.txs = message.txs.map(e => base64FromBytes(e !== undefined ? e : new Uint8Array()));
+    } else {
+      obj.txs = [];
+    }
+    message.decidedLastCommit !== undefined && (obj.decidedLastCommit = message.decidedLastCommit ? CommitInfo.toJSON(message.decidedLastCommit) : undefined);
+    if (message.misbehavior) {
+      obj.misbehavior = message.misbehavior.map(e => e ? Misbehavior.toJSON(e) : undefined);
+    } else {
+      obj.misbehavior = [];
+    }
+    message.hash !== undefined && (obj.hash = base64FromBytes(message.hash !== undefined ? message.hash : new Uint8Array()));
+    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
+    message.time !== undefined && (obj.time = message.time.toISOString());
+    message.nextValidatorsHash !== undefined && (obj.nextValidatorsHash = base64FromBytes(message.nextValidatorsHash !== undefined ? message.nextValidatorsHash : new Uint8Array()));
+    message.proposerAddress !== undefined && (obj.proposerAddress = base64FromBytes(message.proposerAddress !== undefined ? message.proposerAddress : new Uint8Array()));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<RequestFinalizeBlock>): RequestFinalizeBlock {
+    const message = createBaseRequestFinalizeBlock();
+    message.txs = object.txs?.map(e => e) || [];
+    message.decidedLastCommit = object.decidedLastCommit !== undefined && object.decidedLastCommit !== null ? CommitInfo.fromPartial(object.decidedLastCommit) : undefined;
+    message.misbehavior = object.misbehavior?.map(e => Misbehavior.fromPartial(e)) || [];
+    message.hash = object.hash ?? new Uint8Array();
+    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
+    message.time = object.time ?? undefined;
+    message.nextValidatorsHash = object.nextValidatorsHash ?? new Uint8Array();
+    message.proposerAddress = object.proposerAddress ?? new Uint8Array();
+    return message;
+  },
+  fromSDK(object: RequestFinalizeBlockSDKType): RequestFinalizeBlock {
+    return {
+      txs: Array.isArray(object?.txs) ? object.txs.map((e: any) => e) : [],
+      decidedLastCommit: object.decided_last_commit ? CommitInfo.fromSDK(object.decided_last_commit) : undefined,
+      misbehavior: Array.isArray(object?.misbehavior) ? object.misbehavior.map((e: any) => Misbehavior.fromSDK(e)) : [],
+      hash: object?.hash,
+      height: object?.height,
+      time: object.time ?? undefined,
+      nextValidatorsHash: object?.next_validators_hash,
+      proposerAddress: object?.proposer_address
+    };
+  },
+  toSDK(message: RequestFinalizeBlock): RequestFinalizeBlockSDKType {
+    const obj: any = {};
+    if (message.txs) {
+      obj.txs = message.txs.map(e => e);
+    } else {
+      obj.txs = [];
+    }
+    message.decidedLastCommit !== undefined && (obj.decided_last_commit = message.decidedLastCommit ? CommitInfo.toSDK(message.decidedLastCommit) : undefined);
+    if (message.misbehavior) {
+      obj.misbehavior = message.misbehavior.map(e => e ? Misbehavior.toSDK(e) : undefined);
+    } else {
+      obj.misbehavior = [];
+    }
+    obj.hash = message.hash;
+    obj.height = message.height;
+    message.time !== undefined && (obj.time = message.time ?? undefined);
+    obj.next_validators_hash = message.nextValidatorsHash;
+    obj.proposer_address = message.proposerAddress;
+    return obj;
+  },
+  fromAmino(object: RequestFinalizeBlockAmino): RequestFinalizeBlock {
+    return {
+      txs: Array.isArray(object?.txs) ? object.txs.map((e: any) => e) : [],
+      decidedLastCommit: object?.decided_last_commit ? CommitInfo.fromAmino(object.decided_last_commit) : undefined,
+      misbehavior: Array.isArray(object?.misbehavior) ? object.misbehavior.map((e: any) => Misbehavior.fromAmino(e)) : [],
+      hash: object.hash,
+      height: BigInt(object.height),
+      time: object.time,
+      nextValidatorsHash: object.next_validators_hash,
+      proposerAddress: object.proposer_address
+    };
+  },
+  toAmino(message: RequestFinalizeBlock): RequestFinalizeBlockAmino {
+    const obj: any = {};
+    if (message.txs) {
+      obj.txs = message.txs.map(e => e);
+    } else {
+      obj.txs = [];
+    }
+    obj.decided_last_commit = message.decidedLastCommit ? CommitInfo.toAmino(message.decidedLastCommit) : undefined;
+    if (message.misbehavior) {
+      obj.misbehavior = message.misbehavior.map(e => e ? Misbehavior.toAmino(e) : undefined);
+    } else {
+      obj.misbehavior = [];
+    }
+    obj.hash = message.hash;
+    obj.height = message.height ? message.height.toString() : undefined;
+    obj.time = message.time;
+    obj.next_validators_hash = message.nextValidatorsHash;
+    obj.proposer_address = message.proposerAddress;
+    return obj;
+  },
+  fromAminoMsg(object: RequestFinalizeBlockAminoMsg): RequestFinalizeBlock {
+    return RequestFinalizeBlock.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RequestFinalizeBlockProtoMsg): RequestFinalizeBlock {
+    return RequestFinalizeBlock.decode(message.value);
+  },
+  toProto(message: RequestFinalizeBlock): Uint8Array {
+    return RequestFinalizeBlock.encode(message).finish();
+  },
+  toProtoMsg(message: RequestFinalizeBlock): RequestFinalizeBlockProtoMsg {
+    return {
+      typeUrl: "/tendermint.abci.RequestFinalizeBlock",
+      value: RequestFinalizeBlock.encode(message).finish()
+    };
+  }
+};
 function createBaseResponse(): Response {
   return {
     exception: undefined,
@@ -3603,17 +3862,17 @@ function createBaseResponse(): Response {
     info: undefined,
     initChain: undefined,
     query: undefined,
-    beginBlock: undefined,
     checkTx: undefined,
-    deliverTx: undefined,
-    endBlock: undefined,
     commit: undefined,
     listSnapshots: undefined,
     offerSnapshot: undefined,
     loadSnapshotChunk: undefined,
     applySnapshotChunk: undefined,
     prepareProposal: undefined,
-    processProposal: undefined
+    processProposal: undefined,
+    extendVote: undefined,
+    verifyVoteExtension: undefined,
+    finalizeBlock: undefined
   };
 }
 export const Response = {
@@ -3637,17 +3896,8 @@ export const Response = {
     if (message.query !== undefined) {
       ResponseQuery.encode(message.query, writer.uint32(58).fork()).ldelim();
     }
-    if (message.beginBlock !== undefined) {
-      ResponseBeginBlock.encode(message.beginBlock, writer.uint32(66).fork()).ldelim();
-    }
     if (message.checkTx !== undefined) {
       ResponseCheckTx.encode(message.checkTx, writer.uint32(74).fork()).ldelim();
-    }
-    if (message.deliverTx !== undefined) {
-      ResponseDeliverTx.encode(message.deliverTx, writer.uint32(82).fork()).ldelim();
-    }
-    if (message.endBlock !== undefined) {
-      ResponseEndBlock.encode(message.endBlock, writer.uint32(90).fork()).ldelim();
     }
     if (message.commit !== undefined) {
       ResponseCommit.encode(message.commit, writer.uint32(98).fork()).ldelim();
@@ -3669,6 +3919,15 @@ export const Response = {
     }
     if (message.processProposal !== undefined) {
       ResponseProcessProposal.encode(message.processProposal, writer.uint32(146).fork()).ldelim();
+    }
+    if (message.extendVote !== undefined) {
+      ResponseExtendVote.encode(message.extendVote, writer.uint32(154).fork()).ldelim();
+    }
+    if (message.verifyVoteExtension !== undefined) {
+      ResponseVerifyVoteExtension.encode(message.verifyVoteExtension, writer.uint32(162).fork()).ldelim();
+    }
+    if (message.finalizeBlock !== undefined) {
+      ResponseFinalizeBlock.encode(message.finalizeBlock, writer.uint32(170).fork()).ldelim();
     }
     return writer;
   },
@@ -3697,17 +3956,8 @@ export const Response = {
         case 7:
           message.query = ResponseQuery.decode(reader, reader.uint32());
           break;
-        case 8:
-          message.beginBlock = ResponseBeginBlock.decode(reader, reader.uint32());
-          break;
         case 9:
           message.checkTx = ResponseCheckTx.decode(reader, reader.uint32());
-          break;
-        case 10:
-          message.deliverTx = ResponseDeliverTx.decode(reader, reader.uint32());
-          break;
-        case 11:
-          message.endBlock = ResponseEndBlock.decode(reader, reader.uint32());
           break;
         case 12:
           message.commit = ResponseCommit.decode(reader, reader.uint32());
@@ -3730,6 +3980,15 @@ export const Response = {
         case 18:
           message.processProposal = ResponseProcessProposal.decode(reader, reader.uint32());
           break;
+        case 19:
+          message.extendVote = ResponseExtendVote.decode(reader, reader.uint32());
+          break;
+        case 20:
+          message.verifyVoteExtension = ResponseVerifyVoteExtension.decode(reader, reader.uint32());
+          break;
+        case 21:
+          message.finalizeBlock = ResponseFinalizeBlock.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -3745,17 +4004,17 @@ export const Response = {
       info: isSet(object.info) ? ResponseInfo.fromJSON(object.info) : undefined,
       initChain: isSet(object.initChain) ? ResponseInitChain.fromJSON(object.initChain) : undefined,
       query: isSet(object.query) ? ResponseQuery.fromJSON(object.query) : undefined,
-      beginBlock: isSet(object.beginBlock) ? ResponseBeginBlock.fromJSON(object.beginBlock) : undefined,
       checkTx: isSet(object.checkTx) ? ResponseCheckTx.fromJSON(object.checkTx) : undefined,
-      deliverTx: isSet(object.deliverTx) ? ResponseDeliverTx.fromJSON(object.deliverTx) : undefined,
-      endBlock: isSet(object.endBlock) ? ResponseEndBlock.fromJSON(object.endBlock) : undefined,
       commit: isSet(object.commit) ? ResponseCommit.fromJSON(object.commit) : undefined,
       listSnapshots: isSet(object.listSnapshots) ? ResponseListSnapshots.fromJSON(object.listSnapshots) : undefined,
       offerSnapshot: isSet(object.offerSnapshot) ? ResponseOfferSnapshot.fromJSON(object.offerSnapshot) : undefined,
       loadSnapshotChunk: isSet(object.loadSnapshotChunk) ? ResponseLoadSnapshotChunk.fromJSON(object.loadSnapshotChunk) : undefined,
       applySnapshotChunk: isSet(object.applySnapshotChunk) ? ResponseApplySnapshotChunk.fromJSON(object.applySnapshotChunk) : undefined,
       prepareProposal: isSet(object.prepareProposal) ? ResponsePrepareProposal.fromJSON(object.prepareProposal) : undefined,
-      processProposal: isSet(object.processProposal) ? ResponseProcessProposal.fromJSON(object.processProposal) : undefined
+      processProposal: isSet(object.processProposal) ? ResponseProcessProposal.fromJSON(object.processProposal) : undefined,
+      extendVote: isSet(object.extendVote) ? ResponseExtendVote.fromJSON(object.extendVote) : undefined,
+      verifyVoteExtension: isSet(object.verifyVoteExtension) ? ResponseVerifyVoteExtension.fromJSON(object.verifyVoteExtension) : undefined,
+      finalizeBlock: isSet(object.finalizeBlock) ? ResponseFinalizeBlock.fromJSON(object.finalizeBlock) : undefined
     };
   },
   toJSON(message: Response): unknown {
@@ -3766,10 +4025,7 @@ export const Response = {
     message.info !== undefined && (obj.info = message.info ? ResponseInfo.toJSON(message.info) : undefined);
     message.initChain !== undefined && (obj.initChain = message.initChain ? ResponseInitChain.toJSON(message.initChain) : undefined);
     message.query !== undefined && (obj.query = message.query ? ResponseQuery.toJSON(message.query) : undefined);
-    message.beginBlock !== undefined && (obj.beginBlock = message.beginBlock ? ResponseBeginBlock.toJSON(message.beginBlock) : undefined);
     message.checkTx !== undefined && (obj.checkTx = message.checkTx ? ResponseCheckTx.toJSON(message.checkTx) : undefined);
-    message.deliverTx !== undefined && (obj.deliverTx = message.deliverTx ? ResponseDeliverTx.toJSON(message.deliverTx) : undefined);
-    message.endBlock !== undefined && (obj.endBlock = message.endBlock ? ResponseEndBlock.toJSON(message.endBlock) : undefined);
     message.commit !== undefined && (obj.commit = message.commit ? ResponseCommit.toJSON(message.commit) : undefined);
     message.listSnapshots !== undefined && (obj.listSnapshots = message.listSnapshots ? ResponseListSnapshots.toJSON(message.listSnapshots) : undefined);
     message.offerSnapshot !== undefined && (obj.offerSnapshot = message.offerSnapshot ? ResponseOfferSnapshot.toJSON(message.offerSnapshot) : undefined);
@@ -3777,6 +4033,9 @@ export const Response = {
     message.applySnapshotChunk !== undefined && (obj.applySnapshotChunk = message.applySnapshotChunk ? ResponseApplySnapshotChunk.toJSON(message.applySnapshotChunk) : undefined);
     message.prepareProposal !== undefined && (obj.prepareProposal = message.prepareProposal ? ResponsePrepareProposal.toJSON(message.prepareProposal) : undefined);
     message.processProposal !== undefined && (obj.processProposal = message.processProposal ? ResponseProcessProposal.toJSON(message.processProposal) : undefined);
+    message.extendVote !== undefined && (obj.extendVote = message.extendVote ? ResponseExtendVote.toJSON(message.extendVote) : undefined);
+    message.verifyVoteExtension !== undefined && (obj.verifyVoteExtension = message.verifyVoteExtension ? ResponseVerifyVoteExtension.toJSON(message.verifyVoteExtension) : undefined);
+    message.finalizeBlock !== undefined && (obj.finalizeBlock = message.finalizeBlock ? ResponseFinalizeBlock.toJSON(message.finalizeBlock) : undefined);
     return obj;
   },
   fromPartial(object: DeepPartial<Response>): Response {
@@ -3787,10 +4046,7 @@ export const Response = {
     message.info = object.info !== undefined && object.info !== null ? ResponseInfo.fromPartial(object.info) : undefined;
     message.initChain = object.initChain !== undefined && object.initChain !== null ? ResponseInitChain.fromPartial(object.initChain) : undefined;
     message.query = object.query !== undefined && object.query !== null ? ResponseQuery.fromPartial(object.query) : undefined;
-    message.beginBlock = object.beginBlock !== undefined && object.beginBlock !== null ? ResponseBeginBlock.fromPartial(object.beginBlock) : undefined;
     message.checkTx = object.checkTx !== undefined && object.checkTx !== null ? ResponseCheckTx.fromPartial(object.checkTx) : undefined;
-    message.deliverTx = object.deliverTx !== undefined && object.deliverTx !== null ? ResponseDeliverTx.fromPartial(object.deliverTx) : undefined;
-    message.endBlock = object.endBlock !== undefined && object.endBlock !== null ? ResponseEndBlock.fromPartial(object.endBlock) : undefined;
     message.commit = object.commit !== undefined && object.commit !== null ? ResponseCommit.fromPartial(object.commit) : undefined;
     message.listSnapshots = object.listSnapshots !== undefined && object.listSnapshots !== null ? ResponseListSnapshots.fromPartial(object.listSnapshots) : undefined;
     message.offerSnapshot = object.offerSnapshot !== undefined && object.offerSnapshot !== null ? ResponseOfferSnapshot.fromPartial(object.offerSnapshot) : undefined;
@@ -3798,6 +4054,9 @@ export const Response = {
     message.applySnapshotChunk = object.applySnapshotChunk !== undefined && object.applySnapshotChunk !== null ? ResponseApplySnapshotChunk.fromPartial(object.applySnapshotChunk) : undefined;
     message.prepareProposal = object.prepareProposal !== undefined && object.prepareProposal !== null ? ResponsePrepareProposal.fromPartial(object.prepareProposal) : undefined;
     message.processProposal = object.processProposal !== undefined && object.processProposal !== null ? ResponseProcessProposal.fromPartial(object.processProposal) : undefined;
+    message.extendVote = object.extendVote !== undefined && object.extendVote !== null ? ResponseExtendVote.fromPartial(object.extendVote) : undefined;
+    message.verifyVoteExtension = object.verifyVoteExtension !== undefined && object.verifyVoteExtension !== null ? ResponseVerifyVoteExtension.fromPartial(object.verifyVoteExtension) : undefined;
+    message.finalizeBlock = object.finalizeBlock !== undefined && object.finalizeBlock !== null ? ResponseFinalizeBlock.fromPartial(object.finalizeBlock) : undefined;
     return message;
   },
   fromSDK(object: ResponseSDKType): Response {
@@ -3808,17 +4067,17 @@ export const Response = {
       info: object.info ? ResponseInfo.fromSDK(object.info) : undefined,
       initChain: object.init_chain ? ResponseInitChain.fromSDK(object.init_chain) : undefined,
       query: object.query ? ResponseQuery.fromSDK(object.query) : undefined,
-      beginBlock: object.begin_block ? ResponseBeginBlock.fromSDK(object.begin_block) : undefined,
       checkTx: object.check_tx ? ResponseCheckTx.fromSDK(object.check_tx) : undefined,
-      deliverTx: object.deliver_tx ? ResponseDeliverTx.fromSDK(object.deliver_tx) : undefined,
-      endBlock: object.end_block ? ResponseEndBlock.fromSDK(object.end_block) : undefined,
       commit: object.commit ? ResponseCommit.fromSDK(object.commit) : undefined,
       listSnapshots: object.list_snapshots ? ResponseListSnapshots.fromSDK(object.list_snapshots) : undefined,
       offerSnapshot: object.offer_snapshot ? ResponseOfferSnapshot.fromSDK(object.offer_snapshot) : undefined,
       loadSnapshotChunk: object.load_snapshot_chunk ? ResponseLoadSnapshotChunk.fromSDK(object.load_snapshot_chunk) : undefined,
       applySnapshotChunk: object.apply_snapshot_chunk ? ResponseApplySnapshotChunk.fromSDK(object.apply_snapshot_chunk) : undefined,
       prepareProposal: object.prepare_proposal ? ResponsePrepareProposal.fromSDK(object.prepare_proposal) : undefined,
-      processProposal: object.process_proposal ? ResponseProcessProposal.fromSDK(object.process_proposal) : undefined
+      processProposal: object.process_proposal ? ResponseProcessProposal.fromSDK(object.process_proposal) : undefined,
+      extendVote: object.extend_vote ? ResponseExtendVote.fromSDK(object.extend_vote) : undefined,
+      verifyVoteExtension: object.verify_vote_extension ? ResponseVerifyVoteExtension.fromSDK(object.verify_vote_extension) : undefined,
+      finalizeBlock: object.finalize_block ? ResponseFinalizeBlock.fromSDK(object.finalize_block) : undefined
     };
   },
   toSDK(message: Response): ResponseSDKType {
@@ -3829,10 +4088,7 @@ export const Response = {
     message.info !== undefined && (obj.info = message.info ? ResponseInfo.toSDK(message.info) : undefined);
     message.initChain !== undefined && (obj.init_chain = message.initChain ? ResponseInitChain.toSDK(message.initChain) : undefined);
     message.query !== undefined && (obj.query = message.query ? ResponseQuery.toSDK(message.query) : undefined);
-    message.beginBlock !== undefined && (obj.begin_block = message.beginBlock ? ResponseBeginBlock.toSDK(message.beginBlock) : undefined);
     message.checkTx !== undefined && (obj.check_tx = message.checkTx ? ResponseCheckTx.toSDK(message.checkTx) : undefined);
-    message.deliverTx !== undefined && (obj.deliver_tx = message.deliverTx ? ResponseDeliverTx.toSDK(message.deliverTx) : undefined);
-    message.endBlock !== undefined && (obj.end_block = message.endBlock ? ResponseEndBlock.toSDK(message.endBlock) : undefined);
     message.commit !== undefined && (obj.commit = message.commit ? ResponseCommit.toSDK(message.commit) : undefined);
     message.listSnapshots !== undefined && (obj.list_snapshots = message.listSnapshots ? ResponseListSnapshots.toSDK(message.listSnapshots) : undefined);
     message.offerSnapshot !== undefined && (obj.offer_snapshot = message.offerSnapshot ? ResponseOfferSnapshot.toSDK(message.offerSnapshot) : undefined);
@@ -3840,6 +4096,9 @@ export const Response = {
     message.applySnapshotChunk !== undefined && (obj.apply_snapshot_chunk = message.applySnapshotChunk ? ResponseApplySnapshotChunk.toSDK(message.applySnapshotChunk) : undefined);
     message.prepareProposal !== undefined && (obj.prepare_proposal = message.prepareProposal ? ResponsePrepareProposal.toSDK(message.prepareProposal) : undefined);
     message.processProposal !== undefined && (obj.process_proposal = message.processProposal ? ResponseProcessProposal.toSDK(message.processProposal) : undefined);
+    message.extendVote !== undefined && (obj.extend_vote = message.extendVote ? ResponseExtendVote.toSDK(message.extendVote) : undefined);
+    message.verifyVoteExtension !== undefined && (obj.verify_vote_extension = message.verifyVoteExtension ? ResponseVerifyVoteExtension.toSDK(message.verifyVoteExtension) : undefined);
+    message.finalizeBlock !== undefined && (obj.finalize_block = message.finalizeBlock ? ResponseFinalizeBlock.toSDK(message.finalizeBlock) : undefined);
     return obj;
   },
   fromAmino(object: ResponseAmino): Response {
@@ -3850,17 +4109,17 @@ export const Response = {
       info: object?.info ? ResponseInfo.fromAmino(object.info) : undefined,
       initChain: object?.init_chain ? ResponseInitChain.fromAmino(object.init_chain) : undefined,
       query: object?.query ? ResponseQuery.fromAmino(object.query) : undefined,
-      beginBlock: object?.begin_block ? ResponseBeginBlock.fromAmino(object.begin_block) : undefined,
       checkTx: object?.check_tx ? ResponseCheckTx.fromAmino(object.check_tx) : undefined,
-      deliverTx: object?.deliver_tx ? ResponseDeliverTx.fromAmino(object.deliver_tx) : undefined,
-      endBlock: object?.end_block ? ResponseEndBlock.fromAmino(object.end_block) : undefined,
       commit: object?.commit ? ResponseCommit.fromAmino(object.commit) : undefined,
       listSnapshots: object?.list_snapshots ? ResponseListSnapshots.fromAmino(object.list_snapshots) : undefined,
       offerSnapshot: object?.offer_snapshot ? ResponseOfferSnapshot.fromAmino(object.offer_snapshot) : undefined,
       loadSnapshotChunk: object?.load_snapshot_chunk ? ResponseLoadSnapshotChunk.fromAmino(object.load_snapshot_chunk) : undefined,
       applySnapshotChunk: object?.apply_snapshot_chunk ? ResponseApplySnapshotChunk.fromAmino(object.apply_snapshot_chunk) : undefined,
       prepareProposal: object?.prepare_proposal ? ResponsePrepareProposal.fromAmino(object.prepare_proposal) : undefined,
-      processProposal: object?.process_proposal ? ResponseProcessProposal.fromAmino(object.process_proposal) : undefined
+      processProposal: object?.process_proposal ? ResponseProcessProposal.fromAmino(object.process_proposal) : undefined,
+      extendVote: object?.extend_vote ? ResponseExtendVote.fromAmino(object.extend_vote) : undefined,
+      verifyVoteExtension: object?.verify_vote_extension ? ResponseVerifyVoteExtension.fromAmino(object.verify_vote_extension) : undefined,
+      finalizeBlock: object?.finalize_block ? ResponseFinalizeBlock.fromAmino(object.finalize_block) : undefined
     };
   },
   toAmino(message: Response): ResponseAmino {
@@ -3871,10 +4130,7 @@ export const Response = {
     obj.info = message.info ? ResponseInfo.toAmino(message.info) : undefined;
     obj.init_chain = message.initChain ? ResponseInitChain.toAmino(message.initChain) : undefined;
     obj.query = message.query ? ResponseQuery.toAmino(message.query) : undefined;
-    obj.begin_block = message.beginBlock ? ResponseBeginBlock.toAmino(message.beginBlock) : undefined;
     obj.check_tx = message.checkTx ? ResponseCheckTx.toAmino(message.checkTx) : undefined;
-    obj.deliver_tx = message.deliverTx ? ResponseDeliverTx.toAmino(message.deliverTx) : undefined;
-    obj.end_block = message.endBlock ? ResponseEndBlock.toAmino(message.endBlock) : undefined;
     obj.commit = message.commit ? ResponseCommit.toAmino(message.commit) : undefined;
     obj.list_snapshots = message.listSnapshots ? ResponseListSnapshots.toAmino(message.listSnapshots) : undefined;
     obj.offer_snapshot = message.offerSnapshot ? ResponseOfferSnapshot.toAmino(message.offerSnapshot) : undefined;
@@ -3882,6 +4138,9 @@ export const Response = {
     obj.apply_snapshot_chunk = message.applySnapshotChunk ? ResponseApplySnapshotChunk.toAmino(message.applySnapshotChunk) : undefined;
     obj.prepare_proposal = message.prepareProposal ? ResponsePrepareProposal.toAmino(message.prepareProposal) : undefined;
     obj.process_proposal = message.processProposal ? ResponseProcessProposal.toAmino(message.processProposal) : undefined;
+    obj.extend_vote = message.extendVote ? ResponseExtendVote.toAmino(message.extendVote) : undefined;
+    obj.verify_vote_extension = message.verifyVoteExtension ? ResponseVerifyVoteExtension.toAmino(message.verifyVoteExtension) : undefined;
+    obj.finalize_block = message.finalizeBlock ? ResponseFinalizeBlock.toAmino(message.finalizeBlock) : undefined;
     return obj;
   },
   fromAminoMsg(object: ResponseAminoMsg): Response {
@@ -4576,99 +4835,6 @@ export const ResponseQuery = {
     };
   }
 };
-function createBaseResponseBeginBlock(): ResponseBeginBlock {
-  return {
-    events: []
-  };
-}
-export const ResponseBeginBlock = {
-  typeUrl: "/tendermint.abci.ResponseBeginBlock",
-  encode(message: ResponseBeginBlock, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    for (const v of message.events) {
-      Event.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): ResponseBeginBlock {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseResponseBeginBlock();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.events.push(Event.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): ResponseBeginBlock {
-    return {
-      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromJSON(e)) : []
-    };
-  },
-  toJSON(message: ResponseBeginBlock): unknown {
-    const obj: any = {};
-    if (message.events) {
-      obj.events = message.events.map(e => e ? Event.toJSON(e) : undefined);
-    } else {
-      obj.events = [];
-    }
-    return obj;
-  },
-  fromPartial(object: DeepPartial<ResponseBeginBlock>): ResponseBeginBlock {
-    const message = createBaseResponseBeginBlock();
-    message.events = object.events?.map(e => Event.fromPartial(e)) || [];
-    return message;
-  },
-  fromSDK(object: ResponseBeginBlockSDKType): ResponseBeginBlock {
-    return {
-      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromSDK(e)) : []
-    };
-  },
-  toSDK(message: ResponseBeginBlock): ResponseBeginBlockSDKType {
-    const obj: any = {};
-    if (message.events) {
-      obj.events = message.events.map(e => e ? Event.toSDK(e) : undefined);
-    } else {
-      obj.events = [];
-    }
-    return obj;
-  },
-  fromAmino(object: ResponseBeginBlockAmino): ResponseBeginBlock {
-    return {
-      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromAmino(e)) : []
-    };
-  },
-  toAmino(message: ResponseBeginBlock): ResponseBeginBlockAmino {
-    const obj: any = {};
-    if (message.events) {
-      obj.events = message.events.map(e => e ? Event.toAmino(e) : undefined);
-    } else {
-      obj.events = [];
-    }
-    return obj;
-  },
-  fromAminoMsg(object: ResponseBeginBlockAminoMsg): ResponseBeginBlock {
-    return ResponseBeginBlock.fromAmino(object.value);
-  },
-  fromProtoMsg(message: ResponseBeginBlockProtoMsg): ResponseBeginBlock {
-    return ResponseBeginBlock.decode(message.value);
-  },
-  toProto(message: ResponseBeginBlock): Uint8Array {
-    return ResponseBeginBlock.encode(message).finish();
-  },
-  toProtoMsg(message: ResponseBeginBlock): ResponseBeginBlockProtoMsg {
-    return {
-      typeUrl: "/tendermint.abci.ResponseBeginBlock",
-      value: ResponseBeginBlock.encode(message).finish()
-    };
-  }
-};
 function createBaseResponseCheckTx(): ResponseCheckTx {
   return {
     code: 0,
@@ -4678,10 +4844,7 @@ function createBaseResponseCheckTx(): ResponseCheckTx {
     gasWanted: BigInt(0),
     gasUsed: BigInt(0),
     events: [],
-    codespace: "",
-    sender: "",
-    priority: BigInt(0),
-    mempoolError: ""
+    codespace: ""
   };
 }
 export const ResponseCheckTx = {
@@ -4710,15 +4873,6 @@ export const ResponseCheckTx = {
     }
     if (message.codespace !== "") {
       writer.uint32(66).string(message.codespace);
-    }
-    if (message.sender !== "") {
-      writer.uint32(74).string(message.sender);
-    }
-    if (message.priority !== BigInt(0)) {
-      writer.uint32(80).int64(message.priority);
-    }
-    if (message.mempoolError !== "") {
-      writer.uint32(90).string(message.mempoolError);
     }
     return writer;
   },
@@ -4753,15 +4907,6 @@ export const ResponseCheckTx = {
         case 8:
           message.codespace = reader.string();
           break;
-        case 9:
-          message.sender = reader.string();
-          break;
-        case 10:
-          message.priority = reader.int64();
-          break;
-        case 11:
-          message.mempoolError = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -4778,10 +4923,7 @@ export const ResponseCheckTx = {
       gasWanted: isSet(object.gas_wanted) ? BigInt(object.gas_wanted.toString()) : BigInt(0),
       gasUsed: isSet(object.gas_used) ? BigInt(object.gas_used.toString()) : BigInt(0),
       events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromJSON(e)) : [],
-      codespace: isSet(object.codespace) ? String(object.codespace) : "",
-      sender: isSet(object.sender) ? String(object.sender) : "",
-      priority: isSet(object.priority) ? BigInt(object.priority.toString()) : BigInt(0),
-      mempoolError: isSet(object.mempoolError) ? String(object.mempoolError) : ""
+      codespace: isSet(object.codespace) ? String(object.codespace) : ""
     };
   },
   toJSON(message: ResponseCheckTx): unknown {
@@ -4798,9 +4940,6 @@ export const ResponseCheckTx = {
       obj.events = [];
     }
     message.codespace !== undefined && (obj.codespace = message.codespace);
-    message.sender !== undefined && (obj.sender = message.sender);
-    message.priority !== undefined && (obj.priority = (message.priority || BigInt(0)).toString());
-    message.mempoolError !== undefined && (obj.mempoolError = message.mempoolError);
     return obj;
   },
   fromPartial(object: DeepPartial<ResponseCheckTx>): ResponseCheckTx {
@@ -4813,9 +4952,6 @@ export const ResponseCheckTx = {
     message.gasUsed = object.gasUsed !== undefined && object.gasUsed !== null ? BigInt(object.gasUsed.toString()) : BigInt(0);
     message.events = object.events?.map(e => Event.fromPartial(e)) || [];
     message.codespace = object.codespace ?? "";
-    message.sender = object.sender ?? "";
-    message.priority = object.priority !== undefined && object.priority !== null ? BigInt(object.priority.toString()) : BigInt(0);
-    message.mempoolError = object.mempoolError ?? "";
     return message;
   },
   fromSDK(object: ResponseCheckTxSDKType): ResponseCheckTx {
@@ -4827,10 +4963,7 @@ export const ResponseCheckTx = {
       gasWanted: object?.gas_wanted,
       gasUsed: object?.gas_used,
       events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromSDK(e)) : [],
-      codespace: object?.codespace,
-      sender: object?.sender,
-      priority: object?.priority,
-      mempoolError: object?.mempool_error
+      codespace: object?.codespace
     };
   },
   toSDK(message: ResponseCheckTx): ResponseCheckTxSDKType {
@@ -4847,9 +4980,6 @@ export const ResponseCheckTx = {
       obj.events = [];
     }
     obj.codespace = message.codespace;
-    obj.sender = message.sender;
-    obj.priority = message.priority;
-    obj.mempool_error = message.mempoolError;
     return obj;
   },
   fromAmino(object: ResponseCheckTxAmino): ResponseCheckTx {
@@ -4861,10 +4991,7 @@ export const ResponseCheckTx = {
       gasWanted: BigInt(object.gas_wanted),
       gasUsed: BigInt(object.gas_used),
       events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromAmino(e)) : [],
-      codespace: object.codespace,
-      sender: object.sender,
-      priority: BigInt(object.priority),
-      mempoolError: object.mempool_error
+      codespace: object.codespace
     };
   },
   toAmino(message: ResponseCheckTx): ResponseCheckTxAmino {
@@ -4881,9 +5008,6 @@ export const ResponseCheckTx = {
       obj.events = [];
     }
     obj.codespace = message.codespace;
-    obj.sender = message.sender;
-    obj.priority = message.priority ? message.priority.toString() : undefined;
-    obj.mempool_error = message.mempoolError;
     return obj;
   },
   fromAminoMsg(object: ResponseCheckTxAminoMsg): ResponseCheckTx {
@@ -4902,342 +5026,14 @@ export const ResponseCheckTx = {
     };
   }
 };
-function createBaseResponseDeliverTx(): ResponseDeliverTx {
-  return {
-    code: 0,
-    data: new Uint8Array(),
-    log: "",
-    info: "",
-    gasWanted: BigInt(0),
-    gasUsed: BigInt(0),
-    events: [],
-    codespace: ""
-  };
-}
-export const ResponseDeliverTx = {
-  typeUrl: "/tendermint.abci.ResponseDeliverTx",
-  encode(message: ResponseDeliverTx, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.code !== 0) {
-      writer.uint32(8).uint32(message.code);
-    }
-    if (message.data.length !== 0) {
-      writer.uint32(18).bytes(message.data);
-    }
-    if (message.log !== "") {
-      writer.uint32(26).string(message.log);
-    }
-    if (message.info !== "") {
-      writer.uint32(34).string(message.info);
-    }
-    if (message.gasWanted !== BigInt(0)) {
-      writer.uint32(40).int64(message.gasWanted);
-    }
-    if (message.gasUsed !== BigInt(0)) {
-      writer.uint32(48).int64(message.gasUsed);
-    }
-    for (const v of message.events) {
-      Event.encode(v!, writer.uint32(58).fork()).ldelim();
-    }
-    if (message.codespace !== "") {
-      writer.uint32(66).string(message.codespace);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): ResponseDeliverTx {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseResponseDeliverTx();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.code = reader.uint32();
-          break;
-        case 2:
-          message.data = reader.bytes();
-          break;
-        case 3:
-          message.log = reader.string();
-          break;
-        case 4:
-          message.info = reader.string();
-          break;
-        case 5:
-          message.gasWanted = reader.int64();
-          break;
-        case 6:
-          message.gasUsed = reader.int64();
-          break;
-        case 7:
-          message.events.push(Event.decode(reader, reader.uint32()));
-          break;
-        case 8:
-          message.codespace = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): ResponseDeliverTx {
-    return {
-      code: isSet(object.code) ? Number(object.code) : 0,
-      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
-      log: isSet(object.log) ? String(object.log) : "",
-      info: isSet(object.info) ? String(object.info) : "",
-      gasWanted: isSet(object.gas_wanted) ? BigInt(object.gas_wanted.toString()) : BigInt(0),
-      gasUsed: isSet(object.gas_used) ? BigInt(object.gas_used.toString()) : BigInt(0),
-      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromJSON(e)) : [],
-      codespace: isSet(object.codespace) ? String(object.codespace) : ""
-    };
-  },
-  toJSON(message: ResponseDeliverTx): unknown {
-    const obj: any = {};
-    message.code !== undefined && (obj.code = Math.round(message.code));
-    message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
-    message.log !== undefined && (obj.log = message.log);
-    message.info !== undefined && (obj.info = message.info);
-    message.gasWanted !== undefined && (obj.gas_wanted = (message.gasWanted || BigInt(0)).toString());
-    message.gasUsed !== undefined && (obj.gas_used = (message.gasUsed || BigInt(0)).toString());
-    if (message.events) {
-      obj.events = message.events.map(e => e ? Event.toJSON(e) : undefined);
-    } else {
-      obj.events = [];
-    }
-    message.codespace !== undefined && (obj.codespace = message.codespace);
-    return obj;
-  },
-  fromPartial(object: DeepPartial<ResponseDeliverTx>): ResponseDeliverTx {
-    const message = createBaseResponseDeliverTx();
-    message.code = object.code ?? 0;
-    message.data = object.data ?? new Uint8Array();
-    message.log = object.log ?? "";
-    message.info = object.info ?? "";
-    message.gasWanted = object.gasWanted !== undefined && object.gasWanted !== null ? BigInt(object.gasWanted.toString()) : BigInt(0);
-    message.gasUsed = object.gasUsed !== undefined && object.gasUsed !== null ? BigInt(object.gasUsed.toString()) : BigInt(0);
-    message.events = object.events?.map(e => Event.fromPartial(e)) || [];
-    message.codespace = object.codespace ?? "";
-    return message;
-  },
-  fromSDK(object: ResponseDeliverTxSDKType): ResponseDeliverTx {
-    return {
-      code: object?.code,
-      data: object?.data,
-      log: object?.log,
-      info: object?.info,
-      gasWanted: object?.gas_wanted,
-      gasUsed: object?.gas_used,
-      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromSDK(e)) : [],
-      codespace: object?.codespace
-    };
-  },
-  toSDK(message: ResponseDeliverTx): ResponseDeliverTxSDKType {
-    const obj: any = {};
-    obj.code = message.code;
-    obj.data = message.data;
-    obj.log = message.log;
-    obj.info = message.info;
-    obj.gas_wanted = message.gasWanted;
-    obj.gas_used = message.gasUsed;
-    if (message.events) {
-      obj.events = message.events.map(e => e ? Event.toSDK(e) : undefined);
-    } else {
-      obj.events = [];
-    }
-    obj.codespace = message.codespace;
-    return obj;
-  },
-  fromAmino(object: ResponseDeliverTxAmino): ResponseDeliverTx {
-    return {
-      code: object.code,
-      data: object.data,
-      log: object.log,
-      info: object.info,
-      gasWanted: BigInt(object.gas_wanted),
-      gasUsed: BigInt(object.gas_used),
-      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromAmino(e)) : [],
-      codespace: object.codespace
-    };
-  },
-  toAmino(message: ResponseDeliverTx): ResponseDeliverTxAmino {
-    const obj: any = {};
-    obj.code = message.code;
-    obj.data = message.data;
-    obj.log = message.log;
-    obj.info = message.info;
-    obj.gas_wanted = message.gasWanted ? message.gasWanted.toString() : undefined;
-    obj.gas_used = message.gasUsed ? message.gasUsed.toString() : undefined;
-    if (message.events) {
-      obj.events = message.events.map(e => e ? Event.toAmino(e) : undefined);
-    } else {
-      obj.events = [];
-    }
-    obj.codespace = message.codespace;
-    return obj;
-  },
-  fromAminoMsg(object: ResponseDeliverTxAminoMsg): ResponseDeliverTx {
-    return ResponseDeliverTx.fromAmino(object.value);
-  },
-  fromProtoMsg(message: ResponseDeliverTxProtoMsg): ResponseDeliverTx {
-    return ResponseDeliverTx.decode(message.value);
-  },
-  toProto(message: ResponseDeliverTx): Uint8Array {
-    return ResponseDeliverTx.encode(message).finish();
-  },
-  toProtoMsg(message: ResponseDeliverTx): ResponseDeliverTxProtoMsg {
-    return {
-      typeUrl: "/tendermint.abci.ResponseDeliverTx",
-      value: ResponseDeliverTx.encode(message).finish()
-    };
-  }
-};
-function createBaseResponseEndBlock(): ResponseEndBlock {
-  return {
-    validatorUpdates: [],
-    consensusParamUpdates: ConsensusParams.fromPartial({}),
-    events: []
-  };
-}
-export const ResponseEndBlock = {
-  typeUrl: "/tendermint.abci.ResponseEndBlock",
-  encode(message: ResponseEndBlock, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    for (const v of message.validatorUpdates) {
-      ValidatorUpdate.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.consensusParamUpdates !== undefined) {
-      ConsensusParams.encode(message.consensusParamUpdates, writer.uint32(18).fork()).ldelim();
-    }
-    for (const v of message.events) {
-      Event.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): ResponseEndBlock {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseResponseEndBlock();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.validatorUpdates.push(ValidatorUpdate.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.consensusParamUpdates = ConsensusParams.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.events.push(Event.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): ResponseEndBlock {
-    return {
-      validatorUpdates: Array.isArray(object?.validatorUpdates) ? object.validatorUpdates.map((e: any) => ValidatorUpdate.fromJSON(e)) : [],
-      consensusParamUpdates: isSet(object.consensusParamUpdates) ? ConsensusParams.fromJSON(object.consensusParamUpdates) : undefined,
-      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromJSON(e)) : []
-    };
-  },
-  toJSON(message: ResponseEndBlock): unknown {
-    const obj: any = {};
-    if (message.validatorUpdates) {
-      obj.validatorUpdates = message.validatorUpdates.map(e => e ? ValidatorUpdate.toJSON(e) : undefined);
-    } else {
-      obj.validatorUpdates = [];
-    }
-    message.consensusParamUpdates !== undefined && (obj.consensusParamUpdates = message.consensusParamUpdates ? ConsensusParams.toJSON(message.consensusParamUpdates) : undefined);
-    if (message.events) {
-      obj.events = message.events.map(e => e ? Event.toJSON(e) : undefined);
-    } else {
-      obj.events = [];
-    }
-    return obj;
-  },
-  fromPartial(object: DeepPartial<ResponseEndBlock>): ResponseEndBlock {
-    const message = createBaseResponseEndBlock();
-    message.validatorUpdates = object.validatorUpdates?.map(e => ValidatorUpdate.fromPartial(e)) || [];
-    message.consensusParamUpdates = object.consensusParamUpdates !== undefined && object.consensusParamUpdates !== null ? ConsensusParams.fromPartial(object.consensusParamUpdates) : undefined;
-    message.events = object.events?.map(e => Event.fromPartial(e)) || [];
-    return message;
-  },
-  fromSDK(object: ResponseEndBlockSDKType): ResponseEndBlock {
-    return {
-      validatorUpdates: Array.isArray(object?.validator_updates) ? object.validator_updates.map((e: any) => ValidatorUpdate.fromSDK(e)) : [],
-      consensusParamUpdates: object.consensus_param_updates ? ConsensusParams.fromSDK(object.consensus_param_updates) : undefined,
-      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromSDK(e)) : []
-    };
-  },
-  toSDK(message: ResponseEndBlock): ResponseEndBlockSDKType {
-    const obj: any = {};
-    if (message.validatorUpdates) {
-      obj.validator_updates = message.validatorUpdates.map(e => e ? ValidatorUpdate.toSDK(e) : undefined);
-    } else {
-      obj.validator_updates = [];
-    }
-    message.consensusParamUpdates !== undefined && (obj.consensus_param_updates = message.consensusParamUpdates ? ConsensusParams.toSDK(message.consensusParamUpdates) : undefined);
-    if (message.events) {
-      obj.events = message.events.map(e => e ? Event.toSDK(e) : undefined);
-    } else {
-      obj.events = [];
-    }
-    return obj;
-  },
-  fromAmino(object: ResponseEndBlockAmino): ResponseEndBlock {
-    return {
-      validatorUpdates: Array.isArray(object?.validator_updates) ? object.validator_updates.map((e: any) => ValidatorUpdate.fromAmino(e)) : [],
-      consensusParamUpdates: object?.consensus_param_updates ? ConsensusParams.fromAmino(object.consensus_param_updates) : undefined,
-      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromAmino(e)) : []
-    };
-  },
-  toAmino(message: ResponseEndBlock): ResponseEndBlockAmino {
-    const obj: any = {};
-    if (message.validatorUpdates) {
-      obj.validator_updates = message.validatorUpdates.map(e => e ? ValidatorUpdate.toAmino(e) : undefined);
-    } else {
-      obj.validator_updates = [];
-    }
-    obj.consensus_param_updates = message.consensusParamUpdates ? ConsensusParams.toAmino(message.consensusParamUpdates) : undefined;
-    if (message.events) {
-      obj.events = message.events.map(e => e ? Event.toAmino(e) : undefined);
-    } else {
-      obj.events = [];
-    }
-    return obj;
-  },
-  fromAminoMsg(object: ResponseEndBlockAminoMsg): ResponseEndBlock {
-    return ResponseEndBlock.fromAmino(object.value);
-  },
-  fromProtoMsg(message: ResponseEndBlockProtoMsg): ResponseEndBlock {
-    return ResponseEndBlock.decode(message.value);
-  },
-  toProto(message: ResponseEndBlock): Uint8Array {
-    return ResponseEndBlock.encode(message).finish();
-  },
-  toProtoMsg(message: ResponseEndBlock): ResponseEndBlockProtoMsg {
-    return {
-      typeUrl: "/tendermint.abci.ResponseEndBlock",
-      value: ResponseEndBlock.encode(message).finish()
-    };
-  }
-};
 function createBaseResponseCommit(): ResponseCommit {
   return {
-    data: new Uint8Array(),
     retainHeight: BigInt(0)
   };
 }
 export const ResponseCommit = {
   typeUrl: "/tendermint.abci.ResponseCommit",
   encode(message: ResponseCommit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.data.length !== 0) {
-      writer.uint32(18).bytes(message.data);
-    }
     if (message.retainHeight !== BigInt(0)) {
       writer.uint32(24).int64(message.retainHeight);
     }
@@ -5250,9 +5046,6 @@ export const ResponseCommit = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 2:
-          message.data = reader.bytes();
-          break;
         case 3:
           message.retainHeight = reader.int64();
           break;
@@ -5265,43 +5058,36 @@ export const ResponseCommit = {
   },
   fromJSON(object: any): ResponseCommit {
     return {
-      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
       retainHeight: isSet(object.retainHeight) ? BigInt(object.retainHeight.toString()) : BigInt(0)
     };
   },
   toJSON(message: ResponseCommit): unknown {
     const obj: any = {};
-    message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
     message.retainHeight !== undefined && (obj.retainHeight = (message.retainHeight || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: DeepPartial<ResponseCommit>): ResponseCommit {
     const message = createBaseResponseCommit();
-    message.data = object.data ?? new Uint8Array();
     message.retainHeight = object.retainHeight !== undefined && object.retainHeight !== null ? BigInt(object.retainHeight.toString()) : BigInt(0);
     return message;
   },
   fromSDK(object: ResponseCommitSDKType): ResponseCommit {
     return {
-      data: object?.data,
       retainHeight: object?.retain_height
     };
   },
   toSDK(message: ResponseCommit): ResponseCommitSDKType {
     const obj: any = {};
-    obj.data = message.data;
     obj.retain_height = message.retainHeight;
     return obj;
   },
   fromAmino(object: ResponseCommitAmino): ResponseCommit {
     return {
-      data: object.data,
       retainHeight: BigInt(object.retain_height)
     };
   },
   toAmino(message: ResponseCommit): ResponseCommitAmino {
     const obj: any = {};
-    obj.data = message.data;
     obj.retain_height = message.retainHeight ? message.retainHeight.toString() : undefined;
     return obj;
   },
@@ -5892,6 +5678,341 @@ export const ResponseProcessProposal = {
     };
   }
 };
+function createBaseResponseExtendVote(): ResponseExtendVote {
+  return {
+    voteExtension: new Uint8Array()
+  };
+}
+export const ResponseExtendVote = {
+  typeUrl: "/tendermint.abci.ResponseExtendVote",
+  encode(message: ResponseExtendVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.voteExtension.length !== 0) {
+      writer.uint32(10).bytes(message.voteExtension);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): ResponseExtendVote {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponseExtendVote();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.voteExtension = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): ResponseExtendVote {
+    return {
+      voteExtension: isSet(object.voteExtension) ? bytesFromBase64(object.voteExtension) : new Uint8Array()
+    };
+  },
+  toJSON(message: ResponseExtendVote): unknown {
+    const obj: any = {};
+    message.voteExtension !== undefined && (obj.voteExtension = base64FromBytes(message.voteExtension !== undefined ? message.voteExtension : new Uint8Array()));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<ResponseExtendVote>): ResponseExtendVote {
+    const message = createBaseResponseExtendVote();
+    message.voteExtension = object.voteExtension ?? new Uint8Array();
+    return message;
+  },
+  fromSDK(object: ResponseExtendVoteSDKType): ResponseExtendVote {
+    return {
+      voteExtension: object?.vote_extension
+    };
+  },
+  toSDK(message: ResponseExtendVote): ResponseExtendVoteSDKType {
+    const obj: any = {};
+    obj.vote_extension = message.voteExtension;
+    return obj;
+  },
+  fromAmino(object: ResponseExtendVoteAmino): ResponseExtendVote {
+    return {
+      voteExtension: object.vote_extension
+    };
+  },
+  toAmino(message: ResponseExtendVote): ResponseExtendVoteAmino {
+    const obj: any = {};
+    obj.vote_extension = message.voteExtension;
+    return obj;
+  },
+  fromAminoMsg(object: ResponseExtendVoteAminoMsg): ResponseExtendVote {
+    return ResponseExtendVote.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ResponseExtendVoteProtoMsg): ResponseExtendVote {
+    return ResponseExtendVote.decode(message.value);
+  },
+  toProto(message: ResponseExtendVote): Uint8Array {
+    return ResponseExtendVote.encode(message).finish();
+  },
+  toProtoMsg(message: ResponseExtendVote): ResponseExtendVoteProtoMsg {
+    return {
+      typeUrl: "/tendermint.abci.ResponseExtendVote",
+      value: ResponseExtendVote.encode(message).finish()
+    };
+  }
+};
+function createBaseResponseVerifyVoteExtension(): ResponseVerifyVoteExtension {
+  return {
+    status: 0
+  };
+}
+export const ResponseVerifyVoteExtension = {
+  typeUrl: "/tendermint.abci.ResponseVerifyVoteExtension",
+  encode(message: ResponseVerifyVoteExtension, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.status !== 0) {
+      writer.uint32(8).int32(message.status);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): ResponseVerifyVoteExtension {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponseVerifyVoteExtension();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.status = (reader.int32() as any);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): ResponseVerifyVoteExtension {
+    return {
+      status: isSet(object.status) ? responseVerifyVoteExtension_VerifyStatusFromJSON(object.status) : -1
+    };
+  },
+  toJSON(message: ResponseVerifyVoteExtension): unknown {
+    const obj: any = {};
+    message.status !== undefined && (obj.status = responseVerifyVoteExtension_VerifyStatusToJSON(message.status));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<ResponseVerifyVoteExtension>): ResponseVerifyVoteExtension {
+    const message = createBaseResponseVerifyVoteExtension();
+    message.status = object.status ?? 0;
+    return message;
+  },
+  fromSDK(object: ResponseVerifyVoteExtensionSDKType): ResponseVerifyVoteExtension {
+    return {
+      status: isSet(object.status) ? responseVerifyVoteExtension_VerifyStatusFromJSON(object.status) : -1
+    };
+  },
+  toSDK(message: ResponseVerifyVoteExtension): ResponseVerifyVoteExtensionSDKType {
+    const obj: any = {};
+    message.status !== undefined && (obj.status = responseVerifyVoteExtension_VerifyStatusToJSON(message.status));
+    return obj;
+  },
+  fromAmino(object: ResponseVerifyVoteExtensionAmino): ResponseVerifyVoteExtension {
+    return {
+      status: isSet(object.status) ? responseVerifyVoteExtension_VerifyStatusFromJSON(object.status) : -1
+    };
+  },
+  toAmino(message: ResponseVerifyVoteExtension): ResponseVerifyVoteExtensionAmino {
+    const obj: any = {};
+    obj.status = message.status;
+    return obj;
+  },
+  fromAminoMsg(object: ResponseVerifyVoteExtensionAminoMsg): ResponseVerifyVoteExtension {
+    return ResponseVerifyVoteExtension.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ResponseVerifyVoteExtensionProtoMsg): ResponseVerifyVoteExtension {
+    return ResponseVerifyVoteExtension.decode(message.value);
+  },
+  toProto(message: ResponseVerifyVoteExtension): Uint8Array {
+    return ResponseVerifyVoteExtension.encode(message).finish();
+  },
+  toProtoMsg(message: ResponseVerifyVoteExtension): ResponseVerifyVoteExtensionProtoMsg {
+    return {
+      typeUrl: "/tendermint.abci.ResponseVerifyVoteExtension",
+      value: ResponseVerifyVoteExtension.encode(message).finish()
+    };
+  }
+};
+function createBaseResponseFinalizeBlock(): ResponseFinalizeBlock {
+  return {
+    events: [],
+    txResults: [],
+    validatorUpdates: [],
+    consensusParamUpdates: ConsensusParams.fromPartial({}),
+    appHash: new Uint8Array()
+  };
+}
+export const ResponseFinalizeBlock = {
+  typeUrl: "/tendermint.abci.ResponseFinalizeBlock",
+  encode(message: ResponseFinalizeBlock, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.events) {
+      Event.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.txResults) {
+      ExecTxResult.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.validatorUpdates) {
+      ValidatorUpdate.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.consensusParamUpdates !== undefined) {
+      ConsensusParams.encode(message.consensusParamUpdates, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.appHash.length !== 0) {
+      writer.uint32(42).bytes(message.appHash);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): ResponseFinalizeBlock {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseResponseFinalizeBlock();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.events.push(Event.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.txResults.push(ExecTxResult.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.validatorUpdates.push(ValidatorUpdate.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.consensusParamUpdates = ConsensusParams.decode(reader, reader.uint32());
+          break;
+        case 5:
+          message.appHash = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): ResponseFinalizeBlock {
+    return {
+      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromJSON(e)) : [],
+      txResults: Array.isArray(object?.txResults) ? object.txResults.map((e: any) => ExecTxResult.fromJSON(e)) : [],
+      validatorUpdates: Array.isArray(object?.validatorUpdates) ? object.validatorUpdates.map((e: any) => ValidatorUpdate.fromJSON(e)) : [],
+      consensusParamUpdates: isSet(object.consensusParamUpdates) ? ConsensusParams.fromJSON(object.consensusParamUpdates) : undefined,
+      appHash: isSet(object.appHash) ? bytesFromBase64(object.appHash) : new Uint8Array()
+    };
+  },
+  toJSON(message: ResponseFinalizeBlock): unknown {
+    const obj: any = {};
+    if (message.events) {
+      obj.events = message.events.map(e => e ? Event.toJSON(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    if (message.txResults) {
+      obj.txResults = message.txResults.map(e => e ? ExecTxResult.toJSON(e) : undefined);
+    } else {
+      obj.txResults = [];
+    }
+    if (message.validatorUpdates) {
+      obj.validatorUpdates = message.validatorUpdates.map(e => e ? ValidatorUpdate.toJSON(e) : undefined);
+    } else {
+      obj.validatorUpdates = [];
+    }
+    message.consensusParamUpdates !== undefined && (obj.consensusParamUpdates = message.consensusParamUpdates ? ConsensusParams.toJSON(message.consensusParamUpdates) : undefined);
+    message.appHash !== undefined && (obj.appHash = base64FromBytes(message.appHash !== undefined ? message.appHash : new Uint8Array()));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<ResponseFinalizeBlock>): ResponseFinalizeBlock {
+    const message = createBaseResponseFinalizeBlock();
+    message.events = object.events?.map(e => Event.fromPartial(e)) || [];
+    message.txResults = object.txResults?.map(e => ExecTxResult.fromPartial(e)) || [];
+    message.validatorUpdates = object.validatorUpdates?.map(e => ValidatorUpdate.fromPartial(e)) || [];
+    message.consensusParamUpdates = object.consensusParamUpdates !== undefined && object.consensusParamUpdates !== null ? ConsensusParams.fromPartial(object.consensusParamUpdates) : undefined;
+    message.appHash = object.appHash ?? new Uint8Array();
+    return message;
+  },
+  fromSDK(object: ResponseFinalizeBlockSDKType): ResponseFinalizeBlock {
+    return {
+      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromSDK(e)) : [],
+      txResults: Array.isArray(object?.tx_results) ? object.tx_results.map((e: any) => ExecTxResult.fromSDK(e)) : [],
+      validatorUpdates: Array.isArray(object?.validator_updates) ? object.validator_updates.map((e: any) => ValidatorUpdate.fromSDK(e)) : [],
+      consensusParamUpdates: object.consensus_param_updates ? ConsensusParams.fromSDK(object.consensus_param_updates) : undefined,
+      appHash: object?.app_hash
+    };
+  },
+  toSDK(message: ResponseFinalizeBlock): ResponseFinalizeBlockSDKType {
+    const obj: any = {};
+    if (message.events) {
+      obj.events = message.events.map(e => e ? Event.toSDK(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    if (message.txResults) {
+      obj.tx_results = message.txResults.map(e => e ? ExecTxResult.toSDK(e) : undefined);
+    } else {
+      obj.tx_results = [];
+    }
+    if (message.validatorUpdates) {
+      obj.validator_updates = message.validatorUpdates.map(e => e ? ValidatorUpdate.toSDK(e) : undefined);
+    } else {
+      obj.validator_updates = [];
+    }
+    message.consensusParamUpdates !== undefined && (obj.consensus_param_updates = message.consensusParamUpdates ? ConsensusParams.toSDK(message.consensusParamUpdates) : undefined);
+    obj.app_hash = message.appHash;
+    return obj;
+  },
+  fromAmino(object: ResponseFinalizeBlockAmino): ResponseFinalizeBlock {
+    return {
+      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromAmino(e)) : [],
+      txResults: Array.isArray(object?.tx_results) ? object.tx_results.map((e: any) => ExecTxResult.fromAmino(e)) : [],
+      validatorUpdates: Array.isArray(object?.validator_updates) ? object.validator_updates.map((e: any) => ValidatorUpdate.fromAmino(e)) : [],
+      consensusParamUpdates: object?.consensus_param_updates ? ConsensusParams.fromAmino(object.consensus_param_updates) : undefined,
+      appHash: object.app_hash
+    };
+  },
+  toAmino(message: ResponseFinalizeBlock): ResponseFinalizeBlockAmino {
+    const obj: any = {};
+    if (message.events) {
+      obj.events = message.events.map(e => e ? Event.toAmino(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    if (message.txResults) {
+      obj.tx_results = message.txResults.map(e => e ? ExecTxResult.toAmino(e) : undefined);
+    } else {
+      obj.tx_results = [];
+    }
+    if (message.validatorUpdates) {
+      obj.validator_updates = message.validatorUpdates.map(e => e ? ValidatorUpdate.toAmino(e) : undefined);
+    } else {
+      obj.validator_updates = [];
+    }
+    obj.consensus_param_updates = message.consensusParamUpdates ? ConsensusParams.toAmino(message.consensusParamUpdates) : undefined;
+    obj.app_hash = message.appHash;
+    return obj;
+  },
+  fromAminoMsg(object: ResponseFinalizeBlockAminoMsg): ResponseFinalizeBlock {
+    return ResponseFinalizeBlock.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ResponseFinalizeBlockProtoMsg): ResponseFinalizeBlock {
+    return ResponseFinalizeBlock.decode(message.value);
+  },
+  toProto(message: ResponseFinalizeBlock): Uint8Array {
+    return ResponseFinalizeBlock.encode(message).finish();
+  },
+  toProtoMsg(message: ResponseFinalizeBlock): ResponseFinalizeBlockProtoMsg {
+    return {
+      typeUrl: "/tendermint.abci.ResponseFinalizeBlock",
+      value: ResponseFinalizeBlock.encode(message).finish()
+    };
+  }
+};
 function createBaseCommitInfo(): CommitInfo {
   return {
     round: 0,
@@ -6322,12 +6443,203 @@ export const EventAttribute = {
     };
   }
 };
+function createBaseExecTxResult(): ExecTxResult {
+  return {
+    code: 0,
+    data: new Uint8Array(),
+    log: "",
+    info: "",
+    gasWanted: BigInt(0),
+    gasUsed: BigInt(0),
+    events: [],
+    codespace: ""
+  };
+}
+export const ExecTxResult = {
+  typeUrl: "/tendermint.abci.ExecTxResult",
+  encode(message: ExecTxResult, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.code !== 0) {
+      writer.uint32(8).uint32(message.code);
+    }
+    if (message.data.length !== 0) {
+      writer.uint32(18).bytes(message.data);
+    }
+    if (message.log !== "") {
+      writer.uint32(26).string(message.log);
+    }
+    if (message.info !== "") {
+      writer.uint32(34).string(message.info);
+    }
+    if (message.gasWanted !== BigInt(0)) {
+      writer.uint32(40).int64(message.gasWanted);
+    }
+    if (message.gasUsed !== BigInt(0)) {
+      writer.uint32(48).int64(message.gasUsed);
+    }
+    for (const v of message.events) {
+      Event.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.codespace !== "") {
+      writer.uint32(66).string(message.codespace);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): ExecTxResult {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseExecTxResult();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.uint32();
+          break;
+        case 2:
+          message.data = reader.bytes();
+          break;
+        case 3:
+          message.log = reader.string();
+          break;
+        case 4:
+          message.info = reader.string();
+          break;
+        case 5:
+          message.gasWanted = reader.int64();
+          break;
+        case 6:
+          message.gasUsed = reader.int64();
+          break;
+        case 7:
+          message.events.push(Event.decode(reader, reader.uint32()));
+          break;
+        case 8:
+          message.codespace = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): ExecTxResult {
+    return {
+      code: isSet(object.code) ? Number(object.code) : 0,
+      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
+      log: isSet(object.log) ? String(object.log) : "",
+      info: isSet(object.info) ? String(object.info) : "",
+      gasWanted: isSet(object.gasWanted) ? BigInt(object.gasWanted.toString()) : BigInt(0),
+      gasUsed: isSet(object.gasUsed) ? BigInt(object.gasUsed.toString()) : BigInt(0),
+      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromJSON(e)) : [],
+      codespace: isSet(object.codespace) ? String(object.codespace) : ""
+    };
+  },
+  toJSON(message: ExecTxResult): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = Math.round(message.code));
+    message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    message.log !== undefined && (obj.log = message.log);
+    message.info !== undefined && (obj.info = message.info);
+    message.gasWanted !== undefined && (obj.gasWanted = (message.gasWanted || BigInt(0)).toString());
+    message.gasUsed !== undefined && (obj.gasUsed = (message.gasUsed || BigInt(0)).toString());
+    if (message.events) {
+      obj.events = message.events.map(e => e ? Event.toJSON(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    message.codespace !== undefined && (obj.codespace = message.codespace);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<ExecTxResult>): ExecTxResult {
+    const message = createBaseExecTxResult();
+    message.code = object.code ?? 0;
+    message.data = object.data ?? new Uint8Array();
+    message.log = object.log ?? "";
+    message.info = object.info ?? "";
+    message.gasWanted = object.gasWanted !== undefined && object.gasWanted !== null ? BigInt(object.gasWanted.toString()) : BigInt(0);
+    message.gasUsed = object.gasUsed !== undefined && object.gasUsed !== null ? BigInt(object.gasUsed.toString()) : BigInt(0);
+    message.events = object.events?.map(e => Event.fromPartial(e)) || [];
+    message.codespace = object.codespace ?? "";
+    return message;
+  },
+  fromSDK(object: ExecTxResultSDKType): ExecTxResult {
+    return {
+      code: object?.code,
+      data: object?.data,
+      log: object?.log,
+      info: object?.info,
+      gasWanted: object?.gas_wanted,
+      gasUsed: object?.gas_used,
+      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromSDK(e)) : [],
+      codespace: object?.codespace
+    };
+  },
+  toSDK(message: ExecTxResult): ExecTxResultSDKType {
+    const obj: any = {};
+    obj.code = message.code;
+    obj.data = message.data;
+    obj.log = message.log;
+    obj.info = message.info;
+    obj.gas_wanted = message.gasWanted;
+    obj.gas_used = message.gasUsed;
+    if (message.events) {
+      obj.events = message.events.map(e => e ? Event.toSDK(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    obj.codespace = message.codespace;
+    return obj;
+  },
+  fromAmino(object: ExecTxResultAmino): ExecTxResult {
+    return {
+      code: object.code,
+      data: object.data,
+      log: object.log,
+      info: object.info,
+      gasWanted: BigInt(object.gas_wanted),
+      gasUsed: BigInt(object.gas_used),
+      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromAmino(e)) : [],
+      codespace: object.codespace
+    };
+  },
+  toAmino(message: ExecTxResult): ExecTxResultAmino {
+    const obj: any = {};
+    obj.code = message.code;
+    obj.data = message.data;
+    obj.log = message.log;
+    obj.info = message.info;
+    obj.gas_wanted = message.gasWanted ? message.gasWanted.toString() : undefined;
+    obj.gas_used = message.gasUsed ? message.gasUsed.toString() : undefined;
+    if (message.events) {
+      obj.events = message.events.map(e => e ? Event.toAmino(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    obj.codespace = message.codespace;
+    return obj;
+  },
+  fromAminoMsg(object: ExecTxResultAminoMsg): ExecTxResult {
+    return ExecTxResult.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ExecTxResultProtoMsg): ExecTxResult {
+    return ExecTxResult.decode(message.value);
+  },
+  toProto(message: ExecTxResult): Uint8Array {
+    return ExecTxResult.encode(message).finish();
+  },
+  toProtoMsg(message: ExecTxResult): ExecTxResultProtoMsg {
+    return {
+      typeUrl: "/tendermint.abci.ExecTxResult",
+      value: ExecTxResult.encode(message).finish()
+    };
+  }
+};
 function createBaseTxResult(): TxResult {
   return {
     height: BigInt(0),
     index: 0,
     tx: new Uint8Array(),
-    result: ResponseDeliverTx.fromPartial({})
+    result: ExecTxResult.fromPartial({})
   };
 }
 export const TxResult = {
@@ -6343,7 +6655,7 @@ export const TxResult = {
       writer.uint32(26).bytes(message.tx);
     }
     if (message.result !== undefined) {
-      ResponseDeliverTx.encode(message.result, writer.uint32(34).fork()).ldelim();
+      ExecTxResult.encode(message.result, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -6364,7 +6676,7 @@ export const TxResult = {
           message.tx = reader.bytes();
           break;
         case 4:
-          message.result = ResponseDeliverTx.decode(reader, reader.uint32());
+          message.result = ExecTxResult.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -6378,7 +6690,7 @@ export const TxResult = {
       height: isSet(object.height) ? BigInt(object.height.toString()) : BigInt(0),
       index: isSet(object.index) ? Number(object.index) : 0,
       tx: isSet(object.tx) ? bytesFromBase64(object.tx) : new Uint8Array(),
-      result: isSet(object.result) ? ResponseDeliverTx.fromJSON(object.result) : undefined
+      result: isSet(object.result) ? ExecTxResult.fromJSON(object.result) : undefined
     };
   },
   toJSON(message: TxResult): unknown {
@@ -6386,7 +6698,7 @@ export const TxResult = {
     message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
     message.index !== undefined && (obj.index = Math.round(message.index));
     message.tx !== undefined && (obj.tx = base64FromBytes(message.tx !== undefined ? message.tx : new Uint8Array()));
-    message.result !== undefined && (obj.result = message.result ? ResponseDeliverTx.toJSON(message.result) : undefined);
+    message.result !== undefined && (obj.result = message.result ? ExecTxResult.toJSON(message.result) : undefined);
     return obj;
   },
   fromPartial(object: DeepPartial<TxResult>): TxResult {
@@ -6394,7 +6706,7 @@ export const TxResult = {
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.index = object.index ?? 0;
     message.tx = object.tx ?? new Uint8Array();
-    message.result = object.result !== undefined && object.result !== null ? ResponseDeliverTx.fromPartial(object.result) : undefined;
+    message.result = object.result !== undefined && object.result !== null ? ExecTxResult.fromPartial(object.result) : undefined;
     return message;
   },
   fromSDK(object: TxResultSDKType): TxResult {
@@ -6402,7 +6714,7 @@ export const TxResult = {
       height: object?.height,
       index: object?.index,
       tx: object?.tx,
-      result: object.result ? ResponseDeliverTx.fromSDK(object.result) : undefined
+      result: object.result ? ExecTxResult.fromSDK(object.result) : undefined
     };
   },
   toSDK(message: TxResult): TxResultSDKType {
@@ -6410,7 +6722,7 @@ export const TxResult = {
     obj.height = message.height;
     obj.index = message.index;
     obj.tx = message.tx;
-    message.result !== undefined && (obj.result = message.result ? ResponseDeliverTx.toSDK(message.result) : undefined);
+    message.result !== undefined && (obj.result = message.result ? ExecTxResult.toSDK(message.result) : undefined);
     return obj;
   },
   fromAmino(object: TxResultAmino): TxResult {
@@ -6418,7 +6730,7 @@ export const TxResult = {
       height: BigInt(object.height),
       index: object.index,
       tx: object.tx,
-      result: object?.result ? ResponseDeliverTx.fromAmino(object.result) : undefined
+      result: object?.result ? ExecTxResult.fromAmino(object.result) : undefined
     };
   },
   toAmino(message: TxResult): TxResultAmino {
@@ -6426,7 +6738,7 @@ export const TxResult = {
     obj.height = message.height ? message.height.toString() : undefined;
     obj.index = message.index;
     obj.tx = message.tx;
-    obj.result = message.result ? ResponseDeliverTx.toAmino(message.result) : undefined;
+    obj.result = message.result ? ExecTxResult.toAmino(message.result) : undefined;
     return obj;
   },
   fromAminoMsg(object: TxResultAminoMsg): TxResult {
@@ -6638,7 +6950,7 @@ export const ValidatorUpdate = {
 function createBaseVoteInfo(): VoteInfo {
   return {
     validator: Validator.fromPartial({}),
-    signedLastBlock: false
+    blockIdFlag: 0
   };
 }
 export const VoteInfo = {
@@ -6647,8 +6959,8 @@ export const VoteInfo = {
     if (message.validator !== undefined) {
       Validator.encode(message.validator, writer.uint32(10).fork()).ldelim();
     }
-    if (message.signedLastBlock === true) {
-      writer.uint32(16).bool(message.signedLastBlock);
+    if (message.blockIdFlag !== 0) {
+      writer.uint32(24).int32(message.blockIdFlag);
     }
     return writer;
   },
@@ -6662,8 +6974,8 @@ export const VoteInfo = {
         case 1:
           message.validator = Validator.decode(reader, reader.uint32());
           break;
-        case 2:
-          message.signedLastBlock = reader.bool();
+        case 3:
+          message.blockIdFlag = (reader.int32() as any);
           break;
         default:
           reader.skipType(tag & 7);
@@ -6675,43 +6987,43 @@ export const VoteInfo = {
   fromJSON(object: any): VoteInfo {
     return {
       validator: isSet(object.validator) ? Validator.fromJSON(object.validator) : undefined,
-      signedLastBlock: isSet(object.signedLastBlock) ? Boolean(object.signedLastBlock) : false
+      blockIdFlag: isSet(object.blockIdFlag) ? blockIDFlagFromJSON(object.blockIdFlag) : -1
     };
   },
   toJSON(message: VoteInfo): unknown {
     const obj: any = {};
     message.validator !== undefined && (obj.validator = message.validator ? Validator.toJSON(message.validator) : undefined);
-    message.signedLastBlock !== undefined && (obj.signedLastBlock = message.signedLastBlock);
+    message.blockIdFlag !== undefined && (obj.blockIdFlag = blockIDFlagToJSON(message.blockIdFlag));
     return obj;
   },
   fromPartial(object: DeepPartial<VoteInfo>): VoteInfo {
     const message = createBaseVoteInfo();
     message.validator = object.validator !== undefined && object.validator !== null ? Validator.fromPartial(object.validator) : undefined;
-    message.signedLastBlock = object.signedLastBlock ?? false;
+    message.blockIdFlag = object.blockIdFlag ?? 0;
     return message;
   },
   fromSDK(object: VoteInfoSDKType): VoteInfo {
     return {
       validator: object.validator ? Validator.fromSDK(object.validator) : undefined,
-      signedLastBlock: object?.signed_last_block
+      blockIdFlag: isSet(object.block_id_flag) ? blockIDFlagFromJSON(object.block_id_flag) : -1
     };
   },
   toSDK(message: VoteInfo): VoteInfoSDKType {
     const obj: any = {};
     message.validator !== undefined && (obj.validator = message.validator ? Validator.toSDK(message.validator) : undefined);
-    obj.signed_last_block = message.signedLastBlock;
+    message.blockIdFlag !== undefined && (obj.block_id_flag = blockIDFlagToJSON(message.blockIdFlag));
     return obj;
   },
   fromAmino(object: VoteInfoAmino): VoteInfo {
     return {
       validator: object?.validator ? Validator.fromAmino(object.validator) : undefined,
-      signedLastBlock: object.signed_last_block
+      blockIdFlag: isSet(object.block_id_flag) ? blockIDFlagFromJSON(object.block_id_flag) : -1
     };
   },
   toAmino(message: VoteInfo): VoteInfoAmino {
     const obj: any = {};
     obj.validator = message.validator ? Validator.toAmino(message.validator) : undefined;
-    obj.signed_last_block = message.signedLastBlock;
+    obj.block_id_flag = message.blockIdFlag;
     return obj;
   },
   fromAminoMsg(object: VoteInfoAminoMsg): VoteInfo {
@@ -6733,8 +7045,9 @@ export const VoteInfo = {
 function createBaseExtendedVoteInfo(): ExtendedVoteInfo {
   return {
     validator: Validator.fromPartial({}),
-    signedLastBlock: false,
-    voteExtension: new Uint8Array()
+    voteExtension: new Uint8Array(),
+    extensionSignature: new Uint8Array(),
+    blockIdFlag: 0
   };
 }
 export const ExtendedVoteInfo = {
@@ -6743,11 +7056,14 @@ export const ExtendedVoteInfo = {
     if (message.validator !== undefined) {
       Validator.encode(message.validator, writer.uint32(10).fork()).ldelim();
     }
-    if (message.signedLastBlock === true) {
-      writer.uint32(16).bool(message.signedLastBlock);
-    }
     if (message.voteExtension.length !== 0) {
       writer.uint32(26).bytes(message.voteExtension);
+    }
+    if (message.extensionSignature.length !== 0) {
+      writer.uint32(34).bytes(message.extensionSignature);
+    }
+    if (message.blockIdFlag !== 0) {
+      writer.uint32(40).int32(message.blockIdFlag);
     }
     return writer;
   },
@@ -6761,11 +7077,14 @@ export const ExtendedVoteInfo = {
         case 1:
           message.validator = Validator.decode(reader, reader.uint32());
           break;
-        case 2:
-          message.signedLastBlock = reader.bool();
-          break;
         case 3:
           message.voteExtension = reader.bytes();
+          break;
+        case 4:
+          message.extensionSignature = reader.bytes();
+          break;
+        case 5:
+          message.blockIdFlag = (reader.int32() as any);
           break;
         default:
           reader.skipType(tag & 7);
@@ -6777,50 +7096,57 @@ export const ExtendedVoteInfo = {
   fromJSON(object: any): ExtendedVoteInfo {
     return {
       validator: isSet(object.validator) ? Validator.fromJSON(object.validator) : undefined,
-      signedLastBlock: isSet(object.signedLastBlock) ? Boolean(object.signedLastBlock) : false,
-      voteExtension: isSet(object.voteExtension) ? bytesFromBase64(object.voteExtension) : new Uint8Array()
+      voteExtension: isSet(object.voteExtension) ? bytesFromBase64(object.voteExtension) : new Uint8Array(),
+      extensionSignature: isSet(object.extensionSignature) ? bytesFromBase64(object.extensionSignature) : new Uint8Array(),
+      blockIdFlag: isSet(object.blockIdFlag) ? blockIDFlagFromJSON(object.blockIdFlag) : -1
     };
   },
   toJSON(message: ExtendedVoteInfo): unknown {
     const obj: any = {};
     message.validator !== undefined && (obj.validator = message.validator ? Validator.toJSON(message.validator) : undefined);
-    message.signedLastBlock !== undefined && (obj.signedLastBlock = message.signedLastBlock);
     message.voteExtension !== undefined && (obj.voteExtension = base64FromBytes(message.voteExtension !== undefined ? message.voteExtension : new Uint8Array()));
+    message.extensionSignature !== undefined && (obj.extensionSignature = base64FromBytes(message.extensionSignature !== undefined ? message.extensionSignature : new Uint8Array()));
+    message.blockIdFlag !== undefined && (obj.blockIdFlag = blockIDFlagToJSON(message.blockIdFlag));
     return obj;
   },
   fromPartial(object: DeepPartial<ExtendedVoteInfo>): ExtendedVoteInfo {
     const message = createBaseExtendedVoteInfo();
     message.validator = object.validator !== undefined && object.validator !== null ? Validator.fromPartial(object.validator) : undefined;
-    message.signedLastBlock = object.signedLastBlock ?? false;
     message.voteExtension = object.voteExtension ?? new Uint8Array();
+    message.extensionSignature = object.extensionSignature ?? new Uint8Array();
+    message.blockIdFlag = object.blockIdFlag ?? 0;
     return message;
   },
   fromSDK(object: ExtendedVoteInfoSDKType): ExtendedVoteInfo {
     return {
       validator: object.validator ? Validator.fromSDK(object.validator) : undefined,
-      signedLastBlock: object?.signed_last_block,
-      voteExtension: object?.vote_extension
+      voteExtension: object?.vote_extension,
+      extensionSignature: object?.extension_signature,
+      blockIdFlag: isSet(object.block_id_flag) ? blockIDFlagFromJSON(object.block_id_flag) : -1
     };
   },
   toSDK(message: ExtendedVoteInfo): ExtendedVoteInfoSDKType {
     const obj: any = {};
     message.validator !== undefined && (obj.validator = message.validator ? Validator.toSDK(message.validator) : undefined);
-    obj.signed_last_block = message.signedLastBlock;
     obj.vote_extension = message.voteExtension;
+    obj.extension_signature = message.extensionSignature;
+    message.blockIdFlag !== undefined && (obj.block_id_flag = blockIDFlagToJSON(message.blockIdFlag));
     return obj;
   },
   fromAmino(object: ExtendedVoteInfoAmino): ExtendedVoteInfo {
     return {
       validator: object?.validator ? Validator.fromAmino(object.validator) : undefined,
-      signedLastBlock: object.signed_last_block,
-      voteExtension: object.vote_extension
+      voteExtension: object.vote_extension,
+      extensionSignature: object.extension_signature,
+      blockIdFlag: isSet(object.block_id_flag) ? blockIDFlagFromJSON(object.block_id_flag) : -1
     };
   },
   toAmino(message: ExtendedVoteInfo): ExtendedVoteInfoAmino {
     const obj: any = {};
     obj.validator = message.validator ? Validator.toAmino(message.validator) : undefined;
-    obj.signed_last_block = message.signedLastBlock;
     obj.vote_extension = message.voteExtension;
+    obj.extension_signature = message.extensionSignature;
+    obj.block_id_flag = message.blockIdFlag;
     return obj;
   },
   fromAminoMsg(object: ExtendedVoteInfoAminoMsg): ExtendedVoteInfo {
@@ -6844,7 +7170,7 @@ function createBaseMisbehavior(): Misbehavior {
     type: 0,
     validator: Validator.fromPartial({}),
     height: BigInt(0),
-    time: undefined,
+    time: new Date(),
     totalVotingPower: BigInt(0)
   };
 }

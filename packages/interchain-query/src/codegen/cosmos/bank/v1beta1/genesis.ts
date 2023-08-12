@@ -1,10 +1,10 @@
-import { Params, ParamsAmino, ParamsSDKType, Metadata, MetadataAmino, MetadataSDKType } from "./bank";
+import { Params, ParamsAmino, ParamsSDKType, Metadata, MetadataAmino, MetadataSDKType, SendEnabled, SendEnabledAmino, SendEnabledSDKType } from "./bank";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial } from "../../../helpers";
 /** GenesisState defines the bank module's genesis state. */
 export interface GenesisState {
-  /** params defines all the paramaters of the module. */
+  /** params defines all the parameters of the module. */
   params: Params | undefined;
   /** balances is an array containing the balances of all the accounts. */
   balances: Balance[];
@@ -13,10 +13,14 @@ export interface GenesisState {
    * balances. Otherwise, it will be used to validate that the sum of the balances equals this amount.
    */
   supply: Coin[];
-  /** denom_metadata defines the metadata of the differents coins. */
+  /** denom_metadata defines the metadata of the different coins. */
   denomMetadata: Metadata[];
-  /** supply_offsets defines the amount of supply offset. */
-  supplyOffsets: GenesisSupplyOffset[];
+  /**
+   * send_enabled defines the denoms where send is enabled or disabled.
+   * 
+   * Since: cosmos-sdk 0.47
+   */
+  sendEnabled: SendEnabled[];
 }
 export interface GenesisStateProtoMsg {
   typeUrl: "/cosmos.bank.v1beta1.GenesisState";
@@ -24,7 +28,7 @@ export interface GenesisStateProtoMsg {
 }
 /** GenesisState defines the bank module's genesis state. */
 export interface GenesisStateAmino {
-  /** params defines all the paramaters of the module. */
+  /** params defines all the parameters of the module. */
   params?: ParamsAmino | undefined;
   /** balances is an array containing the balances of all the accounts. */
   balances: BalanceAmino[];
@@ -33,10 +37,14 @@ export interface GenesisStateAmino {
    * balances. Otherwise, it will be used to validate that the sum of the balances equals this amount.
    */
   supply: CoinAmino[];
-  /** denom_metadata defines the metadata of the differents coins. */
+  /** denom_metadata defines the metadata of the different coins. */
   denom_metadata: MetadataAmino[];
-  /** supply_offsets defines the amount of supply offset. */
-  supply_offsets: GenesisSupplyOffsetAmino[];
+  /**
+   * send_enabled defines the denoms where send is enabled or disabled.
+   * 
+   * Since: cosmos-sdk 0.47
+   */
+  send_enabled: SendEnabledAmino[];
 }
 export interface GenesisStateAminoMsg {
   type: "cosmos-sdk/GenesisState";
@@ -48,7 +56,7 @@ export interface GenesisStateSDKType {
   balances: BalanceSDKType[];
   supply: CoinSDKType[];
   denom_metadata: MetadataSDKType[];
-  supply_offsets: GenesisSupplyOffsetSDKType[];
+  send_enabled: SendEnabledSDKType[];
 }
 /**
  * Balance defines an account address and balance pair used in the bank module's
@@ -86,49 +94,13 @@ export interface BalanceSDKType {
   address: string;
   coins: CoinSDKType[];
 }
-/**
- * GenesisSupplyOffset encodes the supply offsets, just for genesis.
- * The offsets are serialized directly by denom in state.
- */
-export interface GenesisSupplyOffset {
-  /** Denom */
-  denom: string;
-  /** SupplyOffset */
-  offset: string;
-}
-export interface GenesisSupplyOffsetProtoMsg {
-  typeUrl: "/cosmos.bank.v1beta1.GenesisSupplyOffset";
-  value: Uint8Array;
-}
-/**
- * GenesisSupplyOffset encodes the supply offsets, just for genesis.
- * The offsets are serialized directly by denom in state.
- */
-export interface GenesisSupplyOffsetAmino {
-  /** Denom */
-  denom: string;
-  /** SupplyOffset */
-  offset: string;
-}
-export interface GenesisSupplyOffsetAminoMsg {
-  type: "cosmos-sdk/GenesisSupplyOffset";
-  value: GenesisSupplyOffsetAmino;
-}
-/**
- * GenesisSupplyOffset encodes the supply offsets, just for genesis.
- * The offsets are serialized directly by denom in state.
- */
-export interface GenesisSupplyOffsetSDKType {
-  denom: string;
-  offset: string;
-}
 function createBaseGenesisState(): GenesisState {
   return {
     params: Params.fromPartial({}),
     balances: [],
     supply: [],
     denomMetadata: [],
-    supplyOffsets: []
+    sendEnabled: []
   };
 }
 export const GenesisState = {
@@ -147,8 +119,8 @@ export const GenesisState = {
     for (const v of message.denomMetadata) {
       Metadata.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    for (const v of message.supplyOffsets) {
-      GenesisSupplyOffset.encode(v!, writer.uint32(42).fork()).ldelim();
+    for (const v of message.sendEnabled) {
+      SendEnabled.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -172,7 +144,7 @@ export const GenesisState = {
           message.denomMetadata.push(Metadata.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.supplyOffsets.push(GenesisSupplyOffset.decode(reader, reader.uint32()));
+          message.sendEnabled.push(SendEnabled.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -187,7 +159,7 @@ export const GenesisState = {
       balances: Array.isArray(object?.balances) ? object.balances.map((e: any) => Balance.fromJSON(e)) : [],
       supply: Array.isArray(object?.supply) ? object.supply.map((e: any) => Coin.fromJSON(e)) : [],
       denomMetadata: Array.isArray(object?.denomMetadata) ? object.denomMetadata.map((e: any) => Metadata.fromJSON(e)) : [],
-      supplyOffsets: Array.isArray(object?.supplyOffsets) ? object.supplyOffsets.map((e: any) => GenesisSupplyOffset.fromJSON(e)) : []
+      sendEnabled: Array.isArray(object?.sendEnabled) ? object.sendEnabled.map((e: any) => SendEnabled.fromJSON(e)) : []
     };
   },
   toJSON(message: GenesisState): unknown {
@@ -208,10 +180,10 @@ export const GenesisState = {
     } else {
       obj.denomMetadata = [];
     }
-    if (message.supplyOffsets) {
-      obj.supplyOffsets = message.supplyOffsets.map(e => e ? GenesisSupplyOffset.toJSON(e) : undefined);
+    if (message.sendEnabled) {
+      obj.sendEnabled = message.sendEnabled.map(e => e ? SendEnabled.toJSON(e) : undefined);
     } else {
-      obj.supplyOffsets = [];
+      obj.sendEnabled = [];
     }
     return obj;
   },
@@ -221,7 +193,7 @@ export const GenesisState = {
     message.balances = object.balances?.map(e => Balance.fromPartial(e)) || [];
     message.supply = object.supply?.map(e => Coin.fromPartial(e)) || [];
     message.denomMetadata = object.denomMetadata?.map(e => Metadata.fromPartial(e)) || [];
-    message.supplyOffsets = object.supplyOffsets?.map(e => GenesisSupplyOffset.fromPartial(e)) || [];
+    message.sendEnabled = object.sendEnabled?.map(e => SendEnabled.fromPartial(e)) || [];
     return message;
   },
   fromSDK(object: GenesisStateSDKType): GenesisState {
@@ -230,7 +202,7 @@ export const GenesisState = {
       balances: Array.isArray(object?.balances) ? object.balances.map((e: any) => Balance.fromSDK(e)) : [],
       supply: Array.isArray(object?.supply) ? object.supply.map((e: any) => Coin.fromSDK(e)) : [],
       denomMetadata: Array.isArray(object?.denom_metadata) ? object.denom_metadata.map((e: any) => Metadata.fromSDK(e)) : [],
-      supplyOffsets: Array.isArray(object?.supply_offsets) ? object.supply_offsets.map((e: any) => GenesisSupplyOffset.fromSDK(e)) : []
+      sendEnabled: Array.isArray(object?.send_enabled) ? object.send_enabled.map((e: any) => SendEnabled.fromSDK(e)) : []
     };
   },
   toSDK(message: GenesisState): GenesisStateSDKType {
@@ -251,10 +223,10 @@ export const GenesisState = {
     } else {
       obj.denom_metadata = [];
     }
-    if (message.supplyOffsets) {
-      obj.supply_offsets = message.supplyOffsets.map(e => e ? GenesisSupplyOffset.toSDK(e) : undefined);
+    if (message.sendEnabled) {
+      obj.send_enabled = message.sendEnabled.map(e => e ? SendEnabled.toSDK(e) : undefined);
     } else {
-      obj.supply_offsets = [];
+      obj.send_enabled = [];
     }
     return obj;
   },
@@ -264,7 +236,7 @@ export const GenesisState = {
       balances: Array.isArray(object?.balances) ? object.balances.map((e: any) => Balance.fromAmino(e)) : [],
       supply: Array.isArray(object?.supply) ? object.supply.map((e: any) => Coin.fromAmino(e)) : [],
       denomMetadata: Array.isArray(object?.denom_metadata) ? object.denom_metadata.map((e: any) => Metadata.fromAmino(e)) : [],
-      supplyOffsets: Array.isArray(object?.supply_offsets) ? object.supply_offsets.map((e: any) => GenesisSupplyOffset.fromAmino(e)) : []
+      sendEnabled: Array.isArray(object?.send_enabled) ? object.send_enabled.map((e: any) => SendEnabled.fromAmino(e)) : []
     };
   },
   toAmino(message: GenesisState): GenesisStateAmino {
@@ -285,10 +257,10 @@ export const GenesisState = {
     } else {
       obj.denom_metadata = [];
     }
-    if (message.supplyOffsets) {
-      obj.supply_offsets = message.supplyOffsets.map(e => e ? GenesisSupplyOffset.toAmino(e) : undefined);
+    if (message.sendEnabled) {
+      obj.send_enabled = message.sendEnabled.map(e => e ? SendEnabled.toAmino(e) : undefined);
     } else {
-      obj.supply_offsets = [];
+      obj.send_enabled = [];
     }
     return obj;
   },
@@ -425,108 +397,6 @@ export const Balance = {
     return {
       typeUrl: "/cosmos.bank.v1beta1.Balance",
       value: Balance.encode(message).finish()
-    };
-  }
-};
-function createBaseGenesisSupplyOffset(): GenesisSupplyOffset {
-  return {
-    denom: "",
-    offset: ""
-  };
-}
-export const GenesisSupplyOffset = {
-  typeUrl: "/cosmos.bank.v1beta1.GenesisSupplyOffset",
-  aminoType: "cosmos-sdk/GenesisSupplyOffset",
-  encode(message: GenesisSupplyOffset, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.denom !== "") {
-      writer.uint32(10).string(message.denom);
-    }
-    if (message.offset !== "") {
-      writer.uint32(18).string(message.offset);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): GenesisSupplyOffset {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGenesisSupplyOffset();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.denom = reader.string();
-          break;
-        case 2:
-          message.offset = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): GenesisSupplyOffset {
-    return {
-      denom: isSet(object.denom) ? String(object.denom) : "",
-      offset: isSet(object.offset) ? String(object.offset) : ""
-    };
-  },
-  toJSON(message: GenesisSupplyOffset): unknown {
-    const obj: any = {};
-    message.denom !== undefined && (obj.denom = message.denom);
-    message.offset !== undefined && (obj.offset = message.offset);
-    return obj;
-  },
-  fromPartial(object: DeepPartial<GenesisSupplyOffset>): GenesisSupplyOffset {
-    const message = createBaseGenesisSupplyOffset();
-    message.denom = object.denom ?? "";
-    message.offset = object.offset ?? "";
-    return message;
-  },
-  fromSDK(object: GenesisSupplyOffsetSDKType): GenesisSupplyOffset {
-    return {
-      denom: object?.denom,
-      offset: object?.offset
-    };
-  },
-  toSDK(message: GenesisSupplyOffset): GenesisSupplyOffsetSDKType {
-    const obj: any = {};
-    obj.denom = message.denom;
-    obj.offset = message.offset;
-    return obj;
-  },
-  fromAmino(object: GenesisSupplyOffsetAmino): GenesisSupplyOffset {
-    return {
-      denom: object.denom,
-      offset: object.offset
-    };
-  },
-  toAmino(message: GenesisSupplyOffset): GenesisSupplyOffsetAmino {
-    const obj: any = {};
-    obj.denom = message.denom;
-    obj.offset = message.offset;
-    return obj;
-  },
-  fromAminoMsg(object: GenesisSupplyOffsetAminoMsg): GenesisSupplyOffset {
-    return GenesisSupplyOffset.fromAmino(object.value);
-  },
-  toAminoMsg(message: GenesisSupplyOffset): GenesisSupplyOffsetAminoMsg {
-    return {
-      type: "cosmos-sdk/GenesisSupplyOffset",
-      value: GenesisSupplyOffset.toAmino(message)
-    };
-  },
-  fromProtoMsg(message: GenesisSupplyOffsetProtoMsg): GenesisSupplyOffset {
-    return GenesisSupplyOffset.decode(message.value);
-  },
-  toProto(message: GenesisSupplyOffset): Uint8Array {
-    return GenesisSupplyOffset.encode(message).finish();
-  },
-  toProtoMsg(message: GenesisSupplyOffset): GenesisSupplyOffsetProtoMsg {
-    return {
-      typeUrl: "/cosmos.bank.v1beta1.GenesisSupplyOffset",
-      value: GenesisSupplyOffset.encode(message).finish()
     };
   }
 };

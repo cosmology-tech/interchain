@@ -5,7 +5,7 @@ import { isSet, DeepPartial } from "../../../helpers";
 export interface GenesisState {
   /** minter is a space for holding current inflation information. */
   minter: Minter | undefined;
-  /** params defines all the paramaters of the module. */
+  /** params defines all the parameters of the module. */
   params: Params | undefined;
 }
 export interface GenesisStateProtoMsg {
@@ -16,7 +16,7 @@ export interface GenesisStateProtoMsg {
 export interface GenesisStateAmino {
   /** minter is a space for holding current inflation information. */
   minter?: MinterAmino | undefined;
-  /** params defines all the paramaters of the module. */
+  /** params defines all the parameters of the module. */
   params?: ParamsAmino | undefined;
 }
 export interface GenesisStateAminoMsg {

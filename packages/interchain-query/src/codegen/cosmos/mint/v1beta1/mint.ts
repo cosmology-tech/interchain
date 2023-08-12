@@ -1,5 +1,4 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { Decimal } from "@cosmjs/math";
 import { isSet, DeepPartial } from "../../../helpers";
 /** Minter represents the minting state. */
 export interface Minter {
@@ -28,7 +27,7 @@ export interface MinterSDKType {
   inflation: string;
   annual_provisions: string;
 }
-/** Params holds parameters for the mint module. */
+/** Params defines the parameters for the x/mint module. */
 export interface Params {
   /** type of coin to mint */
   mintDenom: string;
@@ -47,7 +46,7 @@ export interface ParamsProtoMsg {
   typeUrl: "/cosmos.mint.v1beta1.Params";
   value: Uint8Array;
 }
-/** Params holds parameters for the mint module. */
+/** Params defines the parameters for the x/mint module. */
 export interface ParamsAmino {
   /** type of coin to mint */
   mint_denom: string;
@@ -66,7 +65,7 @@ export interface ParamsAminoMsg {
   type: "cosmos-sdk/x/mint/Params";
   value: ParamsAmino;
 }
-/** Params holds parameters for the mint module. */
+/** Params defines the parameters for the x/mint module. */
 export interface ParamsSDKType {
   mint_denom: string;
   inflation_rate_change: string;
@@ -86,10 +85,10 @@ export const Minter = {
   aminoType: "cosmos-sdk/Minter",
   encode(message: Minter, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.inflation !== "") {
-      writer.uint32(10).string(Decimal.fromUserInput(message.inflation, 18).atomics);
+      writer.uint32(10).string(message.inflation);
     }
     if (message.annualProvisions !== "") {
-      writer.uint32(18).string(Decimal.fromUserInput(message.annualProvisions, 18).atomics);
+      writer.uint32(18).string(message.annualProvisions);
     }
     return writer;
   },
@@ -101,10 +100,10 @@ export const Minter = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.inflation = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.inflation = reader.string();
           break;
         case 2:
-          message.annualProvisions = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.annualProvisions = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -195,16 +194,16 @@ export const Params = {
       writer.uint32(10).string(message.mintDenom);
     }
     if (message.inflationRateChange !== "") {
-      writer.uint32(18).string(Decimal.fromUserInput(message.inflationRateChange, 18).atomics);
+      writer.uint32(18).string(message.inflationRateChange);
     }
     if (message.inflationMax !== "") {
-      writer.uint32(26).string(Decimal.fromUserInput(message.inflationMax, 18).atomics);
+      writer.uint32(26).string(message.inflationMax);
     }
     if (message.inflationMin !== "") {
-      writer.uint32(34).string(Decimal.fromUserInput(message.inflationMin, 18).atomics);
+      writer.uint32(34).string(message.inflationMin);
     }
     if (message.goalBonded !== "") {
-      writer.uint32(42).string(Decimal.fromUserInput(message.goalBonded, 18).atomics);
+      writer.uint32(42).string(message.goalBonded);
     }
     if (message.blocksPerYear !== BigInt(0)) {
       writer.uint32(48).uint64(message.blocksPerYear);
@@ -222,16 +221,16 @@ export const Params = {
           message.mintDenom = reader.string();
           break;
         case 2:
-          message.inflationRateChange = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.inflationRateChange = reader.string();
           break;
         case 3:
-          message.inflationMax = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.inflationMax = reader.string();
           break;
         case 4:
-          message.inflationMin = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.inflationMin = reader.string();
           break;
         case 5:
-          message.goalBonded = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.goalBonded = reader.string();
           break;
         case 6:
           message.blocksPerYear = reader.uint64();

@@ -1,11 +1,20 @@
 import { DecCoin, DecCoinAmino, DecCoinSDKType, Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { Decimal } from "@cosmjs/math";
 import { isSet, DeepPartial } from "../../../helpers";
 /** Params defines the set of params for the distribution module. */
 export interface Params {
   communityTax: string;
+  /**
+   * Deprecated: The base_proposer_reward field is deprecated and is no longer used
+   * in the x/distribution module's reward mechanism.
+   */
+  /** @deprecated */
   baseProposerReward: string;
+  /**
+   * Deprecated: The bonus_proposer_reward field is deprecated and is no longer used
+   * in the x/distribution module's reward mechanism.
+   */
+  /** @deprecated */
   bonusProposerReward: string;
   withdrawAddrEnabled: boolean;
 }
@@ -16,7 +25,17 @@ export interface ParamsProtoMsg {
 /** Params defines the set of params for the distribution module. */
 export interface ParamsAmino {
   community_tax: string;
+  /**
+   * Deprecated: The base_proposer_reward field is deprecated and is no longer used
+   * in the x/distribution module's reward mechanism.
+   */
+  /** @deprecated */
   base_proposer_reward: string;
+  /**
+   * Deprecated: The bonus_proposer_reward field is deprecated and is no longer used
+   * in the x/distribution module's reward mechanism.
+   */
+  /** @deprecated */
   bonus_proposer_reward: string;
   withdraw_addr_enabled: boolean;
 }
@@ -27,7 +46,9 @@ export interface ParamsAminoMsg {
 /** Params defines the set of params for the distribution module. */
 export interface ParamsSDKType {
   community_tax: string;
+  /** @deprecated */
   base_proposer_reward: string;
+  /** @deprecated */
   bonus_proposer_reward: string;
   withdraw_addr_enabled: boolean;
 }
@@ -268,7 +289,13 @@ export interface FeePoolSDKType {
  * CommunityPoolSpendProposal details a proposal for use of community funds,
  * together with how many coins are proposed to be spent, and to which
  * recipient account.
+ * 
+ * Deprecated: Do not use. As of the Cosmos SDK release v0.47.x, there is no
+ * longer a need for an explicit CommunityPoolSpendProposal. To spend community
+ * pool funds, a simple MsgCommunityPoolSpend can be invoked from the x/gov
+ * module via a v1 governance proposal.
  */
+/** @deprecated */
 export interface CommunityPoolSpendProposal {
   title: string;
   description: string;
@@ -283,7 +310,13 @@ export interface CommunityPoolSpendProposalProtoMsg {
  * CommunityPoolSpendProposal details a proposal for use of community funds,
  * together with how many coins are proposed to be spent, and to which
  * recipient account.
+ * 
+ * Deprecated: Do not use. As of the Cosmos SDK release v0.47.x, there is no
+ * longer a need for an explicit CommunityPoolSpendProposal. To spend community
+ * pool funds, a simple MsgCommunityPoolSpend can be invoked from the x/gov
+ * module via a v1 governance proposal.
  */
+/** @deprecated */
 export interface CommunityPoolSpendProposalAmino {
   title: string;
   description: string;
@@ -298,7 +331,13 @@ export interface CommunityPoolSpendProposalAminoMsg {
  * CommunityPoolSpendProposal details a proposal for use of community funds,
  * together with how many coins are proposed to be spent, and to which
  * recipient account.
+ * 
+ * Deprecated: Do not use. As of the Cosmos SDK release v0.47.x, there is no
+ * longer a need for an explicit CommunityPoolSpendProposal. To spend community
+ * pool funds, a simple MsgCommunityPoolSpend can be invoked from the x/gov
+ * module via a v1 governance proposal.
  */
+/** @deprecated */
 export interface CommunityPoolSpendProposalSDKType {
   title: string;
   description: string;
@@ -438,13 +477,13 @@ export const Params = {
   aminoType: "cosmos-sdk/x/distribution/Params",
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.communityTax !== "") {
-      writer.uint32(10).string(Decimal.fromUserInput(message.communityTax, 18).atomics);
+      writer.uint32(10).string(message.communityTax);
     }
     if (message.baseProposerReward !== "") {
-      writer.uint32(18).string(Decimal.fromUserInput(message.baseProposerReward, 18).atomics);
+      writer.uint32(18).string(message.baseProposerReward);
     }
     if (message.bonusProposerReward !== "") {
-      writer.uint32(26).string(Decimal.fromUserInput(message.bonusProposerReward, 18).atomics);
+      writer.uint32(26).string(message.bonusProposerReward);
     }
     if (message.withdrawAddrEnabled === true) {
       writer.uint32(32).bool(message.withdrawAddrEnabled);
@@ -459,13 +498,13 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.communityTax = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.communityTax = reader.string();
           break;
         case 2:
-          message.baseProposerReward = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.baseProposerReward = reader.string();
           break;
         case 3:
-          message.bonusProposerReward = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.bonusProposerReward = reader.string();
           break;
         case 4:
           message.withdrawAddrEnabled = reader.bool();
@@ -997,7 +1036,7 @@ export const ValidatorSlashEvent = {
       writer.uint32(8).uint64(message.validatorPeriod);
     }
     if (message.fraction !== "") {
-      writer.uint32(18).string(Decimal.fromUserInput(message.fraction, 18).atomics);
+      writer.uint32(18).string(message.fraction);
     }
     return writer;
   },
@@ -1012,7 +1051,7 @@ export const ValidatorSlashEvent = {
           message.validatorPeriod = reader.uint64();
           break;
         case 2:
-          message.fraction = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.fraction = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1442,7 +1481,7 @@ export const DelegatorStartingInfo = {
       writer.uint32(8).uint64(message.previousPeriod);
     }
     if (message.stake !== "") {
-      writer.uint32(18).string(Decimal.fromUserInput(message.stake, 18).atomics);
+      writer.uint32(18).string(message.stake);
     }
     if (message.height !== BigInt(0)) {
       writer.uint32(24).uint64(message.height);
@@ -1460,7 +1499,7 @@ export const DelegatorStartingInfo = {
           message.previousPeriod = reader.uint64();
           break;
         case 2:
-          message.stake = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.stake = reader.string();
           break;
         case 3:
           message.height = reader.uint64();

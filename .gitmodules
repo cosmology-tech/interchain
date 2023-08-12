@@ -1,0 +1,12 @@
+[submodule "protos/cosmos-sdk"]
+	path = protos/cosmos-sdk
+	url = git@github.com:cosmos/cosmos-sdk.git
+[submodule "protos/ibc-go"]
+	path = protos/ibc-go
+	url = git@github.com:cosmos/ibc-go.git
+[submodule "protos/ics23"]
+	path = protos/ics23
+	url = git@github.com:cosmos/ics23.git
+[submodule "protos/wasmd"]
+	path = protos/wasmd
+	url = git@github.com:CosmWasm/wasmd.git

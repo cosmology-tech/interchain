@@ -11,11 +11,11 @@ export interface GenesisState {
   votes: Vote[];
   /** proposals defines all the proposals present at genesis. */
   proposals: Proposal[];
-  /** params defines all the paramaters of related to deposit. */
+  /** deposit_params defines all the parameters related to deposit. */
   depositParams: DepositParams | undefined;
-  /** params defines all the paramaters of related to voting. */
+  /** voting_params defines all the parameters related to voting. */
   votingParams: VotingParams | undefined;
-  /** params defines all the paramaters of related to tally. */
+  /** tally_params defines all the parameters related to tally. */
   tallyParams: TallyParams | undefined;
 }
 export interface GenesisStateProtoMsg {
@@ -32,11 +32,11 @@ export interface GenesisStateAmino {
   votes: VoteAmino[];
   /** proposals defines all the proposals present at genesis. */
   proposals: ProposalAmino[];
-  /** params defines all the paramaters of related to deposit. */
+  /** deposit_params defines all the parameters related to deposit. */
   deposit_params?: DepositParamsAmino | undefined;
-  /** params defines all the paramaters of related to voting. */
+  /** voting_params defines all the parameters related to voting. */
   voting_params?: VotingParamsAmino | undefined;
-  /** params defines all the paramaters of related to tally. */
+  /** tally_params defines all the parameters related to tally. */
   tally_params?: TallyParamsAmino | undefined;
 }
 export interface GenesisStateAminoMsg {

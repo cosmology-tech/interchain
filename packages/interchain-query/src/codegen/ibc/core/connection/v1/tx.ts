@@ -582,7 +582,7 @@ function createBaseMsgConnectionOpenTry(): MsgConnectionOpenTry {
   return {
     clientId: "",
     previousConnectionId: "",
-    clientState: undefined,
+    clientState: Any.fromPartial({}),
     counterparty: Counterparty.fromPartial({}),
     delayPeriod: BigInt(0),
     counterpartyVersions: [],
@@ -921,7 +921,7 @@ function createBaseMsgConnectionOpenAck(): MsgConnectionOpenAck {
     connectionId: "",
     counterpartyConnectionId: "",
     version: Version.fromPartial({}),
-    clientState: undefined,
+    clientState: Any.fromPartial({}),
     proofHeight: Height.fromPartial({}),
     proofTry: new Uint8Array(),
     proofClient: new Uint8Array(),

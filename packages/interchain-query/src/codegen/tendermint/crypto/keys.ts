@@ -1,6 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial } from "../../helpers";
-/** PublicKey defines the keys available for use with Tendermint Validators */
+/** PublicKey defines the keys available for use with Validators */
 export interface PublicKey {
   ed25519?: Uint8Array;
   secp256k1?: Uint8Array;
@@ -9,7 +9,7 @@ export interface PublicKeyProtoMsg {
   typeUrl: "/tendermint.crypto.PublicKey";
   value: Uint8Array;
 }
-/** PublicKey defines the keys available for use with Tendermint Validators */
+/** PublicKey defines the keys available for use with Validators */
 export interface PublicKeyAmino {
   ed25519?: Uint8Array;
   secp256k1?: Uint8Array;
@@ -18,7 +18,7 @@ export interface PublicKeyAminoMsg {
   type: "/tendermint.crypto.PublicKey";
   value: PublicKeyAmino;
 }
-/** PublicKey defines the keys available for use with Tendermint Validators */
+/** PublicKey defines the keys available for use with Validators */
 export interface PublicKeySDKType {
   ed25519?: Uint8Array;
   secp256k1?: Uint8Array;

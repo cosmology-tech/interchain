@@ -8,24 +8,25 @@ import { toTimestamp, fromTimestamp, isSet, DeepPartial, bytesFromBase64, base64
  */
 export interface ValidatorSigningInfo {
   address: string;
-  /** Height at which validator was first a candidate OR was unjailed */
+  /** Height at which validator was first a candidate OR was un-jailed */
   startHeight: bigint;
   /**
-   * Index which is incremented each time the validator was a bonded
-   * in a block and may have signed a precommit or not. This in conjunction with the
-   * `SignedBlocksWindow` param determines the index in the `MissedBlocksBitArray`.
+   * Index which is incremented every time a validator is bonded in a block and
+   * _may_ have signed a pre-commit or not. This in conjunction with the
+   * signed_blocks_window param determines the index in the missed block bitmap.
    */
   indexOffset: bigint;
   /** Timestamp until which the validator is jailed due to liveness downtime. */
   jailedUntil: Date | undefined;
   /**
-   * Whether or not a validator has been tombstoned (killed out of validator set). It is set
-   * once the validator commits an equivocation or for any other configured misbehiavor.
+   * Whether or not a validator has been tombstoned (killed out of validator
+   * set). It is set once the validator commits an equivocation or for any other
+   * configured misbehavior.
    */
   tombstoned: boolean;
   /**
-   * A counter kept to avoid unnecessary array reads.
-   * Note that `Sum(MissedBlocksBitArray)` always equals `MissedBlocksCounter`.
+   * A counter of missed (unsigned) blocks. It is used to avoid unnecessary
+   * reads in the missed block bitmap.
    */
   missedBlocksCounter: bigint;
 }
@@ -39,24 +40,25 @@ export interface ValidatorSigningInfoProtoMsg {
  */
 export interface ValidatorSigningInfoAmino {
   address: string;
-  /** Height at which validator was first a candidate OR was unjailed */
+  /** Height at which validator was first a candidate OR was un-jailed */
   start_height: string;
   /**
-   * Index which is incremented each time the validator was a bonded
-   * in a block and may have signed a precommit or not. This in conjunction with the
-   * `SignedBlocksWindow` param determines the index in the `MissedBlocksBitArray`.
+   * Index which is incremented every time a validator is bonded in a block and
+   * _may_ have signed a pre-commit or not. This in conjunction with the
+   * signed_blocks_window param determines the index in the missed block bitmap.
    */
   index_offset: string;
   /** Timestamp until which the validator is jailed due to liveness downtime. */
   jailed_until?: Date | undefined;
   /**
-   * Whether or not a validator has been tombstoned (killed out of validator set). It is set
-   * once the validator commits an equivocation or for any other configured misbehiavor.
+   * Whether or not a validator has been tombstoned (killed out of validator
+   * set). It is set once the validator commits an equivocation or for any other
+   * configured misbehavior.
    */
   tombstoned: boolean;
   /**
-   * A counter kept to avoid unnecessary array reads.
-   * Note that `Sum(MissedBlocksBitArray)` always equals `MissedBlocksCounter`.
+   * A counter of missed (unsigned) blocks. It is used to avoid unnecessary
+   * reads in the missed block bitmap.
    */
   missed_blocks_counter: string;
 }
@@ -113,7 +115,7 @@ function createBaseValidatorSigningInfo(): ValidatorSigningInfo {
     address: "",
     startHeight: BigInt(0),
     indexOffset: BigInt(0),
-    jailedUntil: undefined,
+    jailedUntil: new Date(),
     tombstoned: false,
     missedBlocksCounter: BigInt(0)
   };
@@ -270,7 +272,7 @@ function createBaseParams(): Params {
   return {
     signedBlocksWindow: BigInt(0),
     minSignedPerWindow: new Uint8Array(),
-    downtimeJailDuration: undefined,
+    downtimeJailDuration: Duration.fromPartial({}),
     slashFractionDoubleSign: new Uint8Array(),
     slashFractionDowntime: new Uint8Array()
   };

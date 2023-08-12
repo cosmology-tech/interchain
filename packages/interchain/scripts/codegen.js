@@ -1,13 +1,14 @@
-import { join } from 'path';
-import telescope from '@cosmology/telescope';
-import { sync as rimraf } from 'rimraf';
+const { join, resolve } = require('path');
+const telescope = require('@cosmology/telescope').default;
+const rimraf = require('rimraf').rimrafSync;
 
 const protoDirs = [
-  join(__dirname, '/../../../cosmos-sdk/proto'),
-  join(__dirname, '/../../../ibc-go/proto'),
-  join(__dirname, '/../../../ics23/proto'),
-  join(__dirname, '/../../../proto')
-];
+  join(__dirname, '/../../../protos/cosmos-sdk/proto'),
+  join(__dirname, '/../../../protos/ibc-go/proto'),
+  join(__dirname, '/../../../protos/ics23/proto'),
+  join(__dirname, '/../../../protos/proto')
+].map((a) => resolve(a));
+
 const outPath = join(__dirname, '/../src/codegen');
 rimraf(outPath);
 
@@ -38,6 +39,8 @@ telescope({
           'cosmos.group.v1beta1',
 
           // 'cosmos.mint.v1beta1',
+
+          'cosmos.autocli.v1',
 
           'cosmos.group.v1',
           'cosmos.msg.v1',

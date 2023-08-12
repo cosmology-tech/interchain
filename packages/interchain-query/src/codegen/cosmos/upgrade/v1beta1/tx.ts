@@ -7,7 +7,7 @@ import { isSet, DeepPartial } from "../../../helpers";
  * Since: cosmos-sdk 0.46
  */
 export interface MsgSoftwareUpgrade {
-  /** authority is the address of the governance account. */
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
   authority: string;
   /** plan is the upgrade plan. */
   plan: Plan | undefined;
@@ -22,7 +22,7 @@ export interface MsgSoftwareUpgradeProtoMsg {
  * Since: cosmos-sdk 0.46
  */
 export interface MsgSoftwareUpgradeAmino {
-  /** authority is the address of the governance account. */
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
   authority: string;
   /** plan is the upgrade plan. */
   plan?: PlanAmino | undefined;
@@ -72,7 +72,7 @@ export interface MsgSoftwareUpgradeResponseSDKType {}
  * Since: cosmos-sdk 0.46
  */
 export interface MsgCancelUpgrade {
-  /** authority is the address of the governance account. */
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
   authority: string;
 }
 export interface MsgCancelUpgradeProtoMsg {
@@ -85,7 +85,7 @@ export interface MsgCancelUpgradeProtoMsg {
  * Since: cosmos-sdk 0.46
  */
 export interface MsgCancelUpgradeAmino {
-  /** authority is the address of the governance account. */
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
   authority: string;
 }
 export interface MsgCancelUpgradeAminoMsg {

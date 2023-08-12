@@ -21,10 +21,7 @@ export interface Plan {
    */
   /** @deprecated */
   time: Date | undefined;
-  /**
-   * The height at which the upgrade must be performed.
-   * Only used if Time is not set.
-   */
+  /** The height at which the upgrade must be performed. */
   height: bigint;
   /**
    * Any application specific upgrade info to be included on-chain
@@ -62,10 +59,7 @@ export interface PlanAmino {
    */
   /** @deprecated */
   time?: Date | undefined;
-  /**
-   * The height at which the upgrade must be performed.
-   * Only used if Time is not set.
-   */
+  /** The height at which the upgrade must be performed. */
   height: string;
   /**
    * Any application specific upgrade info to be included on-chain
@@ -97,10 +91,16 @@ export interface PlanSDKType {
 /**
  * SoftwareUpgradeProposal is a gov Content type for initiating a software
  * upgrade.
+ * Deprecated: This legacy proposal is deprecated in favor of Msg-based gov
+ * proposals, see MsgSoftwareUpgrade.
  */
+/** @deprecated */
 export interface SoftwareUpgradeProposal {
+  /** title of the proposal */
   title: string;
+  /** description of the proposal */
   description: string;
+  /** plan of the proposal */
   plan: Plan | undefined;
 }
 export interface SoftwareUpgradeProposalProtoMsg {
@@ -110,10 +110,16 @@ export interface SoftwareUpgradeProposalProtoMsg {
 /**
  * SoftwareUpgradeProposal is a gov Content type for initiating a software
  * upgrade.
+ * Deprecated: This legacy proposal is deprecated in favor of Msg-based gov
+ * proposals, see MsgSoftwareUpgrade.
  */
+/** @deprecated */
 export interface SoftwareUpgradeProposalAmino {
+  /** title of the proposal */
   title: string;
+  /** description of the proposal */
   description: string;
+  /** plan of the proposal */
   plan?: PlanAmino | undefined;
 }
 export interface SoftwareUpgradeProposalAminoMsg {
@@ -123,7 +129,10 @@ export interface SoftwareUpgradeProposalAminoMsg {
 /**
  * SoftwareUpgradeProposal is a gov Content type for initiating a software
  * upgrade.
+ * Deprecated: This legacy proposal is deprecated in favor of Msg-based gov
+ * proposals, see MsgSoftwareUpgrade.
  */
+/** @deprecated */
 export interface SoftwareUpgradeProposalSDKType {
   title: string;
   description: string;
@@ -132,9 +141,14 @@ export interface SoftwareUpgradeProposalSDKType {
 /**
  * CancelSoftwareUpgradeProposal is a gov Content type for cancelling a software
  * upgrade.
+ * Deprecated: This legacy proposal is deprecated in favor of Msg-based gov
+ * proposals, see MsgCancelUpgrade.
  */
+/** @deprecated */
 export interface CancelSoftwareUpgradeProposal {
+  /** title of the proposal */
   title: string;
+  /** description of the proposal */
   description: string;
 }
 export interface CancelSoftwareUpgradeProposalProtoMsg {
@@ -144,9 +158,14 @@ export interface CancelSoftwareUpgradeProposalProtoMsg {
 /**
  * CancelSoftwareUpgradeProposal is a gov Content type for cancelling a software
  * upgrade.
+ * Deprecated: This legacy proposal is deprecated in favor of Msg-based gov
+ * proposals, see MsgCancelUpgrade.
  */
+/** @deprecated */
 export interface CancelSoftwareUpgradeProposalAmino {
+  /** title of the proposal */
   title: string;
+  /** description of the proposal */
   description: string;
 }
 export interface CancelSoftwareUpgradeProposalAminoMsg {
@@ -156,7 +175,10 @@ export interface CancelSoftwareUpgradeProposalAminoMsg {
 /**
  * CancelSoftwareUpgradeProposal is a gov Content type for cancelling a software
  * upgrade.
+ * Deprecated: This legacy proposal is deprecated in favor of Msg-based gov
+ * proposals, see MsgCancelUpgrade.
  */
+/** @deprecated */
 export interface CancelSoftwareUpgradeProposalSDKType {
   title: string;
   description: string;
@@ -203,10 +225,10 @@ export interface ModuleVersionSDKType {
 function createBasePlan(): Plan {
   return {
     name: "",
-    time: undefined,
+    time: new Date(),
     height: BigInt(0),
     info: "",
-    upgradedClientState: undefined
+    upgradedClientState: Any.fromPartial({})
   };
 }
 export const Plan = {

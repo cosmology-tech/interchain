@@ -1,9 +1,13 @@
+import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial } from "../../../helpers";
 /** MsgVerifyInvariant represents a message to verify a particular invariance. */
 export interface MsgVerifyInvariant {
+  /** sender is the account address of private key to send coins to fee collector account. */
   sender: string;
+  /** name of the invariant module. */
   invariantModuleName: string;
+  /** invariant_route is the msg's invariant route. */
   invariantRoute: string;
 }
 export interface MsgVerifyInvariantProtoMsg {
@@ -12,8 +16,11 @@ export interface MsgVerifyInvariantProtoMsg {
 }
 /** MsgVerifyInvariant represents a message to verify a particular invariance. */
 export interface MsgVerifyInvariantAmino {
+  /** sender is the account address of private key to send coins to fee collector account. */
   sender: string;
+  /** name of the invariant module. */
   invariant_module_name: string;
+  /** invariant_route is the msg's invariant route. */
   invariant_route: string;
 }
 export interface MsgVerifyInvariantAminoMsg {
@@ -40,6 +47,74 @@ export interface MsgVerifyInvariantResponseAminoMsg {
 }
 /** MsgVerifyInvariantResponse defines the Msg/VerifyInvariant response type. */
 export interface MsgVerifyInvariantResponseSDKType {}
+/**
+ * MsgUpdateParams is the Msg/UpdateParams request type.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParams {
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+  authority: string;
+  /** constant_fee defines the x/crisis parameter. */
+  constantFee: Coin | undefined;
+}
+export interface MsgUpdateParamsProtoMsg {
+  typeUrl: "/cosmos.crisis.v1beta1.MsgUpdateParams";
+  value: Uint8Array;
+}
+/**
+ * MsgUpdateParams is the Msg/UpdateParams request type.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsAmino {
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+  authority: string;
+  /** constant_fee defines the x/crisis parameter. */
+  constant_fee?: CoinAmino | undefined;
+}
+export interface MsgUpdateParamsAminoMsg {
+  type: "cosmos-sdk/x/crisis/MsgUpdateParams";
+  value: MsgUpdateParamsAmino;
+}
+/**
+ * MsgUpdateParams is the Msg/UpdateParams request type.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsSDKType {
+  authority: string;
+  constant_fee: CoinSDKType | undefined;
+}
+/**
+ * MsgUpdateParamsResponse defines the response structure for executing a
+ * MsgUpdateParams message.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsResponse {}
+export interface MsgUpdateParamsResponseProtoMsg {
+  typeUrl: "/cosmos.crisis.v1beta1.MsgUpdateParamsResponse";
+  value: Uint8Array;
+}
+/**
+ * MsgUpdateParamsResponse defines the response structure for executing a
+ * MsgUpdateParams message.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsResponseAmino {}
+export interface MsgUpdateParamsResponseAminoMsg {
+  type: "cosmos-sdk/MsgUpdateParamsResponse";
+  value: MsgUpdateParamsResponseAmino;
+}
+/**
+ * MsgUpdateParamsResponse defines the response structure for executing a
+ * MsgUpdateParams message.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsResponseSDKType {}
 function createBaseMsgVerifyInvariant(): MsgVerifyInvariant {
   return {
     sender: "",
@@ -223,6 +298,178 @@ export const MsgVerifyInvariantResponse = {
     return {
       typeUrl: "/cosmos.crisis.v1beta1.MsgVerifyInvariantResponse",
       value: MsgVerifyInvariantResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgUpdateParams(): MsgUpdateParams {
+  return {
+    authority: "",
+    constantFee: Coin.fromPartial({})
+  };
+}
+export const MsgUpdateParams = {
+  typeUrl: "/cosmos.crisis.v1beta1.MsgUpdateParams",
+  aminoType: "cosmos-sdk/x/crisis/MsgUpdateParams",
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.constantFee !== undefined) {
+      Coin.encode(message.constantFee, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.constantFee = Coin.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      constantFee: isSet(object.constantFee) ? Coin.fromJSON(object.constantFee) : undefined
+    };
+  },
+  toJSON(message: MsgUpdateParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.constantFee !== undefined && (obj.constantFee = message.constantFee ? Coin.toJSON(message.constantFee) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<MsgUpdateParams>): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    message.authority = object.authority ?? "";
+    message.constantFee = object.constantFee !== undefined && object.constantFee !== null ? Coin.fromPartial(object.constantFee) : undefined;
+    return message;
+  },
+  fromSDK(object: MsgUpdateParamsSDKType): MsgUpdateParams {
+    return {
+      authority: object?.authority,
+      constantFee: object.constant_fee ? Coin.fromSDK(object.constant_fee) : undefined
+    };
+  },
+  toSDK(message: MsgUpdateParams): MsgUpdateParamsSDKType {
+    const obj: any = {};
+    obj.authority = message.authority;
+    message.constantFee !== undefined && (obj.constant_fee = message.constantFee ? Coin.toSDK(message.constantFee) : undefined);
+    return obj;
+  },
+  fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
+    return {
+      authority: object.authority,
+      constantFee: object?.constant_fee ? Coin.fromAmino(object.constant_fee) : undefined
+    };
+  },
+  toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
+    const obj: any = {};
+    obj.authority = message.authority;
+    obj.constant_fee = message.constantFee ? Coin.toAmino(message.constantFee) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
+    return MsgUpdateParams.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
+    return {
+      type: "cosmos-sdk/x/crisis/MsgUpdateParams",
+      value: MsgUpdateParams.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value);
+  },
+  toProto(message: MsgUpdateParams): Uint8Array {
+    return MsgUpdateParams.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateParams): MsgUpdateParamsProtoMsg {
+    return {
+      typeUrl: "/cosmos.crisis.v1beta1.MsgUpdateParams",
+      value: MsgUpdateParams.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
+  return {};
+}
+export const MsgUpdateParamsResponse = {
+  typeUrl: "/cosmos.crisis.v1beta1.MsgUpdateParamsResponse",
+  aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateParamsResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: DeepPartial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
+  },
+  fromSDK(_: MsgUpdateParamsResponseSDKType): MsgUpdateParamsResponse {
+    return {};
+  },
+  toSDK(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseSDKType {
+    const obj: any = {};
+    return obj;
+  },
+  fromAmino(_: MsgUpdateParamsResponseAmino): MsgUpdateParamsResponse {
+    return {};
+  },
+  toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseAminoMsg {
+    return {
+      type: "cosmos-sdk/MsgUpdateParamsResponse",
+      value: MsgUpdateParamsResponse.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value);
+  },
+  toProto(message: MsgUpdateParamsResponse): Uint8Array {
+    return MsgUpdateParamsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseProtoMsg {
+    return {
+      typeUrl: "/cosmos.crisis.v1beta1.MsgUpdateParamsResponse",
+      value: MsgUpdateParamsResponse.encode(message).finish()
     };
   }
 };

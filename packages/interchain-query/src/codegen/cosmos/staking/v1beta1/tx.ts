@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Description, DescriptionAmino, DescriptionSDKType, CommissionRates, CommissionRatesAmino, CommissionRatesSDKType } from "./staking";
+import { Description, DescriptionAmino, DescriptionSDKType, CommissionRates, CommissionRatesAmino, CommissionRatesSDKType, Params, ParamsAmino, ParamsSDKType } from "./staking";
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { Timestamp } from "../../../google/protobuf/timestamp";
@@ -7,12 +7,17 @@ import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, toTimestamp, fromTimestamp } from "../../../helpers";
 import { toBase64, fromBase64 } from "@cosmjs/encoding";
 import { encodeBech32Pubkey, decodeBech32Pubkey } from "@cosmjs/amino";
-import { Decimal } from "@cosmjs/math";
 /** MsgCreateValidator defines a SDK message for creating a new validator. */
 export interface MsgCreateValidator {
   description: Description | undefined;
   commission: CommissionRates | undefined;
   minSelfDelegation: string;
+  /**
+   * Deprecated: Use of Delegator Address in MsgCreateValidator is deprecated.
+   * The validator address bytes and delegator address bytes refer to the same account while creating validator (defer
+   * only in bech32 notation).
+   */
+  /** @deprecated */
   delegatorAddress: string;
   validatorAddress: string;
   pubkey: Any | undefined;
@@ -27,6 +32,12 @@ export interface MsgCreateValidatorAmino {
   description?: DescriptionAmino | undefined;
   commission?: CommissionRatesAmino | undefined;
   min_self_delegation: string;
+  /**
+   * Deprecated: Use of Delegator Address in MsgCreateValidator is deprecated.
+   * The validator address bytes and delegator address bytes refer to the same account while creating validator (defer
+   * only in bech32 notation).
+   */
+  /** @deprecated */
   delegator_address: string;
   validator_address: string;
   pubkey?: AnyAmino | undefined;
@@ -41,6 +52,7 @@ export interface MsgCreateValidatorSDKType {
   description: DescriptionSDKType | undefined;
   commission: CommissionRatesSDKType | undefined;
   min_self_delegation: string;
+  /** @deprecated */
   delegator_address: string;
   validator_address: string;
   pubkey: AnySDKType | undefined;
@@ -260,6 +272,12 @@ export interface MsgUndelegateSDKType {
 /** MsgUndelegateResponse defines the Msg/Undelegate response type. */
 export interface MsgUndelegateResponse {
   completionTime: Date | undefined;
+  /**
+   * amount returns the amount of undelegated coins
+   * 
+   * Since: cosmos-sdk 0.50
+   */
+  amount: Coin | undefined;
 }
 export interface MsgUndelegateResponseProtoMsg {
   typeUrl: "/cosmos.staking.v1beta1.MsgUndelegateResponse";
@@ -268,6 +286,12 @@ export interface MsgUndelegateResponseProtoMsg {
 /** MsgUndelegateResponse defines the Msg/Undelegate response type. */
 export interface MsgUndelegateResponseAmino {
   completion_time?: Date | undefined;
+  /**
+   * amount returns the amount of undelegated coins
+   * 
+   * Since: cosmos-sdk 0.50
+   */
+  amount?: CoinAmino | undefined;
 }
 export interface MsgUndelegateResponseAminoMsg {
   type: "cosmos-sdk/MsgUndelegateResponse";
@@ -276,7 +300,155 @@ export interface MsgUndelegateResponseAminoMsg {
 /** MsgUndelegateResponse defines the Msg/Undelegate response type. */
 export interface MsgUndelegateResponseSDKType {
   completion_time: Date | undefined;
+  amount: CoinSDKType | undefined;
 }
+/**
+ * MsgCancelUnbondingDelegation defines the SDK message for performing a cancel unbonding delegation for delegator
+ * 
+ * Since: cosmos-sdk 0.46
+ */
+export interface MsgCancelUnbondingDelegation {
+  delegatorAddress: string;
+  validatorAddress: string;
+  /** amount is always less than or equal to unbonding delegation entry balance */
+  amount: Coin | undefined;
+  /** creation_height is the height which the unbonding took place. */
+  creationHeight: bigint;
+}
+export interface MsgCancelUnbondingDelegationProtoMsg {
+  typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation";
+  value: Uint8Array;
+}
+/**
+ * MsgCancelUnbondingDelegation defines the SDK message for performing a cancel unbonding delegation for delegator
+ * 
+ * Since: cosmos-sdk 0.46
+ */
+export interface MsgCancelUnbondingDelegationAmino {
+  delegator_address: string;
+  validator_address: string;
+  /** amount is always less than or equal to unbonding delegation entry balance */
+  amount?: CoinAmino | undefined;
+  /** creation_height is the height which the unbonding took place. */
+  creation_height: string;
+}
+export interface MsgCancelUnbondingDelegationAminoMsg {
+  type: "cosmos-sdk/MsgCancelUnbondingDelegation";
+  value: MsgCancelUnbondingDelegationAmino;
+}
+/**
+ * MsgCancelUnbondingDelegation defines the SDK message for performing a cancel unbonding delegation for delegator
+ * 
+ * Since: cosmos-sdk 0.46
+ */
+export interface MsgCancelUnbondingDelegationSDKType {
+  delegator_address: string;
+  validator_address: string;
+  amount: CoinSDKType | undefined;
+  creation_height: bigint;
+}
+/**
+ * MsgCancelUnbondingDelegationResponse
+ * 
+ * Since: cosmos-sdk 0.46
+ */
+export interface MsgCancelUnbondingDelegationResponse {}
+export interface MsgCancelUnbondingDelegationResponseProtoMsg {
+  typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegationResponse";
+  value: Uint8Array;
+}
+/**
+ * MsgCancelUnbondingDelegationResponse
+ * 
+ * Since: cosmos-sdk 0.46
+ */
+export interface MsgCancelUnbondingDelegationResponseAmino {}
+export interface MsgCancelUnbondingDelegationResponseAminoMsg {
+  type: "cosmos-sdk/MsgCancelUnbondingDelegationResponse";
+  value: MsgCancelUnbondingDelegationResponseAmino;
+}
+/**
+ * MsgCancelUnbondingDelegationResponse
+ * 
+ * Since: cosmos-sdk 0.46
+ */
+export interface MsgCancelUnbondingDelegationResponseSDKType {}
+/**
+ * MsgUpdateParams is the Msg/UpdateParams request type.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParams {
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+  authority: string;
+  /**
+   * params defines the x/staking parameters to update.
+   * 
+   * NOTE: All parameters must be supplied.
+   */
+  params: Params | undefined;
+}
+export interface MsgUpdateParamsProtoMsg {
+  typeUrl: "/cosmos.staking.v1beta1.MsgUpdateParams";
+  value: Uint8Array;
+}
+/**
+ * MsgUpdateParams is the Msg/UpdateParams request type.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsAmino {
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+  authority: string;
+  /**
+   * params defines the x/staking parameters to update.
+   * 
+   * NOTE: All parameters must be supplied.
+   */
+  params?: ParamsAmino | undefined;
+}
+export interface MsgUpdateParamsAminoMsg {
+  type: "cosmos-sdk/x/staking/MsgUpdateParams";
+  value: MsgUpdateParamsAmino;
+}
+/**
+ * MsgUpdateParams is the Msg/UpdateParams request type.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsSDKType {
+  authority: string;
+  params: ParamsSDKType | undefined;
+}
+/**
+ * MsgUpdateParamsResponse defines the response structure for executing a
+ * MsgUpdateParams message.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsResponse {}
+export interface MsgUpdateParamsResponseProtoMsg {
+  typeUrl: "/cosmos.staking.v1beta1.MsgUpdateParamsResponse";
+  value: Uint8Array;
+}
+/**
+ * MsgUpdateParamsResponse defines the response structure for executing a
+ * MsgUpdateParams message.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsResponseAmino {}
+export interface MsgUpdateParamsResponseAminoMsg {
+  type: "cosmos-sdk/MsgUpdateParamsResponse";
+  value: MsgUpdateParamsResponseAmino;
+}
+/**
+ * MsgUpdateParamsResponse defines the response structure for executing a
+ * MsgUpdateParams message.
+ * 
+ * Since: cosmos-sdk 0.47
+ */
+export interface MsgUpdateParamsResponseSDKType {}
 function createBaseMsgCreateValidator(): MsgCreateValidator {
   return {
     description: Description.fromPartial({}),
@@ -284,8 +456,8 @@ function createBaseMsgCreateValidator(): MsgCreateValidator {
     minSelfDelegation: "",
     delegatorAddress: "",
     validatorAddress: "",
-    pubkey: undefined,
-    value: undefined
+    pubkey: Any.fromPartial({}),
+    value: Coin.fromPartial({})
   };
 }
 export const MsgCreateValidator = {
@@ -544,7 +716,7 @@ export const MsgEditValidator = {
       writer.uint32(18).string(message.validatorAddress);
     }
     if (message.commissionRate !== "") {
-      writer.uint32(26).string(Decimal.fromUserInput(message.commissionRate, 18).atomics);
+      writer.uint32(26).string(message.commissionRate);
     }
     if (message.minSelfDelegation !== "") {
       writer.uint32(34).string(message.minSelfDelegation);
@@ -565,7 +737,7 @@ export const MsgEditValidator = {
           message.validatorAddress = reader.string();
           break;
         case 3:
-          message.commissionRate = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.commissionRate = reader.string();
           break;
         case 4:
           message.minSelfDelegation = reader.string();
@@ -729,7 +901,7 @@ function createBaseMsgDelegate(): MsgDelegate {
   return {
     delegatorAddress: "",
     validatorAddress: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgDelegate = {
@@ -916,7 +1088,7 @@ function createBaseMsgBeginRedelegate(): MsgBeginRedelegate {
     delegatorAddress: "",
     validatorSrcAddress: "",
     validatorDstAddress: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgBeginRedelegate = {
@@ -1043,7 +1215,7 @@ export const MsgBeginRedelegate = {
 };
 function createBaseMsgBeginRedelegateResponse(): MsgBeginRedelegateResponse {
   return {
-    completionTime: undefined
+    completionTime: new Date()
   };
 }
 export const MsgBeginRedelegateResponse = {
@@ -1133,7 +1305,7 @@ function createBaseMsgUndelegate(): MsgUndelegate {
   return {
     delegatorAddress: "",
     validatorAddress: "",
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgUndelegate = {
@@ -1247,7 +1419,8 @@ export const MsgUndelegate = {
 };
 function createBaseMsgUndelegateResponse(): MsgUndelegateResponse {
   return {
-    completionTime: undefined
+    completionTime: new Date(),
+    amount: Coin.fromPartial({})
   };
 }
 export const MsgUndelegateResponse = {
@@ -1256,6 +1429,9 @@ export const MsgUndelegateResponse = {
   encode(message: MsgUndelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.completionTime !== undefined) {
       Timestamp.encode(toTimestamp(message.completionTime), writer.uint32(10).fork()).ldelim();
+    }
+    if (message.amount !== undefined) {
+      Coin.encode(message.amount, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -1269,6 +1445,9 @@ export const MsgUndelegateResponse = {
         case 1:
           message.completionTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
+        case 2:
+          message.amount = Coin.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1278,37 +1457,44 @@ export const MsgUndelegateResponse = {
   },
   fromJSON(object: any): MsgUndelegateResponse {
     return {
-      completionTime: isSet(object.completionTime) ? new Date(object.completionTime) : undefined
+      completionTime: isSet(object.completionTime) ? new Date(object.completionTime) : undefined,
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
     };
   },
   toJSON(message: MsgUndelegateResponse): unknown {
     const obj: any = {};
     message.completionTime !== undefined && (obj.completionTime = message.completionTime.toISOString());
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
   fromPartial(object: DeepPartial<MsgUndelegateResponse>): MsgUndelegateResponse {
     const message = createBaseMsgUndelegateResponse();
     message.completionTime = object.completionTime ?? undefined;
+    message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
   },
   fromSDK(object: MsgUndelegateResponseSDKType): MsgUndelegateResponse {
     return {
-      completionTime: object.completion_time ?? undefined
+      completionTime: object.completion_time ?? undefined,
+      amount: object.amount ? Coin.fromSDK(object.amount) : undefined
     };
   },
   toSDK(message: MsgUndelegateResponse): MsgUndelegateResponseSDKType {
     const obj: any = {};
     message.completionTime !== undefined && (obj.completion_time = message.completionTime ?? undefined);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toSDK(message.amount) : undefined);
     return obj;
   },
   fromAmino(object: MsgUndelegateResponseAmino): MsgUndelegateResponse {
     return {
-      completionTime: object.completion_time
+      completionTime: object.completion_time,
+      amount: object?.amount ? Coin.fromAmino(object.amount) : undefined
     };
   },
   toAmino(message: MsgUndelegateResponse): MsgUndelegateResponseAmino {
     const obj: any = {};
     obj.completion_time = message.completionTime;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUndelegateResponseAminoMsg): MsgUndelegateResponse {
@@ -1330,6 +1516,378 @@ export const MsgUndelegateResponse = {
     return {
       typeUrl: "/cosmos.staking.v1beta1.MsgUndelegateResponse",
       value: MsgUndelegateResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgCancelUnbondingDelegation(): MsgCancelUnbondingDelegation {
+  return {
+    delegatorAddress: "",
+    validatorAddress: "",
+    amount: Coin.fromPartial({}),
+    creationHeight: BigInt(0)
+  };
+}
+export const MsgCancelUnbondingDelegation = {
+  typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation",
+  aminoType: "cosmos-sdk/MsgCancelUnbondingDelegation",
+  encode(message: MsgCancelUnbondingDelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.delegatorAddress !== "") {
+      writer.uint32(10).string(message.delegatorAddress);
+    }
+    if (message.validatorAddress !== "") {
+      writer.uint32(18).string(message.validatorAddress);
+    }
+    if (message.amount !== undefined) {
+      Coin.encode(message.amount, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.creationHeight !== BigInt(0)) {
+      writer.uint32(32).int64(message.creationHeight);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelUnbondingDelegation {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCancelUnbondingDelegation();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.delegatorAddress = reader.string();
+          break;
+        case 2:
+          message.validatorAddress = reader.string();
+          break;
+        case 3:
+          message.amount = Coin.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.creationHeight = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgCancelUnbondingDelegation {
+    return {
+      delegatorAddress: isSet(object.delegatorAddress) ? String(object.delegatorAddress) : "",
+      validatorAddress: isSet(object.validatorAddress) ? String(object.validatorAddress) : "",
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
+      creationHeight: isSet(object.creationHeight) ? BigInt(object.creationHeight.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: MsgCancelUnbondingDelegation): unknown {
+    const obj: any = {};
+    message.delegatorAddress !== undefined && (obj.delegatorAddress = message.delegatorAddress);
+    message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.creationHeight !== undefined && (obj.creationHeight = (message.creationHeight || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: DeepPartial<MsgCancelUnbondingDelegation>): MsgCancelUnbondingDelegation {
+    const message = createBaseMsgCancelUnbondingDelegation();
+    message.delegatorAddress = object.delegatorAddress ?? "";
+    message.validatorAddress = object.validatorAddress ?? "";
+    message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
+    message.creationHeight = object.creationHeight !== undefined && object.creationHeight !== null ? BigInt(object.creationHeight.toString()) : BigInt(0);
+    return message;
+  },
+  fromSDK(object: MsgCancelUnbondingDelegationSDKType): MsgCancelUnbondingDelegation {
+    return {
+      delegatorAddress: object?.delegator_address,
+      validatorAddress: object?.validator_address,
+      amount: object.amount ? Coin.fromSDK(object.amount) : undefined,
+      creationHeight: object?.creation_height
+    };
+  },
+  toSDK(message: MsgCancelUnbondingDelegation): MsgCancelUnbondingDelegationSDKType {
+    const obj: any = {};
+    obj.delegator_address = message.delegatorAddress;
+    obj.validator_address = message.validatorAddress;
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toSDK(message.amount) : undefined);
+    obj.creation_height = message.creationHeight;
+    return obj;
+  },
+  fromAmino(object: MsgCancelUnbondingDelegationAmino): MsgCancelUnbondingDelegation {
+    return {
+      delegatorAddress: object.delegator_address,
+      validatorAddress: object.validator_address,
+      amount: object?.amount ? Coin.fromAmino(object.amount) : undefined,
+      creationHeight: BigInt(object.creation_height)
+    };
+  },
+  toAmino(message: MsgCancelUnbondingDelegation): MsgCancelUnbondingDelegationAmino {
+    const obj: any = {};
+    obj.delegator_address = message.delegatorAddress;
+    obj.validator_address = message.validatorAddress;
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
+    obj.creation_height = message.creationHeight ? message.creationHeight.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgCancelUnbondingDelegationAminoMsg): MsgCancelUnbondingDelegation {
+    return MsgCancelUnbondingDelegation.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgCancelUnbondingDelegation): MsgCancelUnbondingDelegationAminoMsg {
+    return {
+      type: "cosmos-sdk/MsgCancelUnbondingDelegation",
+      value: MsgCancelUnbondingDelegation.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgCancelUnbondingDelegationProtoMsg): MsgCancelUnbondingDelegation {
+    return MsgCancelUnbondingDelegation.decode(message.value);
+  },
+  toProto(message: MsgCancelUnbondingDelegation): Uint8Array {
+    return MsgCancelUnbondingDelegation.encode(message).finish();
+  },
+  toProtoMsg(message: MsgCancelUnbondingDelegation): MsgCancelUnbondingDelegationProtoMsg {
+    return {
+      typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation",
+      value: MsgCancelUnbondingDelegation.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgCancelUnbondingDelegationResponse(): MsgCancelUnbondingDelegationResponse {
+  return {};
+}
+export const MsgCancelUnbondingDelegationResponse = {
+  typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegationResponse",
+  aminoType: "cosmos-sdk/MsgCancelUnbondingDelegationResponse",
+  encode(_: MsgCancelUnbondingDelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelUnbondingDelegationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCancelUnbondingDelegationResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgCancelUnbondingDelegationResponse {
+    return {};
+  },
+  toJSON(_: MsgCancelUnbondingDelegationResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: DeepPartial<MsgCancelUnbondingDelegationResponse>): MsgCancelUnbondingDelegationResponse {
+    const message = createBaseMsgCancelUnbondingDelegationResponse();
+    return message;
+  },
+  fromSDK(_: MsgCancelUnbondingDelegationResponseSDKType): MsgCancelUnbondingDelegationResponse {
+    return {};
+  },
+  toSDK(_: MsgCancelUnbondingDelegationResponse): MsgCancelUnbondingDelegationResponseSDKType {
+    const obj: any = {};
+    return obj;
+  },
+  fromAmino(_: MsgCancelUnbondingDelegationResponseAmino): MsgCancelUnbondingDelegationResponse {
+    return {};
+  },
+  toAmino(_: MsgCancelUnbondingDelegationResponse): MsgCancelUnbondingDelegationResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgCancelUnbondingDelegationResponseAminoMsg): MsgCancelUnbondingDelegationResponse {
+    return MsgCancelUnbondingDelegationResponse.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgCancelUnbondingDelegationResponse): MsgCancelUnbondingDelegationResponseAminoMsg {
+    return {
+      type: "cosmos-sdk/MsgCancelUnbondingDelegationResponse",
+      value: MsgCancelUnbondingDelegationResponse.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgCancelUnbondingDelegationResponseProtoMsg): MsgCancelUnbondingDelegationResponse {
+    return MsgCancelUnbondingDelegationResponse.decode(message.value);
+  },
+  toProto(message: MsgCancelUnbondingDelegationResponse): Uint8Array {
+    return MsgCancelUnbondingDelegationResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgCancelUnbondingDelegationResponse): MsgCancelUnbondingDelegationResponseProtoMsg {
+    return {
+      typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegationResponse",
+      value: MsgCancelUnbondingDelegationResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgUpdateParams(): MsgUpdateParams {
+  return {
+    authority: "",
+    params: Params.fromPartial({})
+  };
+}
+export const MsgUpdateParams = {
+  typeUrl: "/cosmos.staking.v1beta1.MsgUpdateParams",
+  aminoType: "cosmos-sdk/x/staking/MsgUpdateParams",
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+    };
+  },
+  toJSON(message: MsgUpdateParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<MsgUpdateParams>): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    message.authority = object.authority ?? "";
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    return message;
+  },
+  fromSDK(object: MsgUpdateParamsSDKType): MsgUpdateParams {
+    return {
+      authority: object?.authority,
+      params: object.params ? Params.fromSDK(object.params) : undefined
+    };
+  },
+  toSDK(message: MsgUpdateParams): MsgUpdateParamsSDKType {
+    const obj: any = {};
+    obj.authority = message.authority;
+    message.params !== undefined && (obj.params = message.params ? Params.toSDK(message.params) : undefined);
+    return obj;
+  },
+  fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
+    return {
+      authority: object.authority,
+      params: object?.params ? Params.fromAmino(object.params) : undefined
+    };
+  },
+  toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
+    const obj: any = {};
+    obj.authority = message.authority;
+    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
+    return MsgUpdateParams.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgUpdateParams): MsgUpdateParamsAminoMsg {
+    return {
+      type: "cosmos-sdk/x/staking/MsgUpdateParams",
+      value: MsgUpdateParams.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgUpdateParamsProtoMsg): MsgUpdateParams {
+    return MsgUpdateParams.decode(message.value);
+  },
+  toProto(message: MsgUpdateParams): Uint8Array {
+    return MsgUpdateParams.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateParams): MsgUpdateParamsProtoMsg {
+    return {
+      typeUrl: "/cosmos.staking.v1beta1.MsgUpdateParams",
+      value: MsgUpdateParams.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
+  return {};
+}
+export const MsgUpdateParamsResponse = {
+  typeUrl: "/cosmos.staking.v1beta1.MsgUpdateParamsResponse",
+  aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateParamsResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: DeepPartial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
+  },
+  fromSDK(_: MsgUpdateParamsResponseSDKType): MsgUpdateParamsResponse {
+    return {};
+  },
+  toSDK(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseSDKType {
+    const obj: any = {};
+    return obj;
+  },
+  fromAmino(_: MsgUpdateParamsResponseAmino): MsgUpdateParamsResponse {
+    return {};
+  },
+  toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateParamsResponseAminoMsg): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseAminoMsg {
+    return {
+      type: "cosmos-sdk/MsgUpdateParamsResponse",
+      value: MsgUpdateParamsResponse.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgUpdateParamsResponseProtoMsg): MsgUpdateParamsResponse {
+    return MsgUpdateParamsResponse.decode(message.value);
+  },
+  toProto(message: MsgUpdateParamsResponse): Uint8Array {
+    return MsgUpdateParamsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateParamsResponse): MsgUpdateParamsResponseProtoMsg {
+    return {
+      typeUrl: "/cosmos.staking.v1beta1.MsgUpdateParamsResponse",
+      value: MsgUpdateParamsResponse.encode(message).finish()
     };
   }
 };

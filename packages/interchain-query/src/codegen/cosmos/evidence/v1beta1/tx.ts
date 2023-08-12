@@ -6,7 +6,9 @@ import { isSet, DeepPartial, bytesFromBase64, base64FromBytes } from "../../../h
  * Evidence of misbehavior such as equivocation or counterfactual signing.
  */
 export interface MsgSubmitEvidence {
+  /** submitter is the signer account address of evidence. */
   submitter: string;
+  /** evidence defines the evidence of misbehavior. */
   evidence: Any | undefined;
 }
 export interface MsgSubmitEvidenceProtoMsg {
@@ -18,7 +20,9 @@ export interface MsgSubmitEvidenceProtoMsg {
  * Evidence of misbehavior such as equivocation or counterfactual signing.
  */
 export interface MsgSubmitEvidenceAmino {
+  /** submitter is the signer account address of evidence. */
   submitter: string;
+  /** evidence defines the evidence of misbehavior. */
   evidence?: AnyAmino | undefined;
 }
 export interface MsgSubmitEvidenceAminoMsg {
@@ -58,7 +62,7 @@ export interface MsgSubmitEvidenceResponseSDKType {
 function createBaseMsgSubmitEvidence(): MsgSubmitEvidence {
   return {
     submitter: "",
-    evidence: undefined
+    evidence: Any.fromPartial({})
   };
 }
 export const MsgSubmitEvidence = {

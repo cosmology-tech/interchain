@@ -1311,7 +1311,7 @@ export const QueryTotalEscrowForDenomRequest = {
 };
 function createBaseQueryTotalEscrowForDenomResponse(): QueryTotalEscrowForDenomResponse {
   return {
-    amount: undefined
+    amount: Coin.fromPartial({})
   };
 }
 export const QueryTotalEscrowForDenomResponse = {

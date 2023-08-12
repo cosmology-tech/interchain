@@ -778,7 +778,7 @@ export const ClientState = {
 };
 function createBaseConsensusState(): ConsensusState {
   return {
-    publicKey: undefined,
+    publicKey: Any.fromPartial({}),
     diversifier: "",
     timestamp: BigInt(0)
   };
@@ -897,7 +897,7 @@ function createBaseHeader(): Header {
     sequence: BigInt(0),
     timestamp: BigInt(0),
     signature: new Uint8Array(),
-    newPublicKey: undefined,
+    newPublicKey: Any.fromPartial({}),
     newDiversifier: ""
   };
 }
@@ -1544,7 +1544,7 @@ export const SignBytes = {
 };
 function createBaseHeaderData(): HeaderData {
   return {
-    newPubKey: undefined,
+    newPubKey: Any.fromPartial({}),
     newDiversifier: ""
   };
 }
@@ -1647,7 +1647,7 @@ export const HeaderData = {
 function createBaseClientStateData(): ClientStateData {
   return {
     path: new Uint8Array(),
-    clientState: undefined
+    clientState: Any.fromPartial({})
   };
 }
 export const ClientStateData = {
@@ -1749,7 +1749,7 @@ export const ClientStateData = {
 function createBaseConsensusStateData(): ConsensusStateData {
   return {
     path: new Uint8Array(),
-    consensusState: undefined
+    consensusState: Any.fromPartial({})
   };
 }
 export const ConsensusStateData = {
