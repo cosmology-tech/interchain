@@ -1,0 +1,49 @@
+{
+  "editor.quickSuggestions": {
+    "comments": "inline",
+    "strings": "inline"
+  },
+  "[markdown]": {
+    "editor.quickSuggestions": {
+      "other": "on",
+      "comments": "inline",
+      "strings": "inline"
+    }
+  },
+  "files.associations": {
+    "*.mdx": "markdown"
+  },
+  "editor.formatOnSave": true,
+  "[javascriptreact]": {
+    "editor.formatOnSave": true
+  },
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.codeActionsOnSave.mode": "problems",
+  "eslint.format.enable": true,
+  "eslint.lintTask.enable": true,
+  "eslint.onIgnoredFiles": "warn",
+  "eslint.workingDirectories": [
+    {
+      "pattern": "packages/*",
+      "!cwd": false
+    }
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
