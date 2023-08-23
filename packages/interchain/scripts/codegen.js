@@ -20,7 +20,14 @@ telescope({
     classesUseArrowFunctions: true,
 
     tsDisable: {
-      patterns: ['**/tx.registry.ts']
+      patterns: ['**/tx.registry.ts'],
+      files: [
+        'cosmos/auth/v1beta1/query.ts',
+        'cosmos/authz/v1beta1/authz.ts',
+        'cosmos/gov/v1/tx.ts',
+        'cosmos/gov/v1beta1/gov.ts',
+        'cosmos/gov/v1beta1/tx.ts'
+      ]
     },
 
     prototypes: {
@@ -52,7 +59,6 @@ telescope({
           'cosmos.capability.v1beta1',
           'cosmos.orm.v1alpha1',
           'cosmos.orm.v1',
-          'cosmos.params.v1beta1',
           'cosmos.slashing.v1beta1',
           'cosmos.vesting.v1beta1',
           'google.api',
@@ -70,8 +76,8 @@ telescope({
       }
     },
     interfaces: {
-      enabled: false,
-      useUnionTypes: false
+      enabled: true,
+      useUnionTypes: true
     },
     aminoEncoding: {
       enabled: true,
