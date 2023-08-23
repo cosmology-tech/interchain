@@ -75,14 +75,11 @@ yarn.lock
 /extern.js
 /binary.js
 /tendermint
-/ics23
 /ibc
 /google
 /gogoproto
-/cosmwasm
 /cosmos_proto
 /cosmos
-/confio
 /capability
 /amino
 /varint.js.map

@@ -1,6 +1,6 @@
 {
   "name": "interchain-query",
-  "version": "0.1.15",
+  "version": "0.2.0",
   "description": "Cosmos RPC with React Query",
   "author": "Dan Lynch <pyramation@gmail.com>",
   "homepage": "https://github.com/pyramation/interchain-query#readme",
@@ -53,7 +53,7 @@
     "@babel/preset-env": "7.21.4",
     "@babel/preset-typescript": "^7.21.4",
     "@babel/runtime": "^7.21.0",
-    "@cosmology/telescope": "^0.102.0",
+    "@cosmology/telescope": "^0.105.0",
     "@types/jest": "^29.5.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "29.5.0",
