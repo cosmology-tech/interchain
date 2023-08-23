@@ -18,11 +18,23 @@ telescope({
   options: {
     env: 'v-next',
     tsDisable: {
-      patterns: ['**/tx.registry.ts']
+      patterns: ['**/tx.registry.ts'],
+
+      files: [
+        'cosmos/auth/v1beta1/query.ts',
+        'cosmos/authz/v1beta1/authz.ts',
+        'cosmos/feegrant/v1beta1/feegrant.ts',
+        'cosmos/feegrant/v1beta1/tx.ts',
+        'cosmos/gov/v1/tx.ts',
+        'cosmos/gov/v1beta1/gov.ts',
+        'cosmos/gov/v1beta1/tx.ts',
+        'cosmos/group/v1/tx.ts',
+        'cosmos/group/v1/types.ts'
+      ]
     },
     interfaces: {
-      enabled: false,
-      useUnionTypes: false
+      enabled: true,
+      useUnionTypes: true
     },
     prototypes: {
       enabled: true,
