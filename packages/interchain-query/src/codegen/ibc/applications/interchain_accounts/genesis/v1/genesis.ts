@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { Params as Params1 } from "../../controller/v1/controller";
 import { ParamsAmino as Params1Amino } from "../../controller/v1/controller";
 import { ParamsSDKType as Params1SDKType } from "../../controller/v1/controller";
@@ -259,7 +258,7 @@ function createBaseControllerGenesisState(): ControllerGenesisState {
     activeChannels: [],
     interchainAccounts: [],
     ports: [],
-    params: Params.fromPartial({})
+    params: Params1.fromPartial({})
   };
 }
 export const ControllerGenesisState = {
@@ -425,7 +424,7 @@ function createBaseHostGenesisState(): HostGenesisState {
     activeChannels: [],
     interchainAccounts: [],
     port: "",
-    params: Params.fromPartial({})
+    params: Params2.fromPartial({})
   };
 }
 export const HostGenesisState = {

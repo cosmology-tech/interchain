@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { Timestamp } from "../../../google/protobuf/timestamp";
 import { SendAuthorization, SendAuthorizationProtoMsg, SendAuthorizationSDKType } from "../../bank/v1beta1/authz";
@@ -41,7 +42,7 @@ export interface GenericAuthorizationSDKType {
  * the provide method with expiration time.
  */
 export interface Grant {
-  authorization: (GenericAuthorization & SendAuthorization & StakeAuthorization & TransferAuthorization & Any) | undefined;
+  authorization: GenericAuthorization | SendAuthorization | StakeAuthorization | TransferAuthorization | Any | undefined;
   /**
    * time when the grant will expire and will be pruned. If null, then the grant
    * doesn't have a time expiration (other conditions  in `authorization`
@@ -88,7 +89,7 @@ export interface GrantSDKType {
 export interface GrantAuthorization {
   granter: string;
   grantee: string;
-  authorization: (GenericAuthorization & SendAuthorization & StakeAuthorization & TransferAuthorization & Any) | undefined;
+  authorization: GenericAuthorization | SendAuthorization | StakeAuthorization | TransferAuthorization | Any | undefined;
   expiration: Date;
 }
 export interface GrantAuthorizationProtoMsg {

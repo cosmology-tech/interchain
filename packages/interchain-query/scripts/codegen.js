@@ -19,20 +19,22 @@ telescope({
     env: 'v-next',
     tsDisable: {
       patterns: ['**/tx.registry.ts'],
-      files: [
-        'ibc/core/types/v1/genesis.ts',
-        'ibc/applications/interchain_accounts/genesis/v1/genesis.ts',
-        'cosmos/tx/signing/v1beta1/signing.ts',
-        'cosmos/staking/v1beta1/tx.ts',
-        'cosmos/staking/v1beta1/staking.ts',
 
-        'cosmos/authz/v1beta1/tx.amino.ts',
-        'cosmos/staking/v1beta1/tx.amino.ts'
+      files: [
+        'cosmos/auth/v1beta1/query.ts',
+        'cosmos/authz/v1beta1/authz.ts',
+        'cosmos/feegrant/v1beta1/feegrant.ts',
+        'cosmos/feegrant/v1beta1/tx.ts',
+        'cosmos/gov/v1/tx.ts',
+        'cosmos/gov/v1beta1/gov.ts',
+        'cosmos/gov/v1beta1/tx.ts',
+        'cosmos/group/v1/tx.ts',
+        'cosmos/group/v1/types.ts'
       ]
     },
     interfaces: {
-      enabled: false,
-      useUnionTypes: false
+      enabled: true,
+      useUnionTypes: true
     },
     prototypes: {
       enabled: true,
