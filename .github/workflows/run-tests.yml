@@ -18,6 +18,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.16.0
+      - name: list
+        run: ls packages/interchain/src/codegen/capability/v1
       - name: deps
         run: yarn
       - name: build
