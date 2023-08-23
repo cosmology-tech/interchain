@@ -18,6 +18,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.16.0
+      - name: submodule
+        run: git submodule init && git submodule update --init
       - name: deps
         run: yarn
       - name: build
