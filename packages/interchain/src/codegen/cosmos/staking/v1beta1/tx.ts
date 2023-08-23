@@ -1,11 +1,10 @@
 import { Description, DescriptionAmino, DescriptionSDKType, CommissionRates, CommissionRatesAmino, CommissionRatesSDKType, Params, ParamsAmino, ParamsSDKType } from "./staking";
-import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
+import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { Timestamp } from "../../../google/protobuf/timestamp";
 import { Long, DeepPartial, toTimestamp, fromTimestamp } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { toBase64, fromBase64 } from "@cosmjs/encoding";
-import { encodeBech32Pubkey, decodeBech32Pubkey } from "@cosmjs/amino";
+import { encodePubkey, decodePubkey } from "@cosmjs/proto-signing";
 /** MsgCreateValidator defines a SDK message for creating a new validator. */
 export interface MsgCreateValidator {
   description: Description;
@@ -19,16 +18,13 @@ export interface MsgCreateValidator {
   /** @deprecated */
   delegatorAddress: string;
   validatorAddress: string;
-  pubkey: (Any) | undefined;
+  pubkey: Any;
   value: Coin;
 }
 export interface MsgCreateValidatorProtoMsg {
   typeUrl: "/cosmos.staking.v1beta1.MsgCreateValidator";
   value: Uint8Array;
 }
-export type MsgCreateValidatorEncoded = Omit<MsgCreateValidator, "pubkey"> & {
-  pubkey?: AnyProtoMsg | undefined;
-};
 /** MsgCreateValidator defines a SDK message for creating a new validator. */
 export interface MsgCreateValidatorAmino {
   description?: DescriptionAmino;
@@ -57,7 +53,7 @@ export interface MsgCreateValidatorSDKType {
   /** @deprecated */
   delegator_address: string;
   validator_address: string;
-  pubkey: AnySDKType | undefined;
+  pubkey: AnySDKType;
   value: CoinSDKType;
 }
 /** MsgCreateValidatorResponse defines the Msg/CreateValidator response type. */
@@ -480,7 +476,7 @@ export const MsgCreateValidator = {
       writer.uint32(42).string(message.validatorAddress);
     }
     if (message.pubkey !== undefined) {
-      Any.encode((message.pubkey as Any), writer.uint32(50).fork()).ldelim();
+      Any.encode(message.pubkey, writer.uint32(50).fork()).ldelim();
     }
     if (message.value !== undefined) {
       Coin.encode(message.value, writer.uint32(58).fork()).ldelim();
@@ -510,7 +506,7 @@ export const MsgCreateValidator = {
           message.validatorAddress = reader.string();
           break;
         case 6:
-          message.pubkey = (Cosmos_cryptoPubKey_InterfaceDecoder(reader) as Any);
+          message.pubkey = Any.decode(reader, reader.uint32());
           break;
         case 7:
           message.value = Coin.decode(reader, reader.uint32());
@@ -540,10 +536,7 @@ export const MsgCreateValidator = {
       minSelfDelegation: object.min_self_delegation,
       delegatorAddress: object.delegator_address,
       validatorAddress: object.validator_address,
-      pubkey: encodeBech32Pubkey({
-        type: "tendermint/PubKeySecp256k1",
-        value: toBase64(object.pubkey.value)
-      }, "cosmos"),
+      pubkey: object?.pubkey ? encodePubkey(object.pubkey) : undefined,
       value: object?.value ? Coin.fromAmino(object.value) : undefined
     };
   },
@@ -554,10 +547,7 @@ export const MsgCreateValidator = {
     obj.min_self_delegation = message.minSelfDelegation;
     obj.delegator_address = message.delegatorAddress;
     obj.validator_address = message.validatorAddress;
-    obj.pubkey = message.pubkey ? {
-      typeUrl: "/cosmos.crypto.secp256k1.PubKey",
-      value: fromBase64(decodeBech32Pubkey(message.pubkey).value)
-    } : undefined;
+    obj.pubkey = message.pubkey ? decodePubkey(message.pubkey) : undefined;
     obj.value = message.value ? Coin.toAmino(message.value) : undefined;
     return obj;
   },
@@ -1530,24 +1520,4 @@ export const MsgUpdateParamsResponse = {
       value: MsgUpdateParamsResponse.encode(message).finish()
     };
   }
-};
-export const Cosmos_cryptoPubKey_InterfaceDecoder = (input: _m0.Reader | Uint8Array): Any => {
-  const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-  const data = Any.decode(reader, reader.uint32());
-  switch (data.typeUrl) {
-    default:
-      return data;
-  }
-};
-export const Cosmos_cryptoPubKey_FromAmino = (content: AnyAmino) => {
-  return encodeBech32Pubkey({
-    type: "tendermint/PubKeySecp256k1",
-    value: toBase64(content.value)
-  }, "cosmos");
-};
-export const Cosmos_cryptoPubKey_ToAmino = (content: Any) => {
-  return {
-    typeUrl: "/cosmos.crypto.secp256k1.PubKey",
-    value: fromBase64(decodeBech32Pubkey(content).value)
-  };
 };

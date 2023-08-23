@@ -336,7 +336,7 @@ export const SignatureDescriptors = {
 function createBaseSignatureDescriptor(): SignatureDescriptor {
   return {
     publicKey: Any.fromPartial({}),
-    data: Data.fromPartial({}),
+    data: SignatureDescriptor_Data.fromPartial({}),
     sequence: Long.UZERO
   };
 }

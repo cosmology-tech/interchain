@@ -19,6 +19,10 @@ telescope({
     removeUnusedImports: true, // testing...
     classesUseArrowFunctions: true,
 
+    tsDisable: {
+      patterns: ['**/tx.registry.ts']
+    },
+
     prototypes: {
       excluded: {
         packages: [
@@ -66,7 +70,7 @@ telescope({
       }
     },
     interfaces: {
-      enabled: true,
+      enabled: false,
       useUnionTypes: false
     },
     aminoEncoding: {

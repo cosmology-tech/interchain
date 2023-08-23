@@ -56,6 +56,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@cosmology/lcd": "^0.12.0",
     "@cosmjs/amino": "0.29.4",
     "@cosmjs/proto-signing": "0.29.4",
     "@cosmjs/stargate": "0.29.4",
