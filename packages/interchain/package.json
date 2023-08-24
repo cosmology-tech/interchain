@@ -1,6 +1,6 @@
 {
   "name": "interchain",
-  "version": "0.0.1",
+  "version": "1.8.0",
   "description": "Interchain makes it easy to compose and broadcast Cosmos messages, with all of the proto and amino encoding handled for you ⚛️",
   "author": "Dan Lynch <pyramation@gmail.com>",
   "homepage": "https://github.com/cosmology-tech/interchain#readme",
@@ -56,10 +56,10 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@cosmology/lcd": "^0.12.0",
     "@cosmjs/amino": "0.29.4",
     "@cosmjs/proto-signing": "0.29.4",
     "@cosmjs/stargate": "0.29.4",
-    "@cosmjs/tendermint-rpc": "^0.29.4"
+    "@cosmjs/tendermint-rpc": "^0.29.4",
+    "@cosmology/lcd": "^0.12.0"
   }
 }
