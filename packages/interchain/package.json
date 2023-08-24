@@ -42,7 +42,7 @@
     "url": "https://github.com/cosmology-tech/interchain/issues"
   },
   "devDependencies": {
-    "@cosmology/telescope": "^0.105.0",
+    "@cosmology/telescope": "^0.106.0",
     "@types/jest": "^29.5.0",
     "eslint": "8.45.0",
     "eslint-config-prettier": "^8.8.0",

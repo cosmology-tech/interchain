@@ -1461,10 +1461,10 @@
     "@types/node" ">=13.7.0"
     long "^4.0.0"
 
-"@cosmology/telescope@^0.105.0":
-  version "0.105.0"
-  resolved "https://registry.npmmirror.com/@cosmology/telescope/-/telescope-0.105.0.tgz#aa2257fa793321b06346f711581f4f08bcb7f496"
-  integrity sha512-lhsNYN50uA7FeuytC/s3UtBe2+WslgbeYGYR5u7jlCVFnCL6sUJarIlm5bp++1pnZkcdT2OCUYSCb1Qg2Vg9ww==
+"@cosmology/telescope@^0.106.0":
+  version "0.106.0"
+  resolved "https://registry.npmmirror.com/@cosmology/telescope/-/telescope-0.106.0.tgz#861df42dea91c375d09b72642765f26677d237b4"
+  integrity sha512-Ptb9nWJWuRR2rsG/uO143sPcO+ZmYwcOP74HyLhculM7XwsvktAQyqyYihe8meynX4RnOu5ivU90mwZt9MrhOw==
   dependencies:
     "@babel/core" "7.21.4"
     "@babel/generator" "7.21.4"
