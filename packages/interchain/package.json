@@ -1,6 +1,6 @@
 {
   "name": "interchain",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "Interchain makes it easy to compose and broadcast Cosmos messages, with all of the proto and amino encoding handled for you ⚛️",
   "author": "Dan Lynch <pyramation@gmail.com>",
   "homepage": "https://github.com/cosmology-tech/interchain#readme",
