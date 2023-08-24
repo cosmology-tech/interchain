@@ -81,5 +81,5 @@
     "@tanstack/react-query": "^4.29.12",
     "protobufjs": "^6.11.2"
   },
-  "gitHead": "91a8ef7baf383c3e31702a3406b0fcd5b6c69a9d"
+  "gitHead": "89a5240694a2f65f8231f8454ed4a3459dab4cb3"
 }
