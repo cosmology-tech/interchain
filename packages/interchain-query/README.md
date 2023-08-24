@@ -37,7 +37,7 @@ npm install interchain-query
 ```js
 import { cosmos } from 'interchain-query';
 
-const { createRPCQueryClient } = cosmos.ClientFactory; 
+const { createRPCQueryClient } = cosmos.ClientFactory;
 const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });
 
 // now you can query the cosmos modules
@@ -51,7 +51,7 @@ const balances = await client.cosmos.exchange.v1beta1
 
 ### Composing Messages
 
-Import the `cosmos` object from `interchain-query`. 
+Import the `cosmos` object from `interchain-query`.
 
 ```js
 import { cosmos } from 'interchain-query';
@@ -211,7 +211,7 @@ If you want to manually construct a stargate client
 import { OfflineSigner, GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 
-import { 
+import {
     cosmosAminoConverters,
     cosmosProtoRegistry,
     cosmwasmAminoConverters,
