@@ -80,5 +80,6 @@
     "@cosmjs/tendermint-rpc": "^0.29.4",
     "@tanstack/react-query": "^4.29.12",
     "protobufjs": "^6.11.2"
-  }
+  },
+  "gitHead": "1db61aac145df51cb143aaba598ec4dcbf2b705f"
 }
