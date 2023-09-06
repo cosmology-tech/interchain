@@ -38,7 +38,11 @@
   "bugs": {
     "url": "https://github.com/pyramation/interchain-query/issues"
   },
+  "peerDependencies": {
+    "@tanstack/react-query": "^4.29.12"
+  },
   "devDependencies": {
+    "@tanstack/react-query": "^4.29.12",
     "@babel/cli": "7.21.0",
     "@babel/core": "7.21.4",
     "@babel/eslint-parser": "^7.21.3",
@@ -78,7 +82,6 @@
     "@cosmjs/proto-signing": "0.29.4",
     "@cosmjs/stargate": "0.29.4",
     "@cosmjs/tendermint-rpc": "^0.29.4",
-    "@tanstack/react-query": "^4.29.12",
     "protobufjs": "^6.11.2"
   },
   "gitHead": "e679e23197b229f16d124e49b11e89c61ce94a30"
