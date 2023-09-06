@@ -8,8 +8,11 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
-  "exports": {
-    "./*.js": "./dist/codegen"
+  "typesVersions": {
+    "*": {
+      "dist/codegen/*": ["dist/codegen/*"],
+      "*": ["dist/codegen/*"]
+    }
   },
   "directories": {
     "lib": "src"
