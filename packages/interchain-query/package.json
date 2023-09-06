@@ -53,7 +53,7 @@
     "@babel/preset-env": "7.21.4",
     "@babel/preset-typescript": "^7.21.4",
     "@babel/runtime": "^7.21.0",
-    "@cosmology/telescope": "^0.106.0",
+    "@cosmology/telescope": "^0.108.0",
     "@types/jest": "^29.5.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "29.5.0",

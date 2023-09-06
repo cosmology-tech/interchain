@@ -8,6 +8,9 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
+  "exports": {
+    "./*.js": "./dist/codegen"
+  },
   "directories": {
     "lib": "src"
   },
@@ -42,7 +45,7 @@
     "url": "https://github.com/cosmology-tech/interchain/issues"
   },
   "devDependencies": {
-    "@cosmology/telescope": "^0.106.0",
+    "@cosmology/telescope": "^0.108.0",
     "@types/jest": "^29.5.0",
     "eslint": "8.45.0",
     "eslint-config-prettier": "^8.8.0",

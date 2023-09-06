@@ -1407,16 +1407,15 @@
   resolved "https://registry.yarnpkg.com/@cosmjs/utils/-/utils-0.29.5.tgz#3fed1b3528ae8c5f1eb5d29b68755bebfd3294ee"
   integrity sha512-m7h+RXDUxOzEOGt4P+3OVPX7PuakZT3GBmaM/Y2u+abN3xZkziykD/NvedYFvvCCdQo714XcGl33bwifS9FZPQ==
 
-"@cosmology/ast@^0.92.0":
-  version "0.92.0"
-  resolved "https://registry.npmmirror.com/@cosmology/ast/-/ast-0.92.0.tgz#dedd8c43a5bd7f5924589ad2cff31bb050c5ed40"
-  integrity sha512-de9O0tS7lpEw9QDTPRBAjvPtNd3DYPT5USOc2bDhH/4FKUjaooVX4LCJEnc4FAbS7eh/gy/aZWF4BYHtlMabWw==
+"@cosmology/ast@^0.94.0":
+  version "0.94.0"
+  resolved "https://registry.npmmirror.com/@cosmology/ast/-/ast-0.94.0.tgz#1697ca612fc3490c721dc5279c7c9ddc48a2b26f"
+  integrity sha512-PrLW1GxMromVhYcRVOoHf+OPUUsvFruf28vxVmTEVfAephz4KG2wW8KFzPH9jJDB5+F/7FbqT2nnYpQLyJnYvQ==
   dependencies:
     "@babel/parser" "^7.21.4"
-    "@babel/runtime" "^7.21.0"
     "@babel/types" "7.21.4"
-    "@cosmology/types" "^0.39.0"
-    "@cosmology/utils" "^0.14.0"
+    "@cosmology/types" "^0.41.0"
+    "@cosmology/utils" "^0.16.0"
     case "1.6.3"
     dotty "0.1.2"
 
@@ -1428,15 +1427,14 @@
     "@babel/runtime" "^7.21.0"
     axios "0.27.2"
 
-"@cosmology/proto-parser@^0.48.0":
-  version "0.48.0"
-  resolved "https://registry.npmmirror.com/@cosmology/proto-parser/-/proto-parser-0.48.0.tgz#f2c4198c0d08e0e910735513cab486a73481a7de"
-  integrity sha512-GjK/WGY6wXHeiTBG41e+Tam77ieAuUj58XEqr6cJ/Dcjo1dQiQmyZnWPTx7zFva/oTYJagIi4zfdTJ8bM9Msxg==
+"@cosmology/proto-parser@^0.50.0":
+  version "0.50.0"
+  resolved "https://registry.npmmirror.com/@cosmology/proto-parser/-/proto-parser-0.50.0.tgz#c107047f9c0a60f60fdb813511da0c9abce70c49"
+  integrity sha512-ry8rhzkNLG9NP6Xd7uAk+WsXjoxpzDER+mtqExWONdqmeUZ7iM36tqq5xjb23a7Eg0/m6ikOMVcbr0ZzbPpGaQ==
   dependencies:
-    "@babel/runtime" "^7.21.0"
     "@cosmology/protobufjs" "6.11.6"
-    "@cosmology/types" "^0.39.0"
-    "@cosmology/utils" "^0.14.0"
+    "@cosmology/types" "^0.41.0"
+    "@cosmology/utils" "^0.16.0"
     dotty "0.1.2"
     glob "8.0.3"
     minimatch "5.1.0"
@@ -1461,27 +1459,19 @@
     "@types/node" ">=13.7.0"
     long "^4.0.0"
 
-"@cosmology/telescope@^0.106.0":
-  version "0.106.0"
-  resolved "https://registry.npmmirror.com/@cosmology/telescope/-/telescope-0.106.0.tgz#861df42dea91c375d09b72642765f26677d237b4"
-  integrity sha512-Ptb9nWJWuRR2rsG/uO143sPcO+ZmYwcOP74HyLhculM7XwsvktAQyqyYihe8meynX4RnOu5ivU90mwZt9MrhOw==
+"@cosmology/telescope@^0.108.0":
+  version "0.108.0"
+  resolved "https://registry.npmmirror.com/@cosmology/telescope/-/telescope-0.108.0.tgz#69e77ac0753e54d538f3d9d9aaf63af9cadd0e51"
+  integrity sha512-sOV+qNfMfkjMETQFOubSE4r76dd0r8Zga3bMwKpcOPODJL1pyC0zdjs3xJKiAihChck276PkNw5ohhQvNCLFqg==
   dependencies:
-    "@babel/core" "7.21.4"
     "@babel/generator" "7.21.4"
     "@babel/parser" "^7.21.4"
-    "@babel/plugin-proposal-class-properties" "7.18.6"
-    "@babel/plugin-proposal-export-default-from" "7.18.10"
-    "@babel/plugin-proposal-object-rest-spread" "7.20.7"
-    "@babel/plugin-transform-runtime" "7.21.4"
-    "@babel/preset-env" "7.21.4"
-    "@babel/preset-typescript" "^7.21.4"
-    "@babel/runtime" "^7.21.0"
     "@babel/traverse" "7.21.4"
     "@babel/types" "7.21.4"
-    "@cosmology/ast" "^0.92.0"
-    "@cosmology/proto-parser" "^0.48.0"
-    "@cosmology/types" "^0.39.0"
-    "@cosmology/utils" "^0.14.0"
+    "@cosmology/ast" "^0.94.0"
+    "@cosmology/proto-parser" "^0.50.0"
+    "@cosmology/types" "^0.41.0"
+    "@cosmology/utils" "^0.16.0"
     "@cosmwasm/ts-codegen" "0.34.0"
     "@types/parse-package-name" "0.1.0"
     case "1.6.3"
@@ -1499,21 +1489,19 @@
     rimraf "5.0.0"
     shelljs "0.8.5"
 
-"@cosmology/types@^0.39.0":
-  version "0.39.0"
-  resolved "https://registry.npmmirror.com/@cosmology/types/-/types-0.39.0.tgz#0b754f814cfcef9785d1c3608a109fcb6c2c6133"
-  integrity sha512-0CXcWcAxV12fYBkj0DWtpKf6WhYnp3UDw2v1EtBCdEZSRTfXahjqopvtc8pejbfqId52+/y745xKy/FKYJqJTg==
+"@cosmology/types@^0.41.0":
+  version "0.41.0"
+  resolved "https://registry.npmmirror.com/@cosmology/types/-/types-0.41.0.tgz#80e5c2ca0ef6828a03043a18394aeb1520bf2d27"
+  integrity sha512-d2sD5zJZB4Ka5+YTrgAy2cEDswBP4W6SE8r8iSqBW4RAvObKQtr/mq7a47jaSSZIVFj9sHCezlJkYSqjyqvzrg==
   dependencies:
-    "@babel/runtime" "^7.21.0"
     case "1.6.3"
 
-"@cosmology/utils@^0.14.0":
-  version "0.14.0"
-  resolved "https://registry.npmmirror.com/@cosmology/utils/-/utils-0.14.0.tgz#404b7e095b3ffeba50cd9c512a84c656a0b03bd1"
-  integrity sha512-UsAtzxJgCqp2uGwUNItEdFgSdkKLsQ/RBIrGx0vphpalPMg7a917I/o6AJA+UBgzIpfXpxVk4D6JIA/SEMWawQ==
+"@cosmology/utils@^0.16.0":
+  version "0.16.0"
+  resolved "https://registry.npmmirror.com/@cosmology/utils/-/utils-0.16.0.tgz#4116107b1be068e97ec0f7e5732f0044188aa86d"
+  integrity sha512-zF+8Pp2bxLAUsdOHiBWwojZPJqtNZNE33K8FwjEZYn1NLjkzdCDYrACQ9zfZfXIp8ko6K0M97vz/0b7HA8kFaA==
   dependencies:
-    "@babel/runtime" "^7.21.0"
-    "@cosmology/types" "^0.39.0"
+    "@cosmology/types" "^0.41.0"
     dotty "0.1.2"
 
 "@cosmwasm/ts-codegen@0.34.0":
