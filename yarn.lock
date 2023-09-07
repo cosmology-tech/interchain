@@ -1460,15 +1460,15 @@
   resolved "https://registry.npmjs.org/@cosmjs/utils/-/utils-0.29.5.tgz"
   integrity sha512-m7h+RXDUxOzEOGt4P+3OVPX7PuakZT3GBmaM/Y2u+abN3xZkziykD/NvedYFvvCCdQo714XcGl33bwifS9FZPQ==
 
-"@cosmology/ast@^0.95.1":
-  version "0.95.1"
-  resolved "https://registry.npmjs.org/@cosmology/ast/-/ast-0.95.1.tgz"
-  integrity sha512-ZyfOdGjhtA+E+Yu/hBv0m52IYPZwb/EPHf9pUU97Lqwq5rcHR6J2b08U1d5o4yJPA3NeOlpLP2zc92WBC3lRYA==
+"@cosmology/ast@^0.95.4":
+  version "0.95.4"
+  resolved "https://registry.npmjs.org/@cosmology/ast/-/ast-0.95.4.tgz"
+  integrity sha512-xhNK2zJnKQa9N7THX/zoA5NYK8909kYjR9sK83rHQuf5UaqqwtcZeeAVcgKsNRIDhosd6taz3HOm3XP3qDF4ng==
   dependencies:
     "@babel/parser" "^7.21.4"
     "@babel/types" "7.21.4"
-    "@cosmology/types" "^0.42.0"
-    "@cosmology/utils" "^0.17.0"
+    "@cosmology/types" "^0.42.2"
+    "@cosmology/utils" "^0.17.2"
     case "1.6.3"
     dotty "0.1.2"
 
@@ -1480,14 +1480,14 @@
     "@babel/runtime" "^7.21.0"
     axios "0.27.2"
 
-"@cosmology/proto-parser@^0.51.0":
-  version "0.51.0"
-  resolved "https://registry.npmjs.org/@cosmology/proto-parser/-/proto-parser-0.51.0.tgz"
-  integrity sha512-XfxHIZaLquH9+ypYXPK0sK6cx5u4QuJSvOE0Ko7MQ+7z+6F/yEsQsCq/qzQbSMWIcyFgLgeRE96J8MiGr43o8Q==
+"@cosmology/proto-parser@^0.51.2":
+  version "0.51.2"
+  resolved "https://registry.npmjs.org/@cosmology/proto-parser/-/proto-parser-0.51.2.tgz"
+  integrity sha512-Lk2lrflM5HkeRCTxFENsizVY17Oef1xtmL5wbTcGlahvFfetUYayKwUeoL3ODtb52R46B/RsgC1AKFyZLO7EiA==
   dependencies:
     "@cosmology/protobufjs" "6.11.6"
-    "@cosmology/types" "^0.42.0"
-    "@cosmology/utils" "^0.17.0"
+    "@cosmology/types" "^0.42.2"
+    "@cosmology/utils" "^0.17.2"
     dotty "0.1.2"
     glob "8.0.3"
     minimatch "5.1.0"
@@ -1512,19 +1512,19 @@
     "@types/node" ">=13.7.0"
     long "^4.0.0"
 
-"@cosmology/telescope@^0.109.1":
-  version "0.109.1"
-  resolved "https://registry.npmjs.org/@cosmology/telescope/-/telescope-0.109.1.tgz"
-  integrity sha512-G4CMkZ7dlKOFWDsuPT9fzti5SIstII/XYG8yZnNE5CJCAXknhDNbNDRocZhlfnx0Ali7v/ke9bdnrOpxJ9imNQ==
+"@cosmology/telescope@^0.109.4":
+  version "0.109.4"
+  resolved "https://registry.npmjs.org/@cosmology/telescope/-/telescope-0.109.4.tgz"
+  integrity sha512-ZFJg2RGdsT6l+WrEvKH5pdSPKdRSann2Uk8BOoSCphgLbvSO0dwRtLH/tKoxNcLrhkIdniA0RmF5UhsrGVyKqA==
   dependencies:
     "@babel/generator" "7.21.4"
     "@babel/parser" "^7.21.4"
     "@babel/traverse" "7.21.4"
     "@babel/types" "7.21.4"
-    "@cosmology/ast" "^0.95.1"
-    "@cosmology/proto-parser" "^0.51.0"
-    "@cosmology/types" "^0.42.0"
-    "@cosmology/utils" "^0.17.0"
+    "@cosmology/ast" "^0.95.4"
+    "@cosmology/proto-parser" "^0.51.2"
+    "@cosmology/types" "^0.42.2"
+    "@cosmology/utils" "^0.17.2"
     "@cosmwasm/ts-codegen" "0.34.0"
     "@types/parse-package-name" "0.1.0"
     case "1.6.3"
@@ -1542,19 +1542,19 @@
     rimraf "5.0.0"
     shelljs "0.8.5"
 
-"@cosmology/types@^0.42.0":
-  version "0.42.0"
-  resolved "https://registry.npmjs.org/@cosmology/types/-/types-0.42.0.tgz"
-  integrity sha512-uVhToWbDDDFBB2X1CydgIAz5pjNw8aoAMWEiluA9SMG00SQfZZzHGt9m6/ZxDmkVeFCalieEeVc+4pCs/BPZgQ==
+"@cosmology/types@^0.42.2":
+  version "0.42.2"
+  resolved "https://registry.npmjs.org/@cosmology/types/-/types-0.42.2.tgz"
+  integrity sha512-ljtg/ozCPD7d3hL3r9fD/E4zUAitaJ8AbsLlR22x/r7eyUxhEP3cAvEeNsK0hgXAFbywPIn2w1cYARiWSMLSog==
   dependencies:
     case "1.6.3"
 
-"@cosmology/utils@^0.17.0":
-  version "0.17.0"
-  resolved "https://registry.npmjs.org/@cosmology/utils/-/utils-0.17.0.tgz"
-  integrity sha512-PfUA93AznY/lilaa2QMWgibrYNWsfQHc67kwUihbtZW2OHzA7DesWnGgNzlwUWdi0s2jAF0pZCEGLj0kWMdmWw==
+"@cosmology/utils@^0.17.2":
+  version "0.17.2"
+  resolved "https://registry.npmjs.org/@cosmology/utils/-/utils-0.17.2.tgz"
+  integrity sha512-SQEOVFbhYf2+YmSgYymjEpsP5/zNAnpAYXFYN180b6XcUR0BMcIxghkZ+VHT5HbW+wynVTZezjyxkuwfftVEKA==
   dependencies:
-    "@cosmology/types" "^0.42.0"
+    "@cosmology/types" "^0.42.2"
     dotty "0.1.2"
 
 "@cosmwasm/ts-codegen@0.34.0":
@@ -5340,7 +5340,7 @@ inquirerer@^0.1.3, inquirerer@0.1.3:
     inquirer-autocomplete-prompt "^0.11.1"
 
 "interchain-query@file:/Users/zhizhen/Projects/cosmology-tech/src/cosmology-tech/interchain/packages/interchain-query":
-  version "1.8.10"
+  version "1.8.11"
   resolved "file:packages/interchain-query"
   dependencies:
     "@cosmjs/amino" "0.29.4"
@@ -5350,7 +5350,7 @@ inquirerer@^0.1.3, inquirerer@0.1.3:
     protobufjs "^6.11.2"
 
 "interchain@file:/Users/zhizhen/Projects/cosmology-tech/src/cosmology-tech/interchain/packages/interchain":
-  version "1.8.9"
+  version "1.8.10"
   resolved "file:packages/interchain"
   dependencies:
     "@cosmjs/amino" "0.29.4"

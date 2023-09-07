@@ -31,7 +31,6 @@ telescope({
     },
 
     prototypes: {
-      optionalPageRequests: true,
       optionalQueryParams: true,
       useOptionalNullable: true,
       fieldDefaultIsOptional: true,

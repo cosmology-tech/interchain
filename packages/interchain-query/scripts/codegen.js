@@ -77,7 +77,6 @@ telescope({
       useOptionalNullable: true,
       allowUndefinedTypes: true,
 
-      optionalPageRequests: true,
       optionalQueryParams: true,
     },
     reactQuery: {
