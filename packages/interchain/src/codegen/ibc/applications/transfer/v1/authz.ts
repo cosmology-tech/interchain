@@ -43,6 +43,7 @@ export interface AllocationSDKType {
  * the granter's account for ibc transfer on a specific channel
  */
 export interface TransferAuthorization {
+  $typeUrl?: string;
   /** port and channel amounts */
   allocations: Allocation[];
 }
@@ -67,6 +68,7 @@ export interface TransferAuthorizationAminoMsg {
  * the granter's account for ibc transfer on a specific channel
  */
 export interface TransferAuthorizationSDKType {
+  $typeUrl?: string;
   allocations: AllocationSDKType[];
 }
 function createBaseAllocation(): Allocation {
@@ -78,6 +80,7 @@ function createBaseAllocation(): Allocation {
   };
 }
 export const Allocation = {
+  typeUrl: "/ibc.applications.transfer.v1.Allocation",
   encode(message: Allocation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.sourcePort !== "") {
       writer.uint32(10).string(message.sourcePort);
@@ -175,10 +178,12 @@ export const Allocation = {
 };
 function createBaseTransferAuthorization(): TransferAuthorization {
   return {
+    $typeUrl: "/ibc.applications.transfer.v1.TransferAuthorization",
     allocations: []
   };
 }
 export const TransferAuthorization = {
+  typeUrl: "/ibc.applications.transfer.v1.TransferAuthorization",
   encode(message: TransferAuthorization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.allocations) {
       Allocation.encode(v!, writer.uint32(10).fork()).ldelim();

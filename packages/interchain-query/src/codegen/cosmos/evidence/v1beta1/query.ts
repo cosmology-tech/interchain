@@ -9,7 +9,7 @@ export interface QueryEvidenceRequest {
    * Deprecated: Use hash, a HEX encoded string, instead.
    */
   /** @deprecated */
-  evidenceHash: Uint8Array;
+  evidenceHash?: Uint8Array;
   /**
    * hash defines the evidence hash of the requested evidence.
    * 
@@ -43,7 +43,7 @@ export interface QueryEvidenceRequestAminoMsg {
 /** QueryEvidenceRequest is the request type for the Query/Evidence RPC method. */
 export interface QueryEvidenceRequestSDKType {
   /** @deprecated */
-  evidence_hash: Uint8Array;
+  evidence_hash?: Uint8Array;
   hash: string;
 }
 /** QueryEvidenceResponse is the response type for the Query/Evidence RPC method. */
@@ -74,7 +74,7 @@ export interface QueryEvidenceResponseSDKType {
  */
 export interface QueryAllEvidenceRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination: PageRequest | undefined;
+  pagination?: PageRequest | undefined;
 }
 export interface QueryAllEvidenceRequestProtoMsg {
   typeUrl: "/cosmos.evidence.v1beta1.QueryAllEvidenceRequest";
@@ -97,7 +97,7 @@ export interface QueryAllEvidenceRequestAminoMsg {
  * method.
  */
 export interface QueryAllEvidenceRequestSDKType {
-  pagination: PageRequestSDKType | undefined;
+  pagination?: PageRequestSDKType | undefined;
 }
 /**
  * QueryAllEvidenceResponse is the response type for the Query/AllEvidence RPC

@@ -48,6 +48,7 @@ function createBaseEmpty(): Empty {
   return {};
 }
 export const Empty = {
+  typeUrl: "/google.protobuf.Empty",
   encode(_: Empty, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },

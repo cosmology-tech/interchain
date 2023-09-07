@@ -45,7 +45,7 @@ export interface AccountResponseSDKType {
 /** QueryAccountsRequest is the request type for the Query/Accounts RPC method. */
 export interface QueryAccountsRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination: PageRequest | undefined;
+  pagination?: PageRequest | undefined;
 }
 export interface QueryAccountsRequestProtoMsg {
   typeUrl: "/cosmos.circuit.v1.QueryAccountsRequest";
@@ -62,7 +62,7 @@ export interface QueryAccountsRequestAminoMsg {
 }
 /** QueryAccountsRequest is the request type for the Query/Accounts RPC method. */
 export interface QueryAccountsRequestSDKType {
-  pagination: PageRequestSDKType | undefined;
+  pagination?: PageRequestSDKType | undefined;
 }
 /** AccountsResponse is the response type for the Query/Accounts RPC method. */
 export interface AccountsResponse {

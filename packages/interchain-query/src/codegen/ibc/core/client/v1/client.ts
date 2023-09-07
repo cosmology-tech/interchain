@@ -117,6 +117,7 @@ export interface ClientConsensusStatesSDKType {
  * chain parameters (with exception to latest height, frozen height, and chain-id).
  */
 export interface ClientUpdateProposal {
+  $typeUrl?: string;
   /** the title of the update proposal */
   title: string;
   /** the description of the proposal */
@@ -163,6 +164,7 @@ export interface ClientUpdateProposalAminoMsg {
  * chain parameters (with exception to latest height, frozen height, and chain-id).
  */
 export interface ClientUpdateProposalSDKType {
+  $typeUrl?: string;
   title: string;
   description: string;
   subject_client_id: string;
@@ -173,6 +175,7 @@ export interface ClientUpdateProposalSDKType {
  * upgrade.
  */
 export interface UpgradeProposal {
+  $typeUrl?: string;
   title: string;
   description: string;
   plan: Plan | undefined;
@@ -217,6 +220,7 @@ export interface UpgradeProposalAminoMsg {
  * upgrade.
  */
 export interface UpgradeProposalSDKType {
+  $typeUrl?: string;
   title: string;
   description: string;
   plan: PlanSDKType | undefined;
@@ -632,6 +636,7 @@ export const ClientConsensusStates = {
 };
 function createBaseClientUpdateProposal(): ClientUpdateProposal {
   return {
+    $typeUrl: "/ibc.core.client.v1.ClientUpdateProposal",
     title: "",
     description: "",
     subjectClientId: "",
@@ -762,6 +767,7 @@ export const ClientUpdateProposal = {
 };
 function createBaseUpgradeProposal(): UpgradeProposal {
   return {
+    $typeUrl: "/ibc.core.client.v1.UpgradeProposal",
     title: "",
     description: "",
     plan: Plan.fromPartial({}),

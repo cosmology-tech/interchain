@@ -68,6 +68,7 @@ function createBaseGenesisOwners(): GenesisOwners {
   };
 }
 export const GenesisOwners = {
+  typeUrl: "/capability.v1.GenesisOwners",
   encode(message: GenesisOwners, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.index.isZero()) {
       writer.uint32(8).uint64(message.index);
@@ -138,6 +139,7 @@ function createBaseGenesisState(): GenesisState {
   };
 }
 export const GenesisState = {
+  typeUrl: "/capability.v1.GenesisState",
   encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.index.isZero()) {
       writer.uint32(8).uint64(message.index);

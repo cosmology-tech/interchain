@@ -98,6 +98,7 @@ function createBaseStoreKVPair(): StoreKVPair {
   };
 }
 export const StoreKVPair = {
+  typeUrl: "/cosmos.store.v1beta1.StoreKVPair",
   encode(message: StoreKVPair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.storeKey !== "") {
       writer.uint32(10).string(message.storeKey);
@@ -193,6 +194,7 @@ function createBaseBlockMetadata(): BlockMetadata {
   };
 }
 export const BlockMetadata = {
+  typeUrl: "/cosmos.store.v1beta1.BlockMetadata",
   encode(message: BlockMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.responseCommit !== undefined) {
       ResponseCommit.encode(message.responseCommit, writer.uint32(50).fork()).ldelim();

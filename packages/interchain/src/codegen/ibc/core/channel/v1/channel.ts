@@ -522,6 +522,7 @@ function createBaseChannel(): Channel {
   };
 }
 export const Channel = {
+  typeUrl: "/ibc.core.channel.v1.Channel",
   encode(message: Channel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.state !== 0) {
       writer.uint32(8).int32(message.state);
@@ -634,6 +635,7 @@ function createBaseIdentifiedChannel(): IdentifiedChannel {
   };
 }
 export const IdentifiedChannel = {
+  typeUrl: "/ibc.core.channel.v1.IdentifiedChannel",
   encode(message: IdentifiedChannel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.state !== 0) {
       writer.uint32(8).int32(message.state);
@@ -759,6 +761,7 @@ function createBaseCounterparty(): Counterparty {
   };
 }
 export const Counterparty = {
+  typeUrl: "/ibc.core.channel.v1.Counterparty",
   encode(message: Counterparty, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
@@ -841,6 +844,7 @@ function createBasePacket(): Packet {
   };
 }
 export const Packet = {
+  typeUrl: "/ibc.core.channel.v1.Packet",
   encode(message: Packet, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.sequence.isZero()) {
       writer.uint32(8).uint64(message.sequence);
@@ -973,6 +977,7 @@ function createBasePacketState(): PacketState {
   };
 }
 export const PacketState = {
+  typeUrl: "/ibc.core.channel.v1.PacketState",
   encode(message: PacketState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
@@ -1068,6 +1073,7 @@ function createBasePacketId(): PacketId {
   };
 }
 export const PacketId = {
+  typeUrl: "/ibc.core.channel.v1.PacketId",
   encode(message: PacketId, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
@@ -1153,6 +1159,7 @@ function createBaseAcknowledgement(): Acknowledgement {
   };
 }
 export const Acknowledgement = {
+  typeUrl: "/ibc.core.channel.v1.Acknowledgement",
   encode(message: Acknowledgement, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.result !== undefined) {
       writer.uint32(170).bytes(message.result);
@@ -1229,6 +1236,7 @@ function createBaseTimeout(): Timeout {
   };
 }
 export const Timeout = {
+  typeUrl: "/ibc.core.channel.v1.Timeout",
   encode(message: Timeout, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.height !== undefined) {
       Height.encode(message.height, writer.uint32(10).fork()).ldelim();

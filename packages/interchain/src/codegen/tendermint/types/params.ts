@@ -279,6 +279,7 @@ function createBaseConsensusParams(): ConsensusParams {
   };
 }
 export const ConsensusParams = {
+  typeUrl: "/tendermint.types.ConsensusParams",
   encode(message: ConsensusParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.block !== undefined) {
       BlockParams.encode(message.block, writer.uint32(10).fork()).ldelim();
@@ -376,6 +377,7 @@ function createBaseBlockParams(): BlockParams {
   };
 }
 export const BlockParams = {
+  typeUrl: "/tendermint.types.BlockParams",
   encode(message: BlockParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.maxBytes.isZero()) {
       writer.uint32(8).int64(message.maxBytes);
@@ -447,6 +449,7 @@ function createBaseEvidenceParams(): EvidenceParams {
   };
 }
 export const EvidenceParams = {
+  typeUrl: "/tendermint.types.EvidenceParams",
   encode(message: EvidenceParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.maxAgeNumBlocks.isZero()) {
       writer.uint32(8).int64(message.maxAgeNumBlocks);
@@ -525,6 +528,7 @@ function createBaseValidatorParams(): ValidatorParams {
   };
 }
 export const ValidatorParams = {
+  typeUrl: "/tendermint.types.ValidatorParams",
   encode(message: ValidatorParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.pubKeyTypes) {
       writer.uint32(10).string(v!);
@@ -589,6 +593,7 @@ function createBaseVersionParams(): VersionParams {
   };
 }
 export const VersionParams = {
+  typeUrl: "/tendermint.types.VersionParams",
   encode(message: VersionParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.app.isZero()) {
       writer.uint32(8).uint64(message.app);
@@ -650,6 +655,7 @@ function createBaseHashedParams(): HashedParams {
   };
 }
 export const HashedParams = {
+  typeUrl: "/tendermint.types.HashedParams",
   encode(message: HashedParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.blockMaxBytes.isZero()) {
       writer.uint32(8).int64(message.blockMaxBytes);
@@ -719,6 +725,7 @@ function createBaseABCIParams(): ABCIParams {
   };
 }
 export const ABCIParams = {
+  typeUrl: "/tendermint.types.ABCIParams",
   encode(message: ABCIParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.voteExtensionsEnableHeight.isZero()) {
       writer.uint32(8).int64(message.voteExtensionsEnableHeight);

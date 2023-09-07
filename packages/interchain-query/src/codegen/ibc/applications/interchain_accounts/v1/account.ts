@@ -3,6 +3,7 @@ import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
 /** An InterchainAccount is defined as a BaseAccount & the address of the account owner on the controller chain */
 export interface InterchainAccount {
+  $typeUrl?: string;
   baseAccount: BaseAccount | undefined;
   accountOwner: string;
 }
@@ -21,11 +22,13 @@ export interface InterchainAccountAminoMsg {
 }
 /** An InterchainAccount is defined as a BaseAccount & the address of the account owner on the controller chain */
 export interface InterchainAccountSDKType {
+  $typeUrl?: string;
   base_account: BaseAccountSDKType | undefined;
   account_owner: string;
 }
 function createBaseInterchainAccount(): InterchainAccount {
   return {
+    $typeUrl: "/ibc.applications.interchain_accounts.v1.InterchainAccount",
     baseAccount: BaseAccount.fromPartial({}),
     accountOwner: ""
   };

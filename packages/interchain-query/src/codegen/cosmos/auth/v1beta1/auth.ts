@@ -7,6 +7,7 @@ import { isSet, DeepPartial, bytesFromBase64, base64FromBytes } from "../../../h
  * type for additional functionality (e.g. vesting).
  */
 export interface BaseAccount {
+  $typeUrl?: string;
   address: string;
   pubKey: Any | undefined;
   accountNumber: bigint;
@@ -37,6 +38,7 @@ export interface BaseAccountAminoMsg {
  * type for additional functionality (e.g. vesting).
  */
 export interface BaseAccountSDKType {
+  $typeUrl?: string;
   address: string;
   pub_key: AnySDKType | undefined;
   account_number: bigint;
@@ -44,6 +46,7 @@ export interface BaseAccountSDKType {
 }
 /** ModuleAccount defines an account for modules that holds coins on a pool. */
 export interface ModuleAccount {
+  $typeUrl?: string;
   baseAccount: BaseAccount | undefined;
   name: string;
   permissions: string[];
@@ -64,6 +67,7 @@ export interface ModuleAccountAminoMsg {
 }
 /** ModuleAccount defines an account for modules that holds coins on a pool. */
 export interface ModuleAccountSDKType {
+  $typeUrl?: string;
   base_account: BaseAccountSDKType | undefined;
   name: string;
   permissions: string[];
@@ -147,6 +151,7 @@ export interface ParamsSDKType {
 }
 function createBaseBaseAccount(): BaseAccount {
   return {
+    $typeUrl: "/cosmos.auth.v1beta1.BaseAccount",
     address: "",
     pubKey: Any.fromPartial({}),
     accountNumber: BigInt(0),
@@ -277,6 +282,7 @@ export const BaseAccount = {
 };
 function createBaseModuleAccount(): ModuleAccount {
   return {
+    $typeUrl: "/cosmos.auth.v1beta1.ModuleAccount",
     baseAccount: BaseAccount.fromPartial({}),
     name: "",
     permissions: []

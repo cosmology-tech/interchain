@@ -9,7 +9,7 @@ import { isSet, DeepPartial } from "../../../../helpers";
  */
 export interface QueryDenomTraceRequest {
   /** hash (in hex format) or denom (full denom with ibc prefix) of the denomination trace information. */
-  hash: string;
+  hash?: string;
 }
 export interface QueryDenomTraceRequestProtoMsg {
   typeUrl: "/ibc.applications.transfer.v1.QueryDenomTraceRequest";
@@ -32,7 +32,7 @@ export interface QueryDenomTraceRequestAminoMsg {
  * method
  */
 export interface QueryDenomTraceRequestSDKType {
-  hash: string;
+  hash?: string;
 }
 /**
  * QueryDenomTraceResponse is the response type for the Query/DenomTrace RPC
@@ -71,7 +71,7 @@ export interface QueryDenomTraceResponseSDKType {
  */
 export interface QueryDenomTracesRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination: PageRequest | undefined;
+  pagination?: PageRequest | undefined;
 }
 export interface QueryDenomTracesRequestProtoMsg {
   typeUrl: "/ibc.applications.transfer.v1.QueryDenomTracesRequest";
@@ -94,7 +94,7 @@ export interface QueryDenomTracesRequestAminoMsg {
  * method
  */
 export interface QueryDenomTracesRequestSDKType {
-  pagination: PageRequestSDKType | undefined;
+  pagination?: PageRequestSDKType | undefined;
 }
 /**
  * QueryConnectionsResponse is the response type for the Query/DenomTraces RPC
@@ -174,7 +174,7 @@ export interface QueryParamsResponseSDKType {
  */
 export interface QueryDenomHashRequest {
   /** The denomination trace ([port_id]/[channel_id])+/[denom] */
-  trace: string;
+  trace?: string;
 }
 export interface QueryDenomHashRequestProtoMsg {
   typeUrl: "/ibc.applications.transfer.v1.QueryDenomHashRequest";
@@ -197,7 +197,7 @@ export interface QueryDenomHashRequestAminoMsg {
  * method
  */
 export interface QueryDenomHashRequestSDKType {
-  trace: string;
+  trace?: string;
 }
 /**
  * QueryDenomHashResponse is the response type for the Query/DenomHash RPC
@@ -281,7 +281,7 @@ export interface QueryEscrowAddressResponseSDKType {
 }
 /** QueryTotalEscrowForDenomRequest is the request type for TotalEscrowForDenom RPC method. */
 export interface QueryTotalEscrowForDenomRequest {
-  denom: string;
+  denom?: string;
 }
 export interface QueryTotalEscrowForDenomRequestProtoMsg {
   typeUrl: "/ibc.applications.transfer.v1.QueryTotalEscrowForDenomRequest";
@@ -297,7 +297,7 @@ export interface QueryTotalEscrowForDenomRequestAminoMsg {
 }
 /** QueryTotalEscrowForDenomRequest is the request type for TotalEscrowForDenom RPC method. */
 export interface QueryTotalEscrowForDenomRequestSDKType {
-  denom: string;
+  denom?: string;
 }
 /** QueryTotalEscrowForDenomResponse is the response type for TotalEscrowForDenom RPC method. */
 export interface QueryTotalEscrowForDenomResponse {

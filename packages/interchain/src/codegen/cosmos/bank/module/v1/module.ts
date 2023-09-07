@@ -42,6 +42,7 @@ function createBaseModule(): Module {
   };
 }
 export const Module = {
+  typeUrl: "/cosmos.bank.module.v1.Module",
   encode(message: Module, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.blockedModuleAccountsOverride) {
       writer.uint32(10).string(v!);

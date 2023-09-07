@@ -781,6 +781,7 @@ function createBaseExistenceProof(): ExistenceProof {
   };
 }
 export const ExistenceProof = {
+  typeUrl: "/cosmos.ics23.v1.ExistenceProof",
   encode(message: ExistenceProof, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
@@ -880,6 +881,7 @@ function createBaseNonExistenceProof(): NonExistenceProof {
   };
 }
 export const NonExistenceProof = {
+  typeUrl: "/cosmos.ics23.v1.NonExistenceProof",
   encode(message: NonExistenceProof, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
@@ -967,6 +969,7 @@ function createBaseCommitmentProof(): CommitmentProof {
   };
 }
 export const CommitmentProof = {
+  typeUrl: "/cosmos.ics23.v1.CommitmentProof",
   encode(message: CommitmentProof, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.exist !== undefined) {
       ExistenceProof.encode(message.exist, writer.uint32(10).fork()).ldelim();
@@ -1064,6 +1067,7 @@ function createBaseLeafOp(): LeafOp {
   };
 }
 export const LeafOp = {
+  typeUrl: "/cosmos.ics23.v1.LeafOp",
   encode(message: LeafOp, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.hash !== 0) {
       writer.uint32(8).int32(message.hash);
@@ -1168,6 +1172,7 @@ function createBaseInnerOp(): InnerOp {
   };
 }
 export const InnerOp = {
+  typeUrl: "/cosmos.ics23.v1.InnerOp",
   encode(message: InnerOp, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.hash !== 0) {
       writer.uint32(8).int32(message.hash);
@@ -1256,6 +1261,7 @@ function createBaseProofSpec(): ProofSpec {
   };
 }
 export const ProofSpec = {
+  typeUrl: "/cosmos.ics23.v1.ProofSpec",
   encode(message: ProofSpec, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.leafSpec !== undefined) {
       LeafOp.encode(message.leafSpec, writer.uint32(10).fork()).ldelim();
@@ -1363,6 +1369,7 @@ function createBaseInnerSpec(): InnerSpec {
   };
 }
 export const InnerSpec = {
+  typeUrl: "/cosmos.ics23.v1.InnerSpec",
   encode(message: InnerSpec, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     writer.uint32(10).fork();
     for (const v of message.childOrder) {
@@ -1487,6 +1494,7 @@ function createBaseBatchProof(): BatchProof {
   };
 }
 export const BatchProof = {
+  typeUrl: "/cosmos.ics23.v1.BatchProof",
   encode(message: BatchProof, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.entries) {
       BatchEntry.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1558,6 +1566,7 @@ function createBaseBatchEntry(): BatchEntry {
   };
 }
 export const BatchEntry = {
+  typeUrl: "/cosmos.ics23.v1.BatchEntry",
   encode(message: BatchEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.exist !== undefined) {
       ExistenceProof.encode(message.exist, writer.uint32(10).fork()).ldelim();
@@ -1634,6 +1643,7 @@ function createBaseCompressedBatchProof(): CompressedBatchProof {
   };
 }
 export const CompressedBatchProof = {
+  typeUrl: "/cosmos.ics23.v1.CompressedBatchProof",
   encode(message: CompressedBatchProof, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.entries) {
       CompressedBatchEntry.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1718,6 +1728,7 @@ function createBaseCompressedBatchEntry(): CompressedBatchEntry {
   };
 }
 export const CompressedBatchEntry = {
+  typeUrl: "/cosmos.ics23.v1.CompressedBatchEntry",
   encode(message: CompressedBatchEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.exist !== undefined) {
       CompressedExistenceProof.encode(message.exist, writer.uint32(10).fork()).ldelim();
@@ -1796,6 +1807,7 @@ function createBaseCompressedExistenceProof(): CompressedExistenceProof {
   };
 }
 export const CompressedExistenceProof = {
+  typeUrl: "/cosmos.ics23.v1.CompressedExistenceProof",
   encode(message: CompressedExistenceProof, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
@@ -1904,6 +1916,7 @@ function createBaseCompressedNonExistenceProof(): CompressedNonExistenceProof {
   };
 }
 export const CompressedNonExistenceProof = {
+  typeUrl: "/cosmos.ics23.v1.CompressedNonExistenceProof",
   encode(message: CompressedNonExistenceProof, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);

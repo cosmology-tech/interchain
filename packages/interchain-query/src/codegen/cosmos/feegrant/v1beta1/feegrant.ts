@@ -10,6 +10,7 @@ import { toTimestamp, fromTimestamp, isSet, DeepPartial } from "../../../helpers
  * that optionally expires. The grantee can use up to SpendLimit to cover fees.
  */
 export interface BasicAllowance {
+  $typeUrl?: string;
   /**
    * spend_limit specifies the maximum amount of coins that can be spent
    * by this allowance and will be updated as coins are spent. If it is
@@ -46,6 +47,7 @@ export interface BasicAllowanceAminoMsg {
  * that optionally expires. The grantee can use up to SpendLimit to cover fees.
  */
 export interface BasicAllowanceSDKType {
+  $typeUrl?: string;
   spend_limit: CoinSDKType[];
   expiration: Date | undefined;
 }
@@ -54,6 +56,7 @@ export interface BasicAllowanceSDKType {
  * as well as a limit per time period.
  */
 export interface PeriodicAllowance {
+  $typeUrl?: string;
   /** basic specifies a struct of `BasicAllowance` */
   basic: BasicAllowance | undefined;
   /**
@@ -114,6 +117,7 @@ export interface PeriodicAllowanceAminoMsg {
  * as well as a limit per time period.
  */
 export interface PeriodicAllowanceSDKType {
+  $typeUrl?: string;
   basic: BasicAllowanceSDKType | undefined;
   period: DurationSDKType | undefined;
   period_spend_limit: CoinSDKType[];
@@ -122,6 +126,7 @@ export interface PeriodicAllowanceSDKType {
 }
 /** AllowedMsgAllowance creates allowance only for specified message types. */
 export interface AllowedMsgAllowance {
+  $typeUrl?: string;
   /** allowance can be any of basic and periodic fee allowance. */
   allowance: BasicAllowance | PeriodicAllowance | AllowedMsgAllowance | Any | undefined;
   /** allowed_messages are the messages for which the grantee has the access. */
@@ -147,6 +152,7 @@ export interface AllowedMsgAllowanceAminoMsg {
 }
 /** AllowedMsgAllowance creates allowance only for specified message types. */
 export interface AllowedMsgAllowanceSDKType {
+  $typeUrl?: string;
   allowance: BasicAllowanceSDKType | PeriodicAllowanceSDKType | AllowedMsgAllowanceSDKType | AnySDKType | undefined;
   allowed_messages: string[];
 }
@@ -187,6 +193,7 @@ export interface GrantSDKType {
 }
 function createBaseBasicAllowance(): BasicAllowance {
   return {
+    $typeUrl: "/cosmos.feegrant.v1beta1.BasicAllowance",
     spendLimit: [],
     expiration: new Date()
   };
@@ -301,6 +308,7 @@ export const BasicAllowance = {
 };
 function createBasePeriodicAllowance(): PeriodicAllowance {
   return {
+    $typeUrl: "/cosmos.feegrant.v1beta1.PeriodicAllowance",
     basic: BasicAllowance.fromPartial({}),
     period: Duration.fromPartial({}),
     periodSpendLimit: [],
@@ -469,6 +477,7 @@ export const PeriodicAllowance = {
 };
 function createBaseAllowedMsgAllowance(): AllowedMsgAllowance {
   return {
+    $typeUrl: "/cosmos.feegrant.v1beta1.AllowedMsgAllowance",
     allowance: Any.fromPartial({}),
     allowedMessages: []
   };

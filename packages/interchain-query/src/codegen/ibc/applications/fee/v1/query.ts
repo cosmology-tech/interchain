@@ -8,9 +8,9 @@ import { isSet, DeepPartial } from "../../../../helpers";
 /** QueryIncentivizedPacketsRequest defines the request type for the IncentivizedPackets rpc */
 export interface QueryIncentivizedPacketsRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination: PageRequest | undefined;
+  pagination?: PageRequest | undefined;
   /** block height at which to query */
-  queryHeight: bigint;
+  queryHeight?: bigint;
 }
 export interface QueryIncentivizedPacketsRequestProtoMsg {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketsRequest";
@@ -29,8 +29,8 @@ export interface QueryIncentivizedPacketsRequestAminoMsg {
 }
 /** QueryIncentivizedPacketsRequest defines the request type for the IncentivizedPackets rpc */
 export interface QueryIncentivizedPacketsRequestSDKType {
-  pagination: PageRequestSDKType | undefined;
-  query_height: bigint;
+  pagination?: PageRequestSDKType | undefined;
+  query_height?: bigint;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPackets rpc */
 export interface QueryIncentivizedPacketsResponse {
@@ -62,9 +62,9 @@ export interface QueryIncentivizedPacketsResponseSDKType {
 /** QueryIncentivizedPacketRequest defines the request type for the IncentivizedPacket rpc */
 export interface QueryIncentivizedPacketRequest {
   /** unique packet identifier comprised of channel ID, port ID and sequence */
-  packetId: PacketId | undefined;
+  packetId?: PacketId | undefined;
   /** block height at which to query */
-  queryHeight: bigint;
+  queryHeight?: bigint;
 }
 export interface QueryIncentivizedPacketRequestProtoMsg {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketRequest";
@@ -83,8 +83,8 @@ export interface QueryIncentivizedPacketRequestAminoMsg {
 }
 /** QueryIncentivizedPacketRequest defines the request type for the IncentivizedPacket rpc */
 export interface QueryIncentivizedPacketRequestSDKType {
-  packet_id: PacketIdSDKType | undefined;
-  query_height: bigint;
+  packet_id?: PacketIdSDKType | undefined;
+  query_height?: bigint;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPacket rpc */
 export interface QueryIncentivizedPacketResponse {
@@ -114,11 +114,11 @@ export interface QueryIncentivizedPacketResponseSDKType {
  */
 export interface QueryIncentivizedPacketsForChannelRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination: PageRequest | undefined;
+  pagination?: PageRequest | undefined;
   portId: string;
   channelId: string;
   /** Height to query at */
-  queryHeight: bigint;
+  queryHeight?: bigint;
 }
 export interface QueryIncentivizedPacketsForChannelRequestProtoMsg {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketsForChannelRequest";
@@ -145,10 +145,10 @@ export interface QueryIncentivizedPacketsForChannelRequestAminoMsg {
  * for a specific channel
  */
 export interface QueryIncentivizedPacketsForChannelRequestSDKType {
-  pagination: PageRequestSDKType | undefined;
+  pagination?: PageRequestSDKType | undefined;
   port_id: string;
   channel_id: string;
-  query_height: bigint;
+  query_height?: bigint;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the incentivized packets RPC */
 export interface QueryIncentivizedPacketsForChannelResponse {
@@ -180,7 +180,7 @@ export interface QueryIncentivizedPacketsForChannelResponseSDKType {
 /** QueryTotalRecvFeesRequest defines the request type for the TotalRecvFees rpc */
 export interface QueryTotalRecvFeesRequest {
   /** the packet identifier for the associated fees */
-  packetId: PacketId | undefined;
+  packetId?: PacketId | undefined;
 }
 export interface QueryTotalRecvFeesRequestProtoMsg {
   typeUrl: "/ibc.applications.fee.v1.QueryTotalRecvFeesRequest";
@@ -197,7 +197,7 @@ export interface QueryTotalRecvFeesRequestAminoMsg {
 }
 /** QueryTotalRecvFeesRequest defines the request type for the TotalRecvFees rpc */
 export interface QueryTotalRecvFeesRequestSDKType {
-  packet_id: PacketIdSDKType | undefined;
+  packet_id?: PacketIdSDKType | undefined;
 }
 /** QueryTotalRecvFeesResponse defines the response type for the TotalRecvFees rpc */
 export interface QueryTotalRecvFeesResponse {
@@ -224,7 +224,7 @@ export interface QueryTotalRecvFeesResponseSDKType {
 /** QueryTotalAckFeesRequest defines the request type for the TotalAckFees rpc */
 export interface QueryTotalAckFeesRequest {
   /** the packet identifier for the associated fees */
-  packetId: PacketId | undefined;
+  packetId?: PacketId | undefined;
 }
 export interface QueryTotalAckFeesRequestProtoMsg {
   typeUrl: "/ibc.applications.fee.v1.QueryTotalAckFeesRequest";
@@ -241,7 +241,7 @@ export interface QueryTotalAckFeesRequestAminoMsg {
 }
 /** QueryTotalAckFeesRequest defines the request type for the TotalAckFees rpc */
 export interface QueryTotalAckFeesRequestSDKType {
-  packet_id: PacketIdSDKType | undefined;
+  packet_id?: PacketIdSDKType | undefined;
 }
 /** QueryTotalAckFeesResponse defines the response type for the TotalAckFees rpc */
 export interface QueryTotalAckFeesResponse {
@@ -268,7 +268,7 @@ export interface QueryTotalAckFeesResponseSDKType {
 /** QueryTotalTimeoutFeesRequest defines the request type for the TotalTimeoutFees rpc */
 export interface QueryTotalTimeoutFeesRequest {
   /** the packet identifier for the associated fees */
-  packetId: PacketId | undefined;
+  packetId?: PacketId | undefined;
 }
 export interface QueryTotalTimeoutFeesRequestProtoMsg {
   typeUrl: "/ibc.applications.fee.v1.QueryTotalTimeoutFeesRequest";
@@ -285,7 +285,7 @@ export interface QueryTotalTimeoutFeesRequestAminoMsg {
 }
 /** QueryTotalTimeoutFeesRequest defines the request type for the TotalTimeoutFees rpc */
 export interface QueryTotalTimeoutFeesRequestSDKType {
-  packet_id: PacketIdSDKType | undefined;
+  packet_id?: PacketIdSDKType | undefined;
 }
 /** QueryTotalTimeoutFeesResponse defines the response type for the TotalTimeoutFees rpc */
 export interface QueryTotalTimeoutFeesResponse {
@@ -410,9 +410,9 @@ export interface QueryCounterpartyPayeeResponseSDKType {
 /** QueryFeeEnabledChannelsRequest defines the request type for the FeeEnabledChannels rpc */
 export interface QueryFeeEnabledChannelsRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination: PageRequest | undefined;
+  pagination?: PageRequest | undefined;
   /** block height at which to query */
-  queryHeight: bigint;
+  queryHeight?: bigint;
 }
 export interface QueryFeeEnabledChannelsRequestProtoMsg {
   typeUrl: "/ibc.applications.fee.v1.QueryFeeEnabledChannelsRequest";
@@ -431,8 +431,8 @@ export interface QueryFeeEnabledChannelsRequestAminoMsg {
 }
 /** QueryFeeEnabledChannelsRequest defines the request type for the FeeEnabledChannels rpc */
 export interface QueryFeeEnabledChannelsRequestSDKType {
-  pagination: PageRequestSDKType | undefined;
-  query_height: bigint;
+  pagination?: PageRequestSDKType | undefined;
+  query_height?: bigint;
 }
 /** QueryFeeEnabledChannelsResponse defines the response type for the FeeEnabledChannels rpc */
 export interface QueryFeeEnabledChannelsResponse {

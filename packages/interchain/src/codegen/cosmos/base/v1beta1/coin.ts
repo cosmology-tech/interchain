@@ -83,6 +83,7 @@ function createBaseCoin(): Coin {
   };
 }
 export const Coin = {
+  typeUrl: "/cosmos.base.v1beta1.Coin",
   encode(message: Coin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -159,6 +160,7 @@ function createBaseDecCoin(): DecCoin {
   };
 }
 export const DecCoin = {
+  typeUrl: "/cosmos.base.v1beta1.DecCoin",
   encode(message: DecCoin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);

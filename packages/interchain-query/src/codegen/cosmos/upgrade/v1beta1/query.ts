@@ -203,7 +203,7 @@ export interface QueryModuleVersionsRequest {
    * consensus version from state. Leaving this empty will
    * fetch the full list of module versions from state
    */
-  moduleName: string;
+  moduleName?: string;
 }
 export interface QueryModuleVersionsRequestProtoMsg {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryModuleVersionsRequest";
@@ -234,7 +234,7 @@ export interface QueryModuleVersionsRequestAminoMsg {
  * Since: cosmos-sdk 0.43
  */
 export interface QueryModuleVersionsRequestSDKType {
-  module_name: string;
+  module_name?: string;
 }
 /**
  * QueryModuleVersionsResponse is the response type for the Query/ModuleVersions

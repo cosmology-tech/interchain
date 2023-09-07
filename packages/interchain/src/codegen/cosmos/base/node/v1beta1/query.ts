@@ -103,6 +103,7 @@ function createBaseConfigRequest(): ConfigRequest {
   return {};
 }
 export const ConfigRequest = {
+  typeUrl: "/cosmos.base.node.v1beta1.ConfigRequest",
   encode(_: ConfigRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -161,6 +162,7 @@ function createBaseConfigResponse(): ConfigResponse {
   };
 }
 export const ConfigResponse = {
+  typeUrl: "/cosmos.base.node.v1beta1.ConfigResponse",
   encode(message: ConfigResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.minimumGasPrice !== "") {
       writer.uint32(10).string(message.minimumGasPrice);
@@ -243,6 +245,7 @@ function createBaseStatusRequest(): StatusRequest {
   return {};
 }
 export const StatusRequest = {
+  typeUrl: "/cosmos.base.node.v1beta1.StatusRequest",
   encode(_: StatusRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -303,6 +306,7 @@ function createBaseStatusResponse(): StatusResponse {
   };
 }
 export const StatusResponse = {
+  typeUrl: "/cosmos.base.node.v1beta1.StatusResponse",
   encode(message: StatusResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.earliestStoreHeight.isZero()) {
       writer.uint32(8).uint64(message.earliestStoreHeight);

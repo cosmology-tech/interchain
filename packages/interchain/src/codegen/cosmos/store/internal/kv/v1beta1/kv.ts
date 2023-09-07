@@ -49,6 +49,7 @@ function createBasePairs(): Pairs {
   };
 }
 export const Pairs = {
+  typeUrl: "/cosmos.store.internal.kv.v1beta1.Pairs",
   encode(message: Pairs, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.pairs) {
       Pair.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -120,6 +121,7 @@ function createBasePair(): Pair {
   };
 }
 export const Pair = {
+  typeUrl: "/cosmos.store.internal.kv.v1beta1.Pair",
   encode(message: Pair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);

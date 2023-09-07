@@ -189,6 +189,7 @@ function createBaseMsgAuthorizeCircuitBreaker(): MsgAuthorizeCircuitBreaker {
   };
 }
 export const MsgAuthorizeCircuitBreaker = {
+  typeUrl: "/cosmos.circuit.v1.MsgAuthorizeCircuitBreaker",
   encode(message: MsgAuthorizeCircuitBreaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
@@ -273,6 +274,7 @@ function createBaseMsgAuthorizeCircuitBreakerResponse(): MsgAuthorizeCircuitBrea
   };
 }
 export const MsgAuthorizeCircuitBreakerResponse = {
+  typeUrl: "/cosmos.circuit.v1.MsgAuthorizeCircuitBreakerResponse",
   encode(message: MsgAuthorizeCircuitBreakerResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.success === true) {
       writer.uint32(8).bool(message.success);
@@ -340,6 +342,7 @@ function createBaseMsgTripCircuitBreaker(): MsgTripCircuitBreaker {
   };
 }
 export const MsgTripCircuitBreaker = {
+  typeUrl: "/cosmos.circuit.v1.MsgTripCircuitBreaker",
   encode(message: MsgTripCircuitBreaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -419,6 +422,7 @@ function createBaseMsgTripCircuitBreakerResponse(): MsgTripCircuitBreakerRespons
   };
 }
 export const MsgTripCircuitBreakerResponse = {
+  typeUrl: "/cosmos.circuit.v1.MsgTripCircuitBreakerResponse",
   encode(message: MsgTripCircuitBreakerResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.success === true) {
       writer.uint32(8).bool(message.success);
@@ -486,6 +490,7 @@ function createBaseMsgResetCircuitBreaker(): MsgResetCircuitBreaker {
   };
 }
 export const MsgResetCircuitBreaker = {
+  typeUrl: "/cosmos.circuit.v1.MsgResetCircuitBreaker",
   encode(message: MsgResetCircuitBreaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -565,6 +570,7 @@ function createBaseMsgResetCircuitBreakerResponse(): MsgResetCircuitBreakerRespo
   };
 }
 export const MsgResetCircuitBreakerResponse = {
+  typeUrl: "/cosmos.circuit.v1.MsgResetCircuitBreakerResponse",
   encode(message: MsgResetCircuitBreakerResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.success === true) {
       writer.uint32(8).bool(message.success);

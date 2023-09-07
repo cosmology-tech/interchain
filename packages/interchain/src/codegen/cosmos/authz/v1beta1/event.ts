@@ -72,6 +72,7 @@ function createBaseEventGrant(): EventGrant {
   };
 }
 export const EventGrant = {
+  typeUrl: "/cosmos.authz.v1beta1.EventGrant",
   encode(message: EventGrant, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.msgTypeUrl !== "") {
       writer.uint32(18).string(message.msgTypeUrl);
@@ -158,6 +159,7 @@ function createBaseEventRevoke(): EventRevoke {
   };
 }
 export const EventRevoke = {
+  typeUrl: "/cosmos.authz.v1beta1.EventRevoke",
   encode(message: EventRevoke, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.msgTypeUrl !== "") {
       writer.uint32(18).string(message.msgTypeUrl);

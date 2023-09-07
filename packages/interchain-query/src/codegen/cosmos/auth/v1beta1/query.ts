@@ -11,7 +11,7 @@ import { isSet, DeepPartial, bytesFromBase64, base64FromBytes } from "../../../h
  */
 export interface QueryAccountsRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination: PageRequest | undefined;
+  pagination?: PageRequest | undefined;
 }
 export interface QueryAccountsRequestProtoMsg {
   typeUrl: "/cosmos.auth.v1beta1.QueryAccountsRequest";
@@ -36,7 +36,7 @@ export interface QueryAccountsRequestAminoMsg {
  * Since: cosmos-sdk 0.43
  */
 export interface QueryAccountsRequestSDKType {
-  pagination: PageRequestSDKType | undefined;
+  pagination?: PageRequestSDKType | undefined;
 }
 /**
  * QueryAccountsResponse is the response type for the Query/Accounts RPC method.
@@ -473,7 +473,7 @@ export interface QueryAccountAddressByIDRequest {
    * 
    * Since: cosmos-sdk 0.47
    */
-  accountId: bigint;
+  accountId?: bigint;
 }
 export interface QueryAccountAddressByIDRequestProtoMsg {
   typeUrl: "/cosmos.auth.v1beta1.QueryAccountAddressByIDRequest";
@@ -513,7 +513,7 @@ export interface QueryAccountAddressByIDRequestAminoMsg {
 export interface QueryAccountAddressByIDRequestSDKType {
   /** @deprecated */
   id: bigint;
-  account_id: bigint;
+  account_id?: bigint;
 }
 /**
  * QueryAccountAddressByIDResponse is the response type for AccountAddressByID rpc method

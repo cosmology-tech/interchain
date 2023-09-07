@@ -122,31 +122,31 @@ export interface GetTxsEventRequest {
    * events query.
    */
   /** @deprecated */
-  events: string[];
+  events?: string[];
   /**
    * pagination defines a pagination for the request.
    * Deprecated post v0.46.x: use page and limit instead.
    */
   /** @deprecated */
-  pagination: PageRequest | undefined;
-  orderBy: OrderBy;
+  pagination?: PageRequest | undefined;
+  orderBy?: OrderBy;
   /**
    * page is the page number to query, starts at 1. If not provided, will
    * default to first page.
    */
-  page: bigint;
+  page?: bigint;
   /**
    * limit is the total number of results to be returned in the result page.
    * If left empty it will default to a value to be set by each app.
    */
-  limit: bigint;
+  limit?: bigint;
   /**
    * query defines the transaction event query that is proxied to Tendermint's
    * TxSearch RPC method. The query must be valid.
    * 
    * Since cosmos-sdk 0.50
    */
-  query: string;
+  query?: string;
 }
 export interface GetTxsEventRequestProtoMsg {
   typeUrl: "/cosmos.tx.v1beta1.GetTxsEventRequest";
@@ -199,13 +199,13 @@ export interface GetTxsEventRequestAminoMsg {
  */
 export interface GetTxsEventRequestSDKType {
   /** @deprecated */
-  events: string[];
+  events?: string[];
   /** @deprecated */
-  pagination: PageRequestSDKType | undefined;
-  order_by: OrderBy;
-  page: bigint;
-  limit: bigint;
-  query: string;
+  pagination?: PageRequestSDKType | undefined;
+  order_by?: OrderBy;
+  page?: bigint;
+  limit?: bigint;
+  query?: string;
 }
 /**
  * GetTxsEventResponse is the response type for the Service.TxsByEvents
@@ -484,7 +484,7 @@ export interface GetBlockWithTxsRequest {
   /** height is the height of the block to query. */
   height: bigint;
   /** pagination defines a pagination for the request. */
-  pagination: PageRequest | undefined;
+  pagination?: PageRequest | undefined;
 }
 export interface GetBlockWithTxsRequestProtoMsg {
   typeUrl: "/cosmos.tx.v1beta1.GetBlockWithTxsRequest";
@@ -514,7 +514,7 @@ export interface GetBlockWithTxsRequestAminoMsg {
  */
 export interface GetBlockWithTxsRequestSDKType {
   height: bigint;
-  pagination: PageRequestSDKType | undefined;
+  pagination?: PageRequestSDKType | undefined;
 }
 /**
  * GetBlockWithTxsResponse is the response type for the Service.GetBlockWithTxs

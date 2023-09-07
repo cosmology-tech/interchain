@@ -655,6 +655,7 @@ function createBaseClientState(): ClientState {
   };
 }
 export const ClientState = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.ClientState",
   encode(message: ClientState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.sequence.isZero()) {
       writer.uint32(8).uint64(message.sequence);
@@ -750,6 +751,7 @@ function createBaseConsensusState(): ConsensusState {
   };
 }
 export const ConsensusState = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.ConsensusState",
   encode(message: ConsensusState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.publicKey !== undefined) {
       Any.encode(message.publicKey, writer.uint32(10).fork()).ldelim();
@@ -838,6 +840,7 @@ function createBaseHeader(): Header {
   };
 }
 export const Header = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.Header",
   encode(message: Header, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.sequence.isZero()) {
       writer.uint32(8).uint64(message.sequence);
@@ -943,6 +946,7 @@ function createBaseMisbehaviour(): Misbehaviour {
   };
 }
 export const Misbehaviour = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.Misbehaviour",
   encode(message: Misbehaviour, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -1039,6 +1043,7 @@ function createBaseSignatureAndData(): SignatureAndData {
   };
 }
 export const SignatureAndData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.SignatureAndData",
   encode(message: SignatureAndData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.signature.length !== 0) {
       writer.uint32(10).bytes(message.signature);
@@ -1133,6 +1138,7 @@ function createBaseTimestampedSignatureData(): TimestampedSignatureData {
   };
 }
 export const TimestampedSignatureData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.TimestampedSignatureData",
   encode(message: TimestampedSignatureData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.signatureData.length !== 0) {
       writer.uint32(10).bytes(message.signatureData);
@@ -1212,6 +1218,7 @@ function createBaseSignBytes(): SignBytes {
   };
 }
 export const SignBytes = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.SignBytes",
   encode(message: SignBytes, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.sequence.isZero()) {
       writer.uint32(8).uint64(message.sequence);
@@ -1315,6 +1322,7 @@ function createBaseHeaderData(): HeaderData {
   };
 }
 export const HeaderData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.HeaderData",
   encode(message: HeaderData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.newPubKey !== undefined) {
       Any.encode(message.newPubKey, writer.uint32(10).fork()).ldelim();
@@ -1391,6 +1399,7 @@ function createBaseClientStateData(): ClientStateData {
   };
 }
 export const ClientStateData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.ClientStateData",
   encode(message: ClientStateData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.path.length !== 0) {
       writer.uint32(10).bytes(message.path);
@@ -1467,6 +1476,7 @@ function createBaseConsensusStateData(): ConsensusStateData {
   };
 }
 export const ConsensusStateData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.ConsensusStateData",
   encode(message: ConsensusStateData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.path.length !== 0) {
       writer.uint32(10).bytes(message.path);
@@ -1543,6 +1553,7 @@ function createBaseConnectionStateData(): ConnectionStateData {
   };
 }
 export const ConnectionStateData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.ConnectionStateData",
   encode(message: ConnectionStateData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.path.length !== 0) {
       writer.uint32(10).bytes(message.path);
@@ -1619,6 +1630,7 @@ function createBaseChannelStateData(): ChannelStateData {
   };
 }
 export const ChannelStateData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.ChannelStateData",
   encode(message: ChannelStateData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.path.length !== 0) {
       writer.uint32(10).bytes(message.path);
@@ -1695,6 +1707,7 @@ function createBasePacketCommitmentData(): PacketCommitmentData {
   };
 }
 export const PacketCommitmentData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.PacketCommitmentData",
   encode(message: PacketCommitmentData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.path.length !== 0) {
       writer.uint32(10).bytes(message.path);
@@ -1771,6 +1784,7 @@ function createBasePacketAcknowledgementData(): PacketAcknowledgementData {
   };
 }
 export const PacketAcknowledgementData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.PacketAcknowledgementData",
   encode(message: PacketAcknowledgementData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.path.length !== 0) {
       writer.uint32(10).bytes(message.path);
@@ -1846,6 +1860,7 @@ function createBasePacketReceiptAbsenceData(): PacketReceiptAbsenceData {
   };
 }
 export const PacketReceiptAbsenceData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.PacketReceiptAbsenceData",
   encode(message: PacketReceiptAbsenceData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.path.length !== 0) {
       writer.uint32(10).bytes(message.path);
@@ -1913,6 +1928,7 @@ function createBaseNextSequenceRecvData(): NextSequenceRecvData {
   };
 }
 export const NextSequenceRecvData = {
+  typeUrl: "/ibc.lightclients.solomachine.v2.NextSequenceRecvData",
   encode(message: NextSequenceRecvData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.path.length !== 0) {
       writer.uint32(10).bytes(message.path);

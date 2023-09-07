@@ -8,6 +8,7 @@ import { DeepPartial } from "../../../helpers";
  * Since: cosmos-sdk 0.43
  */
 export interface SendAuthorization {
+  $typeUrl?: string;
   spendLimit: Coin[];
   /**
    * allow_list specifies an optional list of addresses to whom the grantee can send tokens on behalf of the
@@ -48,11 +49,13 @@ export interface SendAuthorizationAminoMsg {
  * Since: cosmos-sdk 0.43
  */
 export interface SendAuthorizationSDKType {
+  $typeUrl?: string;
   spend_limit: CoinSDKType[];
   allow_list: string[];
 }
 function createBaseSendAuthorization(): SendAuthorization {
   return {
+    $typeUrl: "/cosmos.bank.v1beta1.SendAuthorization",
     spendLimit: [],
     allowList: []
   };

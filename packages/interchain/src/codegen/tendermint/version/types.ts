@@ -77,6 +77,7 @@ function createBaseApp(): App {
   };
 }
 export const App = {
+  typeUrl: "/tendermint.version.App",
   encode(message: App, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.protocol.isZero()) {
       writer.uint32(8).uint64(message.protocol);
@@ -147,6 +148,7 @@ function createBaseConsensus(): Consensus {
   };
 }
 export const Consensus = {
+  typeUrl: "/tendermint.version.Consensus",
   encode(message: Consensus, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.block.isZero()) {
       writer.uint32(8).uint64(message.block);

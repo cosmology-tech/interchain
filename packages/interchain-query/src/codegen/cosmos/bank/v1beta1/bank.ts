@@ -126,6 +126,7 @@ export interface OutputSDKType {
  */
 /** @deprecated */
 export interface Supply {
+  $typeUrl?: string;
   total: Coin[];
 }
 export interface SupplyProtoMsg {
@@ -152,6 +153,7 @@ export interface SupplyAminoMsg {
  */
 /** @deprecated */
 export interface SupplySDKType {
+  $typeUrl?: string;
   total: CoinSDKType[];
 }
 /**
@@ -759,6 +761,7 @@ export const Output = {
 };
 function createBaseSupply(): Supply {
   return {
+    $typeUrl: "/cosmos.bank.v1beta1.Supply",
     total: []
   };
 }

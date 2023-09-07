@@ -2202,6 +2202,7 @@ function createBaseFileDescriptorSet(): FileDescriptorSet {
   };
 }
 export const FileDescriptorSet = {
+  typeUrl: "/google.protobuf.FileDescriptorSet",
   encode(message: FileDescriptorSet, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.file) {
       FileDescriptorProto.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -2277,6 +2278,7 @@ function createBaseFileDescriptorProto(): FileDescriptorProto {
   };
 }
 export const FileDescriptorProto = {
+  typeUrl: "/google.protobuf.FileDescriptorProto",
   encode(message: FileDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -2491,6 +2493,7 @@ function createBaseDescriptorProto(): DescriptorProto {
   };
 }
 export const DescriptorProto = {
+  typeUrl: "/google.protobuf.DescriptorProto",
   encode(message: DescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -2666,6 +2669,7 @@ function createBaseDescriptorProto_ExtensionRange(): DescriptorProto_ExtensionRa
   };
 }
 export const DescriptorProto_ExtensionRange = {
+  typeUrl: "/google.protobuf.ExtensionRange",
   encode(message: DescriptorProto_ExtensionRange, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.start !== 0) {
       writer.uint32(8).int32(message.start);
@@ -2745,6 +2749,7 @@ function createBaseDescriptorProto_ReservedRange(): DescriptorProto_ReservedRang
   };
 }
 export const DescriptorProto_ReservedRange = {
+  typeUrl: "/google.protobuf.ReservedRange",
   encode(message: DescriptorProto_ReservedRange, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.start !== 0) {
       writer.uint32(8).int32(message.start);
@@ -2814,6 +2819,7 @@ function createBaseExtensionRangeOptions(): ExtensionRangeOptions {
   };
 }
 export const ExtensionRangeOptions = {
+  typeUrl: "/google.protobuf.ExtensionRangeOptions",
   encode(message: ExtensionRangeOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.uninterpretedOption) {
       UninterpretedOption.encode(v!, writer.uint32(7994).fork()).ldelim();
@@ -2887,6 +2893,7 @@ function createBaseFieldDescriptorProto(): FieldDescriptorProto {
   };
 }
 export const FieldDescriptorProto = {
+  typeUrl: "/google.protobuf.FieldDescriptorProto",
   encode(message: FieldDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3029,6 +3036,7 @@ function createBaseOneofDescriptorProto(): OneofDescriptorProto {
   };
 }
 export const OneofDescriptorProto = {
+  typeUrl: "/google.protobuf.OneofDescriptorProto",
   encode(message: OneofDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3102,6 +3110,7 @@ function createBaseEnumDescriptorProto(): EnumDescriptorProto {
   };
 }
 export const EnumDescriptorProto = {
+  typeUrl: "/google.protobuf.EnumDescriptorProto",
   encode(message: EnumDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3211,6 +3220,7 @@ function createBaseEnumDescriptorProto_EnumReservedRange(): EnumDescriptorProto_
   };
 }
 export const EnumDescriptorProto_EnumReservedRange = {
+  typeUrl: "/google.protobuf.EnumReservedRange",
   encode(message: EnumDescriptorProto_EnumReservedRange, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.start !== 0) {
       writer.uint32(8).int32(message.start);
@@ -3282,6 +3292,7 @@ function createBaseEnumValueDescriptorProto(): EnumValueDescriptorProto {
   };
 }
 export const EnumValueDescriptorProto = {
+  typeUrl: "/google.protobuf.EnumValueDescriptorProto",
   encode(message: EnumValueDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3362,6 +3373,7 @@ function createBaseServiceDescriptorProto(): ServiceDescriptorProto {
   };
 }
 export const ServiceDescriptorProto = {
+  typeUrl: "/google.protobuf.ServiceDescriptorProto",
   encode(message: ServiceDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3449,6 +3461,7 @@ function createBaseMethodDescriptorProto(): MethodDescriptorProto {
   };
 }
 export const MethodDescriptorProto = {
+  typeUrl: "/google.protobuf.MethodDescriptorProto",
   encode(message: MethodDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -3574,6 +3587,7 @@ function createBaseFileOptions(): FileOptions {
   };
 }
 export const FileOptions = {
+  typeUrl: "/google.protobuf.FileOptions",
   encode(message: FileOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.javaPackage !== "") {
       writer.uint32(10).string(message.javaPackage);
@@ -3822,6 +3836,7 @@ function createBaseMessageOptions(): MessageOptions {
   };
 }
 export const MessageOptions = {
+  typeUrl: "/google.protobuf.MessageOptions",
   encode(message: MessageOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.messageSetWireFormat === true) {
       writer.uint32(8).bool(message.messageSetWireFormat);
@@ -3928,6 +3943,7 @@ function createBaseFieldOptions(): FieldOptions {
   };
 }
 export const FieldOptions = {
+  typeUrl: "/google.protobuf.FieldOptions",
   encode(message: FieldOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.ctype !== 1) {
       writer.uint32(8).int32(message.ctype);
@@ -4046,6 +4062,7 @@ function createBaseOneofOptions(): OneofOptions {
   };
 }
 export const OneofOptions = {
+  typeUrl: "/google.protobuf.OneofOptions",
   encode(message: OneofOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.uninterpretedOption) {
       UninterpretedOption.encode(v!, writer.uint32(7994).fork()).ldelim();
@@ -4112,6 +4129,7 @@ function createBaseEnumOptions(): EnumOptions {
   };
 }
 export const EnumOptions = {
+  typeUrl: "/google.protobuf.EnumOptions",
   encode(message: EnumOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.allowAlias === true) {
       writer.uint32(16).bool(message.allowAlias);
@@ -4195,6 +4213,7 @@ function createBaseEnumValueOptions(): EnumValueOptions {
   };
 }
 export const EnumValueOptions = {
+  typeUrl: "/google.protobuf.EnumValueOptions",
   encode(message: EnumValueOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.deprecated === true) {
       writer.uint32(8).bool(message.deprecated);
@@ -4269,6 +4288,7 @@ function createBaseServiceOptions(): ServiceOptions {
   };
 }
 export const ServiceOptions = {
+  typeUrl: "/google.protobuf.ServiceOptions",
   encode(message: ServiceOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.deprecated === true) {
       writer.uint32(264).bool(message.deprecated);
@@ -4344,6 +4364,7 @@ function createBaseMethodOptions(): MethodOptions {
   };
 }
 export const MethodOptions = {
+  typeUrl: "/google.protobuf.MethodOptions",
   encode(message: MethodOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.deprecated === true) {
       writer.uint32(264).bool(message.deprecated);
@@ -4432,6 +4453,7 @@ function createBaseUninterpretedOption(): UninterpretedOption {
   };
 }
 export const UninterpretedOption = {
+  typeUrl: "/google.protobuf.UninterpretedOption",
   encode(message: UninterpretedOption, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.name) {
       UninterpretedOption_NamePart.encode(v!, writer.uint32(18).fork()).ldelim();
@@ -4551,6 +4573,7 @@ function createBaseUninterpretedOption_NamePart(): UninterpretedOption_NamePart 
   };
 }
 export const UninterpretedOption_NamePart = {
+  typeUrl: "/google.protobuf.NamePart",
   encode(message: UninterpretedOption_NamePart, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.namePart !== "") {
       writer.uint32(10).string(message.namePart);
@@ -4620,6 +4643,7 @@ function createBaseSourceCodeInfo(): SourceCodeInfo {
   };
 }
 export const SourceCodeInfo = {
+  typeUrl: "/google.protobuf.SourceCodeInfo",
   encode(message: SourceCodeInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.location) {
       SourceCodeInfo_Location.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -4688,6 +4712,7 @@ function createBaseSourceCodeInfo_Location(): SourceCodeInfo_Location {
   };
 }
 export const SourceCodeInfo_Location = {
+  typeUrl: "/google.protobuf.Location",
   encode(message: SourceCodeInfo_Location, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     writer.uint32(10).fork();
     for (const v of message.path) {
@@ -4814,6 +4839,7 @@ function createBaseGeneratedCodeInfo(): GeneratedCodeInfo {
   };
 }
 export const GeneratedCodeInfo = {
+  typeUrl: "/google.protobuf.GeneratedCodeInfo",
   encode(message: GeneratedCodeInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.annotation) {
       GeneratedCodeInfo_Annotation.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -4881,6 +4907,7 @@ function createBaseGeneratedCodeInfo_Annotation(): GeneratedCodeInfo_Annotation 
   };
 }
 export const GeneratedCodeInfo_Annotation = {
+  typeUrl: "/google.protobuf.Annotation",
   encode(message: GeneratedCodeInfo_Annotation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     writer.uint32(10).fork();
     for (const v of message.path) {

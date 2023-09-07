@@ -11,6 +11,7 @@ import { isSet, DeepPartial, toTimestamp, fromTimestamp } from "../../../helpers
  * the provided method on behalf of the granter's account.
  */
 export interface GenericAuthorization {
+  $typeUrl?: string;
   /** Msg, identified by it's type URL, to grant unrestricted permissions to execute */
   msg: string;
 }
@@ -35,6 +36,7 @@ export interface GenericAuthorizationAminoMsg {
  * the provided method on behalf of the granter's account.
  */
 export interface GenericAuthorizationSDKType {
+  $typeUrl?: string;
   msg: string;
 }
 /**
@@ -147,6 +149,7 @@ export interface GrantQueueItemSDKType {
 }
 function createBaseGenericAuthorization(): GenericAuthorization {
   return {
+    $typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
     msg: ""
   };
 }

@@ -7,6 +7,7 @@ import * as _m0 from "protobufjs/minimal";
  * type for additional functionality (e.g. vesting).
  */
 export interface BaseAccount {
+  $typeUrl?: string;
   address: string;
   pubKey: Any;
   accountNumber: Long;
@@ -37,6 +38,7 @@ export interface BaseAccountAminoMsg {
  * type for additional functionality (e.g. vesting).
  */
 export interface BaseAccountSDKType {
+  $typeUrl?: string;
   address: string;
   pub_key: AnySDKType;
   account_number: Long;
@@ -44,6 +46,7 @@ export interface BaseAccountSDKType {
 }
 /** ModuleAccount defines an account for modules that holds coins on a pool. */
 export interface ModuleAccount {
+  $typeUrl?: string;
   baseAccount: BaseAccount;
   name: string;
   permissions: string[];
@@ -64,6 +67,7 @@ export interface ModuleAccountAminoMsg {
 }
 /** ModuleAccount defines an account for modules that holds coins on a pool. */
 export interface ModuleAccountSDKType {
+  $typeUrl?: string;
   base_account: BaseAccountSDKType;
   name: string;
   permissions: string[];
@@ -147,6 +151,7 @@ export interface ParamsSDKType {
 }
 function createBaseBaseAccount(): BaseAccount {
   return {
+    $typeUrl: "/cosmos.auth.v1beta1.BaseAccount",
     address: "",
     pubKey: Any.fromPartial({}),
     accountNumber: Long.UZERO,
@@ -154,6 +159,7 @@ function createBaseBaseAccount(): BaseAccount {
   };
 }
 export const BaseAccount = {
+  typeUrl: "/cosmos.auth.v1beta1.BaseAccount",
   encode(message: BaseAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -243,12 +249,14 @@ export const BaseAccount = {
 };
 function createBaseModuleAccount(): ModuleAccount {
   return {
+    $typeUrl: "/cosmos.auth.v1beta1.ModuleAccount",
     baseAccount: BaseAccount.fromPartial({}),
     name: "",
     permissions: []
   };
 }
 export const ModuleAccount = {
+  typeUrl: "/cosmos.auth.v1beta1.ModuleAccount",
   encode(message: ModuleAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.baseAccount !== undefined) {
       BaseAccount.encode(message.baseAccount, writer.uint32(10).fork()).ldelim();
@@ -338,6 +346,7 @@ function createBaseModuleCredential(): ModuleCredential {
   };
 }
 export const ModuleCredential = {
+  typeUrl: "/cosmos.auth.v1beta1.ModuleCredential",
   encode(message: ModuleCredential, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.moduleName !== "") {
       writer.uint32(10).string(message.moduleName);
@@ -421,6 +430,7 @@ function createBaseParams(): Params {
   };
 }
 export const Params = {
+  typeUrl: "/cosmos.auth.v1beta1.Params",
   encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.maxMemoCharacters.isZero()) {
       writer.uint32(8).uint64(message.maxMemoCharacters);

@@ -286,6 +286,7 @@ export interface MemberRequestSDKType {
  *    given by `windows`.
  */
 export interface ThresholdDecisionPolicy {
+  $typeUrl?: string;
   /**
    * threshold is the minimum weighted sum of `YES` votes that must be met or
    * exceeded for a proposal to succeed.
@@ -328,6 +329,7 @@ export interface ThresholdDecisionPolicyAminoMsg {
  *    given by `windows`.
  */
 export interface ThresholdDecisionPolicySDKType {
+  $typeUrl?: string;
   threshold: string;
   windows: DecisionPolicyWindowsSDKType | undefined;
 }
@@ -340,6 +342,7 @@ export interface ThresholdDecisionPolicySDKType {
  *    given by `windows`.
  */
 export interface PercentageDecisionPolicy {
+  $typeUrl?: string;
   /**
    * percentage is the minimum percentage of the weighted sum of `YES` votes must
    * meet for a proposal to succeed.
@@ -382,6 +385,7 @@ export interface PercentageDecisionPolicyAminoMsg {
  *    given by `windows`.
  */
 export interface PercentageDecisionPolicySDKType {
+  $typeUrl?: string;
   percentage: string;
   windows: DecisionPolicyWindowsSDKType | undefined;
 }
@@ -1098,6 +1102,7 @@ export const MemberRequest = {
 };
 function createBaseThresholdDecisionPolicy(): ThresholdDecisionPolicy {
   return {
+    $typeUrl: "/cosmos.group.v1.ThresholdDecisionPolicy",
     threshold: "",
     windows: DecisionPolicyWindows.fromPartial({})
   };
@@ -1200,6 +1205,7 @@ export const ThresholdDecisionPolicy = {
 };
 function createBasePercentageDecisionPolicy(): PercentageDecisionPolicy {
   return {
+    $typeUrl: "/cosmos.group.v1.PercentageDecisionPolicy",
     percentage: "",
     windows: DecisionPolicyWindows.fromPartial({})
   };

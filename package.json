@@ -9,6 +9,7 @@
     "commit": "git-cz",
     "build": "lerna run prepare --stream",
     "watch": "yarn watch",
+    "codegen": "lerna run codegen",
     "lint": "lerna run lint",
     "format": "lerna run format",
     "pretest": "yarn lint",

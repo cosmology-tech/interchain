@@ -108,6 +108,7 @@ function createBaseCommitInfo(): CommitInfo {
   };
 }
 export const CommitInfo = {
+  typeUrl: "/cosmos.store.v1beta1.CommitInfo",
   encode(message: CommitInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.version.isZero()) {
       writer.uint32(8).int64(message.version);
@@ -197,6 +198,7 @@ function createBaseStoreInfo(): StoreInfo {
   };
 }
 export const StoreInfo = {
+  typeUrl: "/cosmos.store.v1beta1.StoreInfo",
   encode(message: StoreInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -273,6 +275,7 @@ function createBaseCommitID(): CommitID {
   };
 }
 export const CommitID = {
+  typeUrl: "/cosmos.store.v1beta1.CommitID",
   encode(message: CommitID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.version.isZero()) {
       writer.uint32(8).int64(message.version);

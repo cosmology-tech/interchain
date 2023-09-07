@@ -37,6 +37,7 @@ function createBaseParams(): Params {
   };
 }
 export const Params = {
+  typeUrl: "/ibc.applications.interchain_accounts.controller.v1.Params",
   encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.controllerEnabled === true) {
       writer.uint32(8).bool(message.controllerEnabled);

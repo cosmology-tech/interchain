@@ -779,6 +779,7 @@ function createBaseTx(): Tx {
   };
 }
 export const Tx = {
+  typeUrl: "/cosmos.tx.v1beta1.Tx",
   encode(message: Tx, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.body !== undefined) {
       TxBody.encode(message.body, writer.uint32(10).fork()).ldelim();
@@ -869,6 +870,7 @@ function createBaseTxRaw(): TxRaw {
   };
 }
 export const TxRaw = {
+  typeUrl: "/cosmos.tx.v1beta1.TxRaw",
   encode(message: TxRaw, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bodyBytes.length !== 0) {
       writer.uint32(10).bytes(message.bodyBytes);
@@ -960,6 +962,7 @@ function createBaseSignDoc(): SignDoc {
   };
 }
 export const SignDoc = {
+  typeUrl: "/cosmos.tx.v1beta1.SignDoc",
   encode(message: SignDoc, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bodyBytes.length !== 0) {
       writer.uint32(10).bytes(message.bodyBytes);
@@ -1058,6 +1061,7 @@ function createBaseSignDocDirectAux(): SignDocDirectAux {
   };
 }
 export const SignDocDirectAux = {
+  typeUrl: "/cosmos.tx.v1beta1.SignDocDirectAux",
   encode(message: SignDocDirectAux, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bodyBytes.length !== 0) {
       writer.uint32(10).bytes(message.bodyBytes);
@@ -1173,6 +1177,7 @@ function createBaseTxBody(): TxBody {
   };
 }
 export const TxBody = {
+  typeUrl: "/cosmos.tx.v1beta1.TxBody",
   encode(message: TxBody, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.messages) {
       Any.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1289,6 +1294,7 @@ function createBaseAuthInfo(): AuthInfo {
   };
 }
 export const AuthInfo = {
+  typeUrl: "/cosmos.tx.v1beta1.AuthInfo",
   encode(message: AuthInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.signerInfos) {
       SignerInfo.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1379,6 +1385,7 @@ function createBaseSignerInfo(): SignerInfo {
   };
 }
 export const SignerInfo = {
+  typeUrl: "/cosmos.tx.v1beta1.SignerInfo",
   encode(message: SignerInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.publicKey !== undefined) {
       Any.encode(message.publicKey, writer.uint32(10).fork()).ldelim();
@@ -1464,6 +1471,7 @@ function createBaseModeInfo(): ModeInfo {
   };
 }
 export const ModeInfo = {
+  typeUrl: "/cosmos.tx.v1beta1.ModeInfo",
   encode(message: ModeInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.single !== undefined) {
       ModeInfo_Single.encode(message.single, writer.uint32(10).fork()).ldelim();
@@ -1539,6 +1547,7 @@ function createBaseModeInfo_Single(): ModeInfo_Single {
   };
 }
 export const ModeInfo_Single = {
+  typeUrl: "/cosmos.tx.v1beta1.Single",
   encode(message: ModeInfo_Single, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.mode !== 0) {
       writer.uint32(8).int32(message.mode);
@@ -1606,6 +1615,7 @@ function createBaseModeInfo_Multi(): ModeInfo_Multi {
   };
 }
 export const ModeInfo_Multi = {
+  typeUrl: "/cosmos.tx.v1beta1.Multi",
   encode(message: ModeInfo_Multi, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bitarray !== undefined) {
       CompactBitArray.encode(message.bitarray, writer.uint32(10).fork()).ldelim();
@@ -1688,6 +1698,7 @@ function createBaseFee(): Fee {
   };
 }
 export const Fee = {
+  typeUrl: "/cosmos.tx.v1beta1.Fee",
   encode(message: Fee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1786,6 +1797,7 @@ function createBaseTip(): Tip {
   };
 }
 export const Tip = {
+  typeUrl: "/cosmos.tx.v1beta1.Tip",
   encode(message: Tip, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1868,6 +1880,7 @@ function createBaseAuxSignerData(): AuxSignerData {
   };
 }
 export const AuxSignerData = {
+  typeUrl: "/cosmos.tx.v1beta1.AuxSignerData",
   encode(message: AuxSignerData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);

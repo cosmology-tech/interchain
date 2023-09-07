@@ -223,11 +223,11 @@ export interface QueryValidatorSlashesRequest {
   /** validator_address defines the validator address to query for. */
   validatorAddress: string;
   /** starting_height defines the optional starting height to query the slashes. */
-  startingHeight: bigint;
+  startingHeight?: bigint;
   /** starting_height defines the optional ending height to query the slashes. */
-  endingHeight: bigint;
+  endingHeight?: bigint;
   /** pagination defines an optional pagination for the request. */
-  pagination: PageRequest | undefined;
+  pagination?: PageRequest | undefined;
 }
 export interface QueryValidatorSlashesRequestProtoMsg {
   typeUrl: "/cosmos.distribution.v1beta1.QueryValidatorSlashesRequest";
@@ -257,9 +257,9 @@ export interface QueryValidatorSlashesRequestAminoMsg {
  */
 export interface QueryValidatorSlashesRequestSDKType {
   validator_address: string;
-  starting_height: bigint;
-  ending_height: bigint;
-  pagination: PageRequestSDKType | undefined;
+  starting_height?: bigint;
+  ending_height?: bigint;
+  pagination?: PageRequestSDKType | undefined;
 }
 /**
  * QueryValidatorSlashesResponse is the response type for the

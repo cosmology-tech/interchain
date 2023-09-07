@@ -45,7 +45,7 @@ export interface AccountResponseSDKType {
 /** QueryAccountsRequest is the request type for the Query/Accounts RPC method. */
 export interface QueryAccountsRequest {
   /** pagination defines an optional pagination for the request. */
-  pagination: PageRequest;
+  pagination?: PageRequest;
 }
 export interface QueryAccountsRequestProtoMsg {
   typeUrl: "/cosmos.circuit.v1.QueryAccountsRequest";
@@ -62,7 +62,7 @@ export interface QueryAccountsRequestAminoMsg {
 }
 /** QueryAccountsRequest is the request type for the Query/Accounts RPC method. */
 export interface QueryAccountsRequestSDKType {
-  pagination: PageRequestSDKType;
+  pagination?: PageRequestSDKType;
 }
 /** AccountsResponse is the response type for the Query/Accounts RPC method. */
 export interface AccountsResponse {
@@ -129,6 +129,7 @@ function createBaseQueryAccountRequest(): QueryAccountRequest {
   };
 }
 export const QueryAccountRequest = {
+  typeUrl: "/cosmos.circuit.v1.QueryAccountRequest",
   encode(message: QueryAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -195,6 +196,7 @@ function createBaseAccountResponse(): AccountResponse {
   };
 }
 export const AccountResponse = {
+  typeUrl: "/cosmos.circuit.v1.AccountResponse",
   encode(message: AccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.permission !== undefined) {
       Permissions.encode(message.permission, writer.uint32(10).fork()).ldelim();
@@ -261,6 +263,7 @@ function createBaseQueryAccountsRequest(): QueryAccountsRequest {
   };
 }
 export const QueryAccountsRequest = {
+  typeUrl: "/cosmos.circuit.v1.QueryAccountsRequest",
   encode(message: QueryAccountsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -328,6 +331,7 @@ function createBaseAccountsResponse(): AccountsResponse {
   };
 }
 export const AccountsResponse = {
+  typeUrl: "/cosmos.circuit.v1.AccountsResponse",
   encode(message: AccountsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.accounts) {
       GenesisAccountPermissions.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -405,6 +409,7 @@ function createBaseQueryDisabledListRequest(): QueryDisabledListRequest {
   return {};
 }
 export const QueryDisabledListRequest = {
+  typeUrl: "/cosmos.circuit.v1.QueryDisabledListRequest",
   encode(_: QueryDisabledListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -461,6 +466,7 @@ function createBaseDisabledListResponse(): DisabledListResponse {
   };
 }
 export const DisabledListResponse = {
+  typeUrl: "/cosmos.circuit.v1.DisabledListResponse",
   encode(message: DisabledListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.disabledList) {
       writer.uint32(10).string(v!);
