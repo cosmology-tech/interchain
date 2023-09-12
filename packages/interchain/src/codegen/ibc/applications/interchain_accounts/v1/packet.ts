@@ -94,6 +94,7 @@ function createBaseInterchainAccountPacketData(): InterchainAccountPacketData {
 }
 export const InterchainAccountPacketData = {
   typeUrl: "/ibc.applications.interchain_accounts.v1.InterchainAccountPacketData",
+  aminoType: "cosmos-sdk/InterchainAccountPacketData",
   encode(message: InterchainAccountPacketData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.type !== 0) {
       writer.uint32(8).int32(message.type);
@@ -179,6 +180,7 @@ function createBaseCosmosTx(): CosmosTx {
 }
 export const CosmosTx = {
   typeUrl: "/ibc.applications.interchain_accounts.v1.CosmosTx",
+  aminoType: "cosmos-sdk/CosmosTx",
   encode(message: CosmosTx, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.messages) {
       Any.encode(v!, writer.uint32(10).fork()).ldelim();

@@ -74,6 +74,7 @@ function createBaseModule(): Module {
 }
 export const Module = {
   typeUrl: "/cosmos.auth.module.v1.Module",
+  aminoType: "cosmos-sdk/Module",
   encode(message: Module, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bech32Prefix !== "") {
       writer.uint32(10).string(message.bech32Prefix);
@@ -164,6 +165,7 @@ function createBaseModuleAccountPermission(): ModuleAccountPermission {
 }
 export const ModuleAccountPermission = {
   typeUrl: "/cosmos.auth.module.v1.ModuleAccountPermission",
+  aminoType: "cosmos-sdk/ModuleAccountPermission",
   encode(message: ModuleAccountPermission, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.account !== "") {
       writer.uint32(10).string(message.account);

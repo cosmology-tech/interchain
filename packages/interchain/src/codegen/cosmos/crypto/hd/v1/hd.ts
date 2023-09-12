@@ -59,6 +59,7 @@ function createBaseBIP44Params(): BIP44Params {
 }
 export const BIP44Params = {
   typeUrl: "/cosmos.crypto.hd.v1.BIP44Params",
+  aminoType: "crypto/keys/hd/BIP44Params",
   encode(message: BIP44Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.purpose !== 0) {
       writer.uint32(8).uint32(message.purpose);

@@ -326,6 +326,7 @@ function createBaseQueryDenomTraceRequest(): QueryDenomTraceRequest {
 }
 export const QueryDenomTraceRequest = {
   typeUrl: "/ibc.applications.transfer.v1.QueryDenomTraceRequest",
+  aminoType: "cosmos-sdk/QueryDenomTraceRequest",
   encode(message: QueryDenomTraceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.hash !== "") {
       writer.uint32(10).string(message.hash);
@@ -393,6 +394,7 @@ function createBaseQueryDenomTraceResponse(): QueryDenomTraceResponse {
 }
 export const QueryDenomTraceResponse = {
   typeUrl: "/ibc.applications.transfer.v1.QueryDenomTraceResponse",
+  aminoType: "cosmos-sdk/QueryDenomTraceResponse",
   encode(message: QueryDenomTraceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.denomTrace !== undefined) {
       DenomTrace.encode(message.denomTrace, writer.uint32(10).fork()).ldelim();
@@ -460,6 +462,7 @@ function createBaseQueryDenomTracesRequest(): QueryDenomTracesRequest {
 }
 export const QueryDenomTracesRequest = {
   typeUrl: "/ibc.applications.transfer.v1.QueryDenomTracesRequest",
+  aminoType: "cosmos-sdk/QueryDenomTracesRequest",
   encode(message: QueryDenomTracesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -528,6 +531,7 @@ function createBaseQueryDenomTracesResponse(): QueryDenomTracesResponse {
 }
 export const QueryDenomTracesResponse = {
   typeUrl: "/ibc.applications.transfer.v1.QueryDenomTracesResponse",
+  aminoType: "cosmos-sdk/QueryDenomTracesResponse",
   encode(message: QueryDenomTracesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.denomTraces) {
       DenomTrace.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -606,6 +610,7 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 export const QueryParamsRequest = {
   typeUrl: "/ibc.applications.transfer.v1.QueryParamsRequest",
+  aminoType: "cosmos-sdk/QueryParamsRequest",
   encode(_: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -663,6 +668,7 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 export const QueryParamsResponse = {
   typeUrl: "/ibc.applications.transfer.v1.QueryParamsResponse",
+  aminoType: "cosmos-sdk/QueryParamsResponse",
   encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -730,6 +736,7 @@ function createBaseQueryDenomHashRequest(): QueryDenomHashRequest {
 }
 export const QueryDenomHashRequest = {
   typeUrl: "/ibc.applications.transfer.v1.QueryDenomHashRequest",
+  aminoType: "cosmos-sdk/QueryDenomHashRequest",
   encode(message: QueryDenomHashRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.trace !== "") {
       writer.uint32(10).string(message.trace);
@@ -797,6 +804,7 @@ function createBaseQueryDenomHashResponse(): QueryDenomHashResponse {
 }
 export const QueryDenomHashResponse = {
   typeUrl: "/ibc.applications.transfer.v1.QueryDenomHashResponse",
+  aminoType: "cosmos-sdk/QueryDenomHashResponse",
   encode(message: QueryDenomHashResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.hash !== "") {
       writer.uint32(10).string(message.hash);
@@ -865,6 +873,7 @@ function createBaseQueryEscrowAddressRequest(): QueryEscrowAddressRequest {
 }
 export const QueryEscrowAddressRequest = {
   typeUrl: "/ibc.applications.transfer.v1.QueryEscrowAddressRequest",
+  aminoType: "cosmos-sdk/QueryEscrowAddressRequest",
   encode(message: QueryEscrowAddressRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
@@ -941,6 +950,7 @@ function createBaseQueryEscrowAddressResponse(): QueryEscrowAddressResponse {
 }
 export const QueryEscrowAddressResponse = {
   typeUrl: "/ibc.applications.transfer.v1.QueryEscrowAddressResponse",
+  aminoType: "cosmos-sdk/QueryEscrowAddressResponse",
   encode(message: QueryEscrowAddressResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.escrowAddress !== "") {
       writer.uint32(10).string(message.escrowAddress);
@@ -1008,6 +1018,7 @@ function createBaseQueryTotalEscrowForDenomRequest(): QueryTotalEscrowForDenomRe
 }
 export const QueryTotalEscrowForDenomRequest = {
   typeUrl: "/ibc.applications.transfer.v1.QueryTotalEscrowForDenomRequest",
+  aminoType: "cosmos-sdk/QueryTotalEscrowForDenomRequest",
   encode(message: QueryTotalEscrowForDenomRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
@@ -1075,6 +1086,7 @@ function createBaseQueryTotalEscrowForDenomResponse(): QueryTotalEscrowForDenomR
 }
 export const QueryTotalEscrowForDenomResponse = {
   typeUrl: "/ibc.applications.transfer.v1.QueryTotalEscrowForDenomResponse",
+  aminoType: "cosmos-sdk/QueryTotalEscrowForDenomResponse",
   encode(message: QueryTotalEscrowForDenomResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.amount !== undefined) {
       Coin.encode(message.amount, writer.uint32(10).fork()).ldelim();

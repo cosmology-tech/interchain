@@ -161,6 +161,7 @@ function createBasePermissions(): Permissions {
 }
 export const Permissions = {
   typeUrl: "/cosmos.circuit.v1.Permissions",
+  aminoType: "cosmos-sdk/Permissions",
   encode(message: Permissions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.level !== 0) {
       writer.uint32(8).int32(message.level);
@@ -242,6 +243,7 @@ function createBaseGenesisAccountPermissions(): GenesisAccountPermissions {
 }
 export const GenesisAccountPermissions = {
   typeUrl: "/cosmos.circuit.v1.GenesisAccountPermissions",
+  aminoType: "cosmos-sdk/GenesisAccountPermissions",
   encode(message: GenesisAccountPermissions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -319,6 +321,7 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/cosmos.circuit.v1.GenesisState",
+  aminoType: "cosmos-sdk/GenesisState",
   encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.accountPermissions) {
       GenesisAccountPermissions.encode(v!, writer.uint32(10).fork()).ldelim();

@@ -35,6 +35,7 @@ function createBaseInterchainAccount(): InterchainAccount {
 }
 export const InterchainAccount = {
   typeUrl: "/ibc.applications.interchain_accounts.v1.InterchainAccount",
+  aminoType: "cosmos-sdk/InterchainAccount",
   encode(message: InterchainAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.baseAccount !== undefined) {
       BaseAccount.encode(message.baseAccount, writer.uint32(10).fork()).ldelim();

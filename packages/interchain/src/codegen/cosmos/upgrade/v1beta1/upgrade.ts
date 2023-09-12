@@ -237,6 +237,7 @@ function createBasePlan(): Plan {
 }
 export const Plan = {
   typeUrl: "/cosmos.upgrade.v1beta1.Plan",
+  aminoType: "cosmos-sdk/Plan",
   encode(message: Plan, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -343,6 +344,7 @@ function createBaseSoftwareUpgradeProposal(): SoftwareUpgradeProposal {
 }
 export const SoftwareUpgradeProposal = {
   typeUrl: "/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal",
+  aminoType: "cosmos-sdk/SoftwareUpgradeProposal",
   encode(message: SoftwareUpgradeProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
@@ -430,6 +432,7 @@ function createBaseCancelSoftwareUpgradeProposal(): CancelSoftwareUpgradeProposa
 }
 export const CancelSoftwareUpgradeProposal = {
   typeUrl: "/cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal",
+  aminoType: "cosmos-sdk/CancelSoftwareUpgradeProposal",
   encode(message: CancelSoftwareUpgradeProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
@@ -507,6 +510,7 @@ function createBaseModuleVersion(): ModuleVersion {
 }
 export const ModuleVersion = {
   typeUrl: "/cosmos.upgrade.v1beta1.ModuleVersion",
+  aminoType: "cosmos-sdk/ModuleVersion",
   encode(message: ModuleVersion, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);

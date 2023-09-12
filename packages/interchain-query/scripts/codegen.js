@@ -7,6 +7,7 @@ const protoDirs = [
   join(__dirname, "/../../../protos/ibc-go/proto"),
   join(__dirname, "/../../../protos/ics23/proto"),
   join(__dirname, "/../../../protos/proto"),
+  join(__dirname, "/../../../protos/wasmd/proto"),
 ].map((a) => resolve(a));
 
 const outPath = join(__dirname, "../src/codegen");
@@ -30,6 +31,7 @@ telescope({
         "cosmos/gov/v1beta1/tx.ts",
         "cosmos/group/v1/tx.ts",
         "cosmos/group/v1/types.ts",
+        "cosmwasm/wasm/v1/authz.ts",
       ],
     },
     interfaces: {

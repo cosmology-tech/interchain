@@ -89,6 +89,7 @@ function createBaseListenFinalizeBlockRequest(): ListenFinalizeBlockRequest {
 }
 export const ListenFinalizeBlockRequest = {
   typeUrl: "/cosmos.store.streaming.abci.ListenFinalizeBlockRequest",
+  aminoType: "cosmos-sdk/ListenFinalizeBlockRequest",
   encode(message: ListenFinalizeBlockRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.req !== undefined) {
       RequestFinalizeBlock.encode(message.req, writer.uint32(10).fork()).ldelim();
@@ -163,6 +164,7 @@ function createBaseListenFinalizeBlockResponse(): ListenFinalizeBlockResponse {
 }
 export const ListenFinalizeBlockResponse = {
   typeUrl: "/cosmos.store.streaming.abci.ListenFinalizeBlockResponse",
+  aminoType: "cosmos-sdk/ListenFinalizeBlockResponse",
   encode(_: ListenFinalizeBlockResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -222,6 +224,7 @@ function createBaseListenCommitRequest(): ListenCommitRequest {
 }
 export const ListenCommitRequest = {
   typeUrl: "/cosmos.store.streaming.abci.ListenCommitRequest",
+  aminoType: "cosmos-sdk/ListenCommitRequest",
   encode(message: ListenCommitRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.blockHeight.isZero()) {
       writer.uint32(8).int64(message.blockHeight);
@@ -309,6 +312,7 @@ function createBaseListenCommitResponse(): ListenCommitResponse {
 }
 export const ListenCommitResponse = {
   typeUrl: "/cosmos.store.streaming.abci.ListenCommitResponse",
+  aminoType: "cosmos-sdk/ListenCommitResponse",
   encode(_: ListenCommitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },

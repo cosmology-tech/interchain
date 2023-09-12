@@ -264,6 +264,7 @@ function createBaseMsgSend(): MsgSend {
 }
 export const MsgSend = {
   typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+  aminoType: "cosmos-sdk/MsgSend",
   encode(message: MsgSend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.fromAddress !== "") {
       writer.uint32(10).string(message.fromAddress);
@@ -351,6 +352,7 @@ function createBaseMsgSendResponse(): MsgSendResponse {
 }
 export const MsgSendResponse = {
   typeUrl: "/cosmos.bank.v1beta1.MsgSendResponse",
+  aminoType: "cosmos-sdk/MsgSendResponse",
   encode(_: MsgSendResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -409,6 +411,7 @@ function createBaseMsgMultiSend(): MsgMultiSend {
 }
 export const MsgMultiSend = {
   typeUrl: "/cosmos.bank.v1beta1.MsgMultiSend",
+  aminoType: "cosmos-sdk/MsgMultiSend",
   encode(message: MsgMultiSend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.inputs) {
       Input.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -491,6 +494,7 @@ function createBaseMsgMultiSendResponse(): MsgMultiSendResponse {
 }
 export const MsgMultiSendResponse = {
   typeUrl: "/cosmos.bank.v1beta1.MsgMultiSendResponse",
+  aminoType: "cosmos-sdk/MsgMultiSendResponse",
   encode(_: MsgMultiSendResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -549,6 +553,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/cosmos.bank.v1beta1.MsgUpdateParams",
+  aminoType: "cosmos-sdk/x/bank/MsgUpdateParams",
   encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -623,6 +628,7 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/cosmos.bank.v1beta1.MsgUpdateParamsResponse",
+  aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
   encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -682,6 +688,7 @@ function createBaseMsgSetSendEnabled(): MsgSetSendEnabled {
 }
 export const MsgSetSendEnabled = {
   typeUrl: "/cosmos.bank.v1beta1.MsgSetSendEnabled",
+  aminoType: "cosmos-sdk/MsgSetSendEnabled",
   encode(message: MsgSetSendEnabled, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -773,6 +780,7 @@ function createBaseMsgSetSendEnabledResponse(): MsgSetSendEnabledResponse {
 }
 export const MsgSetSendEnabledResponse = {
   typeUrl: "/cosmos.bank.v1beta1.MsgSetSendEnabledResponse",
+  aminoType: "cosmos-sdk/MsgSetSendEnabledResponse",
   encode(_: MsgSetSendEnabledResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },

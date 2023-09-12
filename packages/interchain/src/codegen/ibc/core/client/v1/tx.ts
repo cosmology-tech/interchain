@@ -313,6 +313,7 @@ function createBaseMsgCreateClient(): MsgCreateClient {
 }
 export const MsgCreateClient = {
   typeUrl: "/ibc.core.client.v1.MsgCreateClient",
+  aminoType: "cosmos-sdk/MsgCreateClient",
   encode(message: MsgCreateClient, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientState !== undefined) {
       Any.encode(message.clientState, writer.uint32(10).fork()).ldelim();
@@ -396,6 +397,7 @@ function createBaseMsgCreateClientResponse(): MsgCreateClientResponse {
 }
 export const MsgCreateClientResponse = {
   typeUrl: "/ibc.core.client.v1.MsgCreateClientResponse",
+  aminoType: "cosmos-sdk/MsgCreateClientResponse",
   encode(_: MsgCreateClientResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -455,6 +457,7 @@ function createBaseMsgUpdateClient(): MsgUpdateClient {
 }
 export const MsgUpdateClient = {
   typeUrl: "/ibc.core.client.v1.MsgUpdateClient",
+  aminoType: "cosmos-sdk/MsgUpdateClient",
   encode(message: MsgUpdateClient, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -538,6 +541,7 @@ function createBaseMsgUpdateClientResponse(): MsgUpdateClientResponse {
 }
 export const MsgUpdateClientResponse = {
   typeUrl: "/ibc.core.client.v1.MsgUpdateClientResponse",
+  aminoType: "cosmos-sdk/MsgUpdateClientResponse",
   encode(_: MsgUpdateClientResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -600,6 +604,7 @@ function createBaseMsgUpgradeClient(): MsgUpgradeClient {
 }
 export const MsgUpgradeClient = {
   typeUrl: "/ibc.core.client.v1.MsgUpgradeClient",
+  aminoType: "cosmos-sdk/MsgUpgradeClient",
   encode(message: MsgUpgradeClient, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -710,6 +715,7 @@ function createBaseMsgUpgradeClientResponse(): MsgUpgradeClientResponse {
 }
 export const MsgUpgradeClientResponse = {
   typeUrl: "/ibc.core.client.v1.MsgUpgradeClientResponse",
+  aminoType: "cosmos-sdk/MsgUpgradeClientResponse",
   encode(_: MsgUpgradeClientResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -769,6 +775,7 @@ function createBaseMsgSubmitMisbehaviour(): MsgSubmitMisbehaviour {
 }
 export const MsgSubmitMisbehaviour = {
   typeUrl: "/ibc.core.client.v1.MsgSubmitMisbehaviour",
+  aminoType: "cosmos-sdk/MsgSubmitMisbehaviour",
   encode(message: MsgSubmitMisbehaviour, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -852,6 +859,7 @@ function createBaseMsgSubmitMisbehaviourResponse(): MsgSubmitMisbehaviourRespons
 }
 export const MsgSubmitMisbehaviourResponse = {
   typeUrl: "/ibc.core.client.v1.MsgSubmitMisbehaviourResponse",
+  aminoType: "cosmos-sdk/MsgSubmitMisbehaviourResponse",
   encode(_: MsgSubmitMisbehaviourResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -910,6 +918,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/ibc.core.client.v1.MsgUpdateParams",
+  aminoType: "cosmos-sdk/MsgUpdateParams",
   encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -984,6 +993,7 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/ibc.core.client.v1.MsgUpdateParamsResponse",
+  aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
   encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },

@@ -48,6 +48,7 @@ function createBaseModule(): Module {
 }
 export const Module = {
   typeUrl: "/cosmos.group.module.v1.Module",
+  aminoType: "cosmos-sdk/Module",
   encode(message: Module, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.maxExecutionPeriod !== undefined) {
       Duration.encode(message.maxExecutionPeriod, writer.uint32(10).fork()).ldelim();

@@ -455,6 +455,7 @@ function createBaseMsgSetWithdrawAddress(): MsgSetWithdrawAddress {
 }
 export const MsgSetWithdrawAddress = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgSetWithdrawAddress",
+  aminoType: "cosmos-sdk/MsgModifyWithdrawAddress",
   encode(message: MsgSetWithdrawAddress, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -529,6 +530,7 @@ function createBaseMsgSetWithdrawAddressResponse(): MsgSetWithdrawAddressRespons
 }
 export const MsgSetWithdrawAddressResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgSetWithdrawAddressResponse",
+  aminoType: "cosmos-sdk/MsgSetWithdrawAddressResponse",
   encode(_: MsgSetWithdrawAddressResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -587,6 +589,7 @@ function createBaseMsgWithdrawDelegatorReward(): MsgWithdrawDelegatorReward {
 }
 export const MsgWithdrawDelegatorReward = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward",
+  aminoType: "cosmos-sdk/MsgWithdrawDelegationReward",
   encode(message: MsgWithdrawDelegatorReward, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -663,6 +666,7 @@ function createBaseMsgWithdrawDelegatorRewardResponse(): MsgWithdrawDelegatorRew
 }
 export const MsgWithdrawDelegatorRewardResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorRewardResponse",
+  aminoType: "cosmos-sdk/MsgWithdrawDelegatorRewardResponse",
   encode(message: MsgWithdrawDelegatorRewardResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -734,6 +738,7 @@ function createBaseMsgWithdrawValidatorCommission(): MsgWithdrawValidatorCommiss
 }
 export const MsgWithdrawValidatorCommission = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission",
+  aminoType: "cosmos-sdk/MsgWithdrawValidatorCommission",
   encode(message: MsgWithdrawValidatorCommission, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.validatorAddress !== "") {
       writer.uint32(10).string(message.validatorAddress);
@@ -801,6 +806,7 @@ function createBaseMsgWithdrawValidatorCommissionResponse(): MsgWithdrawValidato
 }
 export const MsgWithdrawValidatorCommissionResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommissionResponse",
+  aminoType: "cosmos-sdk/MsgWithdrawValidatorCommissionResponse",
   encode(message: MsgWithdrawValidatorCommissionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -873,6 +879,7 @@ function createBaseMsgFundCommunityPool(): MsgFundCommunityPool {
 }
 export const MsgFundCommunityPool = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgFundCommunityPool",
+  aminoType: "cosmos-sdk/MsgFundCommunityPool",
   encode(message: MsgFundCommunityPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -951,6 +958,7 @@ function createBaseMsgFundCommunityPoolResponse(): MsgFundCommunityPoolResponse 
 }
 export const MsgFundCommunityPoolResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgFundCommunityPoolResponse",
+  aminoType: "cosmos-sdk/MsgFundCommunityPoolResponse",
   encode(_: MsgFundCommunityPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -1009,6 +1017,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgUpdateParams",
+  aminoType: "cosmos-sdk/distribution/MsgUpdateParams",
   encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -1083,6 +1092,7 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgUpdateParamsResponse",
+  aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
   encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -1142,6 +1152,7 @@ function createBaseMsgCommunityPoolSpend(): MsgCommunityPoolSpend {
 }
 export const MsgCommunityPoolSpend = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgCommunityPoolSpend",
+  aminoType: "cosmos-sdk/distr/MsgCommunityPoolSpend",
   encode(message: MsgCommunityPoolSpend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -1229,6 +1240,7 @@ function createBaseMsgCommunityPoolSpendResponse(): MsgCommunityPoolSpendRespons
 }
 export const MsgCommunityPoolSpendResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgCommunityPoolSpendResponse",
+  aminoType: "cosmos-sdk/MsgCommunityPoolSpendResponse",
   encode(_: MsgCommunityPoolSpendResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -1288,6 +1300,7 @@ function createBaseMsgDepositValidatorRewardsPool(): MsgDepositValidatorRewardsP
 }
 export const MsgDepositValidatorRewardsPool = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgDepositValidatorRewardsPool",
+  aminoType: "cosmos-sdk/distr/MsgDepositValRewards",
   encode(message: MsgDepositValidatorRewardsPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.depositor !== "") {
       writer.uint32(10).string(message.depositor);
@@ -1375,6 +1388,7 @@ function createBaseMsgDepositValidatorRewardsPoolResponse(): MsgDepositValidator
 }
 export const MsgDepositValidatorRewardsPoolResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgDepositValidatorRewardsPoolResponse",
+  aminoType: "cosmos-sdk/MsgDepositValidatorRewardsPoolResponse",
   encode(_: MsgDepositValidatorRewardsPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },

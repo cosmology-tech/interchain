@@ -160,6 +160,7 @@ function createBaseBaseAccount(): BaseAccount {
 }
 export const BaseAccount = {
   typeUrl: "/cosmos.auth.v1beta1.BaseAccount",
+  aminoType: "cosmos-sdk/BaseAccount",
   encode(message: BaseAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -257,6 +258,7 @@ function createBaseModuleAccount(): ModuleAccount {
 }
 export const ModuleAccount = {
   typeUrl: "/cosmos.auth.v1beta1.ModuleAccount",
+  aminoType: "cosmos-sdk/ModuleAccount",
   encode(message: ModuleAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.baseAccount !== undefined) {
       BaseAccount.encode(message.baseAccount, writer.uint32(10).fork()).ldelim();
@@ -347,6 +349,7 @@ function createBaseModuleCredential(): ModuleCredential {
 }
 export const ModuleCredential = {
   typeUrl: "/cosmos.auth.v1beta1.ModuleCredential",
+  aminoType: "cosmos-sdk/GroupAccountCredential",
   encode(message: ModuleCredential, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.moduleName !== "") {
       writer.uint32(10).string(message.moduleName);
@@ -431,6 +434,7 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/cosmos.auth.v1beta1.Params",
+  aminoType: "cosmos-sdk/x/auth/Params",
   encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.maxMemoCharacters.isZero()) {
       writer.uint32(8).uint64(message.maxMemoCharacters);

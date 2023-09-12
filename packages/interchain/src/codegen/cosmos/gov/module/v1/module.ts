@@ -41,6 +41,7 @@ function createBaseModule(): Module {
 }
 export const Module = {
   typeUrl: "/cosmos.gov.module.v1.Module",
+  aminoType: "cosmos-sdk/Module",
   encode(message: Module, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.maxMetadataLen.isZero()) {
       writer.uint32(8).uint64(message.maxMetadataLen);

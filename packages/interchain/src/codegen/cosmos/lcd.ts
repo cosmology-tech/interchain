@@ -46,6 +46,11 @@ export const createLCDClient = async ({
           requestClient
         })
       },
+      feegrant: {
+        v1beta1: new (await import("./feegrant/v1beta1/query.lcd")).LCDQueryClient({
+          requestClient
+        })
+      },
       gov: {
         v1: new (await import("./gov/v1/query.lcd")).LCDQueryClient({
           requestClient

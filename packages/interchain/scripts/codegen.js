@@ -7,6 +7,7 @@ const protoDirs = [
   join(__dirname, "/../../../protos/ibc-go/proto"),
   join(__dirname, "/../../../protos/ics23/proto"),
   join(__dirname, "/../../../protos/proto"),
+  join(__dirname, "/../../../protos/wasmd/proto"),
 ].map((a) => resolve(a));
 
 const outPath = join(__dirname, "/../src/codegen");
@@ -37,6 +38,7 @@ telescope({
 
       addTypeUrlToObjects: true,
       addTypeUrlToDecoders: true,
+      addAminoTypeToObjects: true,
 
       excluded: {
         packages: [
@@ -52,9 +54,9 @@ telescope({
           "cosmos.base.tendermint.v1beta1",
           "cosmos.crisis.v1beta1",
           "cosmos.evidence.v1beta1",
-          "cosmos.feegrant.v1beta1",
+          // "cosmos.feegrant.v1beta1",
           "cosmos.genutil.v1beta1",
-          "cosmos.group.v1beta1",
+          // "cosmos.group.v1beta1",
 
           // 'cosmos.mint.v1beta1',
 
@@ -67,7 +69,7 @@ telescope({
           "cosmos.orm.v1alpha1",
           "cosmos.orm.v1",
           "cosmos.slashing.v1beta1",
-          "cosmos.vesting.v1beta1",
+          // "cosmos.vesting.v1beta1",
           "google.api",
           "ibc.core.port.v1",
           "ibc.core.types.v1",

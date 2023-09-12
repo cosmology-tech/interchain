@@ -104,6 +104,7 @@ function createBaseConfigRequest(): ConfigRequest {
 }
 export const ConfigRequest = {
   typeUrl: "/cosmos.base.node.v1beta1.ConfigRequest",
+  aminoType: "cosmos-sdk/ConfigRequest",
   encode(_: ConfigRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -163,6 +164,7 @@ function createBaseConfigResponse(): ConfigResponse {
 }
 export const ConfigResponse = {
   typeUrl: "/cosmos.base.node.v1beta1.ConfigResponse",
+  aminoType: "cosmos-sdk/ConfigResponse",
   encode(message: ConfigResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.minimumGasPrice !== "") {
       writer.uint32(10).string(message.minimumGasPrice);
@@ -246,6 +248,7 @@ function createBaseStatusRequest(): StatusRequest {
 }
 export const StatusRequest = {
   typeUrl: "/cosmos.base.node.v1beta1.StatusRequest",
+  aminoType: "cosmos-sdk/StatusRequest",
   encode(_: StatusRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -307,6 +310,7 @@ function createBaseStatusResponse(): StatusResponse {
 }
 export const StatusResponse = {
   typeUrl: "/cosmos.base.node.v1beta1.StatusResponse",
+  aminoType: "cosmos-sdk/StatusResponse",
   encode(message: StatusResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.earliestStoreHeight.isZero()) {
       writer.uint32(8).uint64(message.earliestStoreHeight);

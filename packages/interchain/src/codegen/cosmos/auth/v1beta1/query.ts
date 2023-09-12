@@ -622,6 +622,7 @@ function createBaseQueryAccountsRequest(): QueryAccountsRequest {
 }
 export const QueryAccountsRequest = {
   typeUrl: "/cosmos.auth.v1beta1.QueryAccountsRequest",
+  aminoType: "cosmos-sdk/QueryAccountsRequest",
   encode(message: QueryAccountsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -690,6 +691,7 @@ function createBaseQueryAccountsResponse(): QueryAccountsResponse {
 }
 export const QueryAccountsResponse = {
   typeUrl: "/cosmos.auth.v1beta1.QueryAccountsResponse",
+  aminoType: "cosmos-sdk/QueryAccountsResponse",
   encode(message: QueryAccountsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.accounts) {
       Any.encode((v! as Any), writer.uint32(10).fork()).ldelim();
@@ -770,6 +772,7 @@ function createBaseQueryAccountRequest(): QueryAccountRequest {
 }
 export const QueryAccountRequest = {
   typeUrl: "/cosmos.auth.v1beta1.QueryAccountRequest",
+  aminoType: "cosmos-sdk/QueryAccountRequest",
   encode(message: QueryAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -837,6 +840,7 @@ function createBaseQueryAccountResponse(): QueryAccountResponse {
 }
 export const QueryAccountResponse = {
   typeUrl: "/cosmos.auth.v1beta1.QueryAccountResponse",
+  aminoType: "cosmos-sdk/QueryAccountResponse",
   encode(message: QueryAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.account !== undefined) {
       Any.encode((message.account as Any), writer.uint32(10).fork()).ldelim();
@@ -902,6 +906,7 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 export const QueryParamsRequest = {
   typeUrl: "/cosmos.auth.v1beta1.QueryParamsRequest",
+  aminoType: "cosmos-sdk/QueryParamsRequest",
   encode(_: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -959,6 +964,7 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 export const QueryParamsResponse = {
   typeUrl: "/cosmos.auth.v1beta1.QueryParamsResponse",
+  aminoType: "cosmos-sdk/QueryParamsResponse",
   encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -1024,6 +1030,7 @@ function createBaseQueryModuleAccountsRequest(): QueryModuleAccountsRequest {
 }
 export const QueryModuleAccountsRequest = {
   typeUrl: "/cosmos.auth.v1beta1.QueryModuleAccountsRequest",
+  aminoType: "cosmos-sdk/QueryModuleAccountsRequest",
   encode(_: QueryModuleAccountsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -1081,6 +1088,7 @@ function createBaseQueryModuleAccountsResponse(): QueryModuleAccountsResponse {
 }
 export const QueryModuleAccountsResponse = {
   typeUrl: "/cosmos.auth.v1beta1.QueryModuleAccountsResponse",
+  aminoType: "cosmos-sdk/QueryModuleAccountsResponse",
   encode(message: QueryModuleAccountsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.accounts) {
       Any.encode((v! as Any), writer.uint32(10).fork()).ldelim();
@@ -1152,6 +1160,7 @@ function createBaseQueryModuleAccountByNameRequest(): QueryModuleAccountByNameRe
 }
 export const QueryModuleAccountByNameRequest = {
   typeUrl: "/cosmos.auth.v1beta1.QueryModuleAccountByNameRequest",
+  aminoType: "cosmos-sdk/QueryModuleAccountByNameRequest",
   encode(message: QueryModuleAccountByNameRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -1219,6 +1228,7 @@ function createBaseQueryModuleAccountByNameResponse(): QueryModuleAccountByNameR
 }
 export const QueryModuleAccountByNameResponse = {
   typeUrl: "/cosmos.auth.v1beta1.QueryModuleAccountByNameResponse",
+  aminoType: "cosmos-sdk/QueryModuleAccountByNameResponse",
   encode(message: QueryModuleAccountByNameResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.account !== undefined) {
       Any.encode((message.account as Any), writer.uint32(10).fork()).ldelim();
@@ -1284,6 +1294,7 @@ function createBaseBech32PrefixRequest(): Bech32PrefixRequest {
 }
 export const Bech32PrefixRequest = {
   typeUrl: "/cosmos.auth.v1beta1.Bech32PrefixRequest",
+  aminoType: "cosmos-sdk/Bech32PrefixRequest",
   encode(_: Bech32PrefixRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -1341,6 +1352,7 @@ function createBaseBech32PrefixResponse(): Bech32PrefixResponse {
 }
 export const Bech32PrefixResponse = {
   typeUrl: "/cosmos.auth.v1beta1.Bech32PrefixResponse",
+  aminoType: "cosmos-sdk/Bech32PrefixResponse",
   encode(message: Bech32PrefixResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bech32Prefix !== "") {
       writer.uint32(10).string(message.bech32Prefix);
@@ -1408,6 +1420,7 @@ function createBaseAddressBytesToStringRequest(): AddressBytesToStringRequest {
 }
 export const AddressBytesToStringRequest = {
   typeUrl: "/cosmos.auth.v1beta1.AddressBytesToStringRequest",
+  aminoType: "cosmos-sdk/AddressBytesToStringRequest",
   encode(message: AddressBytesToStringRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.addressBytes.length !== 0) {
       writer.uint32(10).bytes(message.addressBytes);
@@ -1475,6 +1488,7 @@ function createBaseAddressBytesToStringResponse(): AddressBytesToStringResponse 
 }
 export const AddressBytesToStringResponse = {
   typeUrl: "/cosmos.auth.v1beta1.AddressBytesToStringResponse",
+  aminoType: "cosmos-sdk/AddressBytesToStringResponse",
   encode(message: AddressBytesToStringResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.addressString !== "") {
       writer.uint32(10).string(message.addressString);
@@ -1542,6 +1556,7 @@ function createBaseAddressStringToBytesRequest(): AddressStringToBytesRequest {
 }
 export const AddressStringToBytesRequest = {
   typeUrl: "/cosmos.auth.v1beta1.AddressStringToBytesRequest",
+  aminoType: "cosmos-sdk/AddressStringToBytesRequest",
   encode(message: AddressStringToBytesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.addressString !== "") {
       writer.uint32(10).string(message.addressString);
@@ -1609,6 +1624,7 @@ function createBaseAddressStringToBytesResponse(): AddressStringToBytesResponse 
 }
 export const AddressStringToBytesResponse = {
   typeUrl: "/cosmos.auth.v1beta1.AddressStringToBytesResponse",
+  aminoType: "cosmos-sdk/AddressStringToBytesResponse",
   encode(message: AddressStringToBytesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.addressBytes.length !== 0) {
       writer.uint32(10).bytes(message.addressBytes);
@@ -1677,6 +1693,7 @@ function createBaseQueryAccountAddressByIDRequest(): QueryAccountAddressByIDRequ
 }
 export const QueryAccountAddressByIDRequest = {
   typeUrl: "/cosmos.auth.v1beta1.QueryAccountAddressByIDRequest",
+  aminoType: "cosmos-sdk/QueryAccountAddressByIDRequest",
   encode(message: QueryAccountAddressByIDRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.id.isZero()) {
       writer.uint32(8).int64(message.id);
@@ -1753,6 +1770,7 @@ function createBaseQueryAccountAddressByIDResponse(): QueryAccountAddressByIDRes
 }
 export const QueryAccountAddressByIDResponse = {
   typeUrl: "/cosmos.auth.v1beta1.QueryAccountAddressByIDResponse",
+  aminoType: "cosmos-sdk/QueryAccountAddressByIDResponse",
   encode(message: QueryAccountAddressByIDResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
@@ -1820,6 +1838,7 @@ function createBaseQueryAccountInfoRequest(): QueryAccountInfoRequest {
 }
 export const QueryAccountInfoRequest = {
   typeUrl: "/cosmos.auth.v1beta1.QueryAccountInfoRequest",
+  aminoType: "cosmos-sdk/QueryAccountInfoRequest",
   encode(message: QueryAccountInfoRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -1887,6 +1906,7 @@ function createBaseQueryAccountInfoResponse(): QueryAccountInfoResponse {
 }
 export const QueryAccountInfoResponse = {
   typeUrl: "/cosmos.auth.v1beta1.QueryAccountInfoResponse",
+  aminoType: "cosmos-sdk/QueryAccountInfoResponse",
   encode(message: QueryAccountInfoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.info !== undefined) {
       BaseAccount.encode(message.info, writer.uint32(10).fork()).ldelim();

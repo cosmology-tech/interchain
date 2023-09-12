@@ -74,6 +74,7 @@ function createBaseMetadata(): Metadata {
 }
 export const Metadata = {
   typeUrl: "/ibc.applications.interchain_accounts.v1.Metadata",
+  aminoType: "cosmos-sdk/Metadata",
   encode(message: Metadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.version !== "") {
       writer.uint32(10).string(message.version);

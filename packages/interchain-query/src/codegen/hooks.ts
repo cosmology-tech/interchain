@@ -28,6 +28,7 @@ import * as _IbcApplicationsTransferV1Queryrpc from "./ibc/applications/transfer
 import * as _IbcCoreChannelV1Queryrpc from "./ibc/core/channel/v1/query.rpc.Query";
 import * as _IbcCoreClientV1Queryrpc from "./ibc/core/client/v1/query.rpc.Query";
 import * as _IbcCoreConnectionV1Queryrpc from "./ibc/core/connection/v1/query.rpc.Query";
+import * as _CosmwasmWasmV1Queryrpc from "./cosmwasm/wasm/v1/query.rpc.Query";
 export const createRpcQueryHooks = ({
   rpc
 }: {
@@ -131,6 +132,11 @@ export const createRpcQueryHooks = ({
         connection: {
           v1: _IbcCoreConnectionV1Queryrpc.createRpcQueryHooks(rpc)
         }
+      }
+    },
+    cosmwasm: {
+      wasm: {
+        v1: _CosmwasmWasmV1Queryrpc.createRpcQueryHooks(rpc)
       }
     }
   };

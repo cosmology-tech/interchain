@@ -77,6 +77,7 @@ yarn.lock
 /ibc
 /google
 /gogoproto
+/cosmwasm
 /cosmos_proto
 /cosmos
 /capability

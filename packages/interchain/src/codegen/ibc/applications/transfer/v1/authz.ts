@@ -81,6 +81,7 @@ function createBaseAllocation(): Allocation {
 }
 export const Allocation = {
   typeUrl: "/ibc.applications.transfer.v1.Allocation",
+  aminoType: "cosmos-sdk/Allocation",
   encode(message: Allocation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.sourcePort !== "") {
       writer.uint32(10).string(message.sourcePort);
@@ -184,6 +185,7 @@ function createBaseTransferAuthorization(): TransferAuthorization {
 }
 export const TransferAuthorization = {
   typeUrl: "/ibc.applications.transfer.v1.TransferAuthorization",
+  aminoType: "cosmos-sdk/TransferAuthorization",
   encode(message: TransferAuthorization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.allocations) {
       Allocation.encode(v!, writer.uint32(10).fork()).ldelim();

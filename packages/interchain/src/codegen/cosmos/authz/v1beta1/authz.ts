@@ -4,6 +4,7 @@ import { Timestamp } from "../../../google/protobuf/timestamp";
 import { SendAuthorization, SendAuthorizationProtoMsg, SendAuthorizationSDKType } from "../../bank/v1beta1/authz";
 import { StakeAuthorization, StakeAuthorizationProtoMsg, StakeAuthorizationSDKType } from "../../staking/v1beta1/authz";
 import { TransferAuthorization, TransferAuthorizationProtoMsg, TransferAuthorizationSDKType } from "../../../ibc/applications/transfer/v1/authz";
+import { ContractExecutionAuthorization, ContractExecutionAuthorizationProtoMsg, ContractExecutionAuthorizationSDKType, ContractMigrationAuthorization, ContractMigrationAuthorizationProtoMsg, ContractMigrationAuthorizationSDKType } from "../../../cosmwasm/wasm/v1/authz";
 import * as _m0 from "protobufjs/minimal";
 import { DeepPartial, toTimestamp, fromTimestamp } from "../../../helpers";
 /**
@@ -44,7 +45,7 @@ export interface GenericAuthorizationSDKType {
  * the provide method with expiration time.
  */
 export interface Grant {
-  authorization: GenericAuthorization | SendAuthorization | StakeAuthorization | TransferAuthorization | Any | undefined;
+  authorization: GenericAuthorization | SendAuthorization | StakeAuthorization | TransferAuthorization | ContractExecutionAuthorization | ContractMigrationAuthorization | Any | undefined;
   /**
    * time when the grant will expire and will be pruned. If null, then the grant
    * doesn't have a time expiration (other conditions  in `authorization`
@@ -57,7 +58,7 @@ export interface GrantProtoMsg {
   value: Uint8Array;
 }
 export type GrantEncoded = Omit<Grant, "authorization"> & {
-  authorization?: GenericAuthorizationProtoMsg | SendAuthorizationProtoMsg | StakeAuthorizationProtoMsg | TransferAuthorizationProtoMsg | AnyProtoMsg | undefined;
+  authorization?: GenericAuthorizationProtoMsg | SendAuthorizationProtoMsg | StakeAuthorizationProtoMsg | TransferAuthorizationProtoMsg | ContractExecutionAuthorizationProtoMsg | ContractMigrationAuthorizationProtoMsg | AnyProtoMsg | undefined;
 };
 /**
  * Grant gives permissions to execute
@@ -81,7 +82,7 @@ export interface GrantAminoMsg {
  * the provide method with expiration time.
  */
 export interface GrantSDKType {
-  authorization: GenericAuthorizationSDKType | SendAuthorizationSDKType | StakeAuthorizationSDKType | TransferAuthorizationSDKType | AnySDKType | undefined;
+  authorization: GenericAuthorizationSDKType | SendAuthorizationSDKType | StakeAuthorizationSDKType | TransferAuthorizationSDKType | ContractExecutionAuthorizationSDKType | ContractMigrationAuthorizationSDKType | AnySDKType | undefined;
   expiration?: Date;
 }
 /**
@@ -91,7 +92,7 @@ export interface GrantSDKType {
 export interface GrantAuthorization {
   granter: string;
   grantee: string;
-  authorization: GenericAuthorization | SendAuthorization | StakeAuthorization | TransferAuthorization | Any | undefined;
+  authorization: GenericAuthorization | SendAuthorization | StakeAuthorization | TransferAuthorization | ContractExecutionAuthorization | ContractMigrationAuthorization | Any | undefined;
   expiration: Date;
 }
 export interface GrantAuthorizationProtoMsg {
@@ -99,7 +100,7 @@ export interface GrantAuthorizationProtoMsg {
   value: Uint8Array;
 }
 export type GrantAuthorizationEncoded = Omit<GrantAuthorization, "authorization"> & {
-  authorization?: GenericAuthorizationProtoMsg | SendAuthorizationProtoMsg | StakeAuthorizationProtoMsg | TransferAuthorizationProtoMsg | AnyProtoMsg | undefined;
+  authorization?: GenericAuthorizationProtoMsg | SendAuthorizationProtoMsg | StakeAuthorizationProtoMsg | TransferAuthorizationProtoMsg | ContractExecutionAuthorizationProtoMsg | ContractMigrationAuthorizationProtoMsg | AnyProtoMsg | undefined;
 };
 /**
  * GrantAuthorization extends a grant with both the addresses of the grantee and granter.
@@ -122,7 +123,7 @@ export interface GrantAuthorizationAminoMsg {
 export interface GrantAuthorizationSDKType {
   granter: string;
   grantee: string;
-  authorization: GenericAuthorizationSDKType | SendAuthorizationSDKType | StakeAuthorizationSDKType | TransferAuthorizationSDKType | AnySDKType | undefined;
+  authorization: GenericAuthorizationSDKType | SendAuthorizationSDKType | StakeAuthorizationSDKType | TransferAuthorizationSDKType | ContractExecutionAuthorizationSDKType | ContractMigrationAuthorizationSDKType | AnySDKType | undefined;
   expiration: Date;
 }
 /** GrantQueueItem contains the list of TypeURL of a sdk.Msg. */
@@ -155,6 +156,7 @@ function createBaseGenericAuthorization(): GenericAuthorization {
 }
 export const GenericAuthorization = {
   typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
+  aminoType: "cosmos-sdk/GenericAuthorization",
   encode(message: GenericAuthorization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.msg !== "") {
       writer.uint32(10).string(message.msg);
@@ -223,6 +225,7 @@ function createBaseGrant(): Grant {
 }
 export const Grant = {
   typeUrl: "/cosmos.authz.v1beta1.Grant",
+  aminoType: "cosmos-sdk/Grant",
   encode(message: Grant, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authorization !== undefined) {
       Any.encode((message.authorization as Any), writer.uint32(10).fork()).ldelim();
@@ -302,6 +305,7 @@ function createBaseGrantAuthorization(): GrantAuthorization {
 }
 export const GrantAuthorization = {
   typeUrl: "/cosmos.authz.v1beta1.GrantAuthorization",
+  aminoType: "cosmos-sdk/GrantAuthorization",
   encode(message: GrantAuthorization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
@@ -396,6 +400,7 @@ function createBaseGrantQueueItem(): GrantQueueItem {
 }
 export const GrantQueueItem = {
   typeUrl: "/cosmos.authz.v1beta1.GrantQueueItem",
+  aminoType: "cosmos-sdk/GrantQueueItem",
   encode(message: GrantQueueItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.msgTypeUrls) {
       writer.uint32(10).string(v!);
@@ -460,7 +465,7 @@ export const GrantQueueItem = {
     };
   }
 };
-export const Cosmos_authzv1beta1Authorization_InterfaceDecoder = (input: _m0.Reader | Uint8Array): GenericAuthorization | SendAuthorization | StakeAuthorization | TransferAuthorization | Any => {
+export const Cosmos_authzv1beta1Authorization_InterfaceDecoder = (input: _m0.Reader | Uint8Array): GenericAuthorization | SendAuthorization | StakeAuthorization | TransferAuthorization | ContractExecutionAuthorization | ContractMigrationAuthorization | Any => {
   const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
   const data = Any.decode(reader, reader.uint32());
   switch (data.typeUrl) {
@@ -472,6 +477,10 @@ export const Cosmos_authzv1beta1Authorization_InterfaceDecoder = (input: _m0.Rea
       return StakeAuthorization.decode(data.value);
     case "/ibc.applications.transfer.v1.TransferAuthorization":
       return TransferAuthorization.decode(data.value);
+    case "/cosmwasm.wasm.v1.ContractExecutionAuthorization":
+      return ContractExecutionAuthorization.decode(data.value);
+    case "/cosmwasm.wasm.v1.ContractMigrationAuthorization":
+      return ContractMigrationAuthorization.decode(data.value);
     default:
       return data;
   }
@@ -498,6 +507,16 @@ export const Cosmos_authzv1beta1Authorization_FromAmino = (content: AnyAmino) =>
         typeUrl: "/ibc.applications.transfer.v1.TransferAuthorization",
         value: TransferAuthorization.encode(TransferAuthorization.fromPartial(TransferAuthorization.fromAmino(content.value))).finish()
       });
+    case "wasm/ContractExecutionAuthorization":
+      return Any.fromPartial({
+        typeUrl: "/cosmwasm.wasm.v1.ContractExecutionAuthorization",
+        value: ContractExecutionAuthorization.encode(ContractExecutionAuthorization.fromPartial(ContractExecutionAuthorization.fromAmino(content.value))).finish()
+      });
+    case "wasm/ContractMigrationAuthorization":
+      return Any.fromPartial({
+        typeUrl: "/cosmwasm.wasm.v1.ContractMigrationAuthorization",
+        value: ContractMigrationAuthorization.encode(ContractMigrationAuthorization.fromPartial(ContractMigrationAuthorization.fromAmino(content.value))).finish()
+      });
     default:
       return Any.fromAmino(content);
   }
@@ -523,6 +542,16 @@ export const Cosmos_authzv1beta1Authorization_ToAmino = (content: Any) => {
       return {
         type: "cosmos-sdk/TransferAuthorization",
         value: TransferAuthorization.toAmino(TransferAuthorization.decode(content.value))
+      };
+    case "/cosmwasm.wasm.v1.ContractExecutionAuthorization":
+      return {
+        type: "wasm/ContractExecutionAuthorization",
+        value: ContractExecutionAuthorization.toAmino(ContractExecutionAuthorization.decode(content.value))
+      };
+    case "/cosmwasm.wasm.v1.ContractMigrationAuthorization":
+      return {
+        type: "wasm/ContractMigrationAuthorization",
+        value: ContractMigrationAuthorization.toAmino(ContractMigrationAuthorization.decode(content.value))
       };
     default:
       return Any.toAmino(content);

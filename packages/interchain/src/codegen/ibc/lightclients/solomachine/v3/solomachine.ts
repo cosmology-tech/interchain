@@ -302,6 +302,7 @@ function createBaseClientState(): ClientState {
 }
 export const ClientState = {
   typeUrl: "/ibc.lightclients.solomachine.v3.ClientState",
+  aminoType: "cosmos-sdk/ClientState",
   encode(message: ClientState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.sequence.isZero()) {
       writer.uint32(8).uint64(message.sequence);
@@ -389,6 +390,7 @@ function createBaseConsensusState(): ConsensusState {
 }
 export const ConsensusState = {
   typeUrl: "/ibc.lightclients.solomachine.v3.ConsensusState",
+  aminoType: "cosmos-sdk/ConsensusState",
   encode(message: ConsensusState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.publicKey !== undefined) {
       Any.encode(message.publicKey, writer.uint32(10).fork()).ldelim();
@@ -477,6 +479,7 @@ function createBaseHeader(): Header {
 }
 export const Header = {
   typeUrl: "/ibc.lightclients.solomachine.v3.Header",
+  aminoType: "cosmos-sdk/Header",
   encode(message: Header, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.timestamp.isZero()) {
       writer.uint32(8).uint64(message.timestamp);
@@ -573,6 +576,7 @@ function createBaseMisbehaviour(): Misbehaviour {
 }
 export const Misbehaviour = {
   typeUrl: "/ibc.lightclients.solomachine.v3.Misbehaviour",
+  aminoType: "cosmos-sdk/Misbehaviour",
   encode(message: Misbehaviour, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.sequence.isZero()) {
       writer.uint32(8).uint64(message.sequence);
@@ -661,6 +665,7 @@ function createBaseSignatureAndData(): SignatureAndData {
 }
 export const SignatureAndData = {
   typeUrl: "/ibc.lightclients.solomachine.v3.SignatureAndData",
+  aminoType: "cosmos-sdk/SignatureAndData",
   encode(message: SignatureAndData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.signature.length !== 0) {
       writer.uint32(10).bytes(message.signature);
@@ -756,6 +761,7 @@ function createBaseTimestampedSignatureData(): TimestampedSignatureData {
 }
 export const TimestampedSignatureData = {
   typeUrl: "/ibc.lightclients.solomachine.v3.TimestampedSignatureData",
+  aminoType: "cosmos-sdk/TimestampedSignatureData",
   encode(message: TimestampedSignatureData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.signatureData.length !== 0) {
       writer.uint32(10).bytes(message.signatureData);
@@ -836,6 +842,7 @@ function createBaseSignBytes(): SignBytes {
 }
 export const SignBytes = {
   typeUrl: "/ibc.lightclients.solomachine.v3.SignBytes",
+  aminoType: "cosmos-sdk/SignBytes",
   encode(message: SignBytes, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.sequence.isZero()) {
       writer.uint32(8).uint64(message.sequence);
@@ -940,6 +947,7 @@ function createBaseHeaderData(): HeaderData {
 }
 export const HeaderData = {
   typeUrl: "/ibc.lightclients.solomachine.v3.HeaderData",
+  aminoType: "cosmos-sdk/HeaderData",
   encode(message: HeaderData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.newPubKey !== undefined) {
       Any.encode(message.newPubKey, writer.uint32(10).fork()).ldelim();

@@ -166,6 +166,7 @@ function createBaseMsgRegisterInterchainAccount(): MsgRegisterInterchainAccount 
 }
 export const MsgRegisterInterchainAccount = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccount",
+  aminoType: "cosmos-sdk/MsgRegisterInterchainAccount",
   encode(message: MsgRegisterInterchainAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
@@ -252,6 +253,7 @@ function createBaseMsgRegisterInterchainAccountResponse(): MsgRegisterInterchain
 }
 export const MsgRegisterInterchainAccountResponse = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccountResponse",
+  aminoType: "cosmos-sdk/MsgRegisterInterchainAccountResponse",
   encode(message: MsgRegisterInterchainAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.channelId !== "") {
       writer.uint32(10).string(message.channelId);
@@ -331,6 +333,7 @@ function createBaseMsgSendTx(): MsgSendTx {
 }
 export const MsgSendTx = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgSendTx",
+  aminoType: "cosmos-sdk/MsgSendTx",
   encode(message: MsgSendTx, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
@@ -425,6 +428,7 @@ function createBaseMsgSendTxResponse(): MsgSendTxResponse {
 }
 export const MsgSendTxResponse = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgSendTxResponse",
+  aminoType: "cosmos-sdk/MsgSendTxResponse",
   encode(message: MsgSendTxResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.sequence.isZero()) {
       writer.uint32(8).uint64(message.sequence);
@@ -493,6 +497,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgUpdateParams",
+  aminoType: "cosmos-sdk/MsgUpdateParams",
   encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -567,6 +572,7 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgUpdateParamsResponse",
+  aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
   encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },

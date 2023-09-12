@@ -138,6 +138,7 @@ function createBaseRecord(): Record {
 }
 export const Record = {
   typeUrl: "/cosmos.crypto.keyring.v1.Record",
+  aminoType: "cosmos-sdk/Record",
   encode(message: Record, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -250,6 +251,7 @@ function createBaseRecord_Local(): Record_Local {
 }
 export const Record_Local = {
   typeUrl: "/cosmos.crypto.keyring.v1.Local",
+  aminoType: "cosmos-sdk/Local",
   encode(message: Record_Local, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.privKey !== undefined) {
       Any.encode(message.privKey, writer.uint32(10).fork()).ldelim();
@@ -317,6 +319,7 @@ function createBaseRecord_Ledger(): Record_Ledger {
 }
 export const Record_Ledger = {
   typeUrl: "/cosmos.crypto.keyring.v1.Ledger",
+  aminoType: "cosmos-sdk/Ledger",
   encode(message: Record_Ledger, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.path !== undefined) {
       BIP44Params.encode(message.path, writer.uint32(10).fork()).ldelim();
@@ -382,6 +385,7 @@ function createBaseRecord_Multi(): Record_Multi {
 }
 export const Record_Multi = {
   typeUrl: "/cosmos.crypto.keyring.v1.Multi",
+  aminoType: "cosmos-sdk/Multi",
   encode(_: Record_Multi, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -437,6 +441,7 @@ function createBaseRecord_Offline(): Record_Offline {
 }
 export const Record_Offline = {
   typeUrl: "/cosmos.crypto.keyring.v1.Offline",
+  aminoType: "cosmos-sdk/Offline",
   encode(_: Record_Offline, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },

@@ -31,6 +31,7 @@ function createBaseModule(): Module {
 }
 export const Module = {
   typeUrl: "/cosmos.orm.module.v1alpha1.Module",
+  aminoType: "cosmos-sdk/Module",
   encode(_: Module, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },

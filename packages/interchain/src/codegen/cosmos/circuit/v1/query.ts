@@ -130,6 +130,7 @@ function createBaseQueryAccountRequest(): QueryAccountRequest {
 }
 export const QueryAccountRequest = {
   typeUrl: "/cosmos.circuit.v1.QueryAccountRequest",
+  aminoType: "cosmos-sdk/QueryAccountRequest",
   encode(message: QueryAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -197,6 +198,7 @@ function createBaseAccountResponse(): AccountResponse {
 }
 export const AccountResponse = {
   typeUrl: "/cosmos.circuit.v1.AccountResponse",
+  aminoType: "cosmos-sdk/AccountResponse",
   encode(message: AccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.permission !== undefined) {
       Permissions.encode(message.permission, writer.uint32(10).fork()).ldelim();
@@ -264,6 +266,7 @@ function createBaseQueryAccountsRequest(): QueryAccountsRequest {
 }
 export const QueryAccountsRequest = {
   typeUrl: "/cosmos.circuit.v1.QueryAccountsRequest",
+  aminoType: "cosmos-sdk/QueryAccountsRequest",
   encode(message: QueryAccountsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -332,6 +335,7 @@ function createBaseAccountsResponse(): AccountsResponse {
 }
 export const AccountsResponse = {
   typeUrl: "/cosmos.circuit.v1.AccountsResponse",
+  aminoType: "cosmos-sdk/AccountsResponse",
   encode(message: AccountsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.accounts) {
       GenesisAccountPermissions.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -410,6 +414,7 @@ function createBaseQueryDisabledListRequest(): QueryDisabledListRequest {
 }
 export const QueryDisabledListRequest = {
   typeUrl: "/cosmos.circuit.v1.QueryDisabledListRequest",
+  aminoType: "cosmos-sdk/QueryDisabledListRequest",
   encode(_: QueryDisabledListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -467,6 +472,7 @@ function createBaseDisabledListResponse(): DisabledListResponse {
 }
 export const DisabledListResponse = {
   typeUrl: "/cosmos.circuit.v1.DisabledListResponse",
+  aminoType: "cosmos-sdk/DisabledListResponse",
   encode(message: DisabledListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.disabledList) {
       writer.uint32(10).string(v!);

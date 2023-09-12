@@ -463,6 +463,7 @@ function createBaseMsgCreateValidator(): MsgCreateValidator {
 }
 export const MsgCreateValidator = {
   typeUrl: "/cosmos.staking.v1beta1.MsgCreateValidator",
+  aminoType: "cosmos-sdk/MsgCreateValidator",
   encode(message: MsgCreateValidator, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.description !== undefined) {
       Description.encode(message.description, writer.uint32(10).fork()).ldelim();
@@ -582,6 +583,7 @@ function createBaseMsgCreateValidatorResponse(): MsgCreateValidatorResponse {
 }
 export const MsgCreateValidatorResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgCreateValidatorResponse",
+  aminoType: "cosmos-sdk/MsgCreateValidatorResponse",
   encode(_: MsgCreateValidatorResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -642,6 +644,7 @@ function createBaseMsgEditValidator(): MsgEditValidator {
 }
 export const MsgEditValidator = {
   typeUrl: "/cosmos.staking.v1beta1.MsgEditValidator",
+  aminoType: "cosmos-sdk/MsgEditValidator",
   encode(message: MsgEditValidator, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.description !== undefined) {
       Description.encode(message.description, writer.uint32(10).fork()).ldelim();
@@ -734,6 +737,7 @@ function createBaseMsgEditValidatorResponse(): MsgEditValidatorResponse {
 }
 export const MsgEditValidatorResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgEditValidatorResponse",
+  aminoType: "cosmos-sdk/MsgEditValidatorResponse",
   encode(_: MsgEditValidatorResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -793,6 +797,7 @@ function createBaseMsgDelegate(): MsgDelegate {
 }
 export const MsgDelegate = {
   typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
+  aminoType: "cosmos-sdk/MsgDelegate",
   encode(message: MsgDelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -876,6 +881,7 @@ function createBaseMsgDelegateResponse(): MsgDelegateResponse {
 }
 export const MsgDelegateResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgDelegateResponse",
+  aminoType: "cosmos-sdk/MsgDelegateResponse",
   encode(_: MsgDelegateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -936,6 +942,7 @@ function createBaseMsgBeginRedelegate(): MsgBeginRedelegate {
 }
 export const MsgBeginRedelegate = {
   typeUrl: "/cosmos.staking.v1beta1.MsgBeginRedelegate",
+  aminoType: "cosmos-sdk/MsgBeginRedelegate",
   encode(message: MsgBeginRedelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -1030,6 +1037,7 @@ function createBaseMsgBeginRedelegateResponse(): MsgBeginRedelegateResponse {
 }
 export const MsgBeginRedelegateResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgBeginRedelegateResponse",
+  aminoType: "cosmos-sdk/MsgBeginRedelegateResponse",
   encode(message: MsgBeginRedelegateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.completionTime !== undefined) {
       Timestamp.encode(toTimestamp(message.completionTime), writer.uint32(10).fork()).ldelim();
@@ -1099,6 +1107,7 @@ function createBaseMsgUndelegate(): MsgUndelegate {
 }
 export const MsgUndelegate = {
   typeUrl: "/cosmos.staking.v1beta1.MsgUndelegate",
+  aminoType: "cosmos-sdk/MsgUndelegate",
   encode(message: MsgUndelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -1185,6 +1194,7 @@ function createBaseMsgUndelegateResponse(): MsgUndelegateResponse {
 }
 export const MsgUndelegateResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgUndelegateResponse",
+  aminoType: "cosmos-sdk/MsgUndelegateResponse",
   encode(message: MsgUndelegateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.completionTime !== undefined) {
       Timestamp.encode(toTimestamp(message.completionTime), writer.uint32(10).fork()).ldelim();
@@ -1264,6 +1274,7 @@ function createBaseMsgCancelUnbondingDelegation(): MsgCancelUnbondingDelegation 
 }
 export const MsgCancelUnbondingDelegation = {
   typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation",
+  aminoType: "cosmos-sdk/MsgCancelUnbondingDelegation",
   encode(message: MsgCancelUnbondingDelegation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -1356,6 +1367,7 @@ function createBaseMsgCancelUnbondingDelegationResponse(): MsgCancelUnbondingDel
 }
 export const MsgCancelUnbondingDelegationResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegationResponse",
+  aminoType: "cosmos-sdk/MsgCancelUnbondingDelegationResponse",
   encode(_: MsgCancelUnbondingDelegationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -1414,6 +1426,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 export const MsgUpdateParams = {
   typeUrl: "/cosmos.staking.v1beta1.MsgUpdateParams",
+  aminoType: "cosmos-sdk/x/staking/MsgUpdateParams",
   encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
@@ -1488,6 +1501,7 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgUpdateParamsResponse",
+  aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
   encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },

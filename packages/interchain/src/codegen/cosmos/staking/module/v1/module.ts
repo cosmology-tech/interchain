@@ -55,6 +55,7 @@ function createBaseModule(): Module {
 }
 export const Module = {
   typeUrl: "/cosmos.staking.module.v1.Module",
+  aminoType: "cosmos-sdk/Module",
   encode(message: Module, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.hooksOrder) {
       writer.uint32(10).string(v!);

@@ -47,6 +47,7 @@ function createBaseConfig(): Config {
 }
 export const Config = {
   typeUrl: "/cosmos.tx.config.v1.Config",
+  aminoType: "cosmos-sdk/Config",
   encode(message: Config, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.skipAnteHandler === true) {
       writer.uint32(8).bool(message.skipAnteHandler);

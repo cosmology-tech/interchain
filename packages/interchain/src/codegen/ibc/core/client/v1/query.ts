@@ -614,6 +614,7 @@ function createBaseQueryClientStateRequest(): QueryClientStateRequest {
 }
 export const QueryClientStateRequest = {
   typeUrl: "/ibc.core.client.v1.QueryClientStateRequest",
+  aminoType: "cosmos-sdk/QueryClientStateRequest",
   encode(message: QueryClientStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -683,6 +684,7 @@ function createBaseQueryClientStateResponse(): QueryClientStateResponse {
 }
 export const QueryClientStateResponse = {
   typeUrl: "/ibc.core.client.v1.QueryClientStateResponse",
+  aminoType: "cosmos-sdk/QueryClientStateResponse",
   encode(message: QueryClientStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientState !== undefined) {
       Any.encode(message.clientState, writer.uint32(10).fork()).ldelim();
@@ -768,6 +770,7 @@ function createBaseQueryClientStatesRequest(): QueryClientStatesRequest {
 }
 export const QueryClientStatesRequest = {
   typeUrl: "/ibc.core.client.v1.QueryClientStatesRequest",
+  aminoType: "cosmos-sdk/QueryClientStatesRequest",
   encode(message: QueryClientStatesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -836,6 +839,7 @@ function createBaseQueryClientStatesResponse(): QueryClientStatesResponse {
 }
 export const QueryClientStatesResponse = {
   typeUrl: "/ibc.core.client.v1.QueryClientStatesResponse",
+  aminoType: "cosmos-sdk/QueryClientStatesResponse",
   encode(message: QueryClientStatesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.clientStates) {
       IdentifiedClientState.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -919,6 +923,7 @@ function createBaseQueryConsensusStateRequest(): QueryConsensusStateRequest {
 }
 export const QueryConsensusStateRequest = {
   typeUrl: "/ibc.core.client.v1.QueryConsensusStateRequest",
+  aminoType: "cosmos-sdk/QueryConsensusStateRequest",
   encode(message: QueryConsensusStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -1015,6 +1020,7 @@ function createBaseQueryConsensusStateResponse(): QueryConsensusStateResponse {
 }
 export const QueryConsensusStateResponse = {
   typeUrl: "/ibc.core.client.v1.QueryConsensusStateResponse",
+  aminoType: "cosmos-sdk/QueryConsensusStateResponse",
   encode(message: QueryConsensusStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.consensusState !== undefined) {
       Any.encode(message.consensusState, writer.uint32(10).fork()).ldelim();
@@ -1101,6 +1107,7 @@ function createBaseQueryConsensusStatesRequest(): QueryConsensusStatesRequest {
 }
 export const QueryConsensusStatesRequest = {
   typeUrl: "/ibc.core.client.v1.QueryConsensusStatesRequest",
+  aminoType: "cosmos-sdk/QueryConsensusStatesRequest",
   encode(message: QueryConsensusStatesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -1178,6 +1185,7 @@ function createBaseQueryConsensusStatesResponse(): QueryConsensusStatesResponse 
 }
 export const QueryConsensusStatesResponse = {
   typeUrl: "/ibc.core.client.v1.QueryConsensusStatesResponse",
+  aminoType: "cosmos-sdk/QueryConsensusStatesResponse",
   encode(message: QueryConsensusStatesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.consensusStates) {
       ConsensusStateWithHeight.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1259,6 +1267,7 @@ function createBaseQueryConsensusStateHeightsRequest(): QueryConsensusStateHeigh
 }
 export const QueryConsensusStateHeightsRequest = {
   typeUrl: "/ibc.core.client.v1.QueryConsensusStateHeightsRequest",
+  aminoType: "cosmos-sdk/QueryConsensusStateHeightsRequest",
   encode(message: QueryConsensusStateHeightsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -1336,6 +1345,7 @@ function createBaseQueryConsensusStateHeightsResponse(): QueryConsensusStateHeig
 }
 export const QueryConsensusStateHeightsResponse = {
   typeUrl: "/ibc.core.client.v1.QueryConsensusStateHeightsResponse",
+  aminoType: "cosmos-sdk/QueryConsensusStateHeightsResponse",
   encode(message: QueryConsensusStateHeightsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.consensusStateHeights) {
       Height.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1416,6 +1426,7 @@ function createBaseQueryClientStatusRequest(): QueryClientStatusRequest {
 }
 export const QueryClientStatusRequest = {
   typeUrl: "/ibc.core.client.v1.QueryClientStatusRequest",
+  aminoType: "cosmos-sdk/QueryClientStatusRequest",
   encode(message: QueryClientStatusRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -1483,6 +1494,7 @@ function createBaseQueryClientStatusResponse(): QueryClientStatusResponse {
 }
 export const QueryClientStatusResponse = {
   typeUrl: "/ibc.core.client.v1.QueryClientStatusResponse",
+  aminoType: "cosmos-sdk/QueryClientStatusResponse",
   encode(message: QueryClientStatusResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.status !== "") {
       writer.uint32(10).string(message.status);
@@ -1548,6 +1560,7 @@ function createBaseQueryClientParamsRequest(): QueryClientParamsRequest {
 }
 export const QueryClientParamsRequest = {
   typeUrl: "/ibc.core.client.v1.QueryClientParamsRequest",
+  aminoType: "cosmos-sdk/QueryClientParamsRequest",
   encode(_: QueryClientParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -1605,6 +1618,7 @@ function createBaseQueryClientParamsResponse(): QueryClientParamsResponse {
 }
 export const QueryClientParamsResponse = {
   typeUrl: "/ibc.core.client.v1.QueryClientParamsResponse",
+  aminoType: "cosmos-sdk/QueryClientParamsResponse",
   encode(message: QueryClientParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -1670,6 +1684,7 @@ function createBaseQueryUpgradedClientStateRequest(): QueryUpgradedClientStateRe
 }
 export const QueryUpgradedClientStateRequest = {
   typeUrl: "/ibc.core.client.v1.QueryUpgradedClientStateRequest",
+  aminoType: "cosmos-sdk/QueryUpgradedClientStateRequest",
   encode(_: QueryUpgradedClientStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -1727,6 +1742,7 @@ function createBaseQueryUpgradedClientStateResponse(): QueryUpgradedClientStateR
 }
 export const QueryUpgradedClientStateResponse = {
   typeUrl: "/ibc.core.client.v1.QueryUpgradedClientStateResponse",
+  aminoType: "cosmos-sdk/QueryUpgradedClientStateResponse",
   encode(message: QueryUpgradedClientStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.upgradedClientState !== undefined) {
       Any.encode(message.upgradedClientState, writer.uint32(10).fork()).ldelim();
@@ -1792,6 +1808,7 @@ function createBaseQueryUpgradedConsensusStateRequest(): QueryUpgradedConsensusS
 }
 export const QueryUpgradedConsensusStateRequest = {
   typeUrl: "/ibc.core.client.v1.QueryUpgradedConsensusStateRequest",
+  aminoType: "cosmos-sdk/QueryUpgradedConsensusStateRequest",
   encode(_: QueryUpgradedConsensusStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
@@ -1849,6 +1866,7 @@ function createBaseQueryUpgradedConsensusStateResponse(): QueryUpgradedConsensus
 }
 export const QueryUpgradedConsensusStateResponse = {
   typeUrl: "/ibc.core.client.v1.QueryUpgradedConsensusStateResponse",
+  aminoType: "cosmos-sdk/QueryUpgradedConsensusStateResponse",
   encode(message: QueryUpgradedConsensusStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.upgradedConsensusState !== undefined) {
       Any.encode(message.upgradedConsensusState, writer.uint32(10).fork()).ldelim();
