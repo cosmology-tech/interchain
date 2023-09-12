@@ -39,6 +39,9 @@ export const createRPCQueryClient = async ({
         v1: (await import("../cosmos/gov/v1/query.rpc.Query")).createRpcQueryExtension(client),
         v1beta1: (await import("../cosmos/gov/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
       },
+      group: {
+        v1: (await import("../cosmos/group/v1/query.rpc.Query")).createRpcQueryExtension(client)
+      },
       mint: {
         v1beta1: (await import("../cosmos/mint/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
       },

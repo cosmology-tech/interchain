@@ -30,6 +30,9 @@ export const createRPCMsgClient = async ({
       v1: new (await import("./gov/v1/tx.rpc.msg")).MsgClientImpl(rpc),
       v1beta1: new (await import("./gov/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
     },
+    group: {
+      v1: new (await import("./group/v1/tx.rpc.msg")).MsgClientImpl(rpc)
+    },
     mint: {
       v1beta1: new (await import("./mint/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
     },
