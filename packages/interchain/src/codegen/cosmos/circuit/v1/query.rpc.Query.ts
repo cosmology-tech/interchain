@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
 import { QueryAccountRequest, AccountResponse, QueryAccountsRequest, AccountsResponse, QueryDisabledListRequest, DisabledListResponse } from "./query";
 /** Query defines the circuit gRPC querier service. */
@@ -20,7 +20,7 @@ export class QueryClientImpl implements Query {
   account = async (request: QueryAccountRequest): Promise<AccountResponse> => {
     const data = QueryAccountRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.circuit.v1.Query", "Account", data);
-    return promise.then(data => AccountResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => AccountResponse.decode(new BinaryReader(data)));
   };
   /* Account returns account permissions. */
   accounts = async (request: QueryAccountsRequest = {
@@ -28,13 +28,13 @@ export class QueryClientImpl implements Query {
   }): Promise<AccountsResponse> => {
     const data = QueryAccountsRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.circuit.v1.Query", "Accounts", data);
-    return promise.then(data => AccountsResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => AccountsResponse.decode(new BinaryReader(data)));
   };
   /* DisabledList returns a list of disabled message urls */
   disabledList = async (request: QueryDisabledListRequest = {}): Promise<DisabledListResponse> => {
     const data = QueryDisabledListRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.circuit.v1.Query", "DisabledList", data);
-    return promise.then(data => DisabledListResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => DisabledListResponse.decode(new BinaryReader(data)));
   };
 }
 export const createRpcQueryExtension = (base: QueryClient) => {

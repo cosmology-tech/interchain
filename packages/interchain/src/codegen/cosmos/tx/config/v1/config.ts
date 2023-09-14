@@ -1,4 +1,4 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { DeepPartial } from "../../../../helpers";
 /** Config is the config object of the x/auth/tx package. */
 export interface Config {
@@ -48,7 +48,7 @@ function createBaseConfig(): Config {
 export const Config = {
   typeUrl: "/cosmos.tx.config.v1.Config",
   aminoType: "cosmos-sdk/Config",
-  encode(message: Config, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Config, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.skipAnteHandler === true) {
       writer.uint32(8).bool(message.skipAnteHandler);
     }
@@ -57,8 +57,8 @@ export const Config = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Config {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Config {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConfig();
     while (reader.pos < end) {

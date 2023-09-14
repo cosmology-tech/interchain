@@ -1,5 +1,5 @@
 import { Rpc } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
 import { GetRequest, GetResponse, ListRequest, ListResponse } from "./query";
 /** Query is a generic gRPC service for querying ORM data. */
@@ -18,13 +18,13 @@ export class QueryClientImpl implements Query {
   get = async (request: GetRequest): Promise<GetResponse> => {
     const data = GetRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.orm.query.v1alpha1.Query", "Get", data);
-    return promise.then(data => GetResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => GetResponse.decode(new BinaryReader(data)));
   };
   /* List queries an ORM table against an index. */
   list = async (request: ListRequest): Promise<ListResponse> => {
     const data = ListRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.orm.query.v1alpha1.Query", "List", data);
-    return promise.then(data => ListResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => ListResponse.decode(new BinaryReader(data)));
   };
 }
 export const createRpcQueryExtension = (base: QueryClient) => {

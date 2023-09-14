@@ -1,6 +1,6 @@
 import { IdentifiedClientState, IdentifiedClientStateAmino, IdentifiedClientStateSDKType, ClientConsensusStates, ClientConsensusStatesAmino, ClientConsensusStatesSDKType, Params, ParamsAmino, ParamsSDKType } from "./client";
-import { Long, DeepPartial } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { DeepPartial } from "../../../../helpers";
 /** GenesisState defines the ibc client submodule's genesis state. */
 export interface GenesisState {
   /** client states with their corresponding identifiers */
@@ -17,7 +17,7 @@ export interface GenesisState {
   /** @deprecated */
   createLocalhost: boolean;
   /** the sequence for the next generated client identifier */
-  nextClientSequence: Long;
+  nextClientSequence: bigint;
 }
 export interface GenesisStateProtoMsg {
   typeUrl: "/ibc.core.client.v1.GenesisState";
@@ -53,7 +53,7 @@ export interface GenesisStateSDKType {
   params: ParamsSDKType;
   /** @deprecated */
   create_localhost: boolean;
-  next_client_sequence: Long;
+  next_client_sequence: bigint;
 }
 /**
  * GenesisMetadata defines the genesis type for metadata that clients may return
@@ -130,13 +130,13 @@ function createBaseGenesisState(): GenesisState {
     clientsMetadata: [],
     params: Params.fromPartial({}),
     createLocalhost: false,
-    nextClientSequence: Long.UZERO
+    nextClientSequence: BigInt(0)
   };
 }
 export const GenesisState = {
   typeUrl: "/ibc.core.client.v1.GenesisState",
   aminoType: "cosmos-sdk/GenesisState",
-  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.clients) {
       IdentifiedClientState.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -152,13 +152,13 @@ export const GenesisState = {
     if (message.createLocalhost === true) {
       writer.uint32(40).bool(message.createLocalhost);
     }
-    if (!message.nextClientSequence.isZero()) {
+    if (message.nextClientSequence !== BigInt(0)) {
       writer.uint32(48).uint64(message.nextClientSequence);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
     while (reader.pos < end) {
@@ -180,7 +180,7 @@ export const GenesisState = {
           message.createLocalhost = reader.bool();
           break;
         case 6:
-          message.nextClientSequence = (reader.uint64() as Long);
+          message.nextClientSequence = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -196,7 +196,7 @@ export const GenesisState = {
     message.clientsMetadata = object.clientsMetadata?.map(e => IdentifiedGenesisMetadata.fromPartial(e)) || [];
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     message.createLocalhost = object.createLocalhost ?? false;
-    message.nextClientSequence = object.nextClientSequence !== undefined && object.nextClientSequence !== null ? Long.fromValue(object.nextClientSequence) : Long.UZERO;
+    message.nextClientSequence = object.nextClientSequence !== undefined && object.nextClientSequence !== null ? BigInt(object.nextClientSequence.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
@@ -206,7 +206,7 @@ export const GenesisState = {
       clientsMetadata: Array.isArray(object?.clients_metadata) ? object.clients_metadata.map((e: any) => IdentifiedGenesisMetadata.fromAmino(e)) : [],
       params: object?.params ? Params.fromAmino(object.params) : undefined,
       createLocalhost: object.create_localhost,
-      nextClientSequence: Long.fromString(object.next_client_sequence)
+      nextClientSequence: BigInt(object.next_client_sequence)
     };
   },
   toAmino(message: GenesisState): GenesisStateAmino {
@@ -262,7 +262,7 @@ function createBaseGenesisMetadata(): GenesisMetadata {
 export const GenesisMetadata = {
   typeUrl: "/ibc.core.client.v1.GenesisMetadata",
   aminoType: "cosmos-sdk/GenesisMetadata",
-  encode(message: GenesisMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GenesisMetadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
     }
@@ -271,8 +271,8 @@ export const GenesisMetadata = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisMetadata {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GenesisMetadata {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisMetadata();
     while (reader.pos < end) {
@@ -340,7 +340,7 @@ function createBaseIdentifiedGenesisMetadata(): IdentifiedGenesisMetadata {
 export const IdentifiedGenesisMetadata = {
   typeUrl: "/ibc.core.client.v1.IdentifiedGenesisMetadata",
   aminoType: "cosmos-sdk/IdentifiedGenesisMetadata",
-  encode(message: IdentifiedGenesisMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: IdentifiedGenesisMetadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
     }
@@ -349,8 +349,8 @@ export const IdentifiedGenesisMetadata = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): IdentifiedGenesisMetadata {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): IdentifiedGenesisMetadata {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseIdentifiedGenesisMetadata();
     while (reader.pos < end) {

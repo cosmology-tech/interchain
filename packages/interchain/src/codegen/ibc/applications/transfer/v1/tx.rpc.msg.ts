@@ -1,5 +1,5 @@
 import { Rpc } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../../binary";
 import { MsgTransfer, MsgTransferResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
 /** Msg defines the ibc/transfer Msg service. */
 export interface Msg {
@@ -17,12 +17,12 @@ export class MsgClientImpl implements Msg {
   transfer = async (request: MsgTransfer): Promise<MsgTransferResponse> => {
     const data = MsgTransfer.encode(request).finish();
     const promise = this.rpc.request("ibc.applications.transfer.v1.Msg", "Transfer", data);
-    return promise.then(data => MsgTransferResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgTransferResponse.decode(new BinaryReader(data)));
   };
   /* UpdateParams defines a rpc handler for MsgUpdateParams. */
   updateParams = async (request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> => {
     const data = MsgUpdateParams.encode(request).finish();
     const promise = this.rpc.request("ibc.applications.transfer.v1.Msg", "UpdateParams", data);
-    return promise.then(data => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgUpdateParamsResponse.decode(new BinaryReader(data)));
   };
 }

@@ -1,5 +1,5 @@
 import { Params, ParamsAmino, ParamsSDKType } from "./host";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../../../binary";
 import { DeepPartial } from "../../../../../helpers";
 /** MsgUpdateParams defines the payload for Msg/UpdateParams */
 export interface MsgUpdateParams {
@@ -59,7 +59,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 export const MsgUpdateParams = {
   typeUrl: "/ibc.applications.interchain_accounts.host.v1.MsgUpdateParams",
   aminoType: "cosmos-sdk/MsgUpdateParams",
-  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -68,8 +68,8 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
@@ -134,11 +134,11 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 export const MsgUpdateParamsResponse = {
   typeUrl: "/ibc.applications.interchain_accounts.host.v1.MsgUpdateParamsResponse",
   aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
-  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {

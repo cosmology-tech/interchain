@@ -1,4 +1,4 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { DeepPartial } from "../../../../helpers";
 /** Module is the config object for the runtime module. */
 export interface Module {
@@ -176,7 +176,7 @@ function createBaseModule(): Module {
 export const Module = {
   typeUrl: "/cosmos.app.runtime.v1alpha1.Module",
   aminoType: "cosmos-sdk/Module",
-  encode(message: Module, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Module, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.appName !== "") {
       writer.uint32(10).string(message.appName);
     }
@@ -206,8 +206,8 @@ export const Module = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Module {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Module {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModule();
     while (reader.pos < end) {
@@ -349,7 +349,7 @@ function createBaseStoreKeyConfig(): StoreKeyConfig {
 export const StoreKeyConfig = {
   typeUrl: "/cosmos.app.runtime.v1alpha1.StoreKeyConfig",
   aminoType: "cosmos-sdk/StoreKeyConfig",
-  encode(message: StoreKeyConfig, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: StoreKeyConfig, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.moduleName !== "") {
       writer.uint32(10).string(message.moduleName);
     }
@@ -358,8 +358,8 @@ export const StoreKeyConfig = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): StoreKeyConfig {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): StoreKeyConfig {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStoreKeyConfig();
     while (reader.pos < end) {

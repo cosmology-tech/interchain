@@ -1,5 +1,5 @@
 import { Rpc } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../../binary";
 import { MsgConnectionOpenInit, MsgConnectionOpenInitResponse, MsgConnectionOpenTry, MsgConnectionOpenTryResponse, MsgConnectionOpenAck, MsgConnectionOpenAckResponse, MsgConnectionOpenConfirm, MsgConnectionOpenConfirmResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
 /** Msg defines the ibc/connection Msg service. */
 export interface Msg {
@@ -29,32 +29,32 @@ export class MsgClientImpl implements Msg {
   connectionOpenInit = async (request: MsgConnectionOpenInit): Promise<MsgConnectionOpenInitResponse> => {
     const data = MsgConnectionOpenInit.encode(request).finish();
     const promise = this.rpc.request("ibc.core.connection.v1.Msg", "ConnectionOpenInit", data);
-    return promise.then(data => MsgConnectionOpenInitResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgConnectionOpenInitResponse.decode(new BinaryReader(data)));
   };
   /* ConnectionOpenTry defines a rpc handler method for MsgConnectionOpenTry. */
   connectionOpenTry = async (request: MsgConnectionOpenTry): Promise<MsgConnectionOpenTryResponse> => {
     const data = MsgConnectionOpenTry.encode(request).finish();
     const promise = this.rpc.request("ibc.core.connection.v1.Msg", "ConnectionOpenTry", data);
-    return promise.then(data => MsgConnectionOpenTryResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgConnectionOpenTryResponse.decode(new BinaryReader(data)));
   };
   /* ConnectionOpenAck defines a rpc handler method for MsgConnectionOpenAck. */
   connectionOpenAck = async (request: MsgConnectionOpenAck): Promise<MsgConnectionOpenAckResponse> => {
     const data = MsgConnectionOpenAck.encode(request).finish();
     const promise = this.rpc.request("ibc.core.connection.v1.Msg", "ConnectionOpenAck", data);
-    return promise.then(data => MsgConnectionOpenAckResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgConnectionOpenAckResponse.decode(new BinaryReader(data)));
   };
   /* ConnectionOpenConfirm defines a rpc handler method for
    MsgConnectionOpenConfirm. */
   connectionOpenConfirm = async (request: MsgConnectionOpenConfirm): Promise<MsgConnectionOpenConfirmResponse> => {
     const data = MsgConnectionOpenConfirm.encode(request).finish();
     const promise = this.rpc.request("ibc.core.connection.v1.Msg", "ConnectionOpenConfirm", data);
-    return promise.then(data => MsgConnectionOpenConfirmResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgConnectionOpenConfirmResponse.decode(new BinaryReader(data)));
   };
   /* UpdateConnectionParams defines a rpc handler method for
    MsgUpdateParams. */
   updateConnectionParams = async (request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> => {
     const data = MsgUpdateParams.encode(request).finish();
     const promise = this.rpc.request("ibc.core.connection.v1.Msg", "UpdateConnectionParams", data);
-    return promise.then(data => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgUpdateParamsResponse.decode(new BinaryReader(data)));
   };
 }

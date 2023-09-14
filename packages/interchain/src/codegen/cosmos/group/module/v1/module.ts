@@ -1,6 +1,6 @@
 import { Duration, DurationAmino, DurationSDKType } from "../../../../google/protobuf/duration";
-import { Long, DeepPartial } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { DeepPartial } from "../../../../helpers";
 /** Module is the config object of the group module. */
 export interface Module {
   /**
@@ -12,7 +12,7 @@ export interface Module {
    * max_metadata_len defines the max length of the metadata bytes field for various entities within the group module.
    * Defaults to 255 if not explicitly set.
    */
-  maxMetadataLen: Long;
+  maxMetadataLen: bigint;
 }
 export interface ModuleProtoMsg {
   typeUrl: "/cosmos.group.module.v1.Module";
@@ -38,28 +38,28 @@ export interface ModuleAminoMsg {
 /** Module is the config object of the group module. */
 export interface ModuleSDKType {
   max_execution_period: DurationSDKType;
-  max_metadata_len: Long;
+  max_metadata_len: bigint;
 }
 function createBaseModule(): Module {
   return {
     maxExecutionPeriod: Duration.fromPartial({}),
-    maxMetadataLen: Long.UZERO
+    maxMetadataLen: BigInt(0)
   };
 }
 export const Module = {
   typeUrl: "/cosmos.group.module.v1.Module",
   aminoType: "cosmos-sdk/Module",
-  encode(message: Module, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Module, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maxExecutionPeriod !== undefined) {
       Duration.encode(message.maxExecutionPeriod, writer.uint32(10).fork()).ldelim();
     }
-    if (!message.maxMetadataLen.isZero()) {
+    if (message.maxMetadataLen !== BigInt(0)) {
       writer.uint32(16).uint64(message.maxMetadataLen);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Module {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Module {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModule();
     while (reader.pos < end) {
@@ -69,7 +69,7 @@ export const Module = {
           message.maxExecutionPeriod = Duration.decode(reader, reader.uint32());
           break;
         case 2:
-          message.maxMetadataLen = (reader.uint64() as Long);
+          message.maxMetadataLen = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -81,13 +81,13 @@ export const Module = {
   fromPartial(object: DeepPartial<Module>): Module {
     const message = createBaseModule();
     message.maxExecutionPeriod = object.maxExecutionPeriod !== undefined && object.maxExecutionPeriod !== null ? Duration.fromPartial(object.maxExecutionPeriod) : undefined;
-    message.maxMetadataLen = object.maxMetadataLen !== undefined && object.maxMetadataLen !== null ? Long.fromValue(object.maxMetadataLen) : Long.UZERO;
+    message.maxMetadataLen = object.maxMetadataLen !== undefined && object.maxMetadataLen !== null ? BigInt(object.maxMetadataLen.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: ModuleAmino): Module {
     return {
       maxExecutionPeriod: object?.max_execution_period ? Duration.fromAmino(object.max_execution_period) : undefined,
-      maxMetadataLen: Long.fromString(object.max_metadata_len)
+      maxMetadataLen: BigInt(object.max_metadata_len)
     };
   },
   toAmino(message: Module): ModuleAmino {

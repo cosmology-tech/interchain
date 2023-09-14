@@ -1,5 +1,5 @@
 import { Permissions, PermissionsAmino, PermissionsSDKType } from "./types";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { DeepPartial } from "../../../helpers";
 /** MsgAuthorizeCircuitBreaker defines the Msg/AuthorizeCircuitBreaker request type. */
 export interface MsgAuthorizeCircuitBreaker {
@@ -191,7 +191,7 @@ function createBaseMsgAuthorizeCircuitBreaker(): MsgAuthorizeCircuitBreaker {
 export const MsgAuthorizeCircuitBreaker = {
   typeUrl: "/cosmos.circuit.v1.MsgAuthorizeCircuitBreaker",
   aminoType: "cosmos-sdk/MsgAuthorizeCircuitBreaker",
-  encode(message: MsgAuthorizeCircuitBreaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgAuthorizeCircuitBreaker, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
     }
@@ -203,8 +203,8 @@ export const MsgAuthorizeCircuitBreaker = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAuthorizeCircuitBreaker {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgAuthorizeCircuitBreaker {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAuthorizeCircuitBreaker();
     while (reader.pos < end) {
@@ -277,14 +277,14 @@ function createBaseMsgAuthorizeCircuitBreakerResponse(): MsgAuthorizeCircuitBrea
 export const MsgAuthorizeCircuitBreakerResponse = {
   typeUrl: "/cosmos.circuit.v1.MsgAuthorizeCircuitBreakerResponse",
   aminoType: "cosmos-sdk/MsgAuthorizeCircuitBreakerResponse",
-  encode(message: MsgAuthorizeCircuitBreakerResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgAuthorizeCircuitBreakerResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.success === true) {
       writer.uint32(8).bool(message.success);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAuthorizeCircuitBreakerResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgAuthorizeCircuitBreakerResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAuthorizeCircuitBreakerResponse();
     while (reader.pos < end) {
@@ -346,7 +346,7 @@ function createBaseMsgTripCircuitBreaker(): MsgTripCircuitBreaker {
 export const MsgTripCircuitBreaker = {
   typeUrl: "/cosmos.circuit.v1.MsgTripCircuitBreaker",
   aminoType: "cosmos-sdk/MsgTripCircuitBreaker",
-  encode(message: MsgTripCircuitBreaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgTripCircuitBreaker, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -355,8 +355,8 @@ export const MsgTripCircuitBreaker = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgTripCircuitBreaker {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgTripCircuitBreaker {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgTripCircuitBreaker();
     while (reader.pos < end) {
@@ -427,14 +427,14 @@ function createBaseMsgTripCircuitBreakerResponse(): MsgTripCircuitBreakerRespons
 export const MsgTripCircuitBreakerResponse = {
   typeUrl: "/cosmos.circuit.v1.MsgTripCircuitBreakerResponse",
   aminoType: "cosmos-sdk/MsgTripCircuitBreakerResponse",
-  encode(message: MsgTripCircuitBreakerResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgTripCircuitBreakerResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.success === true) {
       writer.uint32(8).bool(message.success);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgTripCircuitBreakerResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgTripCircuitBreakerResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgTripCircuitBreakerResponse();
     while (reader.pos < end) {
@@ -496,7 +496,7 @@ function createBaseMsgResetCircuitBreaker(): MsgResetCircuitBreaker {
 export const MsgResetCircuitBreaker = {
   typeUrl: "/cosmos.circuit.v1.MsgResetCircuitBreaker",
   aminoType: "cosmos-sdk/MsgResetCircuitBreaker",
-  encode(message: MsgResetCircuitBreaker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgResetCircuitBreaker, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -505,8 +505,8 @@ export const MsgResetCircuitBreaker = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgResetCircuitBreaker {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgResetCircuitBreaker {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgResetCircuitBreaker();
     while (reader.pos < end) {
@@ -577,14 +577,14 @@ function createBaseMsgResetCircuitBreakerResponse(): MsgResetCircuitBreakerRespo
 export const MsgResetCircuitBreakerResponse = {
   typeUrl: "/cosmos.circuit.v1.MsgResetCircuitBreakerResponse",
   aminoType: "cosmos-sdk/MsgResetCircuitBreakerResponse",
-  encode(message: MsgResetCircuitBreakerResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgResetCircuitBreakerResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.success === true) {
       writer.uint32(8).bool(message.success);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgResetCircuitBreakerResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgResetCircuitBreakerResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgResetCircuitBreakerResponse();
     while (reader.pos < end) {

@@ -1,7 +1,7 @@
 import { AccessConfig, AccessConfigAmino, AccessConfigSDKType, Params, ParamsAmino, ParamsSDKType } from "./types";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { Long, DeepPartial } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { DeepPartial } from "../../../helpers";
 import { fromBase64, toBase64, toUtf8, fromUtf8 } from "@cosmjs/encoding";
 /** MsgStoreCode submit Wasm code to the system */
 export interface MsgStoreCode {
@@ -44,7 +44,7 @@ export interface MsgStoreCodeSDKType {
 /** MsgStoreCodeResponse returns store result data. */
 export interface MsgStoreCodeResponse {
   /** CodeID is the reference to the stored WASM code */
-  codeId: Long;
+  codeId: bigint;
   /** Checksum is the sha256 hash of the stored code */
   checksum: Uint8Array;
 }
@@ -65,7 +65,7 @@ export interface MsgStoreCodeResponseAminoMsg {
 }
 /** MsgStoreCodeResponse returns store result data. */
 export interface MsgStoreCodeResponseSDKType {
-  code_id: Long;
+  code_id: bigint;
   checksum: Uint8Array;
 }
 /**
@@ -78,7 +78,7 @@ export interface MsgInstantiateContract {
   /** Admin is an optional address that can execute migrations */
   admin: string;
   /** CodeID is the reference to the stored WASM code */
-  codeId: Long;
+  codeId: bigint;
   /** Label is optional metadata to be stored with a contract instance. */
   label: string;
   /** Msg json encoded message to be passed to the contract on instantiation */
@@ -119,7 +119,7 @@ export interface MsgInstantiateContractAminoMsg {
 export interface MsgInstantiateContractSDKType {
   sender: string;
   admin: string;
-  code_id: Long;
+  code_id: bigint;
   label: string;
   msg: Uint8Array;
   funds: CoinSDKType[];
@@ -161,7 +161,7 @@ export interface MsgInstantiateContract2 {
   /** Admin is an optional address that can execute migrations */
   admin: string;
   /** CodeID is the reference to the stored WASM code */
-  codeId: Long;
+  codeId: bigint;
   /** Label is optional metadata to be stored with a contract instance. */
   label: string;
   /** Msg json encoded message to be passed to the contract on instantiation */
@@ -216,7 +216,7 @@ export interface MsgInstantiateContract2AminoMsg {
 export interface MsgInstantiateContract2SDKType {
   sender: string;
   admin: string;
-  code_id: Long;
+  code_id: bigint;
   label: string;
   msg: Uint8Array;
   funds: CoinSDKType[];
@@ -316,7 +316,7 @@ export interface MsgMigrateContract {
   /** Contract is the address of the smart contract */
   contract: string;
   /** CodeID references the new WASM code */
-  codeId: Long;
+  codeId: bigint;
   /** Msg json encoded message to be passed to the contract on migration */
   msg: Uint8Array;
 }
@@ -343,7 +343,7 @@ export interface MsgMigrateContractAminoMsg {
 export interface MsgMigrateContractSDKType {
   sender: string;
   contract: string;
-  code_id: Long;
+  code_id: bigint;
   msg: Uint8Array;
 }
 /** MsgMigrateContractResponse returns contract migration result data. */
@@ -466,7 +466,7 @@ export interface MsgUpdateInstantiateConfig {
   /** Sender is the that actor that signed the messages */
   sender: string;
   /** CodeID references the stored WASM code */
-  codeId: Long;
+  codeId: bigint;
   /** NewInstantiatePermission is the new access control */
   newInstantiatePermission: AccessConfig;
 }
@@ -490,7 +490,7 @@ export interface MsgUpdateInstantiateConfigAminoMsg {
 /** MsgUpdateInstantiateConfig updates instantiate config for a smart contract */
 export interface MsgUpdateInstantiateConfigSDKType {
   sender: string;
-  code_id: Long;
+  code_id: bigint;
   new_instantiate_permission: AccessConfigSDKType;
 }
 /** MsgUpdateInstantiateConfigResponse returns empty data */
@@ -673,7 +673,7 @@ export interface MsgPinCodes {
   /** Authority is the address of the governance account. */
   authority: string;
   /** CodeIDs references the new WASM codes */
-  codeIds: Long[];
+  codeIds: bigint[];
 }
 export interface MsgPinCodesProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.MsgPinCodes";
@@ -701,7 +701,7 @@ export interface MsgPinCodesAminoMsg {
  */
 export interface MsgPinCodesSDKType {
   authority: string;
-  code_ids: Long[];
+  code_ids: bigint[];
 }
 /**
  * MsgPinCodesResponse defines the response structure for executing a
@@ -741,7 +741,7 @@ export interface MsgUnpinCodes {
   /** Authority is the address of the governance account. */
   authority: string;
   /** CodeIDs references the WASM codes */
-  codeIds: Long[];
+  codeIds: bigint[];
 }
 export interface MsgUnpinCodesProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.MsgUnpinCodes";
@@ -769,7 +769,7 @@ export interface MsgUnpinCodesAminoMsg {
  */
 export interface MsgUnpinCodesSDKType {
   authority: string;
-  code_ids: Long[];
+  code_ids: bigint[];
 }
 /**
  * MsgUnpinCodesResponse defines the response structure for executing a
@@ -1077,7 +1077,7 @@ function createBaseMsgStoreCode(): MsgStoreCode {
 export const MsgStoreCode = {
   typeUrl: "/cosmwasm.wasm.v1.MsgStoreCode",
   aminoType: "wasm/MsgStoreCode",
-  encode(message: MsgStoreCode, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgStoreCode, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
@@ -1089,8 +1089,8 @@ export const MsgStoreCode = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStoreCode {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgStoreCode {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStoreCode();
     while (reader.pos < end) {
@@ -1157,15 +1157,15 @@ export const MsgStoreCode = {
 };
 function createBaseMsgStoreCodeResponse(): MsgStoreCodeResponse {
   return {
-    codeId: Long.UZERO,
+    codeId: BigInt(0),
     checksum: new Uint8Array()
   };
 }
 export const MsgStoreCodeResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgStoreCodeResponse",
   aminoType: "wasm/MsgStoreCodeResponse",
-  encode(message: MsgStoreCodeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.codeId.isZero()) {
+  encode(message: MsgStoreCodeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.codeId !== BigInt(0)) {
       writer.uint32(8).uint64(message.codeId);
     }
     if (message.checksum.length !== 0) {
@@ -1173,15 +1173,15 @@ export const MsgStoreCodeResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStoreCodeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgStoreCodeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStoreCodeResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.codeId = (reader.uint64() as Long);
+          message.codeId = reader.uint64();
           break;
         case 2:
           message.checksum = reader.bytes();
@@ -1195,13 +1195,13 @@ export const MsgStoreCodeResponse = {
   },
   fromPartial(object: DeepPartial<MsgStoreCodeResponse>): MsgStoreCodeResponse {
     const message = createBaseMsgStoreCodeResponse();
-    message.codeId = object.codeId !== undefined && object.codeId !== null ? Long.fromValue(object.codeId) : Long.UZERO;
+    message.codeId = object.codeId !== undefined && object.codeId !== null ? BigInt(object.codeId.toString()) : BigInt(0);
     message.checksum = object.checksum ?? new Uint8Array();
     return message;
   },
   fromAmino(object: MsgStoreCodeResponseAmino): MsgStoreCodeResponse {
     return {
-      codeId: Long.fromString(object.code_id),
+      codeId: BigInt(object.code_id),
       checksum: object.checksum
     };
   },
@@ -1237,7 +1237,7 @@ function createBaseMsgInstantiateContract(): MsgInstantiateContract {
   return {
     sender: "",
     admin: "",
-    codeId: Long.UZERO,
+    codeId: BigInt(0),
     label: "",
     msg: new Uint8Array(),
     funds: []
@@ -1246,14 +1246,14 @@ function createBaseMsgInstantiateContract(): MsgInstantiateContract {
 export const MsgInstantiateContract = {
   typeUrl: "/cosmwasm.wasm.v1.MsgInstantiateContract",
   aminoType: "wasm/MsgInstantiateContract",
-  encode(message: MsgInstantiateContract, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgInstantiateContract, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
     if (message.admin !== "") {
       writer.uint32(18).string(message.admin);
     }
-    if (!message.codeId.isZero()) {
+    if (message.codeId !== BigInt(0)) {
       writer.uint32(24).uint64(message.codeId);
     }
     if (message.label !== "") {
@@ -1267,8 +1267,8 @@ export const MsgInstantiateContract = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgInstantiateContract {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgInstantiateContract {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInstantiateContract();
     while (reader.pos < end) {
@@ -1281,7 +1281,7 @@ export const MsgInstantiateContract = {
           message.admin = reader.string();
           break;
         case 3:
-          message.codeId = (reader.uint64() as Long);
+          message.codeId = reader.uint64();
           break;
         case 4:
           message.label = reader.string();
@@ -1303,7 +1303,7 @@ export const MsgInstantiateContract = {
     const message = createBaseMsgInstantiateContract();
     message.sender = object.sender ?? "";
     message.admin = object.admin ?? "";
-    message.codeId = object.codeId !== undefined && object.codeId !== null ? Long.fromValue(object.codeId) : Long.UZERO;
+    message.codeId = object.codeId !== undefined && object.codeId !== null ? BigInt(object.codeId.toString()) : BigInt(0);
     message.label = object.label ?? "";
     message.msg = object.msg ?? new Uint8Array();
     message.funds = object.funds?.map(e => Coin.fromPartial(e)) || [];
@@ -1313,7 +1313,7 @@ export const MsgInstantiateContract = {
     return {
       sender: object.sender,
       admin: object.admin,
-      codeId: Long.fromString(object.code_id),
+      codeId: BigInt(object.code_id),
       label: object.label,
       msg: toUtf8(JSON.stringify(object.msg)),
       funds: Array.isArray(object?.funds) ? object.funds.map((e: any) => Coin.fromAmino(e)) : []
@@ -1364,7 +1364,7 @@ function createBaseMsgInstantiateContractResponse(): MsgInstantiateContractRespo
 export const MsgInstantiateContractResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgInstantiateContractResponse",
   aminoType: "wasm/MsgInstantiateContractResponse",
-  encode(message: MsgInstantiateContractResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgInstantiateContractResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -1373,8 +1373,8 @@ export const MsgInstantiateContractResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgInstantiateContractResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgInstantiateContractResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInstantiateContractResponse();
     while (reader.pos < end) {
@@ -1437,7 +1437,7 @@ function createBaseMsgInstantiateContract2(): MsgInstantiateContract2 {
   return {
     sender: "",
     admin: "",
-    codeId: Long.UZERO,
+    codeId: BigInt(0),
     label: "",
     msg: new Uint8Array(),
     funds: [],
@@ -1448,14 +1448,14 @@ function createBaseMsgInstantiateContract2(): MsgInstantiateContract2 {
 export const MsgInstantiateContract2 = {
   typeUrl: "/cosmwasm.wasm.v1.MsgInstantiateContract2",
   aminoType: "wasm/MsgInstantiateContract2",
-  encode(message: MsgInstantiateContract2, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgInstantiateContract2, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
     if (message.admin !== "") {
       writer.uint32(18).string(message.admin);
     }
-    if (!message.codeId.isZero()) {
+    if (message.codeId !== BigInt(0)) {
       writer.uint32(24).uint64(message.codeId);
     }
     if (message.label !== "") {
@@ -1475,8 +1475,8 @@ export const MsgInstantiateContract2 = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgInstantiateContract2 {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgInstantiateContract2 {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInstantiateContract2();
     while (reader.pos < end) {
@@ -1489,7 +1489,7 @@ export const MsgInstantiateContract2 = {
           message.admin = reader.string();
           break;
         case 3:
-          message.codeId = (reader.uint64() as Long);
+          message.codeId = reader.uint64();
           break;
         case 4:
           message.label = reader.string();
@@ -1517,7 +1517,7 @@ export const MsgInstantiateContract2 = {
     const message = createBaseMsgInstantiateContract2();
     message.sender = object.sender ?? "";
     message.admin = object.admin ?? "";
-    message.codeId = object.codeId !== undefined && object.codeId !== null ? Long.fromValue(object.codeId) : Long.UZERO;
+    message.codeId = object.codeId !== undefined && object.codeId !== null ? BigInt(object.codeId.toString()) : BigInt(0);
     message.label = object.label ?? "";
     message.msg = object.msg ?? new Uint8Array();
     message.funds = object.funds?.map(e => Coin.fromPartial(e)) || [];
@@ -1529,7 +1529,7 @@ export const MsgInstantiateContract2 = {
     return {
       sender: object.sender,
       admin: object.admin,
-      codeId: Long.fromString(object.code_id),
+      codeId: BigInt(object.code_id),
       label: object.label,
       msg: toUtf8(JSON.stringify(object.msg)),
       funds: Array.isArray(object?.funds) ? object.funds.map((e: any) => Coin.fromAmino(e)) : [],
@@ -1584,7 +1584,7 @@ function createBaseMsgInstantiateContract2Response(): MsgInstantiateContract2Res
 export const MsgInstantiateContract2Response = {
   typeUrl: "/cosmwasm.wasm.v1.MsgInstantiateContract2Response",
   aminoType: "wasm/MsgInstantiateContract2Response",
-  encode(message: MsgInstantiateContract2Response, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgInstantiateContract2Response, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -1593,8 +1593,8 @@ export const MsgInstantiateContract2Response = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgInstantiateContract2Response {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgInstantiateContract2Response {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInstantiateContract2Response();
     while (reader.pos < end) {
@@ -1664,7 +1664,7 @@ function createBaseMsgExecuteContract(): MsgExecuteContract {
 export const MsgExecuteContract = {
   typeUrl: "/cosmwasm.wasm.v1.MsgExecuteContract",
   aminoType: "wasm/MsgExecuteContract",
-  encode(message: MsgExecuteContract, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExecuteContract, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
@@ -1679,8 +1679,8 @@ export const MsgExecuteContract = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExecuteContract {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExecuteContract {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExecuteContract();
     while (reader.pos < end) {
@@ -1763,14 +1763,14 @@ function createBaseMsgExecuteContractResponse(): MsgExecuteContractResponse {
 export const MsgExecuteContractResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgExecuteContractResponse",
   aminoType: "wasm/MsgExecuteContractResponse",
-  encode(message: MsgExecuteContractResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExecuteContractResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.data.length !== 0) {
       writer.uint32(10).bytes(message.data);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExecuteContractResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExecuteContractResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExecuteContractResponse();
     while (reader.pos < end) {
@@ -1827,21 +1827,21 @@ function createBaseMsgMigrateContract(): MsgMigrateContract {
   return {
     sender: "",
     contract: "",
-    codeId: Long.UZERO,
+    codeId: BigInt(0),
     msg: new Uint8Array()
   };
 }
 export const MsgMigrateContract = {
   typeUrl: "/cosmwasm.wasm.v1.MsgMigrateContract",
   aminoType: "wasm/MsgMigrateContract",
-  encode(message: MsgMigrateContract, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgMigrateContract, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
     if (message.contract !== "") {
       writer.uint32(18).string(message.contract);
     }
-    if (!message.codeId.isZero()) {
+    if (message.codeId !== BigInt(0)) {
       writer.uint32(24).uint64(message.codeId);
     }
     if (message.msg.length !== 0) {
@@ -1849,8 +1849,8 @@ export const MsgMigrateContract = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgMigrateContract {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgMigrateContract {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgMigrateContract();
     while (reader.pos < end) {
@@ -1863,7 +1863,7 @@ export const MsgMigrateContract = {
           message.contract = reader.string();
           break;
         case 3:
-          message.codeId = (reader.uint64() as Long);
+          message.codeId = reader.uint64();
           break;
         case 4:
           message.msg = reader.bytes();
@@ -1879,7 +1879,7 @@ export const MsgMigrateContract = {
     const message = createBaseMsgMigrateContract();
     message.sender = object.sender ?? "";
     message.contract = object.contract ?? "";
-    message.codeId = object.codeId !== undefined && object.codeId !== null ? Long.fromValue(object.codeId) : Long.UZERO;
+    message.codeId = object.codeId !== undefined && object.codeId !== null ? BigInt(object.codeId.toString()) : BigInt(0);
     message.msg = object.msg ?? new Uint8Array();
     return message;
   },
@@ -1887,7 +1887,7 @@ export const MsgMigrateContract = {
     return {
       sender: object.sender,
       contract: object.contract,
-      codeId: Long.fromString(object.code_id),
+      codeId: BigInt(object.code_id),
       msg: toUtf8(JSON.stringify(object.msg))
     };
   },
@@ -1929,14 +1929,14 @@ function createBaseMsgMigrateContractResponse(): MsgMigrateContractResponse {
 export const MsgMigrateContractResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgMigrateContractResponse",
   aminoType: "wasm/MsgMigrateContractResponse",
-  encode(message: MsgMigrateContractResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgMigrateContractResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.data.length !== 0) {
       writer.uint32(10).bytes(message.data);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgMigrateContractResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgMigrateContractResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgMigrateContractResponse();
     while (reader.pos < end) {
@@ -1999,7 +1999,7 @@ function createBaseMsgUpdateAdmin(): MsgUpdateAdmin {
 export const MsgUpdateAdmin = {
   typeUrl: "/cosmwasm.wasm.v1.MsgUpdateAdmin",
   aminoType: "wasm/MsgUpdateAdmin",
-  encode(message: MsgUpdateAdmin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateAdmin, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
@@ -2011,8 +2011,8 @@ export const MsgUpdateAdmin = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateAdmin {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateAdmin {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateAdmin();
     while (reader.pos < end) {
@@ -2083,11 +2083,11 @@ function createBaseMsgUpdateAdminResponse(): MsgUpdateAdminResponse {
 export const MsgUpdateAdminResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgUpdateAdminResponse",
   aminoType: "wasm/MsgUpdateAdminResponse",
-  encode(_: MsgUpdateAdminResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateAdminResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateAdminResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateAdminResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateAdminResponse();
     while (reader.pos < end) {
@@ -2142,7 +2142,7 @@ function createBaseMsgClearAdmin(): MsgClearAdmin {
 export const MsgClearAdmin = {
   typeUrl: "/cosmwasm.wasm.v1.MsgClearAdmin",
   aminoType: "wasm/MsgClearAdmin",
-  encode(message: MsgClearAdmin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgClearAdmin, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
@@ -2151,8 +2151,8 @@ export const MsgClearAdmin = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgClearAdmin {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgClearAdmin {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClearAdmin();
     while (reader.pos < end) {
@@ -2217,11 +2217,11 @@ function createBaseMsgClearAdminResponse(): MsgClearAdminResponse {
 export const MsgClearAdminResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgClearAdminResponse",
   aminoType: "wasm/MsgClearAdminResponse",
-  encode(_: MsgClearAdminResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgClearAdminResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgClearAdminResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgClearAdminResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgClearAdminResponse();
     while (reader.pos < end) {
@@ -2270,18 +2270,18 @@ export const MsgClearAdminResponse = {
 function createBaseMsgUpdateInstantiateConfig(): MsgUpdateInstantiateConfig {
   return {
     sender: "",
-    codeId: Long.UZERO,
+    codeId: BigInt(0),
     newInstantiatePermission: AccessConfig.fromPartial({})
   };
 }
 export const MsgUpdateInstantiateConfig = {
   typeUrl: "/cosmwasm.wasm.v1.MsgUpdateInstantiateConfig",
   aminoType: "wasm/MsgUpdateInstantiateConfig",
-  encode(message: MsgUpdateInstantiateConfig, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateInstantiateConfig, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
-    if (!message.codeId.isZero()) {
+    if (message.codeId !== BigInt(0)) {
       writer.uint32(16).uint64(message.codeId);
     }
     if (message.newInstantiatePermission !== undefined) {
@@ -2289,8 +2289,8 @@ export const MsgUpdateInstantiateConfig = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateInstantiateConfig {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateInstantiateConfig {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateInstantiateConfig();
     while (reader.pos < end) {
@@ -2300,7 +2300,7 @@ export const MsgUpdateInstantiateConfig = {
           message.sender = reader.string();
           break;
         case 2:
-          message.codeId = (reader.uint64() as Long);
+          message.codeId = reader.uint64();
           break;
         case 3:
           message.newInstantiatePermission = AccessConfig.decode(reader, reader.uint32());
@@ -2315,14 +2315,14 @@ export const MsgUpdateInstantiateConfig = {
   fromPartial(object: DeepPartial<MsgUpdateInstantiateConfig>): MsgUpdateInstantiateConfig {
     const message = createBaseMsgUpdateInstantiateConfig();
     message.sender = object.sender ?? "";
-    message.codeId = object.codeId !== undefined && object.codeId !== null ? Long.fromValue(object.codeId) : Long.UZERO;
+    message.codeId = object.codeId !== undefined && object.codeId !== null ? BigInt(object.codeId.toString()) : BigInt(0);
     message.newInstantiatePermission = object.newInstantiatePermission !== undefined && object.newInstantiatePermission !== null ? AccessConfig.fromPartial(object.newInstantiatePermission) : undefined;
     return message;
   },
   fromAmino(object: MsgUpdateInstantiateConfigAmino): MsgUpdateInstantiateConfig {
     return {
       sender: object.sender,
-      codeId: Long.fromString(object.code_id),
+      codeId: BigInt(object.code_id),
       newInstantiatePermission: object?.new_instantiate_permission ? AccessConfig.fromAmino(object.new_instantiate_permission) : undefined
     };
   },
@@ -2361,11 +2361,11 @@ function createBaseMsgUpdateInstantiateConfigResponse(): MsgUpdateInstantiateCon
 export const MsgUpdateInstantiateConfigResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgUpdateInstantiateConfigResponse",
   aminoType: "wasm/MsgUpdateInstantiateConfigResponse",
-  encode(_: MsgUpdateInstantiateConfigResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateInstantiateConfigResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateInstantiateConfigResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateInstantiateConfigResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateInstantiateConfigResponse();
     while (reader.pos < end) {
@@ -2420,7 +2420,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 export const MsgUpdateParams = {
   typeUrl: "/cosmwasm.wasm.v1.MsgUpdateParams",
   aminoType: "wasm/MsgUpdateParams",
-  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -2429,8 +2429,8 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
@@ -2495,11 +2495,11 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 export const MsgUpdateParamsResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgUpdateParamsResponse",
   aminoType: "wasm/MsgUpdateParamsResponse",
-  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
@@ -2555,7 +2555,7 @@ function createBaseMsgSudoContract(): MsgSudoContract {
 export const MsgSudoContract = {
   typeUrl: "/cosmwasm.wasm.v1.MsgSudoContract",
   aminoType: "wasm/MsgSudoContract",
-  encode(message: MsgSudoContract, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSudoContract, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -2567,8 +2567,8 @@ export const MsgSudoContract = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSudoContract {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSudoContract {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSudoContract();
     while (reader.pos < end) {
@@ -2641,14 +2641,14 @@ function createBaseMsgSudoContractResponse(): MsgSudoContractResponse {
 export const MsgSudoContractResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgSudoContractResponse",
   aminoType: "wasm/MsgSudoContractResponse",
-  encode(message: MsgSudoContractResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSudoContractResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.data.length !== 0) {
       writer.uint32(10).bytes(message.data);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSudoContractResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSudoContractResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSudoContractResponse();
     while (reader.pos < end) {
@@ -2710,7 +2710,7 @@ function createBaseMsgPinCodes(): MsgPinCodes {
 export const MsgPinCodes = {
   typeUrl: "/cosmwasm.wasm.v1.MsgPinCodes",
   aminoType: "wasm/MsgPinCodes",
-  encode(message: MsgPinCodes, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgPinCodes, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -2721,8 +2721,8 @@ export const MsgPinCodes = {
     writer.ldelim();
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPinCodes {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgPinCodes {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgPinCodes();
     while (reader.pos < end) {
@@ -2735,10 +2735,10 @@ export const MsgPinCodes = {
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.codeIds.push((reader.uint64() as Long));
+              message.codeIds.push(reader.uint64());
             }
           } else {
-            message.codeIds.push((reader.uint64() as Long));
+            message.codeIds.push(reader.uint64());
           }
           break;
         default:
@@ -2751,20 +2751,20 @@ export const MsgPinCodes = {
   fromPartial(object: DeepPartial<MsgPinCodes>): MsgPinCodes {
     const message = createBaseMsgPinCodes();
     message.authority = object.authority ?? "";
-    message.codeIds = object.codeIds?.map(e => Long.fromValue(e)) || [];
+    message.codeIds = object.codeIds?.map(e => BigInt(e.toString())) || [];
     return message;
   },
   fromAmino(object: MsgPinCodesAmino): MsgPinCodes {
     return {
       authority: object.authority,
-      codeIds: Array.isArray(object?.code_ids) ? object.code_ids.map((e: any) => e) : []
+      codeIds: Array.isArray(object?.code_ids) ? object.code_ids.map((e: any) => BigInt(e)) : []
     };
   },
   toAmino(message: MsgPinCodes): MsgPinCodesAmino {
     const obj: any = {};
     obj.authority = message.authority;
     if (message.codeIds) {
-      obj.code_ids = message.codeIds.map(e => e);
+      obj.code_ids = message.codeIds.map(e => e.toString());
     } else {
       obj.code_ids = [];
     }
@@ -2798,11 +2798,11 @@ function createBaseMsgPinCodesResponse(): MsgPinCodesResponse {
 export const MsgPinCodesResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgPinCodesResponse",
   aminoType: "wasm/MsgPinCodesResponse",
-  encode(_: MsgPinCodesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgPinCodesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPinCodesResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgPinCodesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgPinCodesResponse();
     while (reader.pos < end) {
@@ -2857,7 +2857,7 @@ function createBaseMsgUnpinCodes(): MsgUnpinCodes {
 export const MsgUnpinCodes = {
   typeUrl: "/cosmwasm.wasm.v1.MsgUnpinCodes",
   aminoType: "wasm/MsgUnpinCodes",
-  encode(message: MsgUnpinCodes, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUnpinCodes, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -2868,8 +2868,8 @@ export const MsgUnpinCodes = {
     writer.ldelim();
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnpinCodes {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnpinCodes {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnpinCodes();
     while (reader.pos < end) {
@@ -2882,10 +2882,10 @@ export const MsgUnpinCodes = {
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.codeIds.push((reader.uint64() as Long));
+              message.codeIds.push(reader.uint64());
             }
           } else {
-            message.codeIds.push((reader.uint64() as Long));
+            message.codeIds.push(reader.uint64());
           }
           break;
         default:
@@ -2898,20 +2898,20 @@ export const MsgUnpinCodes = {
   fromPartial(object: DeepPartial<MsgUnpinCodes>): MsgUnpinCodes {
     const message = createBaseMsgUnpinCodes();
     message.authority = object.authority ?? "";
-    message.codeIds = object.codeIds?.map(e => Long.fromValue(e)) || [];
+    message.codeIds = object.codeIds?.map(e => BigInt(e.toString())) || [];
     return message;
   },
   fromAmino(object: MsgUnpinCodesAmino): MsgUnpinCodes {
     return {
       authority: object.authority,
-      codeIds: Array.isArray(object?.code_ids) ? object.code_ids.map((e: any) => e) : []
+      codeIds: Array.isArray(object?.code_ids) ? object.code_ids.map((e: any) => BigInt(e)) : []
     };
   },
   toAmino(message: MsgUnpinCodes): MsgUnpinCodesAmino {
     const obj: any = {};
     obj.authority = message.authority;
     if (message.codeIds) {
-      obj.code_ids = message.codeIds.map(e => e);
+      obj.code_ids = message.codeIds.map(e => e.toString());
     } else {
       obj.code_ids = [];
     }
@@ -2945,11 +2945,11 @@ function createBaseMsgUnpinCodesResponse(): MsgUnpinCodesResponse {
 export const MsgUnpinCodesResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgUnpinCodesResponse",
   aminoType: "wasm/MsgUnpinCodesResponse",
-  encode(_: MsgUnpinCodesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUnpinCodesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnpinCodesResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUnpinCodesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnpinCodesResponse();
     while (reader.pos < end) {
@@ -3013,7 +3013,7 @@ function createBaseMsgStoreAndInstantiateContract(): MsgStoreAndInstantiateContr
 export const MsgStoreAndInstantiateContract = {
   typeUrl: "/cosmwasm.wasm.v1.MsgStoreAndInstantiateContract",
   aminoType: "wasm/MsgStoreAndInstantiateContract",
-  encode(message: MsgStoreAndInstantiateContract, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgStoreAndInstantiateContract, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -3049,8 +3049,8 @@ export const MsgStoreAndInstantiateContract = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStoreAndInstantiateContract {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgStoreAndInstantiateContract {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStoreAndInstantiateContract();
     while (reader.pos < end) {
@@ -3176,7 +3176,7 @@ function createBaseMsgStoreAndInstantiateContractResponse(): MsgStoreAndInstanti
 export const MsgStoreAndInstantiateContractResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgStoreAndInstantiateContractResponse",
   aminoType: "wasm/MsgStoreAndInstantiateContractResponse",
-  encode(message: MsgStoreAndInstantiateContractResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgStoreAndInstantiateContractResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -3185,8 +3185,8 @@ export const MsgStoreAndInstantiateContractResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStoreAndInstantiateContractResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgStoreAndInstantiateContractResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStoreAndInstantiateContractResponse();
     while (reader.pos < end) {
@@ -3254,7 +3254,7 @@ function createBaseMsgAddCodeUploadParamsAddresses(): MsgAddCodeUploadParamsAddr
 export const MsgAddCodeUploadParamsAddresses = {
   typeUrl: "/cosmwasm.wasm.v1.MsgAddCodeUploadParamsAddresses",
   aminoType: "wasm/MsgAddCodeUploadParamsAddresses",
-  encode(message: MsgAddCodeUploadParamsAddresses, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgAddCodeUploadParamsAddresses, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -3263,8 +3263,8 @@ export const MsgAddCodeUploadParamsAddresses = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddCodeUploadParamsAddresses {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgAddCodeUploadParamsAddresses {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAddCodeUploadParamsAddresses();
     while (reader.pos < end) {
@@ -3333,11 +3333,11 @@ function createBaseMsgAddCodeUploadParamsAddressesResponse(): MsgAddCodeUploadPa
 export const MsgAddCodeUploadParamsAddressesResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgAddCodeUploadParamsAddressesResponse",
   aminoType: "wasm/MsgAddCodeUploadParamsAddressesResponse",
-  encode(_: MsgAddCodeUploadParamsAddressesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgAddCodeUploadParamsAddressesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddCodeUploadParamsAddressesResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgAddCodeUploadParamsAddressesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAddCodeUploadParamsAddressesResponse();
     while (reader.pos < end) {
@@ -3392,7 +3392,7 @@ function createBaseMsgRemoveCodeUploadParamsAddresses(): MsgRemoveCodeUploadPara
 export const MsgRemoveCodeUploadParamsAddresses = {
   typeUrl: "/cosmwasm.wasm.v1.MsgRemoveCodeUploadParamsAddresses",
   aminoType: "wasm/MsgRemoveCodeUploadParamsAddresses",
-  encode(message: MsgRemoveCodeUploadParamsAddresses, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRemoveCodeUploadParamsAddresses, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -3401,8 +3401,8 @@ export const MsgRemoveCodeUploadParamsAddresses = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRemoveCodeUploadParamsAddresses {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRemoveCodeUploadParamsAddresses {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRemoveCodeUploadParamsAddresses();
     while (reader.pos < end) {
@@ -3471,11 +3471,11 @@ function createBaseMsgRemoveCodeUploadParamsAddressesResponse(): MsgRemoveCodeUp
 export const MsgRemoveCodeUploadParamsAddressesResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgRemoveCodeUploadParamsAddressesResponse",
   aminoType: "wasm/MsgRemoveCodeUploadParamsAddressesResponse",
-  encode(_: MsgRemoveCodeUploadParamsAddressesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgRemoveCodeUploadParamsAddressesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRemoveCodeUploadParamsAddressesResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRemoveCodeUploadParamsAddressesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRemoveCodeUploadParamsAddressesResponse();
     while (reader.pos < end) {

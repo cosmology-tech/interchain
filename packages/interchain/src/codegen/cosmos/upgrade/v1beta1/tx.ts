@@ -1,5 +1,5 @@
 import { Plan, PlanAmino, PlanSDKType } from "./upgrade";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { DeepPartial } from "../../../helpers";
 /**
  * MsgSoftwareUpgrade is the Msg/SoftwareUpgrade request type.
@@ -135,7 +135,7 @@ function createBaseMsgSoftwareUpgrade(): MsgSoftwareUpgrade {
 export const MsgSoftwareUpgrade = {
   typeUrl: "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
   aminoType: "cosmos-sdk/MsgSoftwareUpgrade",
-  encode(message: MsgSoftwareUpgrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSoftwareUpgrade, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -144,8 +144,8 @@ export const MsgSoftwareUpgrade = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSoftwareUpgrade {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSoftwareUpgrade {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSoftwareUpgrade();
     while (reader.pos < end) {
@@ -210,11 +210,11 @@ function createBaseMsgSoftwareUpgradeResponse(): MsgSoftwareUpgradeResponse {
 export const MsgSoftwareUpgradeResponse = {
   typeUrl: "/cosmos.upgrade.v1beta1.MsgSoftwareUpgradeResponse",
   aminoType: "cosmos-sdk/MsgSoftwareUpgradeResponse",
-  encode(_: MsgSoftwareUpgradeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgSoftwareUpgradeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSoftwareUpgradeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSoftwareUpgradeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSoftwareUpgradeResponse();
     while (reader.pos < end) {
@@ -268,14 +268,14 @@ function createBaseMsgCancelUpgrade(): MsgCancelUpgrade {
 export const MsgCancelUpgrade = {
   typeUrl: "/cosmos.upgrade.v1beta1.MsgCancelUpgrade",
   aminoType: "cosmos-sdk/MsgCancelUpgrade",
-  encode(message: MsgCancelUpgrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCancelUpgrade, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelUpgrade {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelUpgrade {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelUpgrade();
     while (reader.pos < end) {
@@ -334,11 +334,11 @@ function createBaseMsgCancelUpgradeResponse(): MsgCancelUpgradeResponse {
 export const MsgCancelUpgradeResponse = {
   typeUrl: "/cosmos.upgrade.v1beta1.MsgCancelUpgradeResponse",
   aminoType: "cosmos-sdk/MsgCancelUpgradeResponse",
-  encode(_: MsgCancelUpgradeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgCancelUpgradeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelUpgradeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelUpgradeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelUpgradeResponse();
     while (reader.pos < end) {

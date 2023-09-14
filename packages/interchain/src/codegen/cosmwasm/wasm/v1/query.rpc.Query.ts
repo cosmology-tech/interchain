@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
 import { QueryContractInfoRequest, QueryContractInfoResponse, QueryContractHistoryRequest, QueryContractHistoryResponse, QueryContractsByCodeRequest, QueryContractsByCodeResponse, QueryAllContractStateRequest, QueryAllContractStateResponse, QueryRawContractStateRequest, QueryRawContractStateResponse, QuerySmartContractStateRequest, QuerySmartContractStateResponse, QueryCodeRequest, QueryCodeResponse, QueryCodesRequest, QueryCodesResponse, QueryPinnedCodesRequest, QueryPinnedCodesResponse, QueryParamsRequest, QueryParamsResponse, QueryContractsByCreatorRequest, QueryContractsByCreatorResponse } from "./query";
 /** Query provides defines the gRPC querier service */
@@ -36,43 +36,43 @@ export class QueryClientImpl implements Query {
   contractInfo = async (request: QueryContractInfoRequest): Promise<QueryContractInfoResponse> => {
     const data = QueryContractInfoRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "ContractInfo", data);
-    return promise.then(data => QueryContractInfoResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryContractInfoResponse.decode(new BinaryReader(data)));
   };
   /* ContractHistory gets the contract code history */
   contractHistory = async (request: QueryContractHistoryRequest): Promise<QueryContractHistoryResponse> => {
     const data = QueryContractHistoryRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "ContractHistory", data);
-    return promise.then(data => QueryContractHistoryResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryContractHistoryResponse.decode(new BinaryReader(data)));
   };
   /* ContractsByCode lists all smart contracts for a code id */
   contractsByCode = async (request: QueryContractsByCodeRequest): Promise<QueryContractsByCodeResponse> => {
     const data = QueryContractsByCodeRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "ContractsByCode", data);
-    return promise.then(data => QueryContractsByCodeResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryContractsByCodeResponse.decode(new BinaryReader(data)));
   };
   /* AllContractState gets all raw store data for a single contract */
   allContractState = async (request: QueryAllContractStateRequest): Promise<QueryAllContractStateResponse> => {
     const data = QueryAllContractStateRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "AllContractState", data);
-    return promise.then(data => QueryAllContractStateResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryAllContractStateResponse.decode(new BinaryReader(data)));
   };
   /* RawContractState gets single key from the raw store data of a contract */
   rawContractState = async (request: QueryRawContractStateRequest): Promise<QueryRawContractStateResponse> => {
     const data = QueryRawContractStateRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "RawContractState", data);
-    return promise.then(data => QueryRawContractStateResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryRawContractStateResponse.decode(new BinaryReader(data)));
   };
   /* SmartContractState get smart query result from the contract */
   smartContractState = async (request: QuerySmartContractStateRequest): Promise<QuerySmartContractStateResponse> => {
     const data = QuerySmartContractStateRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "SmartContractState", data);
-    return promise.then(data => QuerySmartContractStateResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QuerySmartContractStateResponse.decode(new BinaryReader(data)));
   };
   /* Code gets the binary code and metadata for a singe wasm code */
   code = async (request: QueryCodeRequest): Promise<QueryCodeResponse> => {
     const data = QueryCodeRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "Code", data);
-    return promise.then(data => QueryCodeResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryCodeResponse.decode(new BinaryReader(data)));
   };
   /* Codes gets the metadata for all stored wasm codes */
   codes = async (request: QueryCodesRequest = {
@@ -80,7 +80,7 @@ export class QueryClientImpl implements Query {
   }): Promise<QueryCodesResponse> => {
     const data = QueryCodesRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "Codes", data);
-    return promise.then(data => QueryCodesResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryCodesResponse.decode(new BinaryReader(data)));
   };
   /* PinnedCodes gets the pinned code ids */
   pinnedCodes = async (request: QueryPinnedCodesRequest = {
@@ -88,19 +88,19 @@ export class QueryClientImpl implements Query {
   }): Promise<QueryPinnedCodesResponse> => {
     const data = QueryPinnedCodesRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "PinnedCodes", data);
-    return promise.then(data => QueryPinnedCodesResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryPinnedCodesResponse.decode(new BinaryReader(data)));
   };
   /* Params gets the module params */
   params = async (request: QueryParamsRequest = {}): Promise<QueryParamsResponse> => {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "Params", data);
-    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryParamsResponse.decode(new BinaryReader(data)));
   };
   /* ContractsByCreator gets the contracts by creator */
   contractsByCreator = async (request: QueryContractsByCreatorRequest): Promise<QueryContractsByCreatorResponse> => {
     const data = QueryContractsByCreatorRequest.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Query", "ContractsByCreator", data);
-    return promise.then(data => QueryContractsByCreatorResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryContractsByCreatorResponse.decode(new BinaryReader(data)));
   };
 }
 export const createRpcQueryExtension = (base: QueryClient) => {

@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
 import { QueryBalanceRequest, QueryBalanceResponse, QueryAllBalancesRequest, QueryAllBalancesResponse, QuerySpendableBalancesRequest, QuerySpendableBalancesResponse, QuerySpendableBalanceByDenomRequest, QuerySpendableBalanceByDenomResponse, QueryTotalSupplyRequest, QueryTotalSupplyResponse, QuerySupplyOfRequest, QuerySupplyOfResponse, QueryParamsRequest, QueryParamsResponse, QueryDenomMetadataRequest, QueryDenomMetadataResponse, QueryDenomMetadataByQueryStringRequest, QueryDenomMetadataByQueryStringResponse, QueryDenomsMetadataRequest, QueryDenomsMetadataResponse, QueryDenomOwnersRequest, QueryDenomOwnersResponse, QuerySendEnabledRequest, QuerySendEnabledResponse } from "./query";
 /** Query defines the gRPC querier service. */
@@ -88,7 +88,7 @@ export class QueryClientImpl implements Query {
   balance = async (request: QueryBalanceRequest): Promise<QueryBalanceResponse> => {
     const data = QueryBalanceRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "Balance", data);
-    return promise.then(data => QueryBalanceResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryBalanceResponse.decode(new BinaryReader(data)));
   };
   /* AllBalances queries the balance of all coins for a single account.
   
@@ -97,7 +97,7 @@ export class QueryClientImpl implements Query {
   allBalances = async (request: QueryAllBalancesRequest): Promise<QueryAllBalancesResponse> => {
     const data = QueryAllBalancesRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "AllBalances", data);
-    return promise.then(data => QueryAllBalancesResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryAllBalancesResponse.decode(new BinaryReader(data)));
   };
   /* SpendableBalances queries the spendable balance of all coins for a single
    account.
@@ -109,7 +109,7 @@ export class QueryClientImpl implements Query {
   spendableBalances = async (request: QuerySpendableBalancesRequest): Promise<QuerySpendableBalancesResponse> => {
     const data = QuerySpendableBalancesRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "SpendableBalances", data);
-    return promise.then(data => QuerySpendableBalancesResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QuerySpendableBalancesResponse.decode(new BinaryReader(data)));
   };
   /* SpendableBalanceByDenom queries the spendable balance of a single denom for
    a single account.
@@ -121,7 +121,7 @@ export class QueryClientImpl implements Query {
   spendableBalanceByDenom = async (request: QuerySpendableBalanceByDenomRequest): Promise<QuerySpendableBalanceByDenomResponse> => {
     const data = QuerySpendableBalanceByDenomRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "SpendableBalanceByDenom", data);
-    return promise.then(data => QuerySpendableBalanceByDenomResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QuerySpendableBalanceByDenomResponse.decode(new BinaryReader(data)));
   };
   /* TotalSupply queries the total supply of all coins.
   
@@ -132,7 +132,7 @@ export class QueryClientImpl implements Query {
   }): Promise<QueryTotalSupplyResponse> => {
     const data = QueryTotalSupplyRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "TotalSupply", data);
-    return promise.then(data => QueryTotalSupplyResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryTotalSupplyResponse.decode(new BinaryReader(data)));
   };
   /* SupplyOf queries the supply of a single coin.
   
@@ -141,25 +141,25 @@ export class QueryClientImpl implements Query {
   supplyOf = async (request: QuerySupplyOfRequest): Promise<QuerySupplyOfResponse> => {
     const data = QuerySupplyOfRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "SupplyOf", data);
-    return promise.then(data => QuerySupplyOfResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QuerySupplyOfResponse.decode(new BinaryReader(data)));
   };
   /* Params queries the parameters of x/bank module. */
   params = async (request: QueryParamsRequest = {}): Promise<QueryParamsResponse> => {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "Params", data);
-    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryParamsResponse.decode(new BinaryReader(data)));
   };
   /* DenomsMetadata queries the client metadata of a given coin denomination. */
   denomMetadata = async (request: QueryDenomMetadataRequest): Promise<QueryDenomMetadataResponse> => {
     const data = QueryDenomMetadataRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "DenomMetadata", data);
-    return promise.then(data => QueryDenomMetadataResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryDenomMetadataResponse.decode(new BinaryReader(data)));
   };
   /* DenomsMetadata queries the client metadata of a given coin denomination. */
   denomMetadataByQueryString = async (request: QueryDenomMetadataByQueryStringRequest): Promise<QueryDenomMetadataByQueryStringResponse> => {
     const data = QueryDenomMetadataByQueryStringRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "DenomMetadataByQueryString", data);
-    return promise.then(data => QueryDenomMetadataByQueryStringResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryDenomMetadataByQueryStringResponse.decode(new BinaryReader(data)));
   };
   /* DenomsMetadata queries the client metadata for all registered coin
    denominations. */
@@ -168,7 +168,7 @@ export class QueryClientImpl implements Query {
   }): Promise<QueryDenomsMetadataResponse> => {
     const data = QueryDenomsMetadataRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "DenomsMetadata", data);
-    return promise.then(data => QueryDenomsMetadataResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryDenomsMetadataResponse.decode(new BinaryReader(data)));
   };
   /* DenomOwners queries for all account addresses that own a particular token
    denomination.
@@ -180,7 +180,7 @@ export class QueryClientImpl implements Query {
   denomOwners = async (request: QueryDenomOwnersRequest): Promise<QueryDenomOwnersResponse> => {
     const data = QueryDenomOwnersRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "DenomOwners", data);
-    return promise.then(data => QueryDenomOwnersResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryDenomOwnersResponse.decode(new BinaryReader(data)));
   };
   /* SendEnabled queries for SendEnabled entries.
   
@@ -192,7 +192,7 @@ export class QueryClientImpl implements Query {
   sendEnabled = async (request: QuerySendEnabledRequest): Promise<QuerySendEnabledResponse> => {
     const data = QuerySendEnabledRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Query", "SendEnabled", data);
-    return promise.then(data => QuerySendEnabledResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QuerySendEnabledResponse.decode(new BinaryReader(data)));
   };
 }
 export const createRpcQueryExtension = (base: QueryClient) => {

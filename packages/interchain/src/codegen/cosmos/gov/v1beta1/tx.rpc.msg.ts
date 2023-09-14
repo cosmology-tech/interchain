@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../binary";
 import { MsgSubmitProposal, MsgSubmitProposalResponse, MsgVote, MsgVoteResponse, MsgVoteWeighted, MsgVoteWeightedResponse, MsgDeposit, MsgDepositResponse } from "./tx";
 /** Msg defines the gov Msg service. */
 export interface Msg {
@@ -25,13 +25,13 @@ export class MsgClientImpl implements Msg {
   submitProposal = async (request: MsgSubmitProposal): Promise<MsgSubmitProposalResponse> => {
     const data = MsgSubmitProposal.encode(request).finish();
     const promise = this.rpc.request("cosmos.gov.v1beta1.Msg", "SubmitProposal", data);
-    return promise.then(data => MsgSubmitProposalResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgSubmitProposalResponse.decode(new BinaryReader(data)));
   };
   /* Vote defines a method to add a vote on a specific proposal. */
   vote = async (request: MsgVote): Promise<MsgVoteResponse> => {
     const data = MsgVote.encode(request).finish();
     const promise = this.rpc.request("cosmos.gov.v1beta1.Msg", "Vote", data);
-    return promise.then(data => MsgVoteResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgVoteResponse.decode(new BinaryReader(data)));
   };
   /* VoteWeighted defines a method to add a weighted vote on a specific proposal.
   
@@ -39,12 +39,12 @@ export class MsgClientImpl implements Msg {
   voteWeighted = async (request: MsgVoteWeighted): Promise<MsgVoteWeightedResponse> => {
     const data = MsgVoteWeighted.encode(request).finish();
     const promise = this.rpc.request("cosmos.gov.v1beta1.Msg", "VoteWeighted", data);
-    return promise.then(data => MsgVoteWeightedResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgVoteWeightedResponse.decode(new BinaryReader(data)));
   };
   /* Deposit defines a method to add deposit on a specific proposal. */
   deposit = async (request: MsgDeposit): Promise<MsgDepositResponse> => {
     const data = MsgDeposit.encode(request).finish();
     const promise = this.rpc.request("cosmos.gov.v1beta1.Msg", "Deposit", data);
-    return promise.then(data => MsgDepositResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgDepositResponse.decode(new BinaryReader(data)));
   };
 }

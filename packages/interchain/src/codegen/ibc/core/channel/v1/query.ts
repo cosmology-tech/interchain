@@ -2,8 +2,8 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { Channel, ChannelAmino, ChannelSDKType, IdentifiedChannel, IdentifiedChannelAmino, IdentifiedChannelSDKType, PacketState, PacketStateAmino, PacketStateSDKType } from "./channel";
 import { Height, HeightAmino, HeightSDKType, IdentifiedClientState, IdentifiedClientStateAmino, IdentifiedClientStateSDKType } from "../../client/v1/client";
 import { Any, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
-import { Long, DeepPartial } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { DeepPartial } from "../../../../helpers";
 /** QueryChannelRequest is the request type for the Query/Channel RPC method */
 export interface QueryChannelRequest {
   /** port unique identifier */
@@ -293,9 +293,9 @@ export interface QueryChannelConsensusStateRequest {
   /** channel unique identifier */
   channelId: string;
   /** revision number of the consensus state */
-  revisionNumber: Long;
+  revisionNumber: bigint;
   /** revision height of the consensus state */
-  revisionHeight: Long;
+  revisionHeight: bigint;
 }
 export interface QueryChannelConsensusStateRequestProtoMsg {
   typeUrl: "/ibc.core.channel.v1.QueryChannelConsensusStateRequest";
@@ -326,8 +326,8 @@ export interface QueryChannelConsensusStateRequestAminoMsg {
 export interface QueryChannelConsensusStateRequestSDKType {
   port_id: string;
   channel_id: string;
-  revision_number: Long;
-  revision_height: Long;
+  revision_number: bigint;
+  revision_height: bigint;
 }
 /**
  * QueryChannelClientStateResponse is the Response type for the
@@ -385,7 +385,7 @@ export interface QueryPacketCommitmentRequest {
   /** channel unique identifier */
   channelId: string;
   /** packet sequence */
-  sequence: Long;
+  sequence: bigint;
 }
 export interface QueryPacketCommitmentRequestProtoMsg {
   typeUrl: "/ibc.core.channel.v1.QueryPacketCommitmentRequest";
@@ -414,7 +414,7 @@ export interface QueryPacketCommitmentRequestAminoMsg {
 export interface QueryPacketCommitmentRequestSDKType {
   port_id: string;
   channel_id: string;
-  sequence: Long;
+  sequence: bigint;
 }
 /**
  * QueryPacketCommitmentResponse defines the client query response for a packet
@@ -550,7 +550,7 @@ export interface QueryPacketReceiptRequest {
   /** channel unique identifier */
   channelId: string;
   /** packet sequence */
-  sequence: Long;
+  sequence: bigint;
 }
 export interface QueryPacketReceiptRequestProtoMsg {
   typeUrl: "/ibc.core.channel.v1.QueryPacketReceiptRequest";
@@ -579,7 +579,7 @@ export interface QueryPacketReceiptRequestAminoMsg {
 export interface QueryPacketReceiptRequestSDKType {
   port_id: string;
   channel_id: string;
-  sequence: Long;
+  sequence: bigint;
 }
 /**
  * QueryPacketReceiptResponse defines the client query response for a packet
@@ -635,7 +635,7 @@ export interface QueryPacketAcknowledgementRequest {
   /** channel unique identifier */
   channelId: string;
   /** packet sequence */
-  sequence: Long;
+  sequence: bigint;
 }
 export interface QueryPacketAcknowledgementRequestProtoMsg {
   typeUrl: "/ibc.core.channel.v1.QueryPacketAcknowledgementRequest";
@@ -664,7 +664,7 @@ export interface QueryPacketAcknowledgementRequestAminoMsg {
 export interface QueryPacketAcknowledgementRequestSDKType {
   port_id: string;
   channel_id: string;
-  sequence: Long;
+  sequence: bigint;
 }
 /**
  * QueryPacketAcknowledgementResponse defines the client query response for a
@@ -722,7 +722,7 @@ export interface QueryPacketAcknowledgementsRequest {
   /** pagination request */
   pagination?: PageRequest;
   /** list of packet sequences */
-  packetCommitmentSequences?: Long[];
+  packetCommitmentSequences?: bigint[];
 }
 export interface QueryPacketAcknowledgementsRequestProtoMsg {
   typeUrl: "/ibc.core.channel.v1.QueryPacketAcknowledgementsRequest";
@@ -754,7 +754,7 @@ export interface QueryPacketAcknowledgementsRequestSDKType {
   port_id: string;
   channel_id: string;
   pagination?: PageRequestSDKType;
-  packet_commitment_sequences?: Long[];
+  packet_commitment_sequences?: bigint[];
 }
 /**
  * QueryPacketAcknowledgemetsResponse is the request type for the
@@ -805,7 +805,7 @@ export interface QueryUnreceivedPacketsRequest {
   /** channel unique identifier */
   channelId: string;
   /** list of packet sequences */
-  packetCommitmentSequences: Long[];
+  packetCommitmentSequences: bigint[];
 }
 export interface QueryUnreceivedPacketsRequestProtoMsg {
   typeUrl: "/ibc.core.channel.v1.QueryUnreceivedPacketsRequest";
@@ -834,7 +834,7 @@ export interface QueryUnreceivedPacketsRequestAminoMsg {
 export interface QueryUnreceivedPacketsRequestSDKType {
   port_id: string;
   channel_id: string;
-  packet_commitment_sequences: Long[];
+  packet_commitment_sequences: bigint[];
 }
 /**
  * QueryUnreceivedPacketsResponse is the response type for the
@@ -842,7 +842,7 @@ export interface QueryUnreceivedPacketsRequestSDKType {
  */
 export interface QueryUnreceivedPacketsResponse {
   /** list of unreceived packet sequences */
-  sequences: Long[];
+  sequences: bigint[];
   /** query block height */
   height: Height;
 }
@@ -869,7 +869,7 @@ export interface QueryUnreceivedPacketsResponseAminoMsg {
  * Query/UnreceivedPacketCommitments RPC method
  */
 export interface QueryUnreceivedPacketsResponseSDKType {
-  sequences: Long[];
+  sequences: bigint[];
   height: HeightSDKType;
 }
 /**
@@ -882,7 +882,7 @@ export interface QueryUnreceivedAcksRequest {
   /** channel unique identifier */
   channelId: string;
   /** list of acknowledgement sequences */
-  packetAckSequences: Long[];
+  packetAckSequences: bigint[];
 }
 export interface QueryUnreceivedAcksRequestProtoMsg {
   typeUrl: "/ibc.core.channel.v1.QueryUnreceivedAcksRequest";
@@ -911,7 +911,7 @@ export interface QueryUnreceivedAcksRequestAminoMsg {
 export interface QueryUnreceivedAcksRequestSDKType {
   port_id: string;
   channel_id: string;
-  packet_ack_sequences: Long[];
+  packet_ack_sequences: bigint[];
 }
 /**
  * QueryUnreceivedAcksResponse is the response type for the
@@ -919,7 +919,7 @@ export interface QueryUnreceivedAcksRequestSDKType {
  */
 export interface QueryUnreceivedAcksResponse {
   /** list of unreceived acknowledgement sequences */
-  sequences: Long[];
+  sequences: bigint[];
   /** query block height */
   height: Height;
 }
@@ -946,7 +946,7 @@ export interface QueryUnreceivedAcksResponseAminoMsg {
  * Query/UnreceivedAcks RPC method
  */
 export interface QueryUnreceivedAcksResponseSDKType {
-  sequences: Long[];
+  sequences: bigint[];
   height: HeightSDKType;
 }
 /**
@@ -991,7 +991,7 @@ export interface QueryNextSequenceReceiveRequestSDKType {
  */
 export interface QueryNextSequenceReceiveResponse {
   /** next sequence receive number */
-  nextSequenceReceive: Long;
+  nextSequenceReceive: bigint;
   /** merkle proof of existence */
   proof: Uint8Array;
   /** height at which the proof was retrieved */
@@ -1022,7 +1022,7 @@ export interface QueryNextSequenceReceiveResponseAminoMsg {
  * Query/QueryNextSequenceReceiveResponse RPC method
  */
 export interface QueryNextSequenceReceiveResponseSDKType {
-  next_sequence_receive: Long;
+  next_sequence_receive: bigint;
   proof: Uint8Array;
   proof_height: HeightSDKType;
 }
@@ -1068,7 +1068,7 @@ export interface QueryNextSequenceSendRequestSDKType {
  */
 export interface QueryNextSequenceSendResponse {
   /** next sequence send number */
-  nextSequenceSend: Long;
+  nextSequenceSend: bigint;
   /** merkle proof of existence */
   proof: Uint8Array;
   /** height at which the proof was retrieved */
@@ -1099,7 +1099,7 @@ export interface QueryNextSequenceSendResponseAminoMsg {
  * Query/QueryNextSequenceSend RPC method
  */
 export interface QueryNextSequenceSendResponseSDKType {
-  next_sequence_send: Long;
+  next_sequence_send: bigint;
   proof: Uint8Array;
   proof_height: HeightSDKType;
 }
@@ -1112,7 +1112,7 @@ function createBaseQueryChannelRequest(): QueryChannelRequest {
 export const QueryChannelRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryChannelRequest",
   aminoType: "cosmos-sdk/QueryChannelRequest",
-  encode(message: QueryChannelRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryChannelRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
@@ -1121,8 +1121,8 @@ export const QueryChannelRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryChannelRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryChannelRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryChannelRequest();
     while (reader.pos < end) {
@@ -1191,7 +1191,7 @@ function createBaseQueryChannelResponse(): QueryChannelResponse {
 export const QueryChannelResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryChannelResponse",
   aminoType: "cosmos-sdk/QueryChannelResponse",
-  encode(message: QueryChannelResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryChannelResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channel !== undefined) {
       Channel.encode(message.channel, writer.uint32(10).fork()).ldelim();
     }
@@ -1203,8 +1203,8 @@ export const QueryChannelResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryChannelResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryChannelResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryChannelResponse();
     while (reader.pos < end) {
@@ -1277,14 +1277,14 @@ function createBaseQueryChannelsRequest(): QueryChannelsRequest {
 export const QueryChannelsRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryChannelsRequest",
   aminoType: "cosmos-sdk/QueryChannelsRequest",
-  encode(message: QueryChannelsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryChannelsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryChannelsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryChannelsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryChannelsRequest();
     while (reader.pos < end) {
@@ -1347,7 +1347,7 @@ function createBaseQueryChannelsResponse(): QueryChannelsResponse {
 export const QueryChannelsResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryChannelsResponse",
   aminoType: "cosmos-sdk/QueryChannelsResponse",
-  encode(message: QueryChannelsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryChannelsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.channels) {
       IdentifiedChannel.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1359,8 +1359,8 @@ export const QueryChannelsResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryChannelsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryChannelsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryChannelsResponse();
     while (reader.pos < end) {
@@ -1438,7 +1438,7 @@ function createBaseQueryConnectionChannelsRequest(): QueryConnectionChannelsRequ
 export const QueryConnectionChannelsRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryConnectionChannelsRequest",
   aminoType: "cosmos-sdk/QueryConnectionChannelsRequest",
-  encode(message: QueryConnectionChannelsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryConnectionChannelsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.connection !== "") {
       writer.uint32(10).string(message.connection);
     }
@@ -1447,8 +1447,8 @@ export const QueryConnectionChannelsRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryConnectionChannelsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryConnectionChannelsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryConnectionChannelsRequest();
     while (reader.pos < end) {
@@ -1517,7 +1517,7 @@ function createBaseQueryConnectionChannelsResponse(): QueryConnectionChannelsRes
 export const QueryConnectionChannelsResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryConnectionChannelsResponse",
   aminoType: "cosmos-sdk/QueryConnectionChannelsResponse",
-  encode(message: QueryConnectionChannelsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryConnectionChannelsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.channels) {
       IdentifiedChannel.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1529,8 +1529,8 @@ export const QueryConnectionChannelsResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryConnectionChannelsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryConnectionChannelsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryConnectionChannelsResponse();
     while (reader.pos < end) {
@@ -1608,7 +1608,7 @@ function createBaseQueryChannelClientStateRequest(): QueryChannelClientStateRequ
 export const QueryChannelClientStateRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryChannelClientStateRequest",
   aminoType: "cosmos-sdk/QueryChannelClientStateRequest",
-  encode(message: QueryChannelClientStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryChannelClientStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
@@ -1617,8 +1617,8 @@ export const QueryChannelClientStateRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryChannelClientStateRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryChannelClientStateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryChannelClientStateRequest();
     while (reader.pos < end) {
@@ -1687,7 +1687,7 @@ function createBaseQueryChannelClientStateResponse(): QueryChannelClientStateRes
 export const QueryChannelClientStateResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryChannelClientStateResponse",
   aminoType: "cosmos-sdk/QueryChannelClientStateResponse",
-  encode(message: QueryChannelClientStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryChannelClientStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.identifiedClientState !== undefined) {
       IdentifiedClientState.encode(message.identifiedClientState, writer.uint32(10).fork()).ldelim();
     }
@@ -1699,8 +1699,8 @@ export const QueryChannelClientStateResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryChannelClientStateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryChannelClientStateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryChannelClientStateResponse();
     while (reader.pos < end) {
@@ -1769,30 +1769,30 @@ function createBaseQueryChannelConsensusStateRequest(): QueryChannelConsensusSta
   return {
     portId: "",
     channelId: "",
-    revisionNumber: Long.UZERO,
-    revisionHeight: Long.UZERO
+    revisionNumber: BigInt(0),
+    revisionHeight: BigInt(0)
   };
 }
 export const QueryChannelConsensusStateRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryChannelConsensusStateRequest",
   aminoType: "cosmos-sdk/QueryChannelConsensusStateRequest",
-  encode(message: QueryChannelConsensusStateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryChannelConsensusStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
     if (message.channelId !== "") {
       writer.uint32(18).string(message.channelId);
     }
-    if (!message.revisionNumber.isZero()) {
+    if (message.revisionNumber !== BigInt(0)) {
       writer.uint32(24).uint64(message.revisionNumber);
     }
-    if (!message.revisionHeight.isZero()) {
+    if (message.revisionHeight !== BigInt(0)) {
       writer.uint32(32).uint64(message.revisionHeight);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryChannelConsensusStateRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryChannelConsensusStateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryChannelConsensusStateRequest();
     while (reader.pos < end) {
@@ -1805,10 +1805,10 @@ export const QueryChannelConsensusStateRequest = {
           message.channelId = reader.string();
           break;
         case 3:
-          message.revisionNumber = (reader.uint64() as Long);
+          message.revisionNumber = reader.uint64();
           break;
         case 4:
-          message.revisionHeight = (reader.uint64() as Long);
+          message.revisionHeight = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1821,16 +1821,16 @@ export const QueryChannelConsensusStateRequest = {
     const message = createBaseQueryChannelConsensusStateRequest();
     message.portId = object.portId ?? "";
     message.channelId = object.channelId ?? "";
-    message.revisionNumber = object.revisionNumber !== undefined && object.revisionNumber !== null ? Long.fromValue(object.revisionNumber) : Long.UZERO;
-    message.revisionHeight = object.revisionHeight !== undefined && object.revisionHeight !== null ? Long.fromValue(object.revisionHeight) : Long.UZERO;
+    message.revisionNumber = object.revisionNumber !== undefined && object.revisionNumber !== null ? BigInt(object.revisionNumber.toString()) : BigInt(0);
+    message.revisionHeight = object.revisionHeight !== undefined && object.revisionHeight !== null ? BigInt(object.revisionHeight.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: QueryChannelConsensusStateRequestAmino): QueryChannelConsensusStateRequest {
     return {
       portId: object.port_id,
       channelId: object.channel_id,
-      revisionNumber: Long.fromString(object.revision_number),
-      revisionHeight: Long.fromString(object.revision_height)
+      revisionNumber: BigInt(object.revision_number),
+      revisionHeight: BigInt(object.revision_height)
     };
   },
   toAmino(message: QueryChannelConsensusStateRequest): QueryChannelConsensusStateRequestAmino {
@@ -1874,7 +1874,7 @@ function createBaseQueryChannelConsensusStateResponse(): QueryChannelConsensusSt
 export const QueryChannelConsensusStateResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryChannelConsensusStateResponse",
   aminoType: "cosmos-sdk/QueryChannelConsensusStateResponse",
-  encode(message: QueryChannelConsensusStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryChannelConsensusStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.consensusState !== undefined) {
       Any.encode(message.consensusState, writer.uint32(10).fork()).ldelim();
     }
@@ -1889,8 +1889,8 @@ export const QueryChannelConsensusStateResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryChannelConsensusStateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryChannelConsensusStateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryChannelConsensusStateResponse();
     while (reader.pos < end) {
@@ -1965,26 +1965,26 @@ function createBaseQueryPacketCommitmentRequest(): QueryPacketCommitmentRequest 
   return {
     portId: "",
     channelId: "",
-    sequence: Long.UZERO
+    sequence: BigInt(0)
   };
 }
 export const QueryPacketCommitmentRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryPacketCommitmentRequest",
   aminoType: "cosmos-sdk/QueryPacketCommitmentRequest",
-  encode(message: QueryPacketCommitmentRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPacketCommitmentRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
     if (message.channelId !== "") {
       writer.uint32(18).string(message.channelId);
     }
-    if (!message.sequence.isZero()) {
+    if (message.sequence !== BigInt(0)) {
       writer.uint32(24).uint64(message.sequence);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPacketCommitmentRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPacketCommitmentRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPacketCommitmentRequest();
     while (reader.pos < end) {
@@ -1997,7 +1997,7 @@ export const QueryPacketCommitmentRequest = {
           message.channelId = reader.string();
           break;
         case 3:
-          message.sequence = (reader.uint64() as Long);
+          message.sequence = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2010,14 +2010,14 @@ export const QueryPacketCommitmentRequest = {
     const message = createBaseQueryPacketCommitmentRequest();
     message.portId = object.portId ?? "";
     message.channelId = object.channelId ?? "";
-    message.sequence = object.sequence !== undefined && object.sequence !== null ? Long.fromValue(object.sequence) : Long.UZERO;
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: QueryPacketCommitmentRequestAmino): QueryPacketCommitmentRequest {
     return {
       portId: object.port_id,
       channelId: object.channel_id,
-      sequence: Long.fromString(object.sequence)
+      sequence: BigInt(object.sequence)
     };
   },
   toAmino(message: QueryPacketCommitmentRequest): QueryPacketCommitmentRequestAmino {
@@ -2059,7 +2059,7 @@ function createBaseQueryPacketCommitmentResponse(): QueryPacketCommitmentRespons
 export const QueryPacketCommitmentResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryPacketCommitmentResponse",
   aminoType: "cosmos-sdk/QueryPacketCommitmentResponse",
-  encode(message: QueryPacketCommitmentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPacketCommitmentResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.commitment.length !== 0) {
       writer.uint32(10).bytes(message.commitment);
     }
@@ -2071,8 +2071,8 @@ export const QueryPacketCommitmentResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPacketCommitmentResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPacketCommitmentResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPacketCommitmentResponse();
     while (reader.pos < end) {
@@ -2147,7 +2147,7 @@ function createBaseQueryPacketCommitmentsRequest(): QueryPacketCommitmentsReques
 export const QueryPacketCommitmentsRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryPacketCommitmentsRequest",
   aminoType: "cosmos-sdk/QueryPacketCommitmentsRequest",
-  encode(message: QueryPacketCommitmentsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPacketCommitmentsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
@@ -2159,8 +2159,8 @@ export const QueryPacketCommitmentsRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPacketCommitmentsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPacketCommitmentsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPacketCommitmentsRequest();
     while (reader.pos < end) {
@@ -2235,7 +2235,7 @@ function createBaseQueryPacketCommitmentsResponse(): QueryPacketCommitmentsRespo
 export const QueryPacketCommitmentsResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryPacketCommitmentsResponse",
   aminoType: "cosmos-sdk/QueryPacketCommitmentsResponse",
-  encode(message: QueryPacketCommitmentsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPacketCommitmentsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.commitments) {
       PacketState.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -2247,8 +2247,8 @@ export const QueryPacketCommitmentsResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPacketCommitmentsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPacketCommitmentsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPacketCommitmentsResponse();
     while (reader.pos < end) {
@@ -2321,26 +2321,26 @@ function createBaseQueryPacketReceiptRequest(): QueryPacketReceiptRequest {
   return {
     portId: "",
     channelId: "",
-    sequence: Long.UZERO
+    sequence: BigInt(0)
   };
 }
 export const QueryPacketReceiptRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryPacketReceiptRequest",
   aminoType: "cosmos-sdk/QueryPacketReceiptRequest",
-  encode(message: QueryPacketReceiptRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPacketReceiptRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
     if (message.channelId !== "") {
       writer.uint32(18).string(message.channelId);
     }
-    if (!message.sequence.isZero()) {
+    if (message.sequence !== BigInt(0)) {
       writer.uint32(24).uint64(message.sequence);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPacketReceiptRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPacketReceiptRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPacketReceiptRequest();
     while (reader.pos < end) {
@@ -2353,7 +2353,7 @@ export const QueryPacketReceiptRequest = {
           message.channelId = reader.string();
           break;
         case 3:
-          message.sequence = (reader.uint64() as Long);
+          message.sequence = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2366,14 +2366,14 @@ export const QueryPacketReceiptRequest = {
     const message = createBaseQueryPacketReceiptRequest();
     message.portId = object.portId ?? "";
     message.channelId = object.channelId ?? "";
-    message.sequence = object.sequence !== undefined && object.sequence !== null ? Long.fromValue(object.sequence) : Long.UZERO;
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: QueryPacketReceiptRequestAmino): QueryPacketReceiptRequest {
     return {
       portId: object.port_id,
       channelId: object.channel_id,
-      sequence: Long.fromString(object.sequence)
+      sequence: BigInt(object.sequence)
     };
   },
   toAmino(message: QueryPacketReceiptRequest): QueryPacketReceiptRequestAmino {
@@ -2415,7 +2415,7 @@ function createBaseQueryPacketReceiptResponse(): QueryPacketReceiptResponse {
 export const QueryPacketReceiptResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryPacketReceiptResponse",
   aminoType: "cosmos-sdk/QueryPacketReceiptResponse",
-  encode(message: QueryPacketReceiptResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPacketReceiptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.received === true) {
       writer.uint32(16).bool(message.received);
     }
@@ -2427,8 +2427,8 @@ export const QueryPacketReceiptResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPacketReceiptResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPacketReceiptResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPacketReceiptResponse();
     while (reader.pos < end) {
@@ -2497,26 +2497,26 @@ function createBaseQueryPacketAcknowledgementRequest(): QueryPacketAcknowledgeme
   return {
     portId: "",
     channelId: "",
-    sequence: Long.UZERO
+    sequence: BigInt(0)
   };
 }
 export const QueryPacketAcknowledgementRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryPacketAcknowledgementRequest",
   aminoType: "cosmos-sdk/QueryPacketAcknowledgementRequest",
-  encode(message: QueryPacketAcknowledgementRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPacketAcknowledgementRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
     if (message.channelId !== "") {
       writer.uint32(18).string(message.channelId);
     }
-    if (!message.sequence.isZero()) {
+    if (message.sequence !== BigInt(0)) {
       writer.uint32(24).uint64(message.sequence);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPacketAcknowledgementRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPacketAcknowledgementRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPacketAcknowledgementRequest();
     while (reader.pos < end) {
@@ -2529,7 +2529,7 @@ export const QueryPacketAcknowledgementRequest = {
           message.channelId = reader.string();
           break;
         case 3:
-          message.sequence = (reader.uint64() as Long);
+          message.sequence = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2542,14 +2542,14 @@ export const QueryPacketAcknowledgementRequest = {
     const message = createBaseQueryPacketAcknowledgementRequest();
     message.portId = object.portId ?? "";
     message.channelId = object.channelId ?? "";
-    message.sequence = object.sequence !== undefined && object.sequence !== null ? Long.fromValue(object.sequence) : Long.UZERO;
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: QueryPacketAcknowledgementRequestAmino): QueryPacketAcknowledgementRequest {
     return {
       portId: object.port_id,
       channelId: object.channel_id,
-      sequence: Long.fromString(object.sequence)
+      sequence: BigInt(object.sequence)
     };
   },
   toAmino(message: QueryPacketAcknowledgementRequest): QueryPacketAcknowledgementRequestAmino {
@@ -2591,7 +2591,7 @@ function createBaseQueryPacketAcknowledgementResponse(): QueryPacketAcknowledgem
 export const QueryPacketAcknowledgementResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryPacketAcknowledgementResponse",
   aminoType: "cosmos-sdk/QueryPacketAcknowledgementResponse",
-  encode(message: QueryPacketAcknowledgementResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPacketAcknowledgementResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.acknowledgement.length !== 0) {
       writer.uint32(10).bytes(message.acknowledgement);
     }
@@ -2603,8 +2603,8 @@ export const QueryPacketAcknowledgementResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPacketAcknowledgementResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPacketAcknowledgementResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPacketAcknowledgementResponse();
     while (reader.pos < end) {
@@ -2680,7 +2680,7 @@ function createBaseQueryPacketAcknowledgementsRequest(): QueryPacketAcknowledgem
 export const QueryPacketAcknowledgementsRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryPacketAcknowledgementsRequest",
   aminoType: "cosmos-sdk/QueryPacketAcknowledgementsRequest",
-  encode(message: QueryPacketAcknowledgementsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPacketAcknowledgementsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
@@ -2697,8 +2697,8 @@ export const QueryPacketAcknowledgementsRequest = {
     writer.ldelim();
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPacketAcknowledgementsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPacketAcknowledgementsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPacketAcknowledgementsRequest();
     while (reader.pos < end) {
@@ -2717,10 +2717,10 @@ export const QueryPacketAcknowledgementsRequest = {
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.packetCommitmentSequences.push((reader.uint64() as Long));
+              message.packetCommitmentSequences.push(reader.uint64());
             }
           } else {
-            message.packetCommitmentSequences.push((reader.uint64() as Long));
+            message.packetCommitmentSequences.push(reader.uint64());
           }
           break;
         default:
@@ -2735,7 +2735,7 @@ export const QueryPacketAcknowledgementsRequest = {
     message.portId = object.portId ?? "";
     message.channelId = object.channelId ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
-    message.packetCommitmentSequences = object.packetCommitmentSequences?.map(e => Long.fromValue(e)) || [];
+    message.packetCommitmentSequences = object.packetCommitmentSequences?.map(e => BigInt(e.toString())) || [];
     return message;
   },
   fromAmino(object: QueryPacketAcknowledgementsRequestAmino): QueryPacketAcknowledgementsRequest {
@@ -2743,7 +2743,7 @@ export const QueryPacketAcknowledgementsRequest = {
       portId: object.port_id,
       channelId: object.channel_id,
       pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined,
-      packetCommitmentSequences: Array.isArray(object?.packet_commitment_sequences) ? object.packet_commitment_sequences.map((e: any) => e) : []
+      packetCommitmentSequences: Array.isArray(object?.packet_commitment_sequences) ? object.packet_commitment_sequences.map((e: any) => BigInt(e)) : []
     };
   },
   toAmino(message: QueryPacketAcknowledgementsRequest): QueryPacketAcknowledgementsRequestAmino {
@@ -2752,7 +2752,7 @@ export const QueryPacketAcknowledgementsRequest = {
     obj.channel_id = message.channelId;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
     if (message.packetCommitmentSequences) {
-      obj.packet_commitment_sequences = message.packetCommitmentSequences.map(e => e);
+      obj.packet_commitment_sequences = message.packetCommitmentSequences.map(e => e.toString());
     } else {
       obj.packet_commitment_sequences = [];
     }
@@ -2790,7 +2790,7 @@ function createBaseQueryPacketAcknowledgementsResponse(): QueryPacketAcknowledge
 export const QueryPacketAcknowledgementsResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryPacketAcknowledgementsResponse",
   aminoType: "cosmos-sdk/QueryPacketAcknowledgementsResponse",
-  encode(message: QueryPacketAcknowledgementsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryPacketAcknowledgementsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.acknowledgements) {
       PacketState.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -2802,8 +2802,8 @@ export const QueryPacketAcknowledgementsResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPacketAcknowledgementsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPacketAcknowledgementsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPacketAcknowledgementsResponse();
     while (reader.pos < end) {
@@ -2882,7 +2882,7 @@ function createBaseQueryUnreceivedPacketsRequest(): QueryUnreceivedPacketsReques
 export const QueryUnreceivedPacketsRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryUnreceivedPacketsRequest",
   aminoType: "cosmos-sdk/QueryUnreceivedPacketsRequest",
-  encode(message: QueryUnreceivedPacketsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryUnreceivedPacketsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
@@ -2896,8 +2896,8 @@ export const QueryUnreceivedPacketsRequest = {
     writer.ldelim();
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryUnreceivedPacketsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryUnreceivedPacketsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUnreceivedPacketsRequest();
     while (reader.pos < end) {
@@ -2913,10 +2913,10 @@ export const QueryUnreceivedPacketsRequest = {
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.packetCommitmentSequences.push((reader.uint64() as Long));
+              message.packetCommitmentSequences.push(reader.uint64());
             }
           } else {
-            message.packetCommitmentSequences.push((reader.uint64() as Long));
+            message.packetCommitmentSequences.push(reader.uint64());
           }
           break;
         default:
@@ -2930,14 +2930,14 @@ export const QueryUnreceivedPacketsRequest = {
     const message = createBaseQueryUnreceivedPacketsRequest();
     message.portId = object.portId ?? "";
     message.channelId = object.channelId ?? "";
-    message.packetCommitmentSequences = object.packetCommitmentSequences?.map(e => Long.fromValue(e)) || [];
+    message.packetCommitmentSequences = object.packetCommitmentSequences?.map(e => BigInt(e.toString())) || [];
     return message;
   },
   fromAmino(object: QueryUnreceivedPacketsRequestAmino): QueryUnreceivedPacketsRequest {
     return {
       portId: object.port_id,
       channelId: object.channel_id,
-      packetCommitmentSequences: Array.isArray(object?.packet_commitment_sequences) ? object.packet_commitment_sequences.map((e: any) => e) : []
+      packetCommitmentSequences: Array.isArray(object?.packet_commitment_sequences) ? object.packet_commitment_sequences.map((e: any) => BigInt(e)) : []
     };
   },
   toAmino(message: QueryUnreceivedPacketsRequest): QueryUnreceivedPacketsRequestAmino {
@@ -2945,7 +2945,7 @@ export const QueryUnreceivedPacketsRequest = {
     obj.port_id = message.portId;
     obj.channel_id = message.channelId;
     if (message.packetCommitmentSequences) {
-      obj.packet_commitment_sequences = message.packetCommitmentSequences.map(e => e);
+      obj.packet_commitment_sequences = message.packetCommitmentSequences.map(e => e.toString());
     } else {
       obj.packet_commitment_sequences = [];
     }
@@ -2982,7 +2982,7 @@ function createBaseQueryUnreceivedPacketsResponse(): QueryUnreceivedPacketsRespo
 export const QueryUnreceivedPacketsResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryUnreceivedPacketsResponse",
   aminoType: "cosmos-sdk/QueryUnreceivedPacketsResponse",
-  encode(message: QueryUnreceivedPacketsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryUnreceivedPacketsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     writer.uint32(10).fork();
     for (const v of message.sequences) {
       writer.uint64(v);
@@ -2993,8 +2993,8 @@ export const QueryUnreceivedPacketsResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryUnreceivedPacketsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryUnreceivedPacketsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUnreceivedPacketsResponse();
     while (reader.pos < end) {
@@ -3004,10 +3004,10 @@ export const QueryUnreceivedPacketsResponse = {
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.sequences.push((reader.uint64() as Long));
+              message.sequences.push(reader.uint64());
             }
           } else {
-            message.sequences.push((reader.uint64() as Long));
+            message.sequences.push(reader.uint64());
           }
           break;
         case 2:
@@ -3022,20 +3022,20 @@ export const QueryUnreceivedPacketsResponse = {
   },
   fromPartial(object: DeepPartial<QueryUnreceivedPacketsResponse>): QueryUnreceivedPacketsResponse {
     const message = createBaseQueryUnreceivedPacketsResponse();
-    message.sequences = object.sequences?.map(e => Long.fromValue(e)) || [];
+    message.sequences = object.sequences?.map(e => BigInt(e.toString())) || [];
     message.height = object.height !== undefined && object.height !== null ? Height.fromPartial(object.height) : undefined;
     return message;
   },
   fromAmino(object: QueryUnreceivedPacketsResponseAmino): QueryUnreceivedPacketsResponse {
     return {
-      sequences: Array.isArray(object?.sequences) ? object.sequences.map((e: any) => e) : [],
+      sequences: Array.isArray(object?.sequences) ? object.sequences.map((e: any) => BigInt(e)) : [],
       height: object?.height ? Height.fromAmino(object.height) : undefined
     };
   },
   toAmino(message: QueryUnreceivedPacketsResponse): QueryUnreceivedPacketsResponseAmino {
     const obj: any = {};
     if (message.sequences) {
-      obj.sequences = message.sequences.map(e => e);
+      obj.sequences = message.sequences.map(e => e.toString());
     } else {
       obj.sequences = [];
     }
@@ -3074,7 +3074,7 @@ function createBaseQueryUnreceivedAcksRequest(): QueryUnreceivedAcksRequest {
 export const QueryUnreceivedAcksRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryUnreceivedAcksRequest",
   aminoType: "cosmos-sdk/QueryUnreceivedAcksRequest",
-  encode(message: QueryUnreceivedAcksRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryUnreceivedAcksRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
@@ -3088,8 +3088,8 @@ export const QueryUnreceivedAcksRequest = {
     writer.ldelim();
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryUnreceivedAcksRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryUnreceivedAcksRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUnreceivedAcksRequest();
     while (reader.pos < end) {
@@ -3105,10 +3105,10 @@ export const QueryUnreceivedAcksRequest = {
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.packetAckSequences.push((reader.uint64() as Long));
+              message.packetAckSequences.push(reader.uint64());
             }
           } else {
-            message.packetAckSequences.push((reader.uint64() as Long));
+            message.packetAckSequences.push(reader.uint64());
           }
           break;
         default:
@@ -3122,14 +3122,14 @@ export const QueryUnreceivedAcksRequest = {
     const message = createBaseQueryUnreceivedAcksRequest();
     message.portId = object.portId ?? "";
     message.channelId = object.channelId ?? "";
-    message.packetAckSequences = object.packetAckSequences?.map(e => Long.fromValue(e)) || [];
+    message.packetAckSequences = object.packetAckSequences?.map(e => BigInt(e.toString())) || [];
     return message;
   },
   fromAmino(object: QueryUnreceivedAcksRequestAmino): QueryUnreceivedAcksRequest {
     return {
       portId: object.port_id,
       channelId: object.channel_id,
-      packetAckSequences: Array.isArray(object?.packet_ack_sequences) ? object.packet_ack_sequences.map((e: any) => e) : []
+      packetAckSequences: Array.isArray(object?.packet_ack_sequences) ? object.packet_ack_sequences.map((e: any) => BigInt(e)) : []
     };
   },
   toAmino(message: QueryUnreceivedAcksRequest): QueryUnreceivedAcksRequestAmino {
@@ -3137,7 +3137,7 @@ export const QueryUnreceivedAcksRequest = {
     obj.port_id = message.portId;
     obj.channel_id = message.channelId;
     if (message.packetAckSequences) {
-      obj.packet_ack_sequences = message.packetAckSequences.map(e => e);
+      obj.packet_ack_sequences = message.packetAckSequences.map(e => e.toString());
     } else {
       obj.packet_ack_sequences = [];
     }
@@ -3174,7 +3174,7 @@ function createBaseQueryUnreceivedAcksResponse(): QueryUnreceivedAcksResponse {
 export const QueryUnreceivedAcksResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryUnreceivedAcksResponse",
   aminoType: "cosmos-sdk/QueryUnreceivedAcksResponse",
-  encode(message: QueryUnreceivedAcksResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryUnreceivedAcksResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     writer.uint32(10).fork();
     for (const v of message.sequences) {
       writer.uint64(v);
@@ -3185,8 +3185,8 @@ export const QueryUnreceivedAcksResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryUnreceivedAcksResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryUnreceivedAcksResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUnreceivedAcksResponse();
     while (reader.pos < end) {
@@ -3196,10 +3196,10 @@ export const QueryUnreceivedAcksResponse = {
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.sequences.push((reader.uint64() as Long));
+              message.sequences.push(reader.uint64());
             }
           } else {
-            message.sequences.push((reader.uint64() as Long));
+            message.sequences.push(reader.uint64());
           }
           break;
         case 2:
@@ -3214,20 +3214,20 @@ export const QueryUnreceivedAcksResponse = {
   },
   fromPartial(object: DeepPartial<QueryUnreceivedAcksResponse>): QueryUnreceivedAcksResponse {
     const message = createBaseQueryUnreceivedAcksResponse();
-    message.sequences = object.sequences?.map(e => Long.fromValue(e)) || [];
+    message.sequences = object.sequences?.map(e => BigInt(e.toString())) || [];
     message.height = object.height !== undefined && object.height !== null ? Height.fromPartial(object.height) : undefined;
     return message;
   },
   fromAmino(object: QueryUnreceivedAcksResponseAmino): QueryUnreceivedAcksResponse {
     return {
-      sequences: Array.isArray(object?.sequences) ? object.sequences.map((e: any) => e) : [],
+      sequences: Array.isArray(object?.sequences) ? object.sequences.map((e: any) => BigInt(e)) : [],
       height: object?.height ? Height.fromAmino(object.height) : undefined
     };
   },
   toAmino(message: QueryUnreceivedAcksResponse): QueryUnreceivedAcksResponseAmino {
     const obj: any = {};
     if (message.sequences) {
-      obj.sequences = message.sequences.map(e => e);
+      obj.sequences = message.sequences.map(e => e.toString());
     } else {
       obj.sequences = [];
     }
@@ -3265,7 +3265,7 @@ function createBaseQueryNextSequenceReceiveRequest(): QueryNextSequenceReceiveRe
 export const QueryNextSequenceReceiveRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryNextSequenceReceiveRequest",
   aminoType: "cosmos-sdk/QueryNextSequenceReceiveRequest",
-  encode(message: QueryNextSequenceReceiveRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryNextSequenceReceiveRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
@@ -3274,8 +3274,8 @@ export const QueryNextSequenceReceiveRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryNextSequenceReceiveRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryNextSequenceReceiveRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryNextSequenceReceiveRequest();
     while (reader.pos < end) {
@@ -3336,7 +3336,7 @@ export const QueryNextSequenceReceiveRequest = {
 };
 function createBaseQueryNextSequenceReceiveResponse(): QueryNextSequenceReceiveResponse {
   return {
-    nextSequenceReceive: Long.UZERO,
+    nextSequenceReceive: BigInt(0),
     proof: new Uint8Array(),
     proofHeight: Height.fromPartial({})
   };
@@ -3344,8 +3344,8 @@ function createBaseQueryNextSequenceReceiveResponse(): QueryNextSequenceReceiveR
 export const QueryNextSequenceReceiveResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryNextSequenceReceiveResponse",
   aminoType: "cosmos-sdk/QueryNextSequenceReceiveResponse",
-  encode(message: QueryNextSequenceReceiveResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.nextSequenceReceive.isZero()) {
+  encode(message: QueryNextSequenceReceiveResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.nextSequenceReceive !== BigInt(0)) {
       writer.uint32(8).uint64(message.nextSequenceReceive);
     }
     if (message.proof.length !== 0) {
@@ -3356,15 +3356,15 @@ export const QueryNextSequenceReceiveResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryNextSequenceReceiveResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryNextSequenceReceiveResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryNextSequenceReceiveResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.nextSequenceReceive = (reader.uint64() as Long);
+          message.nextSequenceReceive = reader.uint64();
           break;
         case 2:
           message.proof = reader.bytes();
@@ -3381,14 +3381,14 @@ export const QueryNextSequenceReceiveResponse = {
   },
   fromPartial(object: DeepPartial<QueryNextSequenceReceiveResponse>): QueryNextSequenceReceiveResponse {
     const message = createBaseQueryNextSequenceReceiveResponse();
-    message.nextSequenceReceive = object.nextSequenceReceive !== undefined && object.nextSequenceReceive !== null ? Long.fromValue(object.nextSequenceReceive) : Long.UZERO;
+    message.nextSequenceReceive = object.nextSequenceReceive !== undefined && object.nextSequenceReceive !== null ? BigInt(object.nextSequenceReceive.toString()) : BigInt(0);
     message.proof = object.proof ?? new Uint8Array();
     message.proofHeight = object.proofHeight !== undefined && object.proofHeight !== null ? Height.fromPartial(object.proofHeight) : undefined;
     return message;
   },
   fromAmino(object: QueryNextSequenceReceiveResponseAmino): QueryNextSequenceReceiveResponse {
     return {
-      nextSequenceReceive: Long.fromString(object.next_sequence_receive),
+      nextSequenceReceive: BigInt(object.next_sequence_receive),
       proof: object.proof,
       proofHeight: object?.proof_height ? Height.fromAmino(object.proof_height) : undefined
     };
@@ -3431,7 +3431,7 @@ function createBaseQueryNextSequenceSendRequest(): QueryNextSequenceSendRequest 
 export const QueryNextSequenceSendRequest = {
   typeUrl: "/ibc.core.channel.v1.QueryNextSequenceSendRequest",
   aminoType: "cosmos-sdk/QueryNextSequenceSendRequest",
-  encode(message: QueryNextSequenceSendRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryNextSequenceSendRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
     }
@@ -3440,8 +3440,8 @@ export const QueryNextSequenceSendRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryNextSequenceSendRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryNextSequenceSendRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryNextSequenceSendRequest();
     while (reader.pos < end) {
@@ -3502,7 +3502,7 @@ export const QueryNextSequenceSendRequest = {
 };
 function createBaseQueryNextSequenceSendResponse(): QueryNextSequenceSendResponse {
   return {
-    nextSequenceSend: Long.UZERO,
+    nextSequenceSend: BigInt(0),
     proof: new Uint8Array(),
     proofHeight: Height.fromPartial({})
   };
@@ -3510,8 +3510,8 @@ function createBaseQueryNextSequenceSendResponse(): QueryNextSequenceSendRespons
 export const QueryNextSequenceSendResponse = {
   typeUrl: "/ibc.core.channel.v1.QueryNextSequenceSendResponse",
   aminoType: "cosmos-sdk/QueryNextSequenceSendResponse",
-  encode(message: QueryNextSequenceSendResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.nextSequenceSend.isZero()) {
+  encode(message: QueryNextSequenceSendResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.nextSequenceSend !== BigInt(0)) {
       writer.uint32(8).uint64(message.nextSequenceSend);
     }
     if (message.proof.length !== 0) {
@@ -3522,15 +3522,15 @@ export const QueryNextSequenceSendResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryNextSequenceSendResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryNextSequenceSendResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryNextSequenceSendResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.nextSequenceSend = (reader.uint64() as Long);
+          message.nextSequenceSend = reader.uint64();
           break;
         case 2:
           message.proof = reader.bytes();
@@ -3547,14 +3547,14 @@ export const QueryNextSequenceSendResponse = {
   },
   fromPartial(object: DeepPartial<QueryNextSequenceSendResponse>): QueryNextSequenceSendResponse {
     const message = createBaseQueryNextSequenceSendResponse();
-    message.nextSequenceSend = object.nextSequenceSend !== undefined && object.nextSequenceSend !== null ? Long.fromValue(object.nextSequenceSend) : Long.UZERO;
+    message.nextSequenceSend = object.nextSequenceSend !== undefined && object.nextSequenceSend !== null ? BigInt(object.nextSequenceSend.toString()) : BigInt(0);
     message.proof = object.proof ?? new Uint8Array();
     message.proofHeight = object.proofHeight !== undefined && object.proofHeight !== null ? Height.fromPartial(object.proofHeight) : undefined;
     return message;
   },
   fromAmino(object: QueryNextSequenceSendResponseAmino): QueryNextSequenceSendResponse {
     return {
-      nextSequenceSend: Long.fromString(object.next_sequence_send),
+      nextSequenceSend: BigInt(object.next_sequence_send),
       proof: object.proof,
       proofHeight: object?.proof_height ? Height.fromAmino(object.proof_height) : undefined
     };

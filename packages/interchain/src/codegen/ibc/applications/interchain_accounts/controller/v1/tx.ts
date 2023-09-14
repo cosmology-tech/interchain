@@ -1,7 +1,7 @@
 import { InterchainAccountPacketData, InterchainAccountPacketDataAmino, InterchainAccountPacketDataSDKType } from "../../v1/packet";
 import { Params, ParamsAmino, ParamsSDKType } from "./controller";
-import { Long, DeepPartial } from "../../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../../../binary";
+import { DeepPartial } from "../../../../../helpers";
 /** MsgRegisterInterchainAccount defines the payload for Msg/RegisterAccount */
 export interface MsgRegisterInterchainAccount {
   owner: string;
@@ -60,7 +60,7 @@ export interface MsgSendTx {
    * Relative timeout timestamp provided will be added to the current block time during transaction execution.
    * The timeout timestamp must be non-zero.
    */
-  relativeTimeout: Long;
+  relativeTimeout: bigint;
 }
 export interface MsgSendTxProtoMsg {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgSendTx";
@@ -86,11 +86,11 @@ export interface MsgSendTxSDKType {
   owner: string;
   connection_id: string;
   packet_data: InterchainAccountPacketDataSDKType;
-  relative_timeout: Long;
+  relative_timeout: bigint;
 }
 /** MsgSendTxResponse defines the response for MsgSendTx */
 export interface MsgSendTxResponse {
-  sequence: Long;
+  sequence: bigint;
 }
 export interface MsgSendTxResponseProtoMsg {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgSendTxResponse";
@@ -106,7 +106,7 @@ export interface MsgSendTxResponseAminoMsg {
 }
 /** MsgSendTxResponse defines the response for MsgSendTx */
 export interface MsgSendTxResponseSDKType {
-  sequence: Long;
+  sequence: bigint;
 }
 /** MsgUpdateParams defines the payload for Msg/UpdateParams */
 export interface MsgUpdateParams {
@@ -167,7 +167,7 @@ function createBaseMsgRegisterInterchainAccount(): MsgRegisterInterchainAccount 
 export const MsgRegisterInterchainAccount = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccount",
   aminoType: "cosmos-sdk/MsgRegisterInterchainAccount",
-  encode(message: MsgRegisterInterchainAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRegisterInterchainAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -179,8 +179,8 @@ export const MsgRegisterInterchainAccount = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRegisterInterchainAccount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterInterchainAccount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRegisterInterchainAccount();
     while (reader.pos < end) {
@@ -254,7 +254,7 @@ function createBaseMsgRegisterInterchainAccountResponse(): MsgRegisterInterchain
 export const MsgRegisterInterchainAccountResponse = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccountResponse",
   aminoType: "cosmos-sdk/MsgRegisterInterchainAccountResponse",
-  encode(message: MsgRegisterInterchainAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgRegisterInterchainAccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channelId !== "") {
       writer.uint32(10).string(message.channelId);
     }
@@ -263,8 +263,8 @@ export const MsgRegisterInterchainAccountResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRegisterInterchainAccountResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterInterchainAccountResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRegisterInterchainAccountResponse();
     while (reader.pos < end) {
@@ -328,13 +328,13 @@ function createBaseMsgSendTx(): MsgSendTx {
     owner: "",
     connectionId: "",
     packetData: InterchainAccountPacketData.fromPartial({}),
-    relativeTimeout: Long.UZERO
+    relativeTimeout: BigInt(0)
   };
 }
 export const MsgSendTx = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgSendTx",
   aminoType: "cosmos-sdk/MsgSendTx",
-  encode(message: MsgSendTx, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSendTx, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -344,13 +344,13 @@ export const MsgSendTx = {
     if (message.packetData !== undefined) {
       InterchainAccountPacketData.encode(message.packetData, writer.uint32(26).fork()).ldelim();
     }
-    if (!message.relativeTimeout.isZero()) {
+    if (message.relativeTimeout !== BigInt(0)) {
       writer.uint32(32).uint64(message.relativeTimeout);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSendTx {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSendTx {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSendTx();
     while (reader.pos < end) {
@@ -366,7 +366,7 @@ export const MsgSendTx = {
           message.packetData = InterchainAccountPacketData.decode(reader, reader.uint32());
           break;
         case 4:
-          message.relativeTimeout = (reader.uint64() as Long);
+          message.relativeTimeout = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -380,7 +380,7 @@ export const MsgSendTx = {
     message.owner = object.owner ?? "";
     message.connectionId = object.connectionId ?? "";
     message.packetData = object.packetData !== undefined && object.packetData !== null ? InterchainAccountPacketData.fromPartial(object.packetData) : undefined;
-    message.relativeTimeout = object.relativeTimeout !== undefined && object.relativeTimeout !== null ? Long.fromValue(object.relativeTimeout) : Long.UZERO;
+    message.relativeTimeout = object.relativeTimeout !== undefined && object.relativeTimeout !== null ? BigInt(object.relativeTimeout.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: MsgSendTxAmino): MsgSendTx {
@@ -388,7 +388,7 @@ export const MsgSendTx = {
       owner: object.owner,
       connectionId: object.connection_id,
       packetData: object?.packet_data ? InterchainAccountPacketData.fromAmino(object.packet_data) : undefined,
-      relativeTimeout: Long.fromString(object.relative_timeout)
+      relativeTimeout: BigInt(object.relative_timeout)
     };
   },
   toAmino(message: MsgSendTx): MsgSendTxAmino {
@@ -423,27 +423,27 @@ export const MsgSendTx = {
 };
 function createBaseMsgSendTxResponse(): MsgSendTxResponse {
   return {
-    sequence: Long.UZERO
+    sequence: BigInt(0)
   };
 }
 export const MsgSendTxResponse = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgSendTxResponse",
   aminoType: "cosmos-sdk/MsgSendTxResponse",
-  encode(message: MsgSendTxResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.sequence.isZero()) {
+  encode(message: MsgSendTxResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.sequence !== BigInt(0)) {
       writer.uint32(8).uint64(message.sequence);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSendTxResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSendTxResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSendTxResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.sequence = (reader.uint64() as Long);
+          message.sequence = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -454,12 +454,12 @@ export const MsgSendTxResponse = {
   },
   fromPartial(object: DeepPartial<MsgSendTxResponse>): MsgSendTxResponse {
     const message = createBaseMsgSendTxResponse();
-    message.sequence = object.sequence !== undefined && object.sequence !== null ? Long.fromValue(object.sequence) : Long.UZERO;
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: MsgSendTxResponseAmino): MsgSendTxResponse {
     return {
-      sequence: Long.fromString(object.sequence)
+      sequence: BigInt(object.sequence)
     };
   },
   toAmino(message: MsgSendTxResponse): MsgSendTxResponseAmino {
@@ -498,7 +498,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 export const MsgUpdateParams = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgUpdateParams",
   aminoType: "cosmos-sdk/MsgUpdateParams",
-  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -507,8 +507,8 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
@@ -573,11 +573,11 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 export const MsgUpdateParamsResponse = {
   typeUrl: "/ibc.applications.interchain_accounts.controller.v1.MsgUpdateParamsResponse",
   aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
-  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {

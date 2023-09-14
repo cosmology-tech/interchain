@@ -1,7 +1,7 @@
 import { MemberRequest, MemberRequestAmino, MemberRequestSDKType, VoteOption, ProposalExecutorResult, ThresholdDecisionPolicy, ThresholdDecisionPolicyProtoMsg, ThresholdDecisionPolicySDKType, PercentageDecisionPolicy, PercentageDecisionPolicyProtoMsg, PercentageDecisionPolicySDKType, voteOptionFromJSON, proposalExecutorResultFromJSON } from "./types";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
-import { Long, DeepPartial, isSet } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { DeepPartial, isSet } from "../../../helpers";
 /** Exec defines modes of execution of a proposal on creation or on new vote. */
 export enum Exec {
   /**
@@ -80,7 +80,7 @@ export interface MsgCreateGroupSDKType {
 /** MsgCreateGroupResponse is the Msg/CreateGroup response type. */
 export interface MsgCreateGroupResponse {
   /** group_id is the unique ID of the newly created group. */
-  groupId: Long;
+  groupId: bigint;
 }
 export interface MsgCreateGroupResponseProtoMsg {
   typeUrl: "/cosmos.group.v1.MsgCreateGroupResponse";
@@ -97,14 +97,14 @@ export interface MsgCreateGroupResponseAminoMsg {
 }
 /** MsgCreateGroupResponse is the Msg/CreateGroup response type. */
 export interface MsgCreateGroupResponseSDKType {
-  group_id: Long;
+  group_id: bigint;
 }
 /** MsgUpdateGroupMembers is the Msg/UpdateGroupMembers request type. */
 export interface MsgUpdateGroupMembers {
   /** admin is the account address of the group admin. */
   admin: string;
   /** group_id is the unique ID of the group. */
-  groupId: Long;
+  groupId: bigint;
   /**
    * member_updates is the list of members to update,
    * set weight to 0 to remove a member.
@@ -134,7 +134,7 @@ export interface MsgUpdateGroupMembersAminoMsg {
 /** MsgUpdateGroupMembers is the Msg/UpdateGroupMembers request type. */
 export interface MsgUpdateGroupMembersSDKType {
   admin: string;
-  group_id: Long;
+  group_id: bigint;
   member_updates: MemberRequestSDKType[];
 }
 /** MsgUpdateGroupMembersResponse is the Msg/UpdateGroupMembers response type. */
@@ -156,7 +156,7 @@ export interface MsgUpdateGroupAdmin {
   /** admin is the current account address of the group admin. */
   admin: string;
   /** group_id is the unique ID of the group. */
-  groupId: Long;
+  groupId: bigint;
   /** new_admin is the group new admin account address. */
   newAdmin: string;
 }
@@ -180,7 +180,7 @@ export interface MsgUpdateGroupAdminAminoMsg {
 /** MsgUpdateGroupAdmin is the Msg/UpdateGroupAdmin request type. */
 export interface MsgUpdateGroupAdminSDKType {
   admin: string;
-  group_id: Long;
+  group_id: bigint;
   new_admin: string;
 }
 /** MsgUpdateGroupAdminResponse is the Msg/UpdateGroupAdmin response type. */
@@ -202,7 +202,7 @@ export interface MsgUpdateGroupMetadata {
   /** admin is the account address of the group admin. */
   admin: string;
   /** group_id is the unique ID of the group. */
-  groupId: Long;
+  groupId: bigint;
   /** metadata is the updated group's metadata. */
   metadata: string;
 }
@@ -226,7 +226,7 @@ export interface MsgUpdateGroupMetadataAminoMsg {
 /** MsgUpdateGroupMetadata is the Msg/UpdateGroupMetadata request type. */
 export interface MsgUpdateGroupMetadataSDKType {
   admin: string;
-  group_id: Long;
+  group_id: bigint;
   metadata: string;
 }
 /** MsgUpdateGroupMetadataResponse is the Msg/UpdateGroupMetadata response type. */
@@ -248,7 +248,7 @@ export interface MsgCreateGroupPolicy {
   /** admin is the account address of the group admin. */
   admin: string;
   /** group_id is the unique ID of the group. */
-  groupId: Long;
+  groupId: bigint;
   /** metadata is any arbitrary metadata attached to the group policy. */
   metadata: string;
   /** decision_policy specifies the group policy's decision policy. */
@@ -279,7 +279,7 @@ export interface MsgCreateGroupPolicyAminoMsg {
 /** MsgCreateGroupPolicy is the Msg/CreateGroupPolicy request type. */
 export interface MsgCreateGroupPolicySDKType {
   admin: string;
-  group_id: Long;
+  group_id: bigint;
   metadata: string;
   decision_policy: ThresholdDecisionPolicySDKType | PercentageDecisionPolicySDKType | AnySDKType | undefined;
 }
@@ -410,7 +410,7 @@ export interface MsgCreateGroupWithPolicySDKType {
 /** MsgCreateGroupWithPolicyResponse is the Msg/CreateGroupWithPolicy response type. */
 export interface MsgCreateGroupWithPolicyResponse {
   /** group_id is the unique ID of the newly created group with policy. */
-  groupId: Long;
+  groupId: bigint;
   /** group_policy_address is the account address of the newly created group policy. */
   groupPolicyAddress: string;
 }
@@ -431,7 +431,7 @@ export interface MsgCreateGroupWithPolicyResponseAminoMsg {
 }
 /** MsgCreateGroupWithPolicyResponse is the Msg/CreateGroupWithPolicy response type. */
 export interface MsgCreateGroupWithPolicyResponseSDKType {
-  group_id: Long;
+  group_id: bigint;
   group_policy_address: string;
 }
 /** MsgUpdateGroupPolicyDecisionPolicy is the Msg/UpdateGroupPolicyDecisionPolicy request type. */
@@ -614,7 +614,7 @@ export interface MsgSubmitProposalSDKType {
 /** MsgSubmitProposalResponse is the Msg/SubmitProposal response type. */
 export interface MsgSubmitProposalResponse {
   /** proposal is the unique ID of the proposal. */
-  proposalId: Long;
+  proposalId: bigint;
 }
 export interface MsgSubmitProposalResponseProtoMsg {
   typeUrl: "/cosmos.group.v1.MsgSubmitProposalResponse";
@@ -631,12 +631,12 @@ export interface MsgSubmitProposalResponseAminoMsg {
 }
 /** MsgSubmitProposalResponse is the Msg/SubmitProposal response type. */
 export interface MsgSubmitProposalResponseSDKType {
-  proposal_id: Long;
+  proposal_id: bigint;
 }
 /** MsgWithdrawProposal is the Msg/WithdrawProposal request type. */
 export interface MsgWithdrawProposal {
   /** proposal is the unique ID of the proposal. */
-  proposalId: Long;
+  proposalId: bigint;
   /** address is the admin of the group policy or one of the proposer of the proposal. */
   address: string;
 }
@@ -657,7 +657,7 @@ export interface MsgWithdrawProposalAminoMsg {
 }
 /** MsgWithdrawProposal is the Msg/WithdrawProposal request type. */
 export interface MsgWithdrawProposalSDKType {
-  proposal_id: Long;
+  proposal_id: bigint;
   address: string;
 }
 /** MsgWithdrawProposalResponse is the Msg/WithdrawProposal response type. */
@@ -677,7 +677,7 @@ export interface MsgWithdrawProposalResponseSDKType {}
 /** MsgVote is the Msg/Vote request type. */
 export interface MsgVote {
   /** proposal is the unique ID of the proposal. */
-  proposalId: Long;
+  proposalId: bigint;
   /** voter is the voter account address. */
   voter: string;
   /** option is the voter's choice on the proposal. */
@@ -716,7 +716,7 @@ export interface MsgVoteAminoMsg {
 }
 /** MsgVote is the Msg/Vote request type. */
 export interface MsgVoteSDKType {
-  proposal_id: Long;
+  proposal_id: bigint;
   voter: string;
   option: VoteOption;
   metadata: string;
@@ -739,7 +739,7 @@ export interface MsgVoteResponseSDKType {}
 /** MsgExec is the Msg/Exec request type. */
 export interface MsgExec {
   /** proposal is the unique ID of the proposal. */
-  proposalId: Long;
+  proposalId: bigint;
   /** executor is the account address used to execute the proposal. */
   executor: string;
 }
@@ -760,7 +760,7 @@ export interface MsgExecAminoMsg {
 }
 /** MsgExec is the Msg/Exec request type. */
 export interface MsgExecSDKType {
-  proposal_id: Long;
+  proposal_id: bigint;
   executor: string;
 }
 /** MsgExecResponse is the Msg/Exec request type. */
@@ -790,7 +790,7 @@ export interface MsgLeaveGroup {
   /** address is the account address of the group member. */
   address: string;
   /** group_id is the unique ID of the group. */
-  groupId: Long;
+  groupId: bigint;
 }
 export interface MsgLeaveGroupProtoMsg {
   typeUrl: "/cosmos.group.v1.MsgLeaveGroup";
@@ -810,7 +810,7 @@ export interface MsgLeaveGroupAminoMsg {
 /** MsgLeaveGroup is the Msg/LeaveGroup request type. */
 export interface MsgLeaveGroupSDKType {
   address: string;
-  group_id: Long;
+  group_id: bigint;
 }
 /** MsgLeaveGroupResponse is the Msg/LeaveGroup response type. */
 export interface MsgLeaveGroupResponse {}
@@ -836,7 +836,7 @@ function createBaseMsgCreateGroup(): MsgCreateGroup {
 export const MsgCreateGroup = {
   typeUrl: "/cosmos.group.v1.MsgCreateGroup",
   aminoType: "cosmos-sdk/MsgCreateGroup",
-  encode(message: MsgCreateGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCreateGroup, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.admin !== "") {
       writer.uint32(10).string(message.admin);
     }
@@ -848,8 +848,8 @@ export const MsgCreateGroup = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateGroup {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateGroup {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateGroup();
     while (reader.pos < end) {
@@ -920,27 +920,27 @@ export const MsgCreateGroup = {
 };
 function createBaseMsgCreateGroupResponse(): MsgCreateGroupResponse {
   return {
-    groupId: Long.UZERO
+    groupId: BigInt(0)
   };
 }
 export const MsgCreateGroupResponse = {
   typeUrl: "/cosmos.group.v1.MsgCreateGroupResponse",
   aminoType: "cosmos-sdk/MsgCreateGroupResponse",
-  encode(message: MsgCreateGroupResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.groupId.isZero()) {
+  encode(message: MsgCreateGroupResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.groupId !== BigInt(0)) {
       writer.uint32(8).uint64(message.groupId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateGroupResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateGroupResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateGroupResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.groupId = (reader.uint64() as Long);
+          message.groupId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -951,12 +951,12 @@ export const MsgCreateGroupResponse = {
   },
   fromPartial(object: DeepPartial<MsgCreateGroupResponse>): MsgCreateGroupResponse {
     const message = createBaseMsgCreateGroupResponse();
-    message.groupId = object.groupId !== undefined && object.groupId !== null ? Long.fromValue(object.groupId) : Long.UZERO;
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: MsgCreateGroupResponseAmino): MsgCreateGroupResponse {
     return {
-      groupId: Long.fromString(object.group_id)
+      groupId: BigInt(object.group_id)
     };
   },
   toAmino(message: MsgCreateGroupResponse): MsgCreateGroupResponseAmino {
@@ -989,18 +989,18 @@ export const MsgCreateGroupResponse = {
 function createBaseMsgUpdateGroupMembers(): MsgUpdateGroupMembers {
   return {
     admin: "",
-    groupId: Long.UZERO,
+    groupId: BigInt(0),
     memberUpdates: []
   };
 }
 export const MsgUpdateGroupMembers = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupMembers",
   aminoType: "cosmos-sdk/MsgUpdateGroupMembers",
-  encode(message: MsgUpdateGroupMembers, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateGroupMembers, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.admin !== "") {
       writer.uint32(10).string(message.admin);
     }
-    if (!message.groupId.isZero()) {
+    if (message.groupId !== BigInt(0)) {
       writer.uint32(16).uint64(message.groupId);
     }
     for (const v of message.memberUpdates) {
@@ -1008,8 +1008,8 @@ export const MsgUpdateGroupMembers = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupMembers {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupMembers {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupMembers();
     while (reader.pos < end) {
@@ -1019,7 +1019,7 @@ export const MsgUpdateGroupMembers = {
           message.admin = reader.string();
           break;
         case 2:
-          message.groupId = (reader.uint64() as Long);
+          message.groupId = reader.uint64();
           break;
         case 3:
           message.memberUpdates.push(MemberRequest.decode(reader, reader.uint32()));
@@ -1034,14 +1034,14 @@ export const MsgUpdateGroupMembers = {
   fromPartial(object: DeepPartial<MsgUpdateGroupMembers>): MsgUpdateGroupMembers {
     const message = createBaseMsgUpdateGroupMembers();
     message.admin = object.admin ?? "";
-    message.groupId = object.groupId !== undefined && object.groupId !== null ? Long.fromValue(object.groupId) : Long.UZERO;
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     message.memberUpdates = object.memberUpdates?.map(e => MemberRequest.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: MsgUpdateGroupMembersAmino): MsgUpdateGroupMembers {
     return {
       admin: object.admin,
-      groupId: Long.fromString(object.group_id),
+      groupId: BigInt(object.group_id),
       memberUpdates: Array.isArray(object?.member_updates) ? object.member_updates.map((e: any) => MemberRequest.fromAmino(e)) : []
     };
   },
@@ -1084,11 +1084,11 @@ function createBaseMsgUpdateGroupMembersResponse(): MsgUpdateGroupMembersRespons
 export const MsgUpdateGroupMembersResponse = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupMembersResponse",
   aminoType: "cosmos-sdk/MsgUpdateGroupMembersResponse",
-  encode(_: MsgUpdateGroupMembersResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateGroupMembersResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupMembersResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupMembersResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupMembersResponse();
     while (reader.pos < end) {
@@ -1137,18 +1137,18 @@ export const MsgUpdateGroupMembersResponse = {
 function createBaseMsgUpdateGroupAdmin(): MsgUpdateGroupAdmin {
   return {
     admin: "",
-    groupId: Long.UZERO,
+    groupId: BigInt(0),
     newAdmin: ""
   };
 }
 export const MsgUpdateGroupAdmin = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupAdmin",
   aminoType: "cosmos-sdk/MsgUpdateGroupAdmin",
-  encode(message: MsgUpdateGroupAdmin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateGroupAdmin, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.admin !== "") {
       writer.uint32(10).string(message.admin);
     }
-    if (!message.groupId.isZero()) {
+    if (message.groupId !== BigInt(0)) {
       writer.uint32(16).uint64(message.groupId);
     }
     if (message.newAdmin !== "") {
@@ -1156,8 +1156,8 @@ export const MsgUpdateGroupAdmin = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupAdmin {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupAdmin {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupAdmin();
     while (reader.pos < end) {
@@ -1167,7 +1167,7 @@ export const MsgUpdateGroupAdmin = {
           message.admin = reader.string();
           break;
         case 2:
-          message.groupId = (reader.uint64() as Long);
+          message.groupId = reader.uint64();
           break;
         case 3:
           message.newAdmin = reader.string();
@@ -1182,14 +1182,14 @@ export const MsgUpdateGroupAdmin = {
   fromPartial(object: DeepPartial<MsgUpdateGroupAdmin>): MsgUpdateGroupAdmin {
     const message = createBaseMsgUpdateGroupAdmin();
     message.admin = object.admin ?? "";
-    message.groupId = object.groupId !== undefined && object.groupId !== null ? Long.fromValue(object.groupId) : Long.UZERO;
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     message.newAdmin = object.newAdmin ?? "";
     return message;
   },
   fromAmino(object: MsgUpdateGroupAdminAmino): MsgUpdateGroupAdmin {
     return {
       admin: object.admin,
-      groupId: Long.fromString(object.group_id),
+      groupId: BigInt(object.group_id),
       newAdmin: object.new_admin
     };
   },
@@ -1228,11 +1228,11 @@ function createBaseMsgUpdateGroupAdminResponse(): MsgUpdateGroupAdminResponse {
 export const MsgUpdateGroupAdminResponse = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupAdminResponse",
   aminoType: "cosmos-sdk/MsgUpdateGroupAdminResponse",
-  encode(_: MsgUpdateGroupAdminResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateGroupAdminResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupAdminResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupAdminResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupAdminResponse();
     while (reader.pos < end) {
@@ -1281,18 +1281,18 @@ export const MsgUpdateGroupAdminResponse = {
 function createBaseMsgUpdateGroupMetadata(): MsgUpdateGroupMetadata {
   return {
     admin: "",
-    groupId: Long.UZERO,
+    groupId: BigInt(0),
     metadata: ""
   };
 }
 export const MsgUpdateGroupMetadata = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupMetadata",
   aminoType: "cosmos-sdk/MsgUpdateGroupMetadata",
-  encode(message: MsgUpdateGroupMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateGroupMetadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.admin !== "") {
       writer.uint32(10).string(message.admin);
     }
-    if (!message.groupId.isZero()) {
+    if (message.groupId !== BigInt(0)) {
       writer.uint32(16).uint64(message.groupId);
     }
     if (message.metadata !== "") {
@@ -1300,8 +1300,8 @@ export const MsgUpdateGroupMetadata = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupMetadata {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupMetadata {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupMetadata();
     while (reader.pos < end) {
@@ -1311,7 +1311,7 @@ export const MsgUpdateGroupMetadata = {
           message.admin = reader.string();
           break;
         case 2:
-          message.groupId = (reader.uint64() as Long);
+          message.groupId = reader.uint64();
           break;
         case 3:
           message.metadata = reader.string();
@@ -1326,14 +1326,14 @@ export const MsgUpdateGroupMetadata = {
   fromPartial(object: DeepPartial<MsgUpdateGroupMetadata>): MsgUpdateGroupMetadata {
     const message = createBaseMsgUpdateGroupMetadata();
     message.admin = object.admin ?? "";
-    message.groupId = object.groupId !== undefined && object.groupId !== null ? Long.fromValue(object.groupId) : Long.UZERO;
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     message.metadata = object.metadata ?? "";
     return message;
   },
   fromAmino(object: MsgUpdateGroupMetadataAmino): MsgUpdateGroupMetadata {
     return {
       admin: object.admin,
-      groupId: Long.fromString(object.group_id),
+      groupId: BigInt(object.group_id),
       metadata: object.metadata
     };
   },
@@ -1372,11 +1372,11 @@ function createBaseMsgUpdateGroupMetadataResponse(): MsgUpdateGroupMetadataRespo
 export const MsgUpdateGroupMetadataResponse = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupMetadataResponse",
   aminoType: "cosmos-sdk/MsgUpdateGroupMetadataResponse",
-  encode(_: MsgUpdateGroupMetadataResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateGroupMetadataResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupMetadataResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupMetadataResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupMetadataResponse();
     while (reader.pos < end) {
@@ -1425,7 +1425,7 @@ export const MsgUpdateGroupMetadataResponse = {
 function createBaseMsgCreateGroupPolicy(): MsgCreateGroupPolicy {
   return {
     admin: "",
-    groupId: Long.UZERO,
+    groupId: BigInt(0),
     metadata: "",
     decisionPolicy: Any.fromPartial({})
   };
@@ -1433,11 +1433,11 @@ function createBaseMsgCreateGroupPolicy(): MsgCreateGroupPolicy {
 export const MsgCreateGroupPolicy = {
   typeUrl: "/cosmos.group.v1.MsgCreateGroupPolicy",
   aminoType: "cosmos-sdk/MsgCreateGroupPolicy",
-  encode(message: MsgCreateGroupPolicy, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCreateGroupPolicy, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.admin !== "") {
       writer.uint32(10).string(message.admin);
     }
-    if (!message.groupId.isZero()) {
+    if (message.groupId !== BigInt(0)) {
       writer.uint32(16).uint64(message.groupId);
     }
     if (message.metadata !== "") {
@@ -1448,8 +1448,8 @@ export const MsgCreateGroupPolicy = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateGroupPolicy {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateGroupPolicy {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateGroupPolicy();
     while (reader.pos < end) {
@@ -1459,7 +1459,7 @@ export const MsgCreateGroupPolicy = {
           message.admin = reader.string();
           break;
         case 2:
-          message.groupId = (reader.uint64() as Long);
+          message.groupId = reader.uint64();
           break;
         case 3:
           message.metadata = reader.string();
@@ -1477,7 +1477,7 @@ export const MsgCreateGroupPolicy = {
   fromPartial(object: DeepPartial<MsgCreateGroupPolicy>): MsgCreateGroupPolicy {
     const message = createBaseMsgCreateGroupPolicy();
     message.admin = object.admin ?? "";
-    message.groupId = object.groupId !== undefined && object.groupId !== null ? Long.fromValue(object.groupId) : Long.UZERO;
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     message.metadata = object.metadata ?? "";
     message.decisionPolicy = object.decisionPolicy !== undefined && object.decisionPolicy !== null ? Any.fromPartial(object.decisionPolicy) : undefined;
     return message;
@@ -1485,7 +1485,7 @@ export const MsgCreateGroupPolicy = {
   fromAmino(object: MsgCreateGroupPolicyAmino): MsgCreateGroupPolicy {
     return {
       admin: object.admin,
-      groupId: Long.fromString(object.group_id),
+      groupId: BigInt(object.group_id),
       metadata: object.metadata,
       decisionPolicy: object?.decision_policy ? Cosmos_groupv1DecisionPolicy_FromAmino(object.decision_policy) : undefined
     };
@@ -1528,14 +1528,14 @@ function createBaseMsgCreateGroupPolicyResponse(): MsgCreateGroupPolicyResponse 
 export const MsgCreateGroupPolicyResponse = {
   typeUrl: "/cosmos.group.v1.MsgCreateGroupPolicyResponse",
   aminoType: "cosmos-sdk/MsgCreateGroupPolicyResponse",
-  encode(message: MsgCreateGroupPolicyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCreateGroupPolicyResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateGroupPolicyResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateGroupPolicyResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateGroupPolicyResponse();
     while (reader.pos < end) {
@@ -1598,7 +1598,7 @@ function createBaseMsgUpdateGroupPolicyAdmin(): MsgUpdateGroupPolicyAdmin {
 export const MsgUpdateGroupPolicyAdmin = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupPolicyAdmin",
   aminoType: "cosmos-sdk/MsgUpdateGroupPolicyAdmin",
-  encode(message: MsgUpdateGroupPolicyAdmin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateGroupPolicyAdmin, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.admin !== "") {
       writer.uint32(10).string(message.admin);
     }
@@ -1610,8 +1610,8 @@ export const MsgUpdateGroupPolicyAdmin = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupPolicyAdmin {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupPolicyAdmin {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupPolicyAdmin();
     while (reader.pos < end) {
@@ -1682,11 +1682,11 @@ function createBaseMsgUpdateGroupPolicyAdminResponse(): MsgUpdateGroupPolicyAdmi
 export const MsgUpdateGroupPolicyAdminResponse = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupPolicyAdminResponse",
   aminoType: "cosmos-sdk/MsgUpdateGroupPolicyAdminResponse",
-  encode(_: MsgUpdateGroupPolicyAdminResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateGroupPolicyAdminResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupPolicyAdminResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupPolicyAdminResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupPolicyAdminResponse();
     while (reader.pos < end) {
@@ -1745,7 +1745,7 @@ function createBaseMsgCreateGroupWithPolicy(): MsgCreateGroupWithPolicy {
 export const MsgCreateGroupWithPolicy = {
   typeUrl: "/cosmos.group.v1.MsgCreateGroupWithPolicy",
   aminoType: "cosmos-sdk/MsgCreateGroupWithPolicy",
-  encode(message: MsgCreateGroupWithPolicy, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCreateGroupWithPolicy, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.admin !== "") {
       writer.uint32(10).string(message.admin);
     }
@@ -1766,8 +1766,8 @@ export const MsgCreateGroupWithPolicy = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateGroupWithPolicy {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateGroupWithPolicy {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateGroupWithPolicy();
     while (reader.pos < end) {
@@ -1856,15 +1856,15 @@ export const MsgCreateGroupWithPolicy = {
 };
 function createBaseMsgCreateGroupWithPolicyResponse(): MsgCreateGroupWithPolicyResponse {
   return {
-    groupId: Long.UZERO,
+    groupId: BigInt(0),
     groupPolicyAddress: ""
   };
 }
 export const MsgCreateGroupWithPolicyResponse = {
   typeUrl: "/cosmos.group.v1.MsgCreateGroupWithPolicyResponse",
   aminoType: "cosmos-sdk/MsgCreateGroupWithPolicyResponse",
-  encode(message: MsgCreateGroupWithPolicyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.groupId.isZero()) {
+  encode(message: MsgCreateGroupWithPolicyResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.groupId !== BigInt(0)) {
       writer.uint32(8).uint64(message.groupId);
     }
     if (message.groupPolicyAddress !== "") {
@@ -1872,15 +1872,15 @@ export const MsgCreateGroupWithPolicyResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateGroupWithPolicyResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateGroupWithPolicyResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateGroupWithPolicyResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.groupId = (reader.uint64() as Long);
+          message.groupId = reader.uint64();
           break;
         case 2:
           message.groupPolicyAddress = reader.string();
@@ -1894,13 +1894,13 @@ export const MsgCreateGroupWithPolicyResponse = {
   },
   fromPartial(object: DeepPartial<MsgCreateGroupWithPolicyResponse>): MsgCreateGroupWithPolicyResponse {
     const message = createBaseMsgCreateGroupWithPolicyResponse();
-    message.groupId = object.groupId !== undefined && object.groupId !== null ? Long.fromValue(object.groupId) : Long.UZERO;
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     message.groupPolicyAddress = object.groupPolicyAddress ?? "";
     return message;
   },
   fromAmino(object: MsgCreateGroupWithPolicyResponseAmino): MsgCreateGroupWithPolicyResponse {
     return {
-      groupId: Long.fromString(object.group_id),
+      groupId: BigInt(object.group_id),
       groupPolicyAddress: object.group_policy_address
     };
   },
@@ -1942,7 +1942,7 @@ function createBaseMsgUpdateGroupPolicyDecisionPolicy(): MsgUpdateGroupPolicyDec
 export const MsgUpdateGroupPolicyDecisionPolicy = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupPolicyDecisionPolicy",
   aminoType: "cosmos-sdk/MsgUpdateGroupDecisionPolicy",
-  encode(message: MsgUpdateGroupPolicyDecisionPolicy, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateGroupPolicyDecisionPolicy, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.admin !== "") {
       writer.uint32(10).string(message.admin);
     }
@@ -1954,8 +1954,8 @@ export const MsgUpdateGroupPolicyDecisionPolicy = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupPolicyDecisionPolicy {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupPolicyDecisionPolicy {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupPolicyDecisionPolicy();
     while (reader.pos < end) {
@@ -2026,11 +2026,11 @@ function createBaseMsgUpdateGroupPolicyDecisionPolicyResponse(): MsgUpdateGroupP
 export const MsgUpdateGroupPolicyDecisionPolicyResponse = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupPolicyDecisionPolicyResponse",
   aminoType: "cosmos-sdk/MsgUpdateGroupPolicyDecisionPolicyResponse",
-  encode(_: MsgUpdateGroupPolicyDecisionPolicyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateGroupPolicyDecisionPolicyResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupPolicyDecisionPolicyResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupPolicyDecisionPolicyResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupPolicyDecisionPolicyResponse();
     while (reader.pos < end) {
@@ -2086,7 +2086,7 @@ function createBaseMsgUpdateGroupPolicyMetadata(): MsgUpdateGroupPolicyMetadata 
 export const MsgUpdateGroupPolicyMetadata = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupPolicyMetadata",
   aminoType: "cosmos-sdk/MsgUpdateGroupPolicyMetadata",
-  encode(message: MsgUpdateGroupPolicyMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateGroupPolicyMetadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.admin !== "") {
       writer.uint32(10).string(message.admin);
     }
@@ -2098,8 +2098,8 @@ export const MsgUpdateGroupPolicyMetadata = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupPolicyMetadata {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupPolicyMetadata {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupPolicyMetadata();
     while (reader.pos < end) {
@@ -2170,11 +2170,11 @@ function createBaseMsgUpdateGroupPolicyMetadataResponse(): MsgUpdateGroupPolicyM
 export const MsgUpdateGroupPolicyMetadataResponse = {
   typeUrl: "/cosmos.group.v1.MsgUpdateGroupPolicyMetadataResponse",
   aminoType: "cosmos-sdk/MsgUpdateGroupPolicyMetadataResponse",
-  encode(_: MsgUpdateGroupPolicyMetadataResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateGroupPolicyMetadataResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGroupPolicyMetadataResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateGroupPolicyMetadataResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateGroupPolicyMetadataResponse();
     while (reader.pos < end) {
@@ -2234,7 +2234,7 @@ function createBaseMsgSubmitProposal(): MsgSubmitProposal {
 export const MsgSubmitProposal = {
   typeUrl: "/cosmos.group.v1.MsgSubmitProposal",
   aminoType: "cosmos-sdk/group/MsgSubmitProposal",
-  encode(message: MsgSubmitProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSubmitProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.groupPolicyAddress !== "") {
       writer.uint32(10).string(message.groupPolicyAddress);
     }
@@ -2258,8 +2258,8 @@ export const MsgSubmitProposal = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSubmitProposal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitProposal {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitProposal();
     while (reader.pos < end) {
@@ -2358,27 +2358,27 @@ export const MsgSubmitProposal = {
 };
 function createBaseMsgSubmitProposalResponse(): MsgSubmitProposalResponse {
   return {
-    proposalId: Long.UZERO
+    proposalId: BigInt(0)
   };
 }
 export const MsgSubmitProposalResponse = {
   typeUrl: "/cosmos.group.v1.MsgSubmitProposalResponse",
   aminoType: "cosmos-sdk/MsgSubmitProposalResponse",
-  encode(message: MsgSubmitProposalResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.proposalId.isZero()) {
+  encode(message: MsgSubmitProposalResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSubmitProposalResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitProposalResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSubmitProposalResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2389,12 +2389,12 @@ export const MsgSubmitProposalResponse = {
   },
   fromPartial(object: DeepPartial<MsgSubmitProposalResponse>): MsgSubmitProposalResponse {
     const message = createBaseMsgSubmitProposalResponse();
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: MsgSubmitProposalResponseAmino): MsgSubmitProposalResponse {
     return {
-      proposalId: Long.fromString(object.proposal_id)
+      proposalId: BigInt(object.proposal_id)
     };
   },
   toAmino(message: MsgSubmitProposalResponse): MsgSubmitProposalResponseAmino {
@@ -2426,15 +2426,15 @@ export const MsgSubmitProposalResponse = {
 };
 function createBaseMsgWithdrawProposal(): MsgWithdrawProposal {
   return {
-    proposalId: Long.UZERO,
+    proposalId: BigInt(0),
     address: ""
   };
 }
 export const MsgWithdrawProposal = {
   typeUrl: "/cosmos.group.v1.MsgWithdrawProposal",
   aminoType: "cosmos-sdk/group/MsgWithdrawProposal",
-  encode(message: MsgWithdrawProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.proposalId.isZero()) {
+  encode(message: MsgWithdrawProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     if (message.address !== "") {
@@ -2442,15 +2442,15 @@ export const MsgWithdrawProposal = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawProposal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgWithdrawProposal {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWithdrawProposal();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         case 2:
           message.address = reader.string();
@@ -2464,13 +2464,13 @@ export const MsgWithdrawProposal = {
   },
   fromPartial(object: DeepPartial<MsgWithdrawProposal>): MsgWithdrawProposal {
     const message = createBaseMsgWithdrawProposal();
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.address = object.address ?? "";
     return message;
   },
   fromAmino(object: MsgWithdrawProposalAmino): MsgWithdrawProposal {
     return {
-      proposalId: Long.fromString(object.proposal_id),
+      proposalId: BigInt(object.proposal_id),
       address: object.address
     };
   },
@@ -2508,11 +2508,11 @@ function createBaseMsgWithdrawProposalResponse(): MsgWithdrawProposalResponse {
 export const MsgWithdrawProposalResponse = {
   typeUrl: "/cosmos.group.v1.MsgWithdrawProposalResponse",
   aminoType: "cosmos-sdk/MsgWithdrawProposalResponse",
-  encode(_: MsgWithdrawProposalResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgWithdrawProposalResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawProposalResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgWithdrawProposalResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWithdrawProposalResponse();
     while (reader.pos < end) {
@@ -2560,7 +2560,7 @@ export const MsgWithdrawProposalResponse = {
 };
 function createBaseMsgVote(): MsgVote {
   return {
-    proposalId: Long.UZERO,
+    proposalId: BigInt(0),
     voter: "",
     option: 0,
     metadata: "",
@@ -2570,8 +2570,8 @@ function createBaseMsgVote(): MsgVote {
 export const MsgVote = {
   typeUrl: "/cosmos.group.v1.MsgVote",
   aminoType: "cosmos-sdk/group/MsgVote",
-  encode(message: MsgVote, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.proposalId.isZero()) {
+  encode(message: MsgVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     if (message.voter !== "") {
@@ -2588,15 +2588,15 @@ export const MsgVote = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgVote {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgVote {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgVote();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         case 2:
           message.voter = reader.string();
@@ -2619,7 +2619,7 @@ export const MsgVote = {
   },
   fromPartial(object: DeepPartial<MsgVote>): MsgVote {
     const message = createBaseMsgVote();
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.voter = object.voter ?? "";
     message.option = object.option ?? 0;
     message.metadata = object.metadata ?? "";
@@ -2628,7 +2628,7 @@ export const MsgVote = {
   },
   fromAmino(object: MsgVoteAmino): MsgVote {
     return {
-      proposalId: Long.fromString(object.proposal_id),
+      proposalId: BigInt(object.proposal_id),
       voter: object.voter,
       option: isSet(object.option) ? voteOptionFromJSON(object.option) : -1,
       metadata: object.metadata,
@@ -2672,11 +2672,11 @@ function createBaseMsgVoteResponse(): MsgVoteResponse {
 export const MsgVoteResponse = {
   typeUrl: "/cosmos.group.v1.MsgVoteResponse",
   aminoType: "cosmos-sdk/MsgVoteResponse",
-  encode(_: MsgVoteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgVoteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgVoteResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgVoteResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgVoteResponse();
     while (reader.pos < end) {
@@ -2724,15 +2724,15 @@ export const MsgVoteResponse = {
 };
 function createBaseMsgExec(): MsgExec {
   return {
-    proposalId: Long.UZERO,
+    proposalId: BigInt(0),
     executor: ""
   };
 }
 export const MsgExec = {
   typeUrl: "/cosmos.group.v1.MsgExec",
   aminoType: "cosmos-sdk/group/MsgExec",
-  encode(message: MsgExec, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.proposalId.isZero()) {
+  encode(message: MsgExec, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     if (message.executor !== "") {
@@ -2740,15 +2740,15 @@ export const MsgExec = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExec {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExec {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExec();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.proposalId = (reader.uint64() as Long);
+          message.proposalId = reader.uint64();
           break;
         case 2:
           message.executor = reader.string();
@@ -2762,13 +2762,13 @@ export const MsgExec = {
   },
   fromPartial(object: DeepPartial<MsgExec>): MsgExec {
     const message = createBaseMsgExec();
-    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.executor = object.executor ?? "";
     return message;
   },
   fromAmino(object: MsgExecAmino): MsgExec {
     return {
-      proposalId: Long.fromString(object.proposal_id),
+      proposalId: BigInt(object.proposal_id),
       executor: object.executor
     };
   },
@@ -2808,14 +2808,14 @@ function createBaseMsgExecResponse(): MsgExecResponse {
 export const MsgExecResponse = {
   typeUrl: "/cosmos.group.v1.MsgExecResponse",
   aminoType: "cosmos-sdk/MsgExecResponse",
-  encode(message: MsgExecResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgExecResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.result !== 0) {
       writer.uint32(16).int32(message.result);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExecResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgExecResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExecResponse();
     while (reader.pos < end) {
@@ -2871,23 +2871,23 @@ export const MsgExecResponse = {
 function createBaseMsgLeaveGroup(): MsgLeaveGroup {
   return {
     address: "",
-    groupId: Long.UZERO
+    groupId: BigInt(0)
   };
 }
 export const MsgLeaveGroup = {
   typeUrl: "/cosmos.group.v1.MsgLeaveGroup",
   aminoType: "cosmos-sdk/group/MsgLeaveGroup",
-  encode(message: MsgLeaveGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgLeaveGroup, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
-    if (!message.groupId.isZero()) {
+    if (message.groupId !== BigInt(0)) {
       writer.uint32(16).uint64(message.groupId);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgLeaveGroup {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgLeaveGroup {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgLeaveGroup();
     while (reader.pos < end) {
@@ -2897,7 +2897,7 @@ export const MsgLeaveGroup = {
           message.address = reader.string();
           break;
         case 2:
-          message.groupId = (reader.uint64() as Long);
+          message.groupId = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2909,13 +2909,13 @@ export const MsgLeaveGroup = {
   fromPartial(object: DeepPartial<MsgLeaveGroup>): MsgLeaveGroup {
     const message = createBaseMsgLeaveGroup();
     message.address = object.address ?? "";
-    message.groupId = object.groupId !== undefined && object.groupId !== null ? Long.fromValue(object.groupId) : Long.UZERO;
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: MsgLeaveGroupAmino): MsgLeaveGroup {
     return {
       address: object.address,
-      groupId: Long.fromString(object.group_id)
+      groupId: BigInt(object.group_id)
     };
   },
   toAmino(message: MsgLeaveGroup): MsgLeaveGroupAmino {
@@ -2952,11 +2952,11 @@ function createBaseMsgLeaveGroupResponse(): MsgLeaveGroupResponse {
 export const MsgLeaveGroupResponse = {
   typeUrl: "/cosmos.group.v1.MsgLeaveGroupResponse",
   aminoType: "cosmos-sdk/MsgLeaveGroupResponse",
-  encode(_: MsgLeaveGroupResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgLeaveGroupResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgLeaveGroupResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgLeaveGroupResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgLeaveGroupResponse();
     while (reader.pos < end) {
@@ -3002,8 +3002,8 @@ export const MsgLeaveGroupResponse = {
     };
   }
 };
-export const Cosmos_groupv1DecisionPolicy_InterfaceDecoder = (input: _m0.Reader | Uint8Array): ThresholdDecisionPolicy | PercentageDecisionPolicy | Any => {
-  const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+export const Cosmos_groupv1DecisionPolicy_InterfaceDecoder = (input: BinaryReader | Uint8Array): ThresholdDecisionPolicy | PercentageDecisionPolicy | Any => {
+  const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
   const data = Any.decode(reader, reader.uint32());
   switch (data.typeUrl) {
     case "/cosmos.group.v1.ThresholdDecisionPolicy":

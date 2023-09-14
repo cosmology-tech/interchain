@@ -2,8 +2,8 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { Any, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
 import { Timestamp } from "../../../../google/protobuf/timestamp";
 import { Duration, DurationAmino, DurationSDKType } from "../../../../google/protobuf/duration";
-import { Long, DeepPartial, toTimestamp, fromTimestamp } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { DeepPartial, toTimestamp, fromTimestamp } from "../../../../helpers";
 /** GetRequest is the Query/Get request type. */
 export interface GetRequest {
   /** message_name is the fully-qualified message name of the ORM table being queried. */
@@ -234,12 +234,12 @@ export interface IndexValue {
    * uint specifies a value for an uint32, fixed32, uint64, or fixed64
    * index field.
    */
-  uint?: Long;
+  uint?: bigint;
   /**
    * int64 specifies a value for an int32, sfixed32, int64, or sfixed64
    * index field.
    */
-  int?: Long;
+  int?: bigint;
   /** str specifies a value for a string index field. */
   str?: string;
   /** bytes specifies a value for a bytes index field. */
@@ -288,8 +288,8 @@ export interface IndexValueAminoMsg {
 }
 /** IndexValue represents the value of a field in an ORM index expression. */
 export interface IndexValueSDKType {
-  uint?: Long;
-  int?: Long;
+  uint?: bigint;
+  int?: bigint;
   str?: string;
   bytes?: Uint8Array;
   enum?: string;
@@ -307,7 +307,7 @@ function createBaseGetRequest(): GetRequest {
 export const GetRequest = {
   typeUrl: "/cosmos.orm.query.v1alpha1.GetRequest",
   aminoType: "cosmos-sdk/GetRequest",
-  encode(message: GetRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.messageName !== "") {
       writer.uint32(10).string(message.messageName);
     }
@@ -319,8 +319,8 @@ export const GetRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetRequest();
     while (reader.pos < end) {
@@ -397,14 +397,14 @@ function createBaseGetResponse(): GetResponse {
 export const GetResponse = {
   typeUrl: "/cosmos.orm.query.v1alpha1.GetResponse",
   aminoType: "cosmos-sdk/GetResponse",
-  encode(message: GetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.result !== undefined) {
       Any.encode(message.result, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetResponse();
     while (reader.pos < end) {
@@ -469,7 +469,7 @@ function createBaseListRequest(): ListRequest {
 export const ListRequest = {
   typeUrl: "/cosmos.orm.query.v1alpha1.ListRequest",
   aminoType: "cosmos-sdk/ListRequest",
-  encode(message: ListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ListRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.messageName !== "") {
       writer.uint32(10).string(message.messageName);
     }
@@ -487,8 +487,8 @@ export const ListRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ListRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ListRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListRequest();
     while (reader.pos < end) {
@@ -573,14 +573,14 @@ function createBaseListRequest_Prefix(): ListRequest_Prefix {
 export const ListRequest_Prefix = {
   typeUrl: "/cosmos.orm.query.v1alpha1.Prefix",
   aminoType: "cosmos-sdk/Prefix",
-  encode(message: ListRequest_Prefix, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ListRequest_Prefix, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.values) {
       IndexValue.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ListRequest_Prefix {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ListRequest_Prefix {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListRequest_Prefix();
     while (reader.pos < end) {
@@ -646,7 +646,7 @@ function createBaseListRequest_Range(): ListRequest_Range {
 export const ListRequest_Range = {
   typeUrl: "/cosmos.orm.query.v1alpha1.Range",
   aminoType: "cosmos-sdk/Range",
-  encode(message: ListRequest_Range, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ListRequest_Range, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.start) {
       IndexValue.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -655,8 +655,8 @@ export const ListRequest_Range = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ListRequest_Range {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ListRequest_Range {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListRequest_Range();
     while (reader.pos < end) {
@@ -732,7 +732,7 @@ function createBaseListResponse(): ListResponse {
 export const ListResponse = {
   typeUrl: "/cosmos.orm.query.v1alpha1.ListResponse",
   aminoType: "cosmos-sdk/ListResponse",
-  encode(message: ListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ListResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.results) {
       Any.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -741,8 +741,8 @@ export const ListResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ListResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ListResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListResponse();
     while (reader.pos < end) {
@@ -820,7 +820,7 @@ function createBaseIndexValue(): IndexValue {
 export const IndexValue = {
   typeUrl: "/cosmos.orm.query.v1alpha1.IndexValue",
   aminoType: "cosmos-sdk/IndexValue",
-  encode(message: IndexValue, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: IndexValue, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.uint !== undefined) {
       writer.uint32(8).uint64(message.uint);
     }
@@ -847,18 +847,18 @@ export const IndexValue = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): IndexValue {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): IndexValue {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseIndexValue();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.uint = (reader.uint64() as Long);
+          message.uint = reader.uint64();
           break;
         case 2:
-          message.int = (reader.int64() as Long);
+          message.int = reader.int64();
           break;
         case 3:
           message.str = reader.string();
@@ -887,8 +887,8 @@ export const IndexValue = {
   },
   fromPartial(object: DeepPartial<IndexValue>): IndexValue {
     const message = createBaseIndexValue();
-    message.uint = object.uint !== undefined && object.uint !== null ? Long.fromValue(object.uint) : undefined;
-    message.int = object.int !== undefined && object.int !== null ? Long.fromValue(object.int) : undefined;
+    message.uint = object.uint !== undefined && object.uint !== null ? BigInt(object.uint.toString()) : undefined;
+    message.int = object.int !== undefined && object.int !== null ? BigInt(object.int.toString()) : undefined;
     message.str = object.str ?? undefined;
     message.bytes = object.bytes ?? undefined;
     message.enum = object.enum ?? undefined;
@@ -899,8 +899,8 @@ export const IndexValue = {
   },
   fromAmino(object: IndexValueAmino): IndexValue {
     return {
-      uint: object?.uint ? Long.fromString(object.uint) : undefined,
-      int: object?.int ? Long.fromString(object.int) : undefined,
+      uint: object?.uint ? BigInt(object.uint) : undefined,
+      int: object?.int ? BigInt(object.int) : undefined,
       str: object?.str,
       bytes: object?.bytes,
       enum: object?.enum,

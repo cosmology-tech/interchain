@@ -5,7 +5,7 @@ import { SendAuthorization, SendAuthorizationProtoMsg, SendAuthorizationSDKType 
 import { StakeAuthorization, StakeAuthorizationProtoMsg, StakeAuthorizationSDKType } from "../../staking/v1beta1/authz";
 import { TransferAuthorization, TransferAuthorizationProtoMsg, TransferAuthorizationSDKType } from "../../../ibc/applications/transfer/v1/authz";
 import { ContractExecutionAuthorization, ContractExecutionAuthorizationProtoMsg, ContractExecutionAuthorizationSDKType, ContractMigrationAuthorization, ContractMigrationAuthorizationProtoMsg, ContractMigrationAuthorizationSDKType } from "../../../cosmwasm/wasm/v1/authz";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { DeepPartial, toTimestamp, fromTimestamp } from "../../../helpers";
 /**
  * GenericAuthorization gives the grantee unrestricted permissions to execute
@@ -157,14 +157,14 @@ function createBaseGenericAuthorization(): GenericAuthorization {
 export const GenericAuthorization = {
   typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
   aminoType: "cosmos-sdk/GenericAuthorization",
-  encode(message: GenericAuthorization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GenericAuthorization, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.msg !== "") {
       writer.uint32(10).string(message.msg);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenericAuthorization {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GenericAuthorization {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenericAuthorization();
     while (reader.pos < end) {
@@ -226,7 +226,7 @@ function createBaseGrant(): Grant {
 export const Grant = {
   typeUrl: "/cosmos.authz.v1beta1.Grant",
   aminoType: "cosmos-sdk/Grant",
-  encode(message: Grant, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Grant, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authorization !== undefined) {
       Any.encode((message.authorization as Any), writer.uint32(10).fork()).ldelim();
     }
@@ -235,8 +235,8 @@ export const Grant = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Grant {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Grant {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGrant();
     while (reader.pos < end) {
@@ -306,7 +306,7 @@ function createBaseGrantAuthorization(): GrantAuthorization {
 export const GrantAuthorization = {
   typeUrl: "/cosmos.authz.v1beta1.GrantAuthorization",
   aminoType: "cosmos-sdk/GrantAuthorization",
-  encode(message: GrantAuthorization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GrantAuthorization, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
     }
@@ -321,8 +321,8 @@ export const GrantAuthorization = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GrantAuthorization {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GrantAuthorization {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGrantAuthorization();
     while (reader.pos < end) {
@@ -401,14 +401,14 @@ function createBaseGrantQueueItem(): GrantQueueItem {
 export const GrantQueueItem = {
   typeUrl: "/cosmos.authz.v1beta1.GrantQueueItem",
   aminoType: "cosmos-sdk/GrantQueueItem",
-  encode(message: GrantQueueItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GrantQueueItem, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.msgTypeUrls) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GrantQueueItem {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GrantQueueItem {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGrantQueueItem();
     while (reader.pos < end) {
@@ -465,8 +465,8 @@ export const GrantQueueItem = {
     };
   }
 };
-export const Cosmos_authzv1beta1Authorization_InterfaceDecoder = (input: _m0.Reader | Uint8Array): GenericAuthorization | SendAuthorization | StakeAuthorization | TransferAuthorization | ContractExecutionAuthorization | ContractMigrationAuthorization | Any => {
-  const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+export const Cosmos_authzv1beta1Authorization_InterfaceDecoder = (input: BinaryReader | Uint8Array): GenericAuthorization | SendAuthorization | StakeAuthorization | TransferAuthorization | ContractExecutionAuthorization | ContractMigrationAuthorization | Any => {
+  const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
   const data = Any.decode(reader, reader.uint32());
   switch (data.typeUrl) {
     case "/cosmos.authz.v1beta1.GenericAuthorization":

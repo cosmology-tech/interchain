@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
 import { QueryCurrentPlanRequest, QueryCurrentPlanResponse, QueryAppliedPlanRequest, QueryAppliedPlanResponse, QueryUpgradedConsensusStateRequest, QueryUpgradedConsensusStateResponse, QueryModuleVersionsRequest, QueryModuleVersionsResponse, QueryAuthorityRequest, QueryAuthorityResponse } from "./query";
 /** Query defines the gRPC upgrade querier service. */
@@ -39,13 +39,13 @@ export class QueryClientImpl implements Query {
   currentPlan = async (request: QueryCurrentPlanRequest = {}): Promise<QueryCurrentPlanResponse> => {
     const data = QueryCurrentPlanRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.upgrade.v1beta1.Query", "CurrentPlan", data);
-    return promise.then(data => QueryCurrentPlanResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryCurrentPlanResponse.decode(new BinaryReader(data)));
   };
   /* AppliedPlan queries a previously applied upgrade plan by its name. */
   appliedPlan = async (request: QueryAppliedPlanRequest): Promise<QueryAppliedPlanResponse> => {
     const data = QueryAppliedPlanRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.upgrade.v1beta1.Query", "AppliedPlan", data);
-    return promise.then(data => QueryAppliedPlanResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryAppliedPlanResponse.decode(new BinaryReader(data)));
   };
   /* UpgradedConsensusState queries the consensus state that will serve
    as a trusted kernel for the next version of this chain. It will only be
@@ -56,7 +56,7 @@ export class QueryClientImpl implements Query {
   upgradedConsensusState = async (request: QueryUpgradedConsensusStateRequest): Promise<QueryUpgradedConsensusStateResponse> => {
     const data = QueryUpgradedConsensusStateRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.upgrade.v1beta1.Query", "UpgradedConsensusState", data);
-    return promise.then(data => QueryUpgradedConsensusStateResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryUpgradedConsensusStateResponse.decode(new BinaryReader(data)));
   };
   /* ModuleVersions queries the list of module versions from state.
   
@@ -64,7 +64,7 @@ export class QueryClientImpl implements Query {
   moduleVersions = async (request: QueryModuleVersionsRequest): Promise<QueryModuleVersionsResponse> => {
     const data = QueryModuleVersionsRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.upgrade.v1beta1.Query", "ModuleVersions", data);
-    return promise.then(data => QueryModuleVersionsResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryModuleVersionsResponse.decode(new BinaryReader(data)));
   };
   /* Returns the account with authority to conduct upgrades
   
@@ -72,7 +72,7 @@ export class QueryClientImpl implements Query {
   authority = async (request: QueryAuthorityRequest = {}): Promise<QueryAuthorityResponse> => {
     const data = QueryAuthorityRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.upgrade.v1beta1.Query", "Authority", data);
-    return promise.then(data => QueryAuthorityResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryAuthorityResponse.decode(new BinaryReader(data)));
   };
 }
 export const createRpcQueryExtension = (base: QueryClient) => {

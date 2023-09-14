@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
 import { QueryParamsRequest, QueryParamsResponse, QuerySubspacesRequest, QuerySubspacesResponse } from "./query";
 /** Query defines the gRPC querier service. */
@@ -26,7 +26,7 @@ export class QueryClientImpl implements Query {
   params = async (request: QueryParamsRequest): Promise<QueryParamsResponse> => {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.params.v1beta1.Query", "Params", data);
-    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QueryParamsResponse.decode(new BinaryReader(data)));
   };
   /* Subspaces queries for all registered subspaces and all keys for a subspace.
   
@@ -34,7 +34,7 @@ export class QueryClientImpl implements Query {
   subspaces = async (request: QuerySubspacesRequest = {}): Promise<QuerySubspacesResponse> => {
     const data = QuerySubspacesRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.params.v1beta1.Query", "Subspaces", data);
-    return promise.then(data => QuerySubspacesResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => QuerySubspacesResponse.decode(new BinaryReader(data)));
   };
 }
 export const createRpcQueryExtension = (base: QueryClient) => {

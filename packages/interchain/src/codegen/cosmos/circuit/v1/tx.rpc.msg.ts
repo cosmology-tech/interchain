@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../binary";
 import { MsgAuthorizeCircuitBreaker, MsgAuthorizeCircuitBreakerResponse, MsgTripCircuitBreaker, MsgTripCircuitBreakerResponse, MsgResetCircuitBreaker, MsgResetCircuitBreakerResponse } from "./tx";
 /** Msg defines the circuit Msg service. */
 export interface Msg {
@@ -26,19 +26,19 @@ export class MsgClientImpl implements Msg {
   authorizeCircuitBreaker = async (request: MsgAuthorizeCircuitBreaker): Promise<MsgAuthorizeCircuitBreakerResponse> => {
     const data = MsgAuthorizeCircuitBreaker.encode(request).finish();
     const promise = this.rpc.request("cosmos.circuit.v1.Msg", "AuthorizeCircuitBreaker", data);
-    return promise.then(data => MsgAuthorizeCircuitBreakerResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgAuthorizeCircuitBreakerResponse.decode(new BinaryReader(data)));
   };
   /* TripCircuitBreaker pauses processing of Msg's in the state machine. */
   tripCircuitBreaker = async (request: MsgTripCircuitBreaker): Promise<MsgTripCircuitBreakerResponse> => {
     const data = MsgTripCircuitBreaker.encode(request).finish();
     const promise = this.rpc.request("cosmos.circuit.v1.Msg", "TripCircuitBreaker", data);
-    return promise.then(data => MsgTripCircuitBreakerResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgTripCircuitBreakerResponse.decode(new BinaryReader(data)));
   };
   /* ResetCircuitBreaker resumes processing of Msg's in the state machine that
    have been been paused using TripCircuitBreaker. */
   resetCircuitBreaker = async (request: MsgResetCircuitBreaker): Promise<MsgResetCircuitBreakerResponse> => {
     const data = MsgResetCircuitBreaker.encode(request).finish();
     const promise = this.rpc.request("cosmos.circuit.v1.Msg", "ResetCircuitBreaker", data);
-    return promise.then(data => MsgResetCircuitBreakerResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgResetCircuitBreakerResponse.decode(new BinaryReader(data)));
   };
 }

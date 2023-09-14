@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../binary";
 import { MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
 /** Msg defines the consensus Msg service. */
 export interface Msg {
@@ -23,6 +23,6 @@ export class MsgClientImpl implements Msg {
   updateParams = async (request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> => {
     const data = MsgUpdateParams.encode(request).finish();
     const promise = this.rpc.request("cosmos.consensus.v1.Msg", "UpdateParams", data);
-    return promise.then(data => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgUpdateParamsResponse.decode(new BinaryReader(data)));
   };
 }

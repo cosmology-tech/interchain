@@ -1,7 +1,7 @@
 import { RequestFinalizeBlock, RequestFinalizeBlockAmino, RequestFinalizeBlockSDKType, ResponseFinalizeBlock, ResponseFinalizeBlockAmino, ResponseFinalizeBlockSDKType, ResponseCommit, ResponseCommitAmino, ResponseCommitSDKType } from "../../../../tendermint/abci/types";
 import { StoreKVPair, StoreKVPairAmino, StoreKVPairSDKType } from "../../v1beta1/listening";
-import { Long, DeepPartial } from "../../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { DeepPartial } from "../../../../helpers";
 /** ListenEndBlockRequest is the request type for the ListenEndBlock RPC method */
 export interface ListenFinalizeBlockRequest {
   req: RequestFinalizeBlock;
@@ -42,7 +42,7 @@ export interface ListenFinalizeBlockResponseSDKType {}
 /** ListenCommitRequest is the request type for the ListenCommit RPC method */
 export interface ListenCommitRequest {
   /** explicitly pass in block height as ResponseCommit does not contain this info */
-  blockHeight: Long;
+  blockHeight: bigint;
   res: ResponseCommit;
   changeSet: StoreKVPair[];
 }
@@ -63,7 +63,7 @@ export interface ListenCommitRequestAminoMsg {
 }
 /** ListenCommitRequest is the request type for the ListenCommit RPC method */
 export interface ListenCommitRequestSDKType {
-  block_height: Long;
+  block_height: bigint;
   res: ResponseCommitSDKType;
   change_set: StoreKVPairSDKType[];
 }
@@ -90,7 +90,7 @@ function createBaseListenFinalizeBlockRequest(): ListenFinalizeBlockRequest {
 export const ListenFinalizeBlockRequest = {
   typeUrl: "/cosmos.store.streaming.abci.ListenFinalizeBlockRequest",
   aminoType: "cosmos-sdk/ListenFinalizeBlockRequest",
-  encode(message: ListenFinalizeBlockRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ListenFinalizeBlockRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.req !== undefined) {
       RequestFinalizeBlock.encode(message.req, writer.uint32(10).fork()).ldelim();
     }
@@ -99,8 +99,8 @@ export const ListenFinalizeBlockRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ListenFinalizeBlockRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ListenFinalizeBlockRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListenFinalizeBlockRequest();
     while (reader.pos < end) {
@@ -165,11 +165,11 @@ function createBaseListenFinalizeBlockResponse(): ListenFinalizeBlockResponse {
 export const ListenFinalizeBlockResponse = {
   typeUrl: "/cosmos.store.streaming.abci.ListenFinalizeBlockResponse",
   aminoType: "cosmos-sdk/ListenFinalizeBlockResponse",
-  encode(_: ListenFinalizeBlockResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: ListenFinalizeBlockResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ListenFinalizeBlockResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ListenFinalizeBlockResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListenFinalizeBlockResponse();
     while (reader.pos < end) {
@@ -217,7 +217,7 @@ export const ListenFinalizeBlockResponse = {
 };
 function createBaseListenCommitRequest(): ListenCommitRequest {
   return {
-    blockHeight: Long.ZERO,
+    blockHeight: BigInt(0),
     res: ResponseCommit.fromPartial({}),
     changeSet: []
   };
@@ -225,8 +225,8 @@ function createBaseListenCommitRequest(): ListenCommitRequest {
 export const ListenCommitRequest = {
   typeUrl: "/cosmos.store.streaming.abci.ListenCommitRequest",
   aminoType: "cosmos-sdk/ListenCommitRequest",
-  encode(message: ListenCommitRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.blockHeight.isZero()) {
+  encode(message: ListenCommitRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.blockHeight !== BigInt(0)) {
       writer.uint32(8).int64(message.blockHeight);
     }
     if (message.res !== undefined) {
@@ -237,15 +237,15 @@ export const ListenCommitRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ListenCommitRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ListenCommitRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListenCommitRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.blockHeight = (reader.int64() as Long);
+          message.blockHeight = reader.int64();
           break;
         case 2:
           message.res = ResponseCommit.decode(reader, reader.uint32());
@@ -262,14 +262,14 @@ export const ListenCommitRequest = {
   },
   fromPartial(object: DeepPartial<ListenCommitRequest>): ListenCommitRequest {
     const message = createBaseListenCommitRequest();
-    message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? Long.fromValue(object.blockHeight) : Long.ZERO;
+    message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? BigInt(object.blockHeight.toString()) : BigInt(0);
     message.res = object.res !== undefined && object.res !== null ? ResponseCommit.fromPartial(object.res) : undefined;
     message.changeSet = object.changeSet?.map(e => StoreKVPair.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: ListenCommitRequestAmino): ListenCommitRequest {
     return {
-      blockHeight: Long.fromString(object.block_height),
+      blockHeight: BigInt(object.block_height),
       res: object?.res ? ResponseCommit.fromAmino(object.res) : undefined,
       changeSet: Array.isArray(object?.change_set) ? object.change_set.map((e: any) => StoreKVPair.fromAmino(e)) : []
     };
@@ -313,11 +313,11 @@ function createBaseListenCommitResponse(): ListenCommitResponse {
 export const ListenCommitResponse = {
   typeUrl: "/cosmos.store.streaming.abci.ListenCommitResponse",
   aminoType: "cosmos-sdk/ListenCommitResponse",
-  encode(_: ListenCommitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: ListenCommitResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ListenCommitResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ListenCommitResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListenCommitResponse();
     while (reader.pos < end) {

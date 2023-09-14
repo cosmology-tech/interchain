@@ -1,6 +1,6 @@
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../base/query/v1beta1/pagination";
 import { Permissions, PermissionsAmino, PermissionsSDKType, GenesisAccountPermissions, GenesisAccountPermissionsAmino, GenesisAccountPermissionsSDKType } from "./types";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { DeepPartial } from "../../../helpers";
 /** QueryAccountRequest is the request type for the Query/Account RPC method. */
 export interface QueryAccountRequest {
@@ -131,14 +131,14 @@ function createBaseQueryAccountRequest(): QueryAccountRequest {
 export const QueryAccountRequest = {
   typeUrl: "/cosmos.circuit.v1.QueryAccountRequest",
   aminoType: "cosmos-sdk/QueryAccountRequest",
-  encode(message: QueryAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAccountRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAccountRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountRequest();
     while (reader.pos < end) {
@@ -199,14 +199,14 @@ function createBaseAccountResponse(): AccountResponse {
 export const AccountResponse = {
   typeUrl: "/cosmos.circuit.v1.AccountResponse",
   aminoType: "cosmos-sdk/AccountResponse",
-  encode(message: AccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: AccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.permission !== undefined) {
       Permissions.encode(message.permission, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): AccountResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): AccountResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAccountResponse();
     while (reader.pos < end) {
@@ -267,14 +267,14 @@ function createBaseQueryAccountsRequest(): QueryAccountsRequest {
 export const QueryAccountsRequest = {
   typeUrl: "/cosmos.circuit.v1.QueryAccountsRequest",
   aminoType: "cosmos-sdk/QueryAccountsRequest",
-  encode(message: QueryAccountsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryAccountsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryAccountsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountsRequest();
     while (reader.pos < end) {
@@ -336,7 +336,7 @@ function createBaseAccountsResponse(): AccountsResponse {
 export const AccountsResponse = {
   typeUrl: "/cosmos.circuit.v1.AccountsResponse",
   aminoType: "cosmos-sdk/AccountsResponse",
-  encode(message: AccountsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: AccountsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.accounts) {
       GenesisAccountPermissions.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -345,8 +345,8 @@ export const AccountsResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): AccountsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): AccountsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAccountsResponse();
     while (reader.pos < end) {
@@ -415,11 +415,11 @@ function createBaseQueryDisabledListRequest(): QueryDisabledListRequest {
 export const QueryDisabledListRequest = {
   typeUrl: "/cosmos.circuit.v1.QueryDisabledListRequest",
   aminoType: "cosmos-sdk/QueryDisabledListRequest",
-  encode(_: QueryDisabledListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QueryDisabledListRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDisabledListRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDisabledListRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDisabledListRequest();
     while (reader.pos < end) {
@@ -473,14 +473,14 @@ function createBaseDisabledListResponse(): DisabledListResponse {
 export const DisabledListResponse = {
   typeUrl: "/cosmos.circuit.v1.DisabledListResponse",
   aminoType: "cosmos-sdk/DisabledListResponse",
-  encode(message: DisabledListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: DisabledListResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.disabledList) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): DisabledListResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): DisabledListResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDisabledListResponse();
     while (reader.pos < end) {

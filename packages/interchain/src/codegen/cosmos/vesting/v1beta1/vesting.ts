@@ -1,7 +1,7 @@
 import { BaseAccount, BaseAccountAmino, BaseAccountSDKType } from "../../auth/v1beta1/auth";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
-import { Long, DeepPartial } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { DeepPartial } from "../../../helpers";
 /**
  * BaseVestingAccount implements the VestingAccount interface. It contains all
  * the necessary fields needed for any vesting account implementation.
@@ -12,7 +12,7 @@ export interface BaseVestingAccount {
   delegatedFree: Coin[];
   delegatedVesting: Coin[];
   /** Vesting end time, as unix timestamp (in seconds). */
-  endTime: Long;
+  endTime: bigint;
 }
 export interface BaseVestingAccountProtoMsg {
   typeUrl: "/cosmos.vesting.v1beta1.BaseVestingAccount";
@@ -43,7 +43,7 @@ export interface BaseVestingAccountSDKType {
   original_vesting: CoinSDKType[];
   delegated_free: CoinSDKType[];
   delegated_vesting: CoinSDKType[];
-  end_time: Long;
+  end_time: bigint;
 }
 /**
  * ContinuousVestingAccount implements the VestingAccount interface. It
@@ -52,7 +52,7 @@ export interface BaseVestingAccountSDKType {
 export interface ContinuousVestingAccount {
   baseVestingAccount: BaseVestingAccount;
   /** Vesting start time, as unix timestamp (in seconds). */
-  startTime: Long;
+  startTime: bigint;
 }
 export interface ContinuousVestingAccountProtoMsg {
   typeUrl: "/cosmos.vesting.v1beta1.ContinuousVestingAccount";
@@ -77,7 +77,7 @@ export interface ContinuousVestingAccountAminoMsg {
  */
 export interface ContinuousVestingAccountSDKType {
   base_vesting_account: BaseVestingAccountSDKType;
-  start_time: Long;
+  start_time: bigint;
 }
 /**
  * DelayedVestingAccount implements the VestingAccount interface. It vests all
@@ -114,7 +114,7 @@ export interface DelayedVestingAccountSDKType {
 /** Period defines a length of time and amount of coins that will vest. */
 export interface Period {
   /** Period duration in seconds. */
-  length: Long;
+  length: bigint;
   amount: Coin[];
 }
 export interface PeriodProtoMsg {
@@ -133,7 +133,7 @@ export interface PeriodAminoMsg {
 }
 /** Period defines a length of time and amount of coins that will vest. */
 export interface PeriodSDKType {
-  length: Long;
+  length: bigint;
   amount: CoinSDKType[];
 }
 /**
@@ -142,7 +142,7 @@ export interface PeriodSDKType {
  */
 export interface PeriodicVestingAccount {
   baseVestingAccount: BaseVestingAccount;
-  startTime: Long;
+  startTime: bigint;
   vestingPeriods: Period[];
 }
 export interface PeriodicVestingAccountProtoMsg {
@@ -168,7 +168,7 @@ export interface PeriodicVestingAccountAminoMsg {
  */
 export interface PeriodicVestingAccountSDKType {
   base_vesting_account: BaseVestingAccountSDKType;
-  start_time: Long;
+  start_time: bigint;
   vesting_periods: PeriodSDKType[];
 }
 /**
@@ -215,13 +215,13 @@ function createBaseBaseVestingAccount(): BaseVestingAccount {
     originalVesting: [],
     delegatedFree: [],
     delegatedVesting: [],
-    endTime: Long.ZERO
+    endTime: BigInt(0)
   };
 }
 export const BaseVestingAccount = {
   typeUrl: "/cosmos.vesting.v1beta1.BaseVestingAccount",
   aminoType: "cosmos-sdk/BaseVestingAccount",
-  encode(message: BaseVestingAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: BaseVestingAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.baseAccount !== undefined) {
       BaseAccount.encode(message.baseAccount, writer.uint32(10).fork()).ldelim();
     }
@@ -234,13 +234,13 @@ export const BaseVestingAccount = {
     for (const v of message.delegatedVesting) {
       Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    if (!message.endTime.isZero()) {
+    if (message.endTime !== BigInt(0)) {
       writer.uint32(40).int64(message.endTime);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): BaseVestingAccount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): BaseVestingAccount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBaseVestingAccount();
     while (reader.pos < end) {
@@ -259,7 +259,7 @@ export const BaseVestingAccount = {
           message.delegatedVesting.push(Coin.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.endTime = (reader.int64() as Long);
+          message.endTime = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -274,7 +274,7 @@ export const BaseVestingAccount = {
     message.originalVesting = object.originalVesting?.map(e => Coin.fromPartial(e)) || [];
     message.delegatedFree = object.delegatedFree?.map(e => Coin.fromPartial(e)) || [];
     message.delegatedVesting = object.delegatedVesting?.map(e => Coin.fromPartial(e)) || [];
-    message.endTime = object.endTime !== undefined && object.endTime !== null ? Long.fromValue(object.endTime) : Long.ZERO;
+    message.endTime = object.endTime !== undefined && object.endTime !== null ? BigInt(object.endTime.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: BaseVestingAccountAmino): BaseVestingAccount {
@@ -283,7 +283,7 @@ export const BaseVestingAccount = {
       originalVesting: Array.isArray(object?.original_vesting) ? object.original_vesting.map((e: any) => Coin.fromAmino(e)) : [],
       delegatedFree: Array.isArray(object?.delegated_free) ? object.delegated_free.map((e: any) => Coin.fromAmino(e)) : [],
       delegatedVesting: Array.isArray(object?.delegated_vesting) ? object.delegated_vesting.map((e: any) => Coin.fromAmino(e)) : [],
-      endTime: Long.fromString(object.end_time)
+      endTime: BigInt(object.end_time)
     };
   },
   toAmino(message: BaseVestingAccount): BaseVestingAccountAmino {
@@ -332,23 +332,23 @@ export const BaseVestingAccount = {
 function createBaseContinuousVestingAccount(): ContinuousVestingAccount {
   return {
     baseVestingAccount: BaseVestingAccount.fromPartial({}),
-    startTime: Long.ZERO
+    startTime: BigInt(0)
   };
 }
 export const ContinuousVestingAccount = {
   typeUrl: "/cosmos.vesting.v1beta1.ContinuousVestingAccount",
   aminoType: "cosmos-sdk/ContinuousVestingAccount",
-  encode(message: ContinuousVestingAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: ContinuousVestingAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.baseVestingAccount !== undefined) {
       BaseVestingAccount.encode(message.baseVestingAccount, writer.uint32(10).fork()).ldelim();
     }
-    if (!message.startTime.isZero()) {
+    if (message.startTime !== BigInt(0)) {
       writer.uint32(16).int64(message.startTime);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): ContinuousVestingAccount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ContinuousVestingAccount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseContinuousVestingAccount();
     while (reader.pos < end) {
@@ -358,7 +358,7 @@ export const ContinuousVestingAccount = {
           message.baseVestingAccount = BaseVestingAccount.decode(reader, reader.uint32());
           break;
         case 2:
-          message.startTime = (reader.int64() as Long);
+          message.startTime = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -370,13 +370,13 @@ export const ContinuousVestingAccount = {
   fromPartial(object: DeepPartial<ContinuousVestingAccount>): ContinuousVestingAccount {
     const message = createBaseContinuousVestingAccount();
     message.baseVestingAccount = object.baseVestingAccount !== undefined && object.baseVestingAccount !== null ? BaseVestingAccount.fromPartial(object.baseVestingAccount) : undefined;
-    message.startTime = object.startTime !== undefined && object.startTime !== null ? Long.fromValue(object.startTime) : Long.ZERO;
+    message.startTime = object.startTime !== undefined && object.startTime !== null ? BigInt(object.startTime.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: ContinuousVestingAccountAmino): ContinuousVestingAccount {
     return {
       baseVestingAccount: object?.base_vesting_account ? BaseVestingAccount.fromAmino(object.base_vesting_account) : undefined,
-      startTime: Long.fromString(object.start_time)
+      startTime: BigInt(object.start_time)
     };
   },
   toAmino(message: ContinuousVestingAccount): ContinuousVestingAccountAmino {
@@ -415,14 +415,14 @@ function createBaseDelayedVestingAccount(): DelayedVestingAccount {
 export const DelayedVestingAccount = {
   typeUrl: "/cosmos.vesting.v1beta1.DelayedVestingAccount",
   aminoType: "cosmos-sdk/DelayedVestingAccount",
-  encode(message: DelayedVestingAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: DelayedVestingAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.baseVestingAccount !== undefined) {
       BaseVestingAccount.encode(message.baseVestingAccount, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): DelayedVestingAccount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): DelayedVestingAccount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDelayedVestingAccount();
     while (reader.pos < end) {
@@ -477,15 +477,15 @@ export const DelayedVestingAccount = {
 };
 function createBasePeriod(): Period {
   return {
-    length: Long.ZERO,
+    length: BigInt(0),
     amount: []
   };
 }
 export const Period = {
   typeUrl: "/cosmos.vesting.v1beta1.Period",
   aminoType: "cosmos-sdk/Period",
-  encode(message: Period, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.length.isZero()) {
+  encode(message: Period, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.length !== BigInt(0)) {
       writer.uint32(8).int64(message.length);
     }
     for (const v of message.amount) {
@@ -493,15 +493,15 @@ export const Period = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Period {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Period {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePeriod();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.length = (reader.int64() as Long);
+          message.length = reader.int64();
           break;
         case 2:
           message.amount.push(Coin.decode(reader, reader.uint32()));
@@ -515,13 +515,13 @@ export const Period = {
   },
   fromPartial(object: DeepPartial<Period>): Period {
     const message = createBasePeriod();
-    message.length = object.length !== undefined && object.length !== null ? Long.fromValue(object.length) : Long.ZERO;
+    message.length = object.length !== undefined && object.length !== null ? BigInt(object.length.toString()) : BigInt(0);
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: PeriodAmino): Period {
     return {
-      length: Long.fromString(object.length),
+      length: BigInt(object.length),
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromAmino(e)) : []
     };
   },
@@ -560,18 +560,18 @@ export const Period = {
 function createBasePeriodicVestingAccount(): PeriodicVestingAccount {
   return {
     baseVestingAccount: BaseVestingAccount.fromPartial({}),
-    startTime: Long.ZERO,
+    startTime: BigInt(0),
     vestingPeriods: []
   };
 }
 export const PeriodicVestingAccount = {
   typeUrl: "/cosmos.vesting.v1beta1.PeriodicVestingAccount",
   aminoType: "cosmos-sdk/PeriodicVestingAccount",
-  encode(message: PeriodicVestingAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: PeriodicVestingAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.baseVestingAccount !== undefined) {
       BaseVestingAccount.encode(message.baseVestingAccount, writer.uint32(10).fork()).ldelim();
     }
-    if (!message.startTime.isZero()) {
+    if (message.startTime !== BigInt(0)) {
       writer.uint32(16).int64(message.startTime);
     }
     for (const v of message.vestingPeriods) {
@@ -579,8 +579,8 @@ export const PeriodicVestingAccount = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): PeriodicVestingAccount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): PeriodicVestingAccount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePeriodicVestingAccount();
     while (reader.pos < end) {
@@ -590,7 +590,7 @@ export const PeriodicVestingAccount = {
           message.baseVestingAccount = BaseVestingAccount.decode(reader, reader.uint32());
           break;
         case 2:
-          message.startTime = (reader.int64() as Long);
+          message.startTime = reader.int64();
           break;
         case 3:
           message.vestingPeriods.push(Period.decode(reader, reader.uint32()));
@@ -605,14 +605,14 @@ export const PeriodicVestingAccount = {
   fromPartial(object: DeepPartial<PeriodicVestingAccount>): PeriodicVestingAccount {
     const message = createBasePeriodicVestingAccount();
     message.baseVestingAccount = object.baseVestingAccount !== undefined && object.baseVestingAccount !== null ? BaseVestingAccount.fromPartial(object.baseVestingAccount) : undefined;
-    message.startTime = object.startTime !== undefined && object.startTime !== null ? Long.fromValue(object.startTime) : Long.ZERO;
+    message.startTime = object.startTime !== undefined && object.startTime !== null ? BigInt(object.startTime.toString()) : BigInt(0);
     message.vestingPeriods = object.vestingPeriods?.map(e => Period.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: PeriodicVestingAccountAmino): PeriodicVestingAccount {
     return {
       baseVestingAccount: object?.base_vesting_account ? BaseVestingAccount.fromAmino(object.base_vesting_account) : undefined,
-      startTime: Long.fromString(object.start_time),
+      startTime: BigInt(object.start_time),
       vestingPeriods: Array.isArray(object?.vesting_periods) ? object.vesting_periods.map((e: any) => Period.fromAmino(e)) : []
     };
   },
@@ -657,14 +657,14 @@ function createBasePermanentLockedAccount(): PermanentLockedAccount {
 export const PermanentLockedAccount = {
   typeUrl: "/cosmos.vesting.v1beta1.PermanentLockedAccount",
   aminoType: "cosmos-sdk/PermanentLockedAccount",
-  encode(message: PermanentLockedAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: PermanentLockedAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.baseVestingAccount !== undefined) {
       BaseVestingAccount.encode(message.baseVestingAccount, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): PermanentLockedAccount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): PermanentLockedAccount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePermanentLockedAccount();
     while (reader.pos < end) {

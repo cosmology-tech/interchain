@@ -1,4 +1,4 @@
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
 import { DeepPartial, isSet } from "../../../helpers";
 /** Level is the permission level. */
 export enum Permissions_Level {
@@ -162,7 +162,7 @@ function createBasePermissions(): Permissions {
 export const Permissions = {
   typeUrl: "/cosmos.circuit.v1.Permissions",
   aminoType: "cosmos-sdk/Permissions",
-  encode(message: Permissions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: Permissions, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.level !== 0) {
       writer.uint32(8).int32(message.level);
     }
@@ -171,8 +171,8 @@ export const Permissions = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): Permissions {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): Permissions {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePermissions();
     while (reader.pos < end) {
@@ -244,7 +244,7 @@ function createBaseGenesisAccountPermissions(): GenesisAccountPermissions {
 export const GenesisAccountPermissions = {
   typeUrl: "/cosmos.circuit.v1.GenesisAccountPermissions",
   aminoType: "cosmos-sdk/GenesisAccountPermissions",
-  encode(message: GenesisAccountPermissions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GenesisAccountPermissions, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -253,8 +253,8 @@ export const GenesisAccountPermissions = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisAccountPermissions {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GenesisAccountPermissions {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisAccountPermissions();
     while (reader.pos < end) {
@@ -322,7 +322,7 @@ function createBaseGenesisState(): GenesisState {
 export const GenesisState = {
   typeUrl: "/cosmos.circuit.v1.GenesisState",
   aminoType: "cosmos-sdk/GenesisState",
-  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.accountPermissions) {
       GenesisAccountPermissions.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -331,8 +331,8 @@ export const GenesisState = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GenesisState {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
     while (reader.pos < end) {

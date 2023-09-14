@@ -3,8 +3,8 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { TxResponse, TxResponseAmino, TxResponseSDKType, GasInfo, GasInfoAmino, GasInfoSDKType, Result, ResultAmino, ResultSDKType } from "../../base/abci/v1beta1/abci";
 import { BlockID, BlockIDAmino, BlockIDSDKType } from "../../../tendermint/types/types";
 import { Block, BlockAmino, BlockSDKType } from "../../../tendermint/types/block";
-import { Long, DeepPartial, isSet } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { DeepPartial, isSet } from "../../../helpers";
 /** OrderBy defines the sorting order */
 export enum OrderBy {
   /**
@@ -134,12 +134,12 @@ export interface GetTxsEventRequest {
    * page is the page number to query, starts at 1. If not provided, will
    * default to first page.
    */
-  page?: Long;
+  page?: bigint;
   /**
    * limit is the total number of results to be returned in the result page.
    * If left empty it will default to a value to be set by each app.
    */
-  limit?: Long;
+  limit?: bigint;
   /**
    * query defines the transaction event query that is proxied to Tendermint's
    * TxSearch RPC method. The query must be valid.
@@ -203,8 +203,8 @@ export interface GetTxsEventRequestSDKType {
   /** @deprecated */
   pagination?: PageRequestSDKType;
   order_by?: OrderBy;
-  page?: Long;
-  limit?: Long;
+  page?: bigint;
+  limit?: bigint;
   query?: string;
 }
 /**
@@ -223,7 +223,7 @@ export interface GetTxsEventResponse {
   /** @deprecated */
   pagination: PageResponse;
   /** total is total number of results available */
-  total: Long;
+  total: bigint;
 }
 export interface GetTxsEventResponseProtoMsg {
   typeUrl: "/cosmos.tx.v1beta1.GetTxsEventResponse";
@@ -260,7 +260,7 @@ export interface GetTxsEventResponseSDKType {
   tx_responses: TxResponseSDKType[];
   /** @deprecated */
   pagination: PageResponseSDKType;
-  total: Long;
+  total: bigint;
 }
 /**
  * BroadcastTxRequest is the request type for the Service.BroadcastTxRequest
@@ -482,7 +482,7 @@ export interface GetTxResponseSDKType {
  */
 export interface GetBlockWithTxsRequest {
   /** height is the height of the block to query. */
-  height: Long;
+  height: bigint;
   /** pagination defines a pagination for the request. */
   pagination?: PageRequest;
 }
@@ -513,7 +513,7 @@ export interface GetBlockWithTxsRequestAminoMsg {
  * Since: cosmos-sdk 0.45.2
  */
 export interface GetBlockWithTxsRequestSDKType {
-  height: Long;
+  height: bigint;
   pagination?: PageRequestSDKType;
 }
 /**
@@ -857,15 +857,15 @@ function createBaseGetTxsEventRequest(): GetTxsEventRequest {
     events: [],
     pagination: PageRequest.fromPartial({}),
     orderBy: 0,
-    page: Long.UZERO,
-    limit: Long.UZERO,
+    page: BigInt(0),
+    limit: BigInt(0),
     query: ""
   };
 }
 export const GetTxsEventRequest = {
   typeUrl: "/cosmos.tx.v1beta1.GetTxsEventRequest",
   aminoType: "cosmos-sdk/GetTxsEventRequest",
-  encode(message: GetTxsEventRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GetTxsEventRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.events) {
       writer.uint32(10).string(v!);
     }
@@ -875,10 +875,10 @@ export const GetTxsEventRequest = {
     if (message.orderBy !== 0) {
       writer.uint32(24).int32(message.orderBy);
     }
-    if (!message.page.isZero()) {
+    if (message.page !== BigInt(0)) {
       writer.uint32(32).uint64(message.page);
     }
-    if (!message.limit.isZero()) {
+    if (message.limit !== BigInt(0)) {
       writer.uint32(40).uint64(message.limit);
     }
     if (message.query !== "") {
@@ -886,8 +886,8 @@ export const GetTxsEventRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetTxsEventRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetTxsEventRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetTxsEventRequest();
     while (reader.pos < end) {
@@ -903,10 +903,10 @@ export const GetTxsEventRequest = {
           message.orderBy = (reader.int32() as any);
           break;
         case 4:
-          message.page = (reader.uint64() as Long);
+          message.page = reader.uint64();
           break;
         case 5:
-          message.limit = (reader.uint64() as Long);
+          message.limit = reader.uint64();
           break;
         case 6:
           message.query = reader.string();
@@ -923,8 +923,8 @@ export const GetTxsEventRequest = {
     message.events = object.events?.map(e => e) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     message.orderBy = object.orderBy ?? 0;
-    message.page = object.page !== undefined && object.page !== null ? Long.fromValue(object.page) : Long.UZERO;
-    message.limit = object.limit !== undefined && object.limit !== null ? Long.fromValue(object.limit) : Long.UZERO;
+    message.page = object.page !== undefined && object.page !== null ? BigInt(object.page.toString()) : BigInt(0);
+    message.limit = object.limit !== undefined && object.limit !== null ? BigInt(object.limit.toString()) : BigInt(0);
     message.query = object.query ?? "";
     return message;
   },
@@ -933,8 +933,8 @@ export const GetTxsEventRequest = {
       events: Array.isArray(object?.events) ? object.events.map((e: any) => e) : [],
       pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined,
       orderBy: isSet(object.order_by) ? orderByFromJSON(object.order_by) : -1,
-      page: Long.fromString(object.page),
-      limit: Long.fromString(object.limit),
+      page: BigInt(object.page),
+      limit: BigInt(object.limit),
       query: object.query
     };
   },
@@ -979,13 +979,13 @@ function createBaseGetTxsEventResponse(): GetTxsEventResponse {
     txs: [],
     txResponses: [],
     pagination: PageResponse.fromPartial({}),
-    total: Long.UZERO
+    total: BigInt(0)
   };
 }
 export const GetTxsEventResponse = {
   typeUrl: "/cosmos.tx.v1beta1.GetTxsEventResponse",
   aminoType: "cosmos-sdk/GetTxsEventResponse",
-  encode(message: GetTxsEventResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GetTxsEventResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.txs) {
       Tx.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -995,13 +995,13 @@ export const GetTxsEventResponse = {
     if (message.pagination !== undefined) {
       PageResponse.encode(message.pagination, writer.uint32(26).fork()).ldelim();
     }
-    if (!message.total.isZero()) {
+    if (message.total !== BigInt(0)) {
       writer.uint32(32).uint64(message.total);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetTxsEventResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetTxsEventResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetTxsEventResponse();
     while (reader.pos < end) {
@@ -1017,7 +1017,7 @@ export const GetTxsEventResponse = {
           message.pagination = PageResponse.decode(reader, reader.uint32());
           break;
         case 4:
-          message.total = (reader.uint64() as Long);
+          message.total = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1031,7 +1031,7 @@ export const GetTxsEventResponse = {
     message.txs = object.txs?.map(e => Tx.fromPartial(e)) || [];
     message.txResponses = object.txResponses?.map(e => TxResponse.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
-    message.total = object.total !== undefined && object.total !== null ? Long.fromValue(object.total) : Long.UZERO;
+    message.total = object.total !== undefined && object.total !== null ? BigInt(object.total.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: GetTxsEventResponseAmino): GetTxsEventResponse {
@@ -1039,7 +1039,7 @@ export const GetTxsEventResponse = {
       txs: Array.isArray(object?.txs) ? object.txs.map((e: any) => Tx.fromAmino(e)) : [],
       txResponses: Array.isArray(object?.tx_responses) ? object.tx_responses.map((e: any) => TxResponse.fromAmino(e)) : [],
       pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined,
-      total: Long.fromString(object.total)
+      total: BigInt(object.total)
     };
   },
   toAmino(message: GetTxsEventResponse): GetTxsEventResponseAmino {
@@ -1089,7 +1089,7 @@ function createBaseBroadcastTxRequest(): BroadcastTxRequest {
 export const BroadcastTxRequest = {
   typeUrl: "/cosmos.tx.v1beta1.BroadcastTxRequest",
   aminoType: "cosmos-sdk/BroadcastTxRequest",
-  encode(message: BroadcastTxRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: BroadcastTxRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.txBytes.length !== 0) {
       writer.uint32(10).bytes(message.txBytes);
     }
@@ -1098,8 +1098,8 @@ export const BroadcastTxRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): BroadcastTxRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): BroadcastTxRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBroadcastTxRequest();
     while (reader.pos < end) {
@@ -1166,14 +1166,14 @@ function createBaseBroadcastTxResponse(): BroadcastTxResponse {
 export const BroadcastTxResponse = {
   typeUrl: "/cosmos.tx.v1beta1.BroadcastTxResponse",
   aminoType: "cosmos-sdk/BroadcastTxResponse",
-  encode(message: BroadcastTxResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: BroadcastTxResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.txResponse !== undefined) {
       TxResponse.encode(message.txResponse, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): BroadcastTxResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): BroadcastTxResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBroadcastTxResponse();
     while (reader.pos < end) {
@@ -1235,7 +1235,7 @@ function createBaseSimulateRequest(): SimulateRequest {
 export const SimulateRequest = {
   typeUrl: "/cosmos.tx.v1beta1.SimulateRequest",
   aminoType: "cosmos-sdk/SimulateRequest",
-  encode(message: SimulateRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: SimulateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tx !== undefined) {
       Tx.encode(message.tx, writer.uint32(10).fork()).ldelim();
     }
@@ -1244,8 +1244,8 @@ export const SimulateRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): SimulateRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): SimulateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSimulateRequest();
     while (reader.pos < end) {
@@ -1313,7 +1313,7 @@ function createBaseSimulateResponse(): SimulateResponse {
 export const SimulateResponse = {
   typeUrl: "/cosmos.tx.v1beta1.SimulateResponse",
   aminoType: "cosmos-sdk/SimulateResponse",
-  encode(message: SimulateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: SimulateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.gasInfo !== undefined) {
       GasInfo.encode(message.gasInfo, writer.uint32(10).fork()).ldelim();
     }
@@ -1322,8 +1322,8 @@ export const SimulateResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): SimulateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): SimulateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSimulateResponse();
     while (reader.pos < end) {
@@ -1390,14 +1390,14 @@ function createBaseGetTxRequest(): GetTxRequest {
 export const GetTxRequest = {
   typeUrl: "/cosmos.tx.v1beta1.GetTxRequest",
   aminoType: "cosmos-sdk/GetTxRequest",
-  encode(message: GetTxRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GetTxRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hash !== "") {
       writer.uint32(10).string(message.hash);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetTxRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetTxRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetTxRequest();
     while (reader.pos < end) {
@@ -1459,7 +1459,7 @@ function createBaseGetTxResponse(): GetTxResponse {
 export const GetTxResponse = {
   typeUrl: "/cosmos.tx.v1beta1.GetTxResponse",
   aminoType: "cosmos-sdk/GetTxResponse",
-  encode(message: GetTxResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GetTxResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tx !== undefined) {
       Tx.encode(message.tx, writer.uint32(10).fork()).ldelim();
     }
@@ -1468,8 +1468,8 @@ export const GetTxResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetTxResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetTxResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetTxResponse();
     while (reader.pos < end) {
@@ -1530,15 +1530,15 @@ export const GetTxResponse = {
 };
 function createBaseGetBlockWithTxsRequest(): GetBlockWithTxsRequest {
   return {
-    height: Long.ZERO,
+    height: BigInt(0),
     pagination: PageRequest.fromPartial({})
   };
 }
 export const GetBlockWithTxsRequest = {
   typeUrl: "/cosmos.tx.v1beta1.GetBlockWithTxsRequest",
   aminoType: "cosmos-sdk/GetBlockWithTxsRequest",
-  encode(message: GetBlockWithTxsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.height.isZero()) {
+  encode(message: GetBlockWithTxsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.height !== BigInt(0)) {
       writer.uint32(8).int64(message.height);
     }
     if (message.pagination !== undefined) {
@@ -1546,15 +1546,15 @@ export const GetBlockWithTxsRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetBlockWithTxsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetBlockWithTxsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetBlockWithTxsRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.height = (reader.int64() as Long);
+          message.height = reader.int64();
           break;
         case 2:
           message.pagination = PageRequest.decode(reader, reader.uint32());
@@ -1568,13 +1568,13 @@ export const GetBlockWithTxsRequest = {
   },
   fromPartial(object: DeepPartial<GetBlockWithTxsRequest>): GetBlockWithTxsRequest {
     const message = createBaseGetBlockWithTxsRequest();
-    message.height = object.height !== undefined && object.height !== null ? Long.fromValue(object.height) : Long.ZERO;
+    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   },
   fromAmino(object: GetBlockWithTxsRequestAmino): GetBlockWithTxsRequest {
     return {
-      height: Long.fromString(object.height),
+      height: BigInt(object.height),
       pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
     };
   },
@@ -1617,7 +1617,7 @@ function createBaseGetBlockWithTxsResponse(): GetBlockWithTxsResponse {
 export const GetBlockWithTxsResponse = {
   typeUrl: "/cosmos.tx.v1beta1.GetBlockWithTxsResponse",
   aminoType: "cosmos-sdk/GetBlockWithTxsResponse",
-  encode(message: GetBlockWithTxsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: GetBlockWithTxsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.txs) {
       Tx.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1632,8 +1632,8 @@ export const GetBlockWithTxsResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetBlockWithTxsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetBlockWithTxsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetBlockWithTxsResponse();
     while (reader.pos < end) {
@@ -1716,14 +1716,14 @@ function createBaseTxDecodeRequest(): TxDecodeRequest {
 export const TxDecodeRequest = {
   typeUrl: "/cosmos.tx.v1beta1.TxDecodeRequest",
   aminoType: "cosmos-sdk/TxDecodeRequest",
-  encode(message: TxDecodeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TxDecodeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.txBytes.length !== 0) {
       writer.uint32(10).bytes(message.txBytes);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TxDecodeRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TxDecodeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTxDecodeRequest();
     while (reader.pos < end) {
@@ -1784,14 +1784,14 @@ function createBaseTxDecodeResponse(): TxDecodeResponse {
 export const TxDecodeResponse = {
   typeUrl: "/cosmos.tx.v1beta1.TxDecodeResponse",
   aminoType: "cosmos-sdk/TxDecodeResponse",
-  encode(message: TxDecodeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TxDecodeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tx !== undefined) {
       Tx.encode(message.tx, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TxDecodeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TxDecodeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTxDecodeResponse();
     while (reader.pos < end) {
@@ -1852,14 +1852,14 @@ function createBaseTxEncodeRequest(): TxEncodeRequest {
 export const TxEncodeRequest = {
   typeUrl: "/cosmos.tx.v1beta1.TxEncodeRequest",
   aminoType: "cosmos-sdk/TxEncodeRequest",
-  encode(message: TxEncodeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TxEncodeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tx !== undefined) {
       Tx.encode(message.tx, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TxEncodeRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TxEncodeRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTxEncodeRequest();
     while (reader.pos < end) {
@@ -1920,14 +1920,14 @@ function createBaseTxEncodeResponse(): TxEncodeResponse {
 export const TxEncodeResponse = {
   typeUrl: "/cosmos.tx.v1beta1.TxEncodeResponse",
   aminoType: "cosmos-sdk/TxEncodeResponse",
-  encode(message: TxEncodeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TxEncodeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.txBytes.length !== 0) {
       writer.uint32(10).bytes(message.txBytes);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TxEncodeResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TxEncodeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTxEncodeResponse();
     while (reader.pos < end) {
@@ -1988,14 +1988,14 @@ function createBaseTxEncodeAminoRequest(): TxEncodeAminoRequest {
 export const TxEncodeAminoRequest = {
   typeUrl: "/cosmos.tx.v1beta1.TxEncodeAminoRequest",
   aminoType: "cosmos-sdk/TxEncodeAminoRequest",
-  encode(message: TxEncodeAminoRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TxEncodeAminoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.aminoJson !== "") {
       writer.uint32(10).string(message.aminoJson);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TxEncodeAminoRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TxEncodeAminoRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTxEncodeAminoRequest();
     while (reader.pos < end) {
@@ -2056,14 +2056,14 @@ function createBaseTxEncodeAminoResponse(): TxEncodeAminoResponse {
 export const TxEncodeAminoResponse = {
   typeUrl: "/cosmos.tx.v1beta1.TxEncodeAminoResponse",
   aminoType: "cosmos-sdk/TxEncodeAminoResponse",
-  encode(message: TxEncodeAminoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TxEncodeAminoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.aminoBinary.length !== 0) {
       writer.uint32(10).bytes(message.aminoBinary);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TxEncodeAminoResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TxEncodeAminoResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTxEncodeAminoResponse();
     while (reader.pos < end) {
@@ -2124,14 +2124,14 @@ function createBaseTxDecodeAminoRequest(): TxDecodeAminoRequest {
 export const TxDecodeAminoRequest = {
   typeUrl: "/cosmos.tx.v1beta1.TxDecodeAminoRequest",
   aminoType: "cosmos-sdk/TxDecodeAminoRequest",
-  encode(message: TxDecodeAminoRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TxDecodeAminoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.aminoBinary.length !== 0) {
       writer.uint32(10).bytes(message.aminoBinary);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TxDecodeAminoRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TxDecodeAminoRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTxDecodeAminoRequest();
     while (reader.pos < end) {
@@ -2192,14 +2192,14 @@ function createBaseTxDecodeAminoResponse(): TxDecodeAminoResponse {
 export const TxDecodeAminoResponse = {
   typeUrl: "/cosmos.tx.v1beta1.TxDecodeAminoResponse",
   aminoType: "cosmos-sdk/TxDecodeAminoResponse",
-  encode(message: TxDecodeAminoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: TxDecodeAminoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.aminoJson !== "") {
       writer.uint32(10).string(message.aminoJson);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): TxDecodeAminoResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): TxDecodeAminoResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTxDecodeAminoResponse();
     while (reader.pos < end) {

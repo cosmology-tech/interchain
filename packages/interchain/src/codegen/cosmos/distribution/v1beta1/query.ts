@@ -1,8 +1,8 @@
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../base/query/v1beta1/pagination";
 import { Params, ParamsAmino, ParamsSDKType, ValidatorOutstandingRewards, ValidatorOutstandingRewardsAmino, ValidatorOutstandingRewardsSDKType, ValidatorAccumulatedCommission, ValidatorAccumulatedCommissionAmino, ValidatorAccumulatedCommissionSDKType, ValidatorSlashEvent, ValidatorSlashEventAmino, ValidatorSlashEventSDKType, DelegationDelegatorReward, DelegationDelegatorRewardAmino, DelegationDelegatorRewardSDKType } from "./distribution";
 import { DecCoin, DecCoinAmino, DecCoinSDKType } from "../../base/v1beta1/coin";
-import { Long, DeepPartial } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { DeepPartial } from "../../../helpers";
 /** QueryParamsRequest is the request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 export interface QueryParamsRequestProtoMsg {
@@ -223,9 +223,9 @@ export interface QueryValidatorSlashesRequest {
   /** validator_address defines the validator address to query for. */
   validatorAddress: string;
   /** starting_height defines the optional starting height to query the slashes. */
-  startingHeight?: Long;
+  startingHeight?: bigint;
   /** starting_height defines the optional ending height to query the slashes. */
-  endingHeight?: Long;
+  endingHeight?: bigint;
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequest;
 }
@@ -257,8 +257,8 @@ export interface QueryValidatorSlashesRequestAminoMsg {
  */
 export interface QueryValidatorSlashesRequestSDKType {
   validator_address: string;
-  starting_height?: Long;
-  ending_height?: Long;
+  starting_height?: bigint;
+  ending_height?: bigint;
   pagination?: PageRequestSDKType;
 }
 /**
@@ -615,11 +615,11 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 export const QueryParamsRequest = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryParamsRequest",
   aminoType: "cosmos-sdk/QueryParamsRequest",
-  encode(_: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
     while (reader.pos < end) {
@@ -673,14 +673,14 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 export const QueryParamsResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryParamsResponse",
   aminoType: "cosmos-sdk/QueryParamsResponse",
-  encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
     while (reader.pos < end) {
@@ -741,14 +741,14 @@ function createBaseQueryValidatorDistributionInfoRequest(): QueryValidatorDistri
 export const QueryValidatorDistributionInfoRequest = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryValidatorDistributionInfoRequest",
   aminoType: "cosmos-sdk/QueryValidatorDistributionInfoRequest",
-  encode(message: QueryValidatorDistributionInfoRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryValidatorDistributionInfoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validatorAddress !== "") {
       writer.uint32(10).string(message.validatorAddress);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryValidatorDistributionInfoRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorDistributionInfoRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorDistributionInfoRequest();
     while (reader.pos < end) {
@@ -811,7 +811,7 @@ function createBaseQueryValidatorDistributionInfoResponse(): QueryValidatorDistr
 export const QueryValidatorDistributionInfoResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryValidatorDistributionInfoResponse",
   aminoType: "cosmos-sdk/QueryValidatorDistributionInfoResponse",
-  encode(message: QueryValidatorDistributionInfoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryValidatorDistributionInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.operatorAddress !== "") {
       writer.uint32(10).string(message.operatorAddress);
     }
@@ -823,8 +823,8 @@ export const QueryValidatorDistributionInfoResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryValidatorDistributionInfoResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorDistributionInfoResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorDistributionInfoResponse();
     while (reader.pos < end) {
@@ -905,14 +905,14 @@ function createBaseQueryValidatorOutstandingRewardsRequest(): QueryValidatorOuts
 export const QueryValidatorOutstandingRewardsRequest = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsRequest",
   aminoType: "cosmos-sdk/QueryValidatorOutstandingRewardsRequest",
-  encode(message: QueryValidatorOutstandingRewardsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryValidatorOutstandingRewardsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validatorAddress !== "") {
       writer.uint32(10).string(message.validatorAddress);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryValidatorOutstandingRewardsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorOutstandingRewardsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorOutstandingRewardsRequest();
     while (reader.pos < end) {
@@ -973,14 +973,14 @@ function createBaseQueryValidatorOutstandingRewardsResponse(): QueryValidatorOut
 export const QueryValidatorOutstandingRewardsResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsResponse",
   aminoType: "cosmos-sdk/QueryValidatorOutstandingRewardsResponse",
-  encode(message: QueryValidatorOutstandingRewardsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryValidatorOutstandingRewardsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.rewards !== undefined) {
       ValidatorOutstandingRewards.encode(message.rewards, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryValidatorOutstandingRewardsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorOutstandingRewardsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorOutstandingRewardsResponse();
     while (reader.pos < end) {
@@ -1041,14 +1041,14 @@ function createBaseQueryValidatorCommissionRequest(): QueryValidatorCommissionRe
 export const QueryValidatorCommissionRequest = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryValidatorCommissionRequest",
   aminoType: "cosmos-sdk/QueryValidatorCommissionRequest",
-  encode(message: QueryValidatorCommissionRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryValidatorCommissionRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validatorAddress !== "") {
       writer.uint32(10).string(message.validatorAddress);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryValidatorCommissionRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorCommissionRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorCommissionRequest();
     while (reader.pos < end) {
@@ -1109,14 +1109,14 @@ function createBaseQueryValidatorCommissionResponse(): QueryValidatorCommissionR
 export const QueryValidatorCommissionResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryValidatorCommissionResponse",
   aminoType: "cosmos-sdk/QueryValidatorCommissionResponse",
-  encode(message: QueryValidatorCommissionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryValidatorCommissionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.commission !== undefined) {
       ValidatorAccumulatedCommission.encode(message.commission, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryValidatorCommissionResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorCommissionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorCommissionResponse();
     while (reader.pos < end) {
@@ -1172,22 +1172,22 @@ export const QueryValidatorCommissionResponse = {
 function createBaseQueryValidatorSlashesRequest(): QueryValidatorSlashesRequest {
   return {
     validatorAddress: "",
-    startingHeight: Long.UZERO,
-    endingHeight: Long.UZERO,
+    startingHeight: BigInt(0),
+    endingHeight: BigInt(0),
     pagination: PageRequest.fromPartial({})
   };
 }
 export const QueryValidatorSlashesRequest = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryValidatorSlashesRequest",
   aminoType: "cosmos-sdk/QueryValidatorSlashesRequest",
-  encode(message: QueryValidatorSlashesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryValidatorSlashesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validatorAddress !== "") {
       writer.uint32(10).string(message.validatorAddress);
     }
-    if (!message.startingHeight.isZero()) {
+    if (message.startingHeight !== BigInt(0)) {
       writer.uint32(16).uint64(message.startingHeight);
     }
-    if (!message.endingHeight.isZero()) {
+    if (message.endingHeight !== BigInt(0)) {
       writer.uint32(24).uint64(message.endingHeight);
     }
     if (message.pagination !== undefined) {
@@ -1195,8 +1195,8 @@ export const QueryValidatorSlashesRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryValidatorSlashesRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorSlashesRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorSlashesRequest();
     while (reader.pos < end) {
@@ -1206,10 +1206,10 @@ export const QueryValidatorSlashesRequest = {
           message.validatorAddress = reader.string();
           break;
         case 2:
-          message.startingHeight = (reader.uint64() as Long);
+          message.startingHeight = reader.uint64();
           break;
         case 3:
-          message.endingHeight = (reader.uint64() as Long);
+          message.endingHeight = reader.uint64();
           break;
         case 4:
           message.pagination = PageRequest.decode(reader, reader.uint32());
@@ -1224,16 +1224,16 @@ export const QueryValidatorSlashesRequest = {
   fromPartial(object: DeepPartial<QueryValidatorSlashesRequest>): QueryValidatorSlashesRequest {
     const message = createBaseQueryValidatorSlashesRequest();
     message.validatorAddress = object.validatorAddress ?? "";
-    message.startingHeight = object.startingHeight !== undefined && object.startingHeight !== null ? Long.fromValue(object.startingHeight) : Long.UZERO;
-    message.endingHeight = object.endingHeight !== undefined && object.endingHeight !== null ? Long.fromValue(object.endingHeight) : Long.UZERO;
+    message.startingHeight = object.startingHeight !== undefined && object.startingHeight !== null ? BigInt(object.startingHeight.toString()) : BigInt(0);
+    message.endingHeight = object.endingHeight !== undefined && object.endingHeight !== null ? BigInt(object.endingHeight.toString()) : BigInt(0);
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   },
   fromAmino(object: QueryValidatorSlashesRequestAmino): QueryValidatorSlashesRequest {
     return {
       validatorAddress: object.validator_address,
-      startingHeight: Long.fromString(object.starting_height),
-      endingHeight: Long.fromString(object.ending_height),
+      startingHeight: BigInt(object.starting_height),
+      endingHeight: BigInt(object.ending_height),
       pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
     };
   },
@@ -1276,7 +1276,7 @@ function createBaseQueryValidatorSlashesResponse(): QueryValidatorSlashesRespons
 export const QueryValidatorSlashesResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryValidatorSlashesResponse",
   aminoType: "cosmos-sdk/QueryValidatorSlashesResponse",
-  encode(message: QueryValidatorSlashesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryValidatorSlashesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.slashes) {
       ValidatorSlashEvent.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1285,8 +1285,8 @@ export const QueryValidatorSlashesResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryValidatorSlashesResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryValidatorSlashesResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryValidatorSlashesResponse();
     while (reader.pos < end) {
@@ -1358,7 +1358,7 @@ function createBaseQueryDelegationRewardsRequest(): QueryDelegationRewardsReques
 export const QueryDelegationRewardsRequest = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryDelegationRewardsRequest",
   aminoType: "cosmos-sdk/QueryDelegationRewardsRequest",
-  encode(message: QueryDelegationRewardsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryDelegationRewardsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
     }
@@ -1367,8 +1367,8 @@ export const QueryDelegationRewardsRequest = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegationRewardsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegationRewardsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegationRewardsRequest();
     while (reader.pos < end) {
@@ -1435,14 +1435,14 @@ function createBaseQueryDelegationRewardsResponse(): QueryDelegationRewardsRespo
 export const QueryDelegationRewardsResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryDelegationRewardsResponse",
   aminoType: "cosmos-sdk/QueryDelegationRewardsResponse",
-  encode(message: QueryDelegationRewardsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryDelegationRewardsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.rewards) {
       DecCoin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegationRewardsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegationRewardsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegationRewardsResponse();
     while (reader.pos < end) {
@@ -1507,14 +1507,14 @@ function createBaseQueryDelegationTotalRewardsRequest(): QueryDelegationTotalRew
 export const QueryDelegationTotalRewardsRequest = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryDelegationTotalRewardsRequest",
   aminoType: "cosmos-sdk/QueryDelegationTotalRewardsRequest",
-  encode(message: QueryDelegationTotalRewardsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryDelegationTotalRewardsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegationTotalRewardsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegationTotalRewardsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegationTotalRewardsRequest();
     while (reader.pos < end) {
@@ -1576,7 +1576,7 @@ function createBaseQueryDelegationTotalRewardsResponse(): QueryDelegationTotalRe
 export const QueryDelegationTotalRewardsResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryDelegationTotalRewardsResponse",
   aminoType: "cosmos-sdk/QueryDelegationTotalRewardsResponse",
-  encode(message: QueryDelegationTotalRewardsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryDelegationTotalRewardsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.rewards) {
       DelegationDelegatorReward.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1585,8 +1585,8 @@ export const QueryDelegationTotalRewardsResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegationTotalRewardsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegationTotalRewardsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegationTotalRewardsResponse();
     while (reader.pos < end) {
@@ -1661,14 +1661,14 @@ function createBaseQueryDelegatorValidatorsRequest(): QueryDelegatorValidatorsRe
 export const QueryDelegatorValidatorsRequest = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryDelegatorValidatorsRequest",
   aminoType: "cosmos-sdk/QueryDelegatorValidatorsRequest",
-  encode(message: QueryDelegatorValidatorsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryDelegatorValidatorsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegatorValidatorsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegatorValidatorsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegatorValidatorsRequest();
     while (reader.pos < end) {
@@ -1729,14 +1729,14 @@ function createBaseQueryDelegatorValidatorsResponse(): QueryDelegatorValidatorsR
 export const QueryDelegatorValidatorsResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryDelegatorValidatorsResponse",
   aminoType: "cosmos-sdk/QueryDelegatorValidatorsResponse",
-  encode(message: QueryDelegatorValidatorsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryDelegatorValidatorsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.validators) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegatorValidatorsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegatorValidatorsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegatorValidatorsResponse();
     while (reader.pos < end) {
@@ -1801,14 +1801,14 @@ function createBaseQueryDelegatorWithdrawAddressRequest(): QueryDelegatorWithdra
 export const QueryDelegatorWithdrawAddressRequest = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressRequest",
   aminoType: "cosmos-sdk/QueryDelegatorWithdrawAddressRequest",
-  encode(message: QueryDelegatorWithdrawAddressRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryDelegatorWithdrawAddressRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegatorWithdrawAddressRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegatorWithdrawAddressRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegatorWithdrawAddressRequest();
     while (reader.pos < end) {
@@ -1869,14 +1869,14 @@ function createBaseQueryDelegatorWithdrawAddressResponse(): QueryDelegatorWithdr
 export const QueryDelegatorWithdrawAddressResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressResponse",
   aminoType: "cosmos-sdk/QueryDelegatorWithdrawAddressResponse",
-  encode(message: QueryDelegatorWithdrawAddressResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryDelegatorWithdrawAddressResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.withdrawAddress !== "") {
       writer.uint32(10).string(message.withdrawAddress);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDelegatorWithdrawAddressResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDelegatorWithdrawAddressResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDelegatorWithdrawAddressResponse();
     while (reader.pos < end) {
@@ -1935,11 +1935,11 @@ function createBaseQueryCommunityPoolRequest(): QueryCommunityPoolRequest {
 export const QueryCommunityPoolRequest = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryCommunityPoolRequest",
   aminoType: "cosmos-sdk/QueryCommunityPoolRequest",
-  encode(_: QueryCommunityPoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: QueryCommunityPoolRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCommunityPoolRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryCommunityPoolRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCommunityPoolRequest();
     while (reader.pos < end) {
@@ -1993,14 +1993,14 @@ function createBaseQueryCommunityPoolResponse(): QueryCommunityPoolResponse {
 export const QueryCommunityPoolResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.QueryCommunityPoolResponse",
   aminoType: "cosmos-sdk/QueryCommunityPoolResponse",
-  encode(message: QueryCommunityPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryCommunityPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.pool) {
       DecCoin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCommunityPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryCommunityPoolResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCommunityPoolResponse();
     while (reader.pos < end) {

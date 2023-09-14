@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader } from "../../../binary";
 import { MsgSoftwareUpgrade, MsgSoftwareUpgradeResponse, MsgCancelUpgrade, MsgCancelUpgradeResponse } from "./tx";
 /** Msg defines the upgrade Msg service. */
 export interface Msg {
@@ -28,7 +28,7 @@ export class MsgClientImpl implements Msg {
   softwareUpgrade = async (request: MsgSoftwareUpgrade): Promise<MsgSoftwareUpgradeResponse> => {
     const data = MsgSoftwareUpgrade.encode(request).finish();
     const promise = this.rpc.request("cosmos.upgrade.v1beta1.Msg", "SoftwareUpgrade", data);
-    return promise.then(data => MsgSoftwareUpgradeResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgSoftwareUpgradeResponse.decode(new BinaryReader(data)));
   };
   /* CancelUpgrade is a governance operation for cancelling a previously
    approved software upgrade.
@@ -37,6 +37,6 @@ export class MsgClientImpl implements Msg {
   cancelUpgrade = async (request: MsgCancelUpgrade): Promise<MsgCancelUpgradeResponse> => {
     const data = MsgCancelUpgrade.encode(request).finish();
     const promise = this.rpc.request("cosmos.upgrade.v1beta1.Msg", "CancelUpgrade", data);
-    return promise.then(data => MsgCancelUpgradeResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgCancelUpgradeResponse.decode(new BinaryReader(data)));
   };
 }

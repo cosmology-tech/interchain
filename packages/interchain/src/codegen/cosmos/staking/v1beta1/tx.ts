@@ -2,8 +2,8 @@ import { Description, DescriptionAmino, DescriptionSDKType, CommissionRates, Com
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { Timestamp } from "../../../google/protobuf/timestamp";
-import { Long, DeepPartial, toTimestamp, fromTimestamp } from "../../../helpers";
-import * as _m0 from "protobufjs/minimal";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { DeepPartial, toTimestamp, fromTimestamp } from "../../../helpers";
 import { encodePubkey, decodePubkey } from "@cosmjs/proto-signing";
 /** MsgCreateValidator defines a SDK message for creating a new validator. */
 export interface MsgCreateValidator {
@@ -314,7 +314,7 @@ export interface MsgCancelUnbondingDelegation {
   /** amount is always less than or equal to unbonding delegation entry balance */
   amount: Coin;
   /** creation_height is the height which the unbonding took place. */
-  creationHeight: Long;
+  creationHeight: bigint;
 }
 export interface MsgCancelUnbondingDelegationProtoMsg {
   typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation";
@@ -346,7 +346,7 @@ export interface MsgCancelUnbondingDelegationSDKType {
   delegator_address: string;
   validator_address: string;
   amount: CoinSDKType;
-  creation_height: Long;
+  creation_height: bigint;
 }
 /**
  * MsgCancelUnbondingDelegationResponse
@@ -464,7 +464,7 @@ function createBaseMsgCreateValidator(): MsgCreateValidator {
 export const MsgCreateValidator = {
   typeUrl: "/cosmos.staking.v1beta1.MsgCreateValidator",
   aminoType: "cosmos-sdk/MsgCreateValidator",
-  encode(message: MsgCreateValidator, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCreateValidator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.description !== undefined) {
       Description.encode(message.description, writer.uint32(10).fork()).ldelim();
     }
@@ -488,8 +488,8 @@ export const MsgCreateValidator = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateValidator {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateValidator {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateValidator();
     while (reader.pos < end) {
@@ -584,11 +584,11 @@ function createBaseMsgCreateValidatorResponse(): MsgCreateValidatorResponse {
 export const MsgCreateValidatorResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgCreateValidatorResponse",
   aminoType: "cosmos-sdk/MsgCreateValidatorResponse",
-  encode(_: MsgCreateValidatorResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgCreateValidatorResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateValidatorResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCreateValidatorResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateValidatorResponse();
     while (reader.pos < end) {
@@ -645,7 +645,7 @@ function createBaseMsgEditValidator(): MsgEditValidator {
 export const MsgEditValidator = {
   typeUrl: "/cosmos.staking.v1beta1.MsgEditValidator",
   aminoType: "cosmos-sdk/MsgEditValidator",
-  encode(message: MsgEditValidator, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgEditValidator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.description !== undefined) {
       Description.encode(message.description, writer.uint32(10).fork()).ldelim();
     }
@@ -660,8 +660,8 @@ export const MsgEditValidator = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgEditValidator {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgEditValidator {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgEditValidator();
     while (reader.pos < end) {
@@ -738,11 +738,11 @@ function createBaseMsgEditValidatorResponse(): MsgEditValidatorResponse {
 export const MsgEditValidatorResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgEditValidatorResponse",
   aminoType: "cosmos-sdk/MsgEditValidatorResponse",
-  encode(_: MsgEditValidatorResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgEditValidatorResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgEditValidatorResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgEditValidatorResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgEditValidatorResponse();
     while (reader.pos < end) {
@@ -798,7 +798,7 @@ function createBaseMsgDelegate(): MsgDelegate {
 export const MsgDelegate = {
   typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
   aminoType: "cosmos-sdk/MsgDelegate",
-  encode(message: MsgDelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgDelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
     }
@@ -810,8 +810,8 @@ export const MsgDelegate = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDelegate {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgDelegate {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDelegate();
     while (reader.pos < end) {
@@ -882,11 +882,11 @@ function createBaseMsgDelegateResponse(): MsgDelegateResponse {
 export const MsgDelegateResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgDelegateResponse",
   aminoType: "cosmos-sdk/MsgDelegateResponse",
-  encode(_: MsgDelegateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgDelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDelegateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgDelegateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDelegateResponse();
     while (reader.pos < end) {
@@ -943,7 +943,7 @@ function createBaseMsgBeginRedelegate(): MsgBeginRedelegate {
 export const MsgBeginRedelegate = {
   typeUrl: "/cosmos.staking.v1beta1.MsgBeginRedelegate",
   aminoType: "cosmos-sdk/MsgBeginRedelegate",
-  encode(message: MsgBeginRedelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgBeginRedelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
     }
@@ -958,8 +958,8 @@ export const MsgBeginRedelegate = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBeginRedelegate {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgBeginRedelegate {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBeginRedelegate();
     while (reader.pos < end) {
@@ -1038,14 +1038,14 @@ function createBaseMsgBeginRedelegateResponse(): MsgBeginRedelegateResponse {
 export const MsgBeginRedelegateResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgBeginRedelegateResponse",
   aminoType: "cosmos-sdk/MsgBeginRedelegateResponse",
-  encode(message: MsgBeginRedelegateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgBeginRedelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.completionTime !== undefined) {
       Timestamp.encode(toTimestamp(message.completionTime), writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBeginRedelegateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgBeginRedelegateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBeginRedelegateResponse();
     while (reader.pos < end) {
@@ -1108,7 +1108,7 @@ function createBaseMsgUndelegate(): MsgUndelegate {
 export const MsgUndelegate = {
   typeUrl: "/cosmos.staking.v1beta1.MsgUndelegate",
   aminoType: "cosmos-sdk/MsgUndelegate",
-  encode(message: MsgUndelegate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUndelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
     }
@@ -1120,8 +1120,8 @@ export const MsgUndelegate = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUndelegate {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUndelegate {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUndelegate();
     while (reader.pos < end) {
@@ -1195,7 +1195,7 @@ function createBaseMsgUndelegateResponse(): MsgUndelegateResponse {
 export const MsgUndelegateResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgUndelegateResponse",
   aminoType: "cosmos-sdk/MsgUndelegateResponse",
-  encode(message: MsgUndelegateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUndelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.completionTime !== undefined) {
       Timestamp.encode(toTimestamp(message.completionTime), writer.uint32(10).fork()).ldelim();
     }
@@ -1204,8 +1204,8 @@ export const MsgUndelegateResponse = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUndelegateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUndelegateResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUndelegateResponse();
     while (reader.pos < end) {
@@ -1269,13 +1269,13 @@ function createBaseMsgCancelUnbondingDelegation(): MsgCancelUnbondingDelegation 
     delegatorAddress: "",
     validatorAddress: "",
     amount: Coin.fromPartial({}),
-    creationHeight: Long.ZERO
+    creationHeight: BigInt(0)
   };
 }
 export const MsgCancelUnbondingDelegation = {
   typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation",
   aminoType: "cosmos-sdk/MsgCancelUnbondingDelegation",
-  encode(message: MsgCancelUnbondingDelegation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgCancelUnbondingDelegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
     }
@@ -1285,13 +1285,13 @@ export const MsgCancelUnbondingDelegation = {
     if (message.amount !== undefined) {
       Coin.encode(message.amount, writer.uint32(26).fork()).ldelim();
     }
-    if (!message.creationHeight.isZero()) {
+    if (message.creationHeight !== BigInt(0)) {
       writer.uint32(32).int64(message.creationHeight);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelUnbondingDelegation {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelUnbondingDelegation {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelUnbondingDelegation();
     while (reader.pos < end) {
@@ -1307,7 +1307,7 @@ export const MsgCancelUnbondingDelegation = {
           message.amount = Coin.decode(reader, reader.uint32());
           break;
         case 4:
-          message.creationHeight = (reader.int64() as Long);
+          message.creationHeight = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1321,7 +1321,7 @@ export const MsgCancelUnbondingDelegation = {
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.validatorAddress = object.validatorAddress ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
-    message.creationHeight = object.creationHeight !== undefined && object.creationHeight !== null ? Long.fromValue(object.creationHeight) : Long.ZERO;
+    message.creationHeight = object.creationHeight !== undefined && object.creationHeight !== null ? BigInt(object.creationHeight.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: MsgCancelUnbondingDelegationAmino): MsgCancelUnbondingDelegation {
@@ -1329,7 +1329,7 @@ export const MsgCancelUnbondingDelegation = {
       delegatorAddress: object.delegator_address,
       validatorAddress: object.validator_address,
       amount: object?.amount ? Coin.fromAmino(object.amount) : undefined,
-      creationHeight: Long.fromString(object.creation_height)
+      creationHeight: BigInt(object.creation_height)
     };
   },
   toAmino(message: MsgCancelUnbondingDelegation): MsgCancelUnbondingDelegationAmino {
@@ -1368,11 +1368,11 @@ function createBaseMsgCancelUnbondingDelegationResponse(): MsgCancelUnbondingDel
 export const MsgCancelUnbondingDelegationResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegationResponse",
   aminoType: "cosmos-sdk/MsgCancelUnbondingDelegationResponse",
-  encode(_: MsgCancelUnbondingDelegationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgCancelUnbondingDelegationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelUnbondingDelegationResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelUnbondingDelegationResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelUnbondingDelegationResponse();
     while (reader.pos < end) {
@@ -1427,7 +1427,7 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 export const MsgUpdateParams = {
   typeUrl: "/cosmos.staking.v1beta1.MsgUpdateParams",
   aminoType: "cosmos-sdk/x/staking/MsgUpdateParams",
-  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -1436,8 +1436,8 @@ export const MsgUpdateParams = {
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
@@ -1502,11 +1502,11 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 export const MsgUpdateParamsResponse = {
   typeUrl: "/cosmos.staking.v1beta1.MsgUpdateParamsResponse",
   aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
-  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
@@ -1552,8 +1552,8 @@ export const MsgUpdateParamsResponse = {
     };
   }
 };
-export const Cosmos_cryptoPubKey_InterfaceDecoder = (input: _m0.Reader | Uint8Array): Any => {
-  const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+export const Cosmos_cryptoPubKey_InterfaceDecoder = (input: BinaryReader | Uint8Array): Any => {
+  const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
   const data = Any.decode(reader, reader.uint32());
   switch (data.typeUrl) {
     default:
