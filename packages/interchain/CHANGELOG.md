@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/cosmology-tech/interchain/compare/interchain@1.9.1...interchain@1.10.0) (2023-09-14)
+
+**Note:** Version bump only for package interchain
+
 ## [1.9.1](https://github.com/cosmology-tech/interchain/compare/interchain@1.9.0...interchain@1.9.1) (2023-09-12)
 
 **Note:** Version bump only for package interchain
