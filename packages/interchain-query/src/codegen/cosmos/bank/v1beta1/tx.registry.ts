@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgSend, MsgMultiSend, MsgUpdateParams, MsgSetSendEnabled } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/cosmos.bank.v1beta1.MsgSend", MsgSend], ["/cosmos.bank.v1beta1.MsgMultiSend", MsgMultiSend], ["/cosmos.bank.v1beta1.MsgUpdateParams", MsgUpdateParams], ["/cosmos.bank.v1beta1.MsgSetSendEnabled", MsgSetSendEnabled]];
+import { MsgSend, MsgMultiSend, MsgBurn, MsgUpdateParams, MsgSetSendEnabled } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/cosmos.bank.v1beta1.MsgSend", MsgSend], ["/cosmos.bank.v1beta1.MsgMultiSend", MsgMultiSend], ["/cosmos.bank.v1beta1.MsgBurn", MsgBurn], ["/cosmos.bank.v1beta1.MsgUpdateParams", MsgUpdateParams], ["/cosmos.bank.v1beta1.MsgSetSendEnabled", MsgSetSendEnabled]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -19,6 +19,12 @@ export const MessageComposer = {
       return {
         typeUrl: "/cosmos.bank.v1beta1.MsgMultiSend",
         value: MsgMultiSend.encode(value).finish()
+      };
+    },
+    burn(value: MsgBurn) {
+      return {
+        typeUrl: "/cosmos.bank.v1beta1.MsgBurn",
+        value: MsgBurn.encode(value).finish()
       };
     },
     updateParams(value: MsgUpdateParams) {
@@ -44,6 +50,12 @@ export const MessageComposer = {
     multiSend(value: MsgMultiSend) {
       return {
         typeUrl: "/cosmos.bank.v1beta1.MsgMultiSend",
+        value
+      };
+    },
+    burn(value: MsgBurn) {
+      return {
+        typeUrl: "/cosmos.bank.v1beta1.MsgBurn",
         value
       };
     },
@@ -73,6 +85,12 @@ export const MessageComposer = {
         value: MsgMultiSend.toJSON(value)
       };
     },
+    burn(value: MsgBurn) {
+      return {
+        typeUrl: "/cosmos.bank.v1beta1.MsgBurn",
+        value: MsgBurn.toJSON(value)
+      };
+    },
     updateParams(value: MsgUpdateParams) {
       return {
         typeUrl: "/cosmos.bank.v1beta1.MsgUpdateParams",
@@ -99,6 +117,12 @@ export const MessageComposer = {
         value: MsgMultiSend.fromJSON(value)
       };
     },
+    burn(value: any) {
+      return {
+        typeUrl: "/cosmos.bank.v1beta1.MsgBurn",
+        value: MsgBurn.fromJSON(value)
+      };
+    },
     updateParams(value: any) {
       return {
         typeUrl: "/cosmos.bank.v1beta1.MsgUpdateParams",
@@ -123,6 +147,12 @@ export const MessageComposer = {
       return {
         typeUrl: "/cosmos.bank.v1beta1.MsgMultiSend",
         value: MsgMultiSend.fromPartial(value)
+      };
+    },
+    burn(value: MsgBurn) {
+      return {
+        typeUrl: "/cosmos.bank.v1beta1.MsgBurn",
+        value: MsgBurn.fromPartial(value)
       };
     },
     updateParams(value: MsgUpdateParams) {

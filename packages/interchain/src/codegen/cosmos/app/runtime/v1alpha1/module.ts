@@ -51,6 +51,12 @@ export interface Module {
    * no preparecheckstate function will be registered.
    */
   prepareCheckStaters: string[];
+  /**
+   * pre_blockers specifies the module names of pre blockers
+   * to call in the order in which they should be called. If this is left empty
+   * no pre blocker will be registered.
+   */
+  preBlockers: string[];
 }
 export interface ModuleProtoMsg {
   typeUrl: "/cosmos.app.runtime.v1alpha1.Module";
@@ -107,6 +113,12 @@ export interface ModuleAmino {
    * no preparecheckstate function will be registered.
    */
   prepare_check_staters: string[];
+  /**
+   * pre_blockers specifies the module names of pre blockers
+   * to call in the order in which they should be called. If this is left empty
+   * no pre blocker will be registered.
+   */
+  pre_blockers: string[];
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -123,6 +135,7 @@ export interface ModuleSDKType {
   order_migrations: string[];
   precommiters: string[];
   prepare_check_staters: string[];
+  pre_blockers: string[];
 }
 /**
  * StoreKeyConfig may be supplied to override the default module store key, which
@@ -170,7 +183,8 @@ function createBaseModule(): Module {
     overrideStoreKeys: [],
     orderMigrations: [],
     precommiters: [],
-    prepareCheckStaters: []
+    prepareCheckStaters: [],
+    preBlockers: []
   };
 }
 export const Module = {
@@ -203,6 +217,9 @@ export const Module = {
     }
     for (const v of message.prepareCheckStaters) {
       writer.uint32(74).string(v!);
+    }
+    for (const v of message.preBlockers) {
+      writer.uint32(82).string(v!);
     }
     return writer;
   },
@@ -240,6 +257,9 @@ export const Module = {
         case 9:
           message.prepareCheckStaters.push(reader.string());
           break;
+        case 10:
+          message.preBlockers.push(reader.string());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -258,6 +278,7 @@ export const Module = {
     message.orderMigrations = object.orderMigrations?.map(e => e) || [];
     message.precommiters = object.precommiters?.map(e => e) || [];
     message.prepareCheckStaters = object.prepareCheckStaters?.map(e => e) || [];
+    message.preBlockers = object.preBlockers?.map(e => e) || [];
     return message;
   },
   fromAmino(object: ModuleAmino): Module {
@@ -270,7 +291,8 @@ export const Module = {
       overrideStoreKeys: Array.isArray(object?.override_store_keys) ? object.override_store_keys.map((e: any) => StoreKeyConfig.fromAmino(e)) : [],
       orderMigrations: Array.isArray(object?.order_migrations) ? object.order_migrations.map((e: any) => e) : [],
       precommiters: Array.isArray(object?.precommiters) ? object.precommiters.map((e: any) => e) : [],
-      prepareCheckStaters: Array.isArray(object?.prepare_check_staters) ? object.prepare_check_staters.map((e: any) => e) : []
+      prepareCheckStaters: Array.isArray(object?.prepare_check_staters) ? object.prepare_check_staters.map((e: any) => e) : [],
+      preBlockers: Array.isArray(object?.pre_blockers) ? object.pre_blockers.map((e: any) => e) : []
     };
   },
   toAmino(message: Module): ModuleAmino {
@@ -315,6 +337,11 @@ export const Module = {
       obj.prepare_check_staters = message.prepareCheckStaters.map(e => e);
     } else {
       obj.prepare_check_staters = [];
+    }
+    if (message.preBlockers) {
+      obj.pre_blockers = message.preBlockers.map(e => e);
+    } else {
+      obj.pre_blockers = [];
     }
     return obj;
   },

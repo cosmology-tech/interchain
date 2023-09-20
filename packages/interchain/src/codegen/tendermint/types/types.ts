@@ -235,6 +235,7 @@ export interface Vote {
   type: SignedMsgType;
   height: bigint;
   round: number;
+  /** zero if vote is nil. */
   blockId: BlockID;
   timestamp: Date;
   validatorAddress: Uint8Array;
@@ -268,6 +269,7 @@ export interface VoteAmino {
   type: SignedMsgType;
   height: string;
   round: number;
+  /** zero if vote is nil. */
   block_id?: BlockIDAmino;
   timestamp?: Date;
   validator_address: Uint8Array;

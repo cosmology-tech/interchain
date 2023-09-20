@@ -255,6 +255,67 @@ export interface MsgSetSendEnabledResponseAminoMsg {
  * Since: cosmos-sdk 0.47
  */
 export interface MsgSetSendEnabledResponseSDKType {}
+/**
+ * MsgBurn defines a message for burning coins.
+ * 
+ * Since: cosmos-sdk 0.51
+ */
+export interface MsgBurn {
+  fromAddress: string;
+  amount: Coin[];
+}
+export interface MsgBurnProtoMsg {
+  typeUrl: "/cosmos.bank.v1beta1.MsgBurn";
+  value: Uint8Array;
+}
+/**
+ * MsgBurn defines a message for burning coins.
+ * 
+ * Since: cosmos-sdk 0.51
+ */
+export interface MsgBurnAmino {
+  from_address: string;
+  amount: CoinAmino[];
+}
+export interface MsgBurnAminoMsg {
+  type: "cosmos-sdk/MsgBurn";
+  value: MsgBurnAmino;
+}
+/**
+ * MsgBurn defines a message for burning coins.
+ * 
+ * Since: cosmos-sdk 0.51
+ */
+export interface MsgBurnSDKType {
+  from_address: string;
+  amount: CoinSDKType[];
+}
+/**
+ * MsgBurnResponse defines the Msg/Burn response type.
+ * 
+ * Since: cosmos-sdk 0.51
+ */
+export interface MsgBurnResponse {}
+export interface MsgBurnResponseProtoMsg {
+  typeUrl: "/cosmos.bank.v1beta1.MsgBurnResponse";
+  value: Uint8Array;
+}
+/**
+ * MsgBurnResponse defines the Msg/Burn response type.
+ * 
+ * Since: cosmos-sdk 0.51
+ */
+export interface MsgBurnResponseAmino {}
+export interface MsgBurnResponseAminoMsg {
+  type: "cosmos-sdk/MsgBurnResponse";
+  value: MsgBurnResponseAmino;
+}
+/**
+ * MsgBurnResponse defines the Msg/Burn response type.
+ * 
+ * Since: cosmos-sdk 0.51
+ */
+export interface MsgBurnResponseSDKType {}
 function createBaseMsgSend(): MsgSend {
   return {
     fromAddress: "",
@@ -828,6 +889,144 @@ export const MsgSetSendEnabledResponse = {
     return {
       typeUrl: "/cosmos.bank.v1beta1.MsgSetSendEnabledResponse",
       value: MsgSetSendEnabledResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgBurn(): MsgBurn {
+  return {
+    fromAddress: "",
+    amount: []
+  };
+}
+export const MsgBurn = {
+  typeUrl: "/cosmos.bank.v1beta1.MsgBurn",
+  aminoType: "cosmos-sdk/MsgBurn",
+  encode(message: MsgBurn, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.fromAddress !== "") {
+      writer.uint32(10).string(message.fromAddress);
+    }
+    for (const v of message.amount) {
+      Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgBurn {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgBurn();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.fromAddress = reader.string();
+          break;
+        case 2:
+          message.amount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<MsgBurn>): MsgBurn {
+    const message = createBaseMsgBurn();
+    message.fromAddress = object.fromAddress ?? "";
+    message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: MsgBurnAmino): MsgBurn {
+    return {
+      fromAddress: object.from_address,
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromAmino(e)) : []
+    };
+  },
+  toAmino(message: MsgBurn): MsgBurnAmino {
+    const obj: any = {};
+    obj.from_address = message.fromAddress;
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    return obj;
+  },
+  fromAminoMsg(object: MsgBurnAminoMsg): MsgBurn {
+    return MsgBurn.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgBurn): MsgBurnAminoMsg {
+    return {
+      type: "cosmos-sdk/MsgBurn",
+      value: MsgBurn.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgBurnProtoMsg): MsgBurn {
+    return MsgBurn.decode(message.value);
+  },
+  toProto(message: MsgBurn): Uint8Array {
+    return MsgBurn.encode(message).finish();
+  },
+  toProtoMsg(message: MsgBurn): MsgBurnProtoMsg {
+    return {
+      typeUrl: "/cosmos.bank.v1beta1.MsgBurn",
+      value: MsgBurn.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgBurnResponse(): MsgBurnResponse {
+  return {};
+}
+export const MsgBurnResponse = {
+  typeUrl: "/cosmos.bank.v1beta1.MsgBurnResponse",
+  aminoType: "cosmos-sdk/MsgBurnResponse",
+  encode(_: MsgBurnResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgBurnResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgBurnResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(_: DeepPartial<MsgBurnResponse>): MsgBurnResponse {
+    const message = createBaseMsgBurnResponse();
+    return message;
+  },
+  fromAmino(_: MsgBurnResponseAmino): MsgBurnResponse {
+    return {};
+  },
+  toAmino(_: MsgBurnResponse): MsgBurnResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgBurnResponseAminoMsg): MsgBurnResponse {
+    return MsgBurnResponse.fromAmino(object.value);
+  },
+  toAminoMsg(message: MsgBurnResponse): MsgBurnResponseAminoMsg {
+    return {
+      type: "cosmos-sdk/MsgBurnResponse",
+      value: MsgBurnResponse.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: MsgBurnResponseProtoMsg): MsgBurnResponse {
+    return MsgBurnResponse.decode(message.value);
+  },
+  toProto(message: MsgBurnResponse): Uint8Array {
+    return MsgBurnResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgBurnResponse): MsgBurnResponseProtoMsg {
+    return {
+      typeUrl: "/cosmos.bank.v1beta1.MsgBurnResponse",
+      value: MsgBurnResponse.encode(message).finish()
     };
   }
 };

@@ -107,8 +107,8 @@ export interface MsgTransferResponseSDKType {
 }
 /** MsgUpdateParams is the Msg/UpdateParams request type. */
 export interface MsgUpdateParams {
-  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
-  authority: string;
+  /** signer address */
+  signer: string;
   /**
    * params defines the transfer parameters to update.
    * 
@@ -122,8 +122,8 @@ export interface MsgUpdateParamsProtoMsg {
 }
 /** MsgUpdateParams is the Msg/UpdateParams request type. */
 export interface MsgUpdateParamsAmino {
-  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
-  authority: string;
+  /** signer address */
+  signer: string;
   /**
    * params defines the transfer parameters to update.
    * 
@@ -137,7 +137,7 @@ export interface MsgUpdateParamsAminoMsg {
 }
 /** MsgUpdateParams is the Msg/UpdateParams request type. */
 export interface MsgUpdateParamsSDKType {
-  authority: string;
+  signer: string;
   params: ParamsSDKType;
 }
 /**
@@ -371,7 +371,7 @@ export const MsgTransferResponse = {
 };
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
-    authority: "",
+    signer: "",
     params: Params.fromPartial({})
   };
 }
@@ -379,8 +379,8 @@ export const MsgUpdateParams = {
   typeUrl: "/ibc.applications.transfer.v1.MsgUpdateParams",
   aminoType: "cosmos-sdk/MsgUpdateParams",
   encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.authority !== "") {
-      writer.uint32(10).string(message.authority);
+    if (message.signer !== "") {
+      writer.uint32(10).string(message.signer);
     }
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(18).fork()).ldelim();
@@ -395,7 +395,7 @@ export const MsgUpdateParams = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.authority = reader.string();
+          message.signer = reader.string();
           break;
         case 2:
           message.params = Params.decode(reader, reader.uint32());
@@ -409,19 +409,19 @@ export const MsgUpdateParams = {
   },
   fromPartial(object: DeepPartial<MsgUpdateParams>): MsgUpdateParams {
     const message = createBaseMsgUpdateParams();
-    message.authority = object.authority ?? "";
+    message.signer = object.signer ?? "";
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   },
   fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
     return {
-      authority: object.authority,
+      signer: object.signer,
       params: object?.params ? Params.fromAmino(object.params) : undefined
     };
   },
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.signer = message.signer;
     obj.params = message.params ? Params.toAmino(message.params) : undefined;
     return obj;
   },

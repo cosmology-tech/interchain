@@ -45,6 +45,7 @@ telescope({
       },
       excluded: {
         packages: ["cosmos.autocli.v1"],
+        hardProtos: ["cosmos/accounts/v1/accounts.proto"],
       },
       addAminoTypeToObjects: true,
       addTypeUrlToObjects: true,

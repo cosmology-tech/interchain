@@ -1,6 +1,6 @@
 import { setPaginationParams } from "../../../../helpers";
 import { LCDClient } from "@cosmology/lcd";
-import { QueryDenomTraceRequest, QueryDenomTraceResponseSDKType, QueryDenomTracesRequest, QueryDenomTracesResponseSDKType, QueryParamsRequest, QueryParamsResponseSDKType, QueryDenomHashRequest, QueryDenomHashResponseSDKType, QueryEscrowAddressRequest, QueryEscrowAddressResponseSDKType, QueryTotalEscrowForDenomRequest, QueryTotalEscrowForDenomResponseSDKType } from "./query";
+import { QueryDenomTracesRequest, QueryDenomTracesResponseSDKType, QueryDenomTraceRequest, QueryDenomTraceResponseSDKType, QueryParamsRequest, QueryParamsResponseSDKType, QueryDenomHashRequest, QueryDenomHashResponseSDKType, QueryEscrowAddressRequest, QueryEscrowAddressResponseSDKType, QueryTotalEscrowForDenomRequest, QueryTotalEscrowForDenomResponseSDKType } from "./query";
 export class LCDQueryClient {
   req: LCDClient;
   constructor({
@@ -10,17 +10,6 @@ export class LCDQueryClient {
   }) {
     this.req = requestClient;
   }
-  /* DenomTrace queries a denomination trace information. */
-  denomTrace = async (params: QueryDenomTraceRequest): Promise<QueryDenomTraceResponseSDKType> => {
-    const options: any = {
-      params: {}
-    };
-    if (typeof params?.hash !== "undefined") {
-      options.params.hash = params.hash;
-    }
-    const endpoint = `ibc/apps/transfer/v1/denom_traces/${params.hash}`;
-    return await this.req.get<QueryDenomTraceResponseSDKType>(endpoint, options);
-  };
   /* DenomTraces queries all denomination traces. */
   denomTraces = async (params: QueryDenomTracesRequest = {
     pagination: undefined
@@ -33,6 +22,17 @@ export class LCDQueryClient {
     }
     const endpoint = `ibc/apps/transfer/v1/denom_traces`;
     return await this.req.get<QueryDenomTracesResponseSDKType>(endpoint, options);
+  };
+  /* DenomTrace queries a denomination trace information. */
+  denomTrace = async (params: QueryDenomTraceRequest): Promise<QueryDenomTraceResponseSDKType> => {
+    const options: any = {
+      params: {}
+    };
+    if (typeof params?.hash !== "undefined") {
+      options.params.hash = params.hash;
+    }
+    const endpoint = `ibc/apps/transfer/v1/denom_traces/${params.hash}`;
+    return await this.req.get<QueryDenomTraceResponseSDKType>(endpoint, options);
   };
   /* Params queries all parameters of the ibc-transfer module. */
   params = async (_params: QueryParamsRequest = {}): Promise<QueryParamsResponseSDKType> => {

@@ -8,7 +8,10 @@ export interface Query {
   proposal(request: QueryProposalRequest): Promise<QueryProposalResponse>;
   /** Proposals queries all proposals based on given status. */
   proposals(request: QueryProposalsRequest): Promise<QueryProposalsResponse>;
-  /** Vote queries voted information based on proposalID, voterAddr. */
+  /**
+   * Vote queries voted information based on proposalID, voterAddr.
+   * Due to how we handle state, this query would error for proposals that has already been finished.
+   */
   vote(request: QueryVoteRequest): Promise<QueryVoteResponse>;
   /** Votes queries votes of a given proposal. */
   votes(request: QueryVotesRequest): Promise<QueryVotesResponse>;
@@ -38,7 +41,8 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("cosmos.gov.v1beta1.Query", "Proposals", data);
     return promise.then(data => QueryProposalsResponse.decode(new BinaryReader(data)));
   };
-  /* Vote queries voted information based on proposalID, voterAddr. */
+  /* Vote queries voted information based on proposalID, voterAddr.
+   Due to how we handle state, this query would error for proposals that has already been finished. */
   vote = async (request: QueryVoteRequest): Promise<QueryVoteResponse> => {
     const data = QueryVoteRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.gov.v1beta1.Query", "Vote", data);

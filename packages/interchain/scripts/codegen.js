@@ -74,6 +74,7 @@ telescope({
           "ibc.core.port.v1",
           "ibc.core.types.v1",
         ],
+        hardProtos: ["cosmos/accounts/v1/accounts.proto"],
       },
       parser: {
         keepCase: false,

@@ -232,7 +232,8 @@ export interface Proposal {
   votingEndTime: Date;
   /**
    * metadata is any arbitrary metadata attached to the proposal.
-   * the recommended format of the metadata is to be found here: https://docs.cosmos.network/v0.47/modules/gov#proposal-3
+   * the recommended format of the metadata is to be found here:
+   * https://docs.cosmos.network/v0.47/modules/gov#proposal-3
    */
   metadata: string;
   /**
@@ -296,7 +297,8 @@ export interface ProposalAmino {
   voting_end_time?: Date;
   /**
    * metadata is any arbitrary metadata attached to the proposal.
-   * the recommended format of the metadata is to be found here: https://docs.cosmos.network/v0.47/modules/gov#proposal-3
+   * the recommended format of the metadata is to be found here:
+   * https://docs.cosmos.network/v0.47/modules/gov#proposal-3
    */
   metadata: string;
   /**

@@ -9,6 +9,9 @@ export const createRPCQueryClient = async ({
   const client = new QueryClient(tmClient);
   return {
     cosmos: {
+      accounts: {
+        v1: (await import("./accounts/v1/query.rpc.Query")).createRpcQueryExtension(client)
+      },
       app: {
         v1alpha1: (await import("./app/v1alpha1/query.rpc.Query")).createRpcQueryExtension(client)
       },

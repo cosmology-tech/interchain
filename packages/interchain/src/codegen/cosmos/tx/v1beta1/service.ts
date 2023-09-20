@@ -58,7 +58,7 @@ export enum BroadcastMode {
   /** BROADCAST_MODE_UNSPECIFIED - zero-value for mode ordering */
   BROADCAST_MODE_UNSPECIFIED = 0,
   /**
-   * BROADCAST_MODE_BLOCK - DEPRECATED: use BROADCAST_MODE_SYNC instead,
+   * BROADCAST_MODE_BLOCK - Deprecated: use BROADCAST_MODE_SYNC instead,
    * BROADCAST_MODE_BLOCK is not supported by the SDK from v0.47.x onwards.
    */
   BROADCAST_MODE_BLOCK = 1,
@@ -118,14 +118,14 @@ export function broadcastModeToJSON(object: BroadcastMode): string {
 export interface GetTxsEventRequest {
   /**
    * events is the list of transaction event type.
-   * Deprecated post v0.47.x: use query instead, which should contain a valid
+   * Deprecated: post v0.47.x use query instead, which should contain a valid
    * events query.
    */
   /** @deprecated */
   events?: string[];
   /**
    * pagination defines a pagination for the request.
-   * Deprecated post v0.46.x: use page and limit instead.
+   * Deprecated: post v0.46.x use page and limit instead.
    */
   /** @deprecated */
   pagination?: PageRequest;
@@ -159,14 +159,14 @@ export interface GetTxsEventRequestProtoMsg {
 export interface GetTxsEventRequestAmino {
   /**
    * events is the list of transaction event type.
-   * Deprecated post v0.47.x: use query instead, which should contain a valid
+   * Deprecated: post v0.47.x use query instead, which should contain a valid
    * events query.
    */
   /** @deprecated */
   events: string[];
   /**
    * pagination defines a pagination for the request.
-   * Deprecated post v0.46.x: use page and limit instead.
+   * Deprecated: post v0.46.x use page and limit instead.
    */
   /** @deprecated */
   pagination?: PageRequestAmino;
@@ -218,7 +218,7 @@ export interface GetTxsEventResponse {
   txResponses: TxResponse[];
   /**
    * pagination defines a pagination for the response.
-   * Deprecated post v0.46.x: use total instead.
+   * Deprecated: post v0.46.x use total instead.
    */
   /** @deprecated */
   pagination: PageResponse;
@@ -240,7 +240,7 @@ export interface GetTxsEventResponseAmino {
   tx_responses: TxResponseAmino[];
   /**
    * pagination defines a pagination for the response.
-   * Deprecated post v0.46.x: use total instead.
+   * Deprecated: post v0.46.x use total instead.
    */
   /** @deprecated */
   pagination?: PageResponseAmino;

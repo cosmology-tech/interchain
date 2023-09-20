@@ -7,7 +7,6 @@ export enum BlockIDFlag {
   BLOCK_ID_FLAG_UNKNOWN = 0,
   /** BLOCK_ID_FLAG_ABSENT - the vote was not received */
   BLOCK_ID_FLAG_ABSENT = 1,
-  /** BLOCK_ID_FLAG_COMMIT - voted for the block that received the majority */
   BLOCK_ID_FLAG_COMMIT = 2,
   /** BLOCK_ID_FLAG_NIL - voted for nil */
   BLOCK_ID_FLAG_NIL = 3,

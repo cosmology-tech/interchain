@@ -1,5 +1,5 @@
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../base/query/v1beta1/pagination";
-import { Validator, ValidatorAmino, ValidatorSDKType, DelegationResponse, DelegationResponseAmino, DelegationResponseSDKType, UnbondingDelegation, UnbondingDelegationAmino, UnbondingDelegationSDKType, RedelegationResponse, RedelegationResponseAmino, RedelegationResponseSDKType, HistoricalInfo, HistoricalInfoAmino, HistoricalInfoSDKType, Pool, PoolAmino, PoolSDKType, Params, ParamsAmino, ParamsSDKType } from "./staking";
+import { Validator, ValidatorAmino, ValidatorSDKType, DelegationResponse, DelegationResponseAmino, DelegationResponseSDKType, UnbondingDelegation, UnbondingDelegationAmino, UnbondingDelegationSDKType, RedelegationResponse, RedelegationResponseAmino, RedelegationResponseSDKType, HistoricalInfo, HistoricalInfoAmino, HistoricalInfoSDKType, HistoricalRecord, HistoricalRecordAmino, HistoricalRecordSDKType, Pool, PoolAmino, PoolSDKType, Params, ParamsAmino, ParamsSDKType } from "./staking";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { DeepPartial } from "../../../helpers";
 /** QueryValidatorsRequest is request type for Query/Validators RPC method. */
@@ -754,7 +754,9 @@ export interface QueryHistoricalInfoRequestSDKType {
  */
 export interface QueryHistoricalInfoResponse {
   /** hist defines the historical info at the given height. */
+  /** @deprecated */
   hist: HistoricalInfo;
+  historicalRecord: HistoricalRecord;
 }
 export interface QueryHistoricalInfoResponseProtoMsg {
   typeUrl: "/cosmos.staking.v1beta1.QueryHistoricalInfoResponse";
@@ -766,7 +768,9 @@ export interface QueryHistoricalInfoResponseProtoMsg {
  */
 export interface QueryHistoricalInfoResponseAmino {
   /** hist defines the historical info at the given height. */
+  /** @deprecated */
   hist?: HistoricalInfoAmino;
+  historical_record?: HistoricalRecordAmino;
 }
 export interface QueryHistoricalInfoResponseAminoMsg {
   type: "cosmos-sdk/QueryHistoricalInfoResponse";
@@ -777,7 +781,9 @@ export interface QueryHistoricalInfoResponseAminoMsg {
  * method.
  */
 export interface QueryHistoricalInfoResponseSDKType {
+  /** @deprecated */
   hist: HistoricalInfoSDKType;
+  historical_record: HistoricalRecordSDKType;
 }
 /** QueryPoolRequest is request type for the Query/Pool RPC method. */
 export interface QueryPoolRequest {}
@@ -2635,7 +2641,8 @@ export const QueryHistoricalInfoRequest = {
 };
 function createBaseQueryHistoricalInfoResponse(): QueryHistoricalInfoResponse {
   return {
-    hist: HistoricalInfo.fromPartial({})
+    hist: HistoricalInfo.fromPartial({}),
+    historicalRecord: HistoricalRecord.fromPartial({})
   };
 }
 export const QueryHistoricalInfoResponse = {
@@ -2644,6 +2651,9 @@ export const QueryHistoricalInfoResponse = {
   encode(message: QueryHistoricalInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hist !== undefined) {
       HistoricalInfo.encode(message.hist, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.historicalRecord !== undefined) {
+      HistoricalRecord.encode(message.historicalRecord, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -2657,6 +2667,9 @@ export const QueryHistoricalInfoResponse = {
         case 1:
           message.hist = HistoricalInfo.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.historicalRecord = HistoricalRecord.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2667,16 +2680,19 @@ export const QueryHistoricalInfoResponse = {
   fromPartial(object: DeepPartial<QueryHistoricalInfoResponse>): QueryHistoricalInfoResponse {
     const message = createBaseQueryHistoricalInfoResponse();
     message.hist = object.hist !== undefined && object.hist !== null ? HistoricalInfo.fromPartial(object.hist) : undefined;
+    message.historicalRecord = object.historicalRecord !== undefined && object.historicalRecord !== null ? HistoricalRecord.fromPartial(object.historicalRecord) : undefined;
     return message;
   },
   fromAmino(object: QueryHistoricalInfoResponseAmino): QueryHistoricalInfoResponse {
     return {
-      hist: object?.hist ? HistoricalInfo.fromAmino(object.hist) : undefined
+      hist: object?.hist ? HistoricalInfo.fromAmino(object.hist) : undefined,
+      historicalRecord: object?.historical_record ? HistoricalRecord.fromAmino(object.historical_record) : undefined
     };
   },
   toAmino(message: QueryHistoricalInfoResponse): QueryHistoricalInfoResponseAmino {
     const obj: any = {};
     obj.hist = message.hist ? HistoricalInfo.toAmino(message.hist) : undefined;
+    obj.historical_record = message.historicalRecord ? HistoricalRecord.toAmino(message.historicalRecord) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryHistoricalInfoResponseAminoMsg): QueryHistoricalInfoResponse {

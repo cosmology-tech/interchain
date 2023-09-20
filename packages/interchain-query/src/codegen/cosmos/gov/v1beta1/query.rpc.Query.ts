@@ -10,7 +10,10 @@ export interface Query {
   proposal(request: QueryProposalRequest): Promise<QueryProposalResponse>;
   /** Proposals queries all proposals based on given status. */
   proposals(request: QueryProposalsRequest): Promise<QueryProposalsResponse>;
-  /** Vote queries voted information based on proposalID, voterAddr. */
+  /**
+   * Vote queries voted information based on proposalID, voterAddr.
+   * Due to how we handle state, this query would error for proposals that has already been finished.
+   */
   vote(request: QueryVoteRequest): Promise<QueryVoteResponse>;
   /** Votes queries votes of a given proposal. */
   votes(request: QueryVotesRequest): Promise<QueryVotesResponse>;
@@ -218,7 +221,11 @@ export const createRpcQueryHooks = (rpc: ProtobufRpcClient | undefined) => {
   return {
     /** Proposal queries proposal details based on ProposalID. */useProposal,
     /** Proposals queries all proposals based on given status. */useProposals,
-    /** Vote queries voted information based on proposalID, voterAddr. */useVote,
+    /**
+     * Vote queries voted information based on proposalID, voterAddr.
+     * Due to how we handle state, this query would error for proposals that has already been finished.
+     */
+    useVote,
     /** Votes queries votes of a given proposal. */useVotes,
     /** Params queries all parameters of the gov module. */useParams,
     /** Deposit queries single deposit information based on proposalID, depositor address. */useDeposit,

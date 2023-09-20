@@ -35,7 +35,8 @@ export class LCDQueryClient {
     const endpoint = `cosmos/gov/v1beta1/proposals`;
     return await this.req.get<QueryProposalsResponseSDKType>(endpoint, options);
   };
-  /* Vote queries voted information based on proposalID, voterAddr. */
+  /* Vote queries voted information based on proposalID, voterAddr.
+   Due to how we handle state, this query would error for proposals that has already been finished. */
   vote = async (params: QueryVoteRequest): Promise<QueryVoteResponseSDKType> => {
     const endpoint = `cosmos/gov/v1beta1/proposals/${params.proposalId}/votes/${params.voter}`;
     return await this.req.get<QueryVoteResponseSDKType>(endpoint);

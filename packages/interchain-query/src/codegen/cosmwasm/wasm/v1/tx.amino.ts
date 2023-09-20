@@ -1,4 +1,4 @@
-import { MsgStoreCode, MsgInstantiateContract, MsgInstantiateContract2, MsgExecuteContract, MsgMigrateContract, MsgUpdateAdmin, MsgClearAdmin, MsgUpdateInstantiateConfig, MsgUpdateParams, MsgSudoContract, MsgPinCodes, MsgUnpinCodes, MsgStoreAndInstantiateContract, MsgRemoveCodeUploadParamsAddresses, MsgAddCodeUploadParamsAddresses } from "./tx";
+import { MsgStoreCode, MsgInstantiateContract, MsgInstantiateContract2, MsgExecuteContract, MsgMigrateContract, MsgUpdateAdmin, MsgClearAdmin, MsgUpdateInstantiateConfig, MsgUpdateParams, MsgSudoContract, MsgPinCodes, MsgUnpinCodes, MsgStoreAndInstantiateContract, MsgRemoveCodeUploadParamsAddresses, MsgAddCodeUploadParamsAddresses, MsgStoreAndMigrateContract } from "./tx";
 export const AminoConverter = {
   "/cosmwasm.wasm.v1.MsgStoreCode": {
     aminoType: "wasm/MsgStoreCode",
@@ -74,5 +74,10 @@ export const AminoConverter = {
     aminoType: "wasm/MsgAddCodeUploadParamsAddresses",
     toAmino: MsgAddCodeUploadParamsAddresses.toAmino,
     fromAmino: MsgAddCodeUploadParamsAddresses.fromAmino
+  },
+  "/cosmwasm.wasm.v1.MsgStoreAndMigrateContract": {
+    aminoType: "wasm/MsgStoreAndMigrateContract",
+    toAmino: MsgStoreAndMigrateContract.toAmino,
+    fromAmino: MsgStoreAndMigrateContract.fromAmino
   }
 };

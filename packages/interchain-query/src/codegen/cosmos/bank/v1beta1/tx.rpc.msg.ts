@@ -1,12 +1,18 @@
 import { Rpc } from "../../../helpers";
 import { BinaryReader } from "../../../binary";
-import { MsgSend, MsgSendResponse, MsgMultiSend, MsgMultiSendResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgSetSendEnabled, MsgSetSendEnabledResponse } from "./tx";
+import { MsgSend, MsgSendResponse, MsgMultiSend, MsgMultiSendResponse, MsgBurn, MsgBurnResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgSetSendEnabled, MsgSetSendEnabledResponse } from "./tx";
 /** Msg defines the bank Msg service. */
 export interface Msg {
   /** Send defines a method for sending coins from one account to another account. */
   send(request: MsgSend): Promise<MsgSendResponse>;
   /** MultiSend defines a method for sending coins from some accounts to other accounts. */
   multiSend(request: MsgMultiSend): Promise<MsgMultiSendResponse>;
+  /**
+   * Burn defines a method for burning coins by an account.
+   * 
+   * Since: cosmos-sdk 0.51
+   */
+  burn(request: MsgBurn): Promise<MsgBurnResponse>;
   /**
    * UpdateParams defines a governance operation for updating the x/bank module parameters.
    * The authority is defined in the keeper.
@@ -30,6 +36,7 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
     this.send = this.send.bind(this);
     this.multiSend = this.multiSend.bind(this);
+    this.burn = this.burn.bind(this);
     this.updateParams = this.updateParams.bind(this);
     this.setSendEnabled = this.setSendEnabled.bind(this);
   }
@@ -42,6 +49,11 @@ export class MsgClientImpl implements Msg {
     const data = MsgMultiSend.encode(request).finish();
     const promise = this.rpc.request("cosmos.bank.v1beta1.Msg", "MultiSend", data);
     return promise.then(data => MsgMultiSendResponse.decode(new BinaryReader(data)));
+  }
+  burn(request: MsgBurn): Promise<MsgBurnResponse> {
+    const data = MsgBurn.encode(request).finish();
+    const promise = this.rpc.request("cosmos.bank.v1beta1.Msg", "Burn", data);
+    return promise.then(data => MsgBurnResponse.decode(new BinaryReader(data)));
   }
   updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();

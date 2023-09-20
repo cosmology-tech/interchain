@@ -1,6 +1,6 @@
 import { Rpc } from "../../../helpers";
 import { BinaryReader } from "../../../binary";
-import { MsgStoreCode, MsgStoreCodeResponse, MsgInstantiateContract, MsgInstantiateContractResponse, MsgInstantiateContract2, MsgInstantiateContract2Response, MsgExecuteContract, MsgExecuteContractResponse, MsgMigrateContract, MsgMigrateContractResponse, MsgUpdateAdmin, MsgUpdateAdminResponse, MsgClearAdmin, MsgClearAdminResponse, MsgUpdateInstantiateConfig, MsgUpdateInstantiateConfigResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgSudoContract, MsgSudoContractResponse, MsgPinCodes, MsgPinCodesResponse, MsgUnpinCodes, MsgUnpinCodesResponse, MsgStoreAndInstantiateContract, MsgStoreAndInstantiateContractResponse, MsgRemoveCodeUploadParamsAddresses, MsgRemoveCodeUploadParamsAddressesResponse, MsgAddCodeUploadParamsAddresses, MsgAddCodeUploadParamsAddressesResponse } from "./tx";
+import { MsgStoreCode, MsgStoreCodeResponse, MsgInstantiateContract, MsgInstantiateContractResponse, MsgInstantiateContract2, MsgInstantiateContract2Response, MsgExecuteContract, MsgExecuteContractResponse, MsgMigrateContract, MsgMigrateContractResponse, MsgUpdateAdmin, MsgUpdateAdminResponse, MsgClearAdmin, MsgClearAdminResponse, MsgUpdateInstantiateConfig, MsgUpdateInstantiateConfigResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgSudoContract, MsgSudoContractResponse, MsgPinCodes, MsgPinCodesResponse, MsgUnpinCodes, MsgUnpinCodesResponse, MsgStoreAndInstantiateContract, MsgStoreAndInstantiateContractResponse, MsgRemoveCodeUploadParamsAddresses, MsgRemoveCodeUploadParamsAddressesResponse, MsgAddCodeUploadParamsAddresses, MsgAddCodeUploadParamsAddressesResponse, MsgStoreAndMigrateContract, MsgStoreAndMigrateContractResponse } from "./tx";
 /** Msg defines the wasm Msg service. */
 export interface Msg {
   /** StoreCode to submit Wasm code to the system */
@@ -72,6 +72,13 @@ export interface Msg {
    * The authority is defined in the keeper.
    */
   addCodeUploadParamsAddresses(request: MsgAddCodeUploadParamsAddresses): Promise<MsgAddCodeUploadParamsAddressesResponse>;
+  /**
+   * StoreAndMigrateContract defines a governance operation for storing
+   * and migrating the contract. The authority is defined in the keeper.
+   * 
+   * Since: 0.42
+   */
+  storeAndMigrateContract(request: MsgStoreAndMigrateContract): Promise<MsgStoreAndMigrateContractResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -188,5 +195,14 @@ export class MsgClientImpl implements Msg {
     const data = MsgAddCodeUploadParamsAddresses.encode(request).finish();
     const promise = this.rpc.request("cosmwasm.wasm.v1.Msg", "AddCodeUploadParamsAddresses", data);
     return promise.then(data => MsgAddCodeUploadParamsAddressesResponse.decode(new BinaryReader(data)));
+  };
+  /* StoreAndMigrateContract defines a governance operation for storing
+   and migrating the contract. The authority is defined in the keeper.
+  
+   Since: 0.42 */
+  storeAndMigrateContract = async (request: MsgStoreAndMigrateContract): Promise<MsgStoreAndMigrateContractResponse> => {
+    const data = MsgStoreAndMigrateContract.encode(request).finish();
+    const promise = this.rpc.request("cosmwasm.wasm.v1.Msg", "StoreAndMigrateContract", data);
+    return promise.then(data => MsgStoreAndMigrateContractResponse.decode(new BinaryReader(data)));
   };
 }

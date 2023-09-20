@@ -104,6 +104,7 @@ export function infractionToJSON(object: Infraction): string {
  * recent HistoricalInfo
  * (`n` is set by the staking module's `historical_entries` parameter).
  */
+/** @deprecated */
 export interface HistoricalInfo {
   header: Header;
   valset: Validator[];
@@ -118,6 +119,7 @@ export interface HistoricalInfoProtoMsg {
  * recent HistoricalInfo
  * (`n` is set by the staking module's `historical_entries` parameter).
  */
+/** @deprecated */
 export interface HistoricalInfoAmino {
   header?: HeaderAmino;
   valset: ValidatorAmino[];
@@ -132,9 +134,51 @@ export interface HistoricalInfoAminoMsg {
  * recent HistoricalInfo
  * (`n` is set by the staking module's `historical_entries` parameter).
  */
+/** @deprecated */
 export interface HistoricalInfoSDKType {
   header: HeaderSDKType;
   valset: ValidatorSDKType[];
+}
+/**
+ * Historical contains a set of minimum values needed for evaluating historical validator sets and blocks.
+ * It is stored as part of staking module's state, which persists the `n` most
+ * recent HistoricalInfo
+ * (`n` is set by the staking module's `historical_entries` parameter).
+ */
+export interface HistoricalRecord {
+  apphash: Uint8Array;
+  time: Date;
+  validatorsHash: Uint8Array;
+}
+export interface HistoricalRecordProtoMsg {
+  typeUrl: "/cosmos.staking.v1beta1.HistoricalRecord";
+  value: Uint8Array;
+}
+/**
+ * Historical contains a set of minimum values needed for evaluating historical validator sets and blocks.
+ * It is stored as part of staking module's state, which persists the `n` most
+ * recent HistoricalInfo
+ * (`n` is set by the staking module's `historical_entries` parameter).
+ */
+export interface HistoricalRecordAmino {
+  apphash: Uint8Array;
+  time?: Date;
+  validators_hash: Uint8Array;
+}
+export interface HistoricalRecordAminoMsg {
+  type: "cosmos-sdk/HistoricalRecord";
+  value: HistoricalRecordAmino;
+}
+/**
+ * Historical contains a set of minimum values needed for evaluating historical validator sets and blocks.
+ * It is stored as part of staking module's state, which persists the `n` most
+ * recent HistoricalInfo
+ * (`n` is set by the staking module's `historical_entries` parameter).
+ */
+export interface HistoricalRecordSDKType {
+  apphash: Uint8Array;
+  time: Date;
+  validators_hash: Uint8Array;
 }
 /**
  * CommissionRates defines the initial commission rates to be used for creating
@@ -1016,6 +1060,94 @@ export const HistoricalInfo = {
     return {
       typeUrl: "/cosmos.staking.v1beta1.HistoricalInfo",
       value: HistoricalInfo.encode(message).finish()
+    };
+  }
+};
+function createBaseHistoricalRecord(): HistoricalRecord {
+  return {
+    apphash: new Uint8Array(),
+    time: new Date(),
+    validatorsHash: new Uint8Array()
+  };
+}
+export const HistoricalRecord = {
+  typeUrl: "/cosmos.staking.v1beta1.HistoricalRecord",
+  aminoType: "cosmos-sdk/HistoricalRecord",
+  encode(message: HistoricalRecord, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.apphash.length !== 0) {
+      writer.uint32(10).bytes(message.apphash);
+    }
+    if (message.time !== undefined) {
+      Timestamp.encode(toTimestamp(message.time), writer.uint32(18).fork()).ldelim();
+    }
+    if (message.validatorsHash.length !== 0) {
+      writer.uint32(26).bytes(message.validatorsHash);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): HistoricalRecord {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseHistoricalRecord();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.apphash = reader.bytes();
+          break;
+        case 2:
+          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.validatorsHash = reader.bytes();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<HistoricalRecord>): HistoricalRecord {
+    const message = createBaseHistoricalRecord();
+    message.apphash = object.apphash ?? new Uint8Array();
+    message.time = object.time ?? undefined;
+    message.validatorsHash = object.validatorsHash ?? new Uint8Array();
+    return message;
+  },
+  fromAmino(object: HistoricalRecordAmino): HistoricalRecord {
+    return {
+      apphash: object.apphash,
+      time: object.time,
+      validatorsHash: object.validators_hash
+    };
+  },
+  toAmino(message: HistoricalRecord): HistoricalRecordAmino {
+    const obj: any = {};
+    obj.apphash = message.apphash;
+    obj.time = message.time;
+    obj.validators_hash = message.validatorsHash;
+    return obj;
+  },
+  fromAminoMsg(object: HistoricalRecordAminoMsg): HistoricalRecord {
+    return HistoricalRecord.fromAmino(object.value);
+  },
+  toAminoMsg(message: HistoricalRecord): HistoricalRecordAminoMsg {
+    return {
+      type: "cosmos-sdk/HistoricalRecord",
+      value: HistoricalRecord.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: HistoricalRecordProtoMsg): HistoricalRecord {
+    return HistoricalRecord.decode(message.value);
+  },
+  toProto(message: HistoricalRecord): Uint8Array {
+    return HistoricalRecord.encode(message).finish();
+  },
+  toProtoMsg(message: HistoricalRecord): HistoricalRecordProtoMsg {
+    return {
+      typeUrl: "/cosmos.staking.v1beta1.HistoricalRecord",
+      value: HistoricalRecord.encode(message).finish()
     };
   }
 };

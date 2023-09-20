@@ -1,4 +1,5 @@
 import { ProtobufRpcClient } from "@cosmjs/stargate";
+import * as _CosmosAccountsV1Queryrpc from "./cosmos/accounts/v1/query.rpc.Query";
 import * as _CosmosAppV1alpha1Queryrpc from "./cosmos/app/v1alpha1/query.rpc.Query";
 import * as _CosmosAuthV1beta1Queryrpc from "./cosmos/auth/v1beta1/query.rpc.Query";
 import * as _CosmosAuthzV1beta1Queryrpc from "./cosmos/authz/v1beta1/query.rpc.Query";
@@ -36,6 +37,9 @@ export const createRpcQueryHooks = ({
 }) => {
   return {
     cosmos: {
+      accounts: {
+        v1: _CosmosAccountsV1Queryrpc.createRpcQueryHooks(rpc)
+      },
       app: {
         v1alpha1: _CosmosAppV1alpha1Queryrpc.createRpcQueryHooks(rpc)
       },
