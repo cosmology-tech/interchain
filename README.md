@@ -44,7 +44,7 @@ npm install interchain
 ```js
 import { cosmoshub } from 'interchain';
 
-const { createRPCQueryClient } = cosmoshub.ClientFactory; 
+const { createRPCQueryClient } = cosmoshub.ClientFactory;
 const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });
 
 // now you can query the cosmos modules
@@ -58,7 +58,7 @@ const balances = await client.cosmoshub.exchange.v1beta1
 
 ### Composing Messages
 
-Import the `cosmoshub` object from `interchain`. 
+Import the `cosmoshub` object from `interchain`.
 
 ```js
 import { cosmoshub } from 'interchain';
@@ -218,7 +218,7 @@ If you want to manually construct a stargate client
 import { OfflineSigner, GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 
-import { 
+import {
     cosmosAminoConverters,
     cosmosProtoRegistry,
     cosmwasmAminoConverters,
@@ -294,7 +294,7 @@ Checkout these related projects:
 
 ## Credits
 
-🛠 Built by Cosmology — if you like our tools, please consider delegating to [our validator ⚛️](https://cosmology.tech/validator)
+🛠 Built by Cosmology — if you like our tools, please consider delegating to [our validator ⚛️](https://cosmology.zone/validator)
 
 ## Disclaimer
 
