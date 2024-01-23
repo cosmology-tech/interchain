@@ -9,7 +9,7 @@ export interface IdentifiedClientState {
   /** client identifier */
   clientId: string;
   /** client state */
-  clientState: Any;
+  clientState?: Any;
 }
 export interface IdentifiedClientStateProtoMsg {
   typeUrl: "/ibc.core.client.v1.IdentifiedClientState";
@@ -21,7 +21,7 @@ export interface IdentifiedClientStateProtoMsg {
  */
 export interface IdentifiedClientStateAmino {
   /** client identifier */
-  client_id: string;
+  client_id?: string;
   /** client state */
   client_state?: AnyAmino;
 }
@@ -35,7 +35,7 @@ export interface IdentifiedClientStateAminoMsg {
  */
 export interface IdentifiedClientStateSDKType {
   client_id: string;
-  client_state: AnySDKType;
+  client_state?: AnySDKType;
 }
 /**
  * ConsensusStateWithHeight defines a consensus state with an additional height
@@ -45,7 +45,7 @@ export interface ConsensusStateWithHeight {
   /** consensus state height */
   height: Height;
   /** consensus state */
-  consensusState: Any;
+  consensusState?: Any;
 }
 export interface ConsensusStateWithHeightProtoMsg {
   typeUrl: "/ibc.core.client.v1.ConsensusStateWithHeight";
@@ -71,7 +71,7 @@ export interface ConsensusStateWithHeightAminoMsg {
  */
 export interface ConsensusStateWithHeightSDKType {
   height: HeightSDKType;
-  consensus_state: AnySDKType;
+  consensus_state?: AnySDKType;
 }
 /**
  * ClientConsensusStates defines all the stored consensus states for a given
@@ -93,9 +93,9 @@ export interface ClientConsensusStatesProtoMsg {
  */
 export interface ClientConsensusStatesAmino {
   /** client identifier */
-  client_id: string;
+  client_id?: string;
   /** consensus states and their heights associated with the client */
-  consensus_states: ConsensusStateWithHeightAmino[];
+  consensus_states?: ConsensusStateWithHeightAmino[];
 }
 export interface ClientConsensusStatesAminoMsg {
   type: "cosmos-sdk/ClientConsensusStates";
@@ -145,9 +145,9 @@ export interface HeightProtoMsg {
  */
 export interface HeightAmino {
   /** the revision that the client is currently on */
-  revision_number: string;
+  revision_number?: string;
   /** the height within the given revision */
-  revision_height: string;
+  revision_height?: string;
 }
 export interface HeightAminoMsg {
   type: "cosmos-sdk/Height";
@@ -189,7 +189,7 @@ export interface ParamsAmino {
    * and interacted with. If a client type is removed from the allowed clients list, usage
    * of this client will be disabled until it is added again to the list.
    */
-  allowed_clients: string[];
+  allowed_clients?: string[];
 }
 export interface ParamsAminoMsg {
   type: "cosmos-sdk/Params";
@@ -202,7 +202,7 @@ export interface ParamsSDKType {
 function createBaseIdentifiedClientState(): IdentifiedClientState {
   return {
     clientId: "",
-    clientState: Any.fromPartial({})
+    clientState: undefined
   };
 }
 export const IdentifiedClientState = {
@@ -244,10 +244,14 @@ export const IdentifiedClientState = {
     return message;
   },
   fromAmino(object: IdentifiedClientStateAmino): IdentifiedClientState {
-    return {
-      clientId: object.client_id,
-      clientState: object?.client_state ? Any.fromAmino(object.client_state) : undefined
-    };
+    const message = createBaseIdentifiedClientState();
+    if (object.client_id !== undefined && object.client_id !== null) {
+      message.clientId = object.client_id;
+    }
+    if (object.client_state !== undefined && object.client_state !== null) {
+      message.clientState = Any.fromAmino(object.client_state);
+    }
+    return message;
   },
   toAmino(message: IdentifiedClientState): IdentifiedClientStateAmino {
     const obj: any = {};
@@ -280,7 +284,7 @@ export const IdentifiedClientState = {
 function createBaseConsensusStateWithHeight(): ConsensusStateWithHeight {
   return {
     height: Height.fromPartial({}),
-    consensusState: Any.fromPartial({})
+    consensusState: undefined
   };
 }
 export const ConsensusStateWithHeight = {
@@ -322,10 +326,14 @@ export const ConsensusStateWithHeight = {
     return message;
   },
   fromAmino(object: ConsensusStateWithHeightAmino): ConsensusStateWithHeight {
-    return {
-      height: object?.height ? Height.fromAmino(object.height) : undefined,
-      consensusState: object?.consensus_state ? Any.fromAmino(object.consensus_state) : undefined
-    };
+    const message = createBaseConsensusStateWithHeight();
+    if (object.height !== undefined && object.height !== null) {
+      message.height = Height.fromAmino(object.height);
+    }
+    if (object.consensus_state !== undefined && object.consensus_state !== null) {
+      message.consensusState = Any.fromAmino(object.consensus_state);
+    }
+    return message;
   },
   toAmino(message: ConsensusStateWithHeight): ConsensusStateWithHeightAmino {
     const obj: any = {};
@@ -400,10 +408,12 @@ export const ClientConsensusStates = {
     return message;
   },
   fromAmino(object: ClientConsensusStatesAmino): ClientConsensusStates {
-    return {
-      clientId: object.client_id,
-      consensusStates: Array.isArray(object?.consensus_states) ? object.consensus_states.map((e: any) => ConsensusStateWithHeight.fromAmino(e)) : []
-    };
+    const message = createBaseClientConsensusStates();
+    if (object.client_id !== undefined && object.client_id !== null) {
+      message.clientId = object.client_id;
+    }
+    message.consensusStates = object.consensus_states?.map(e => ConsensusStateWithHeight.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: ClientConsensusStates): ClientConsensusStatesAmino {
     const obj: any = {};
@@ -552,9 +562,9 @@ export const Params = {
     return message;
   },
   fromAmino(object: ParamsAmino): Params {
-    return {
-      allowedClients: Array.isArray(object?.allowed_clients) ? object.allowed_clients.map((e: any) => e) : []
-    };
+    const message = createBaseParams();
+    message.allowedClients = object.allowed_clients?.map(e => e) || [];
+    return message;
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};

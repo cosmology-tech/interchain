@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { DeepPartial } from "../../../helpers";
+import { Decimal } from "@cosmjs/math";
 /**
  * Coin defines a token with a denomination and an amount.
  * 
@@ -21,7 +22,7 @@ export interface CoinProtoMsg {
  * signatures required by gogoproto.
  */
 export interface CoinAmino {
-  denom: string;
+  denom?: string;
   amount: string;
 }
 export interface CoinAminoMsg {
@@ -59,8 +60,8 @@ export interface DecCoinProtoMsg {
  * signatures required by gogoproto.
  */
 export interface DecCoinAmino {
-  denom: string;
-  amount: string;
+  denom?: string;
+  amount?: string;
 }
 export interface DecCoinAminoMsg {
   type: "cosmos-sdk/DecCoin";
@@ -121,15 +122,19 @@ export const Coin = {
     return message;
   },
   fromAmino(object: CoinAmino): Coin {
-    return {
-      denom: object.denom,
-      amount: object.amount
-    };
+    const message = createBaseCoin();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    return message;
   },
   toAmino(message: Coin): CoinAmino {
     const obj: any = {};
     obj.denom = message.denom;
-    obj.amount = message.amount;
+    obj.amount = message.amount ?? "";
     return obj;
   },
   fromAminoMsg(object: CoinAminoMsg): Coin {
@@ -168,7 +173,7 @@ export const DecCoin = {
       writer.uint32(10).string(message.denom);
     }
     if (message.amount !== "") {
-      writer.uint32(18).string(message.amount);
+      writer.uint32(18).string(Decimal.fromUserInput(message.amount, 18).atomics);
     }
     return writer;
   },
@@ -183,7 +188,7 @@ export const DecCoin = {
           message.denom = reader.string();
           break;
         case 2:
-          message.amount = reader.string();
+          message.amount = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -199,10 +204,14 @@ export const DecCoin = {
     return message;
   },
   fromAmino(object: DecCoinAmino): DecCoin {
-    return {
-      denom: object.denom,
-      amount: object.amount
-    };
+    const message = createBaseDecCoin();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    return message;
   },
   toAmino(message: DecCoin): DecCoinAmino {
     const obj: any = {};

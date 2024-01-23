@@ -27,13 +27,13 @@ export interface MsgUpdateParamsProtoMsg {
  */
 export interface MsgUpdateParamsAmino {
   /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
-  authority: string;
+  authority?: string;
   /**
    * params defines the x/auth parameters to update.
    * 
    * NOTE: All parameters must be supplied.
    */
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface MsgUpdateParamsAminoMsg {
   type: "cosmos-sdk/x/auth/MsgUpdateParams";
@@ -122,15 +122,19 @@ export const MsgUpdateParams = {
     return message;
   },
   fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
-    return {
-      authority: object.authority,
-      params: object?.params ? Params.fromAmino(object.params) : undefined
-    };
+    const message = createBaseMsgUpdateParams();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
   },
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
     obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -183,7 +187,8 @@ export const MsgUpdateParamsResponse = {
     return message;
   },
   fromAmino(_: MsgUpdateParamsResponseAmino): MsgUpdateParamsResponse {
-    return {};
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
   },
   toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
     const obj: any = {};

@@ -27,7 +27,7 @@ export interface FileDescriptorsResponseProtoMsg {
 /** FileDescriptorsResponse is the Query/FileDescriptors response type. */
 export interface FileDescriptorsResponseAmino {
   /** files is the file descriptors. */
-  files: FileDescriptorProtoAmino[];
+  files?: FileDescriptorProtoAmino[];
 }
 export interface FileDescriptorsResponseAminoMsg {
   type: "cosmos-sdk/FileDescriptorsResponse";
@@ -65,7 +65,8 @@ export const FileDescriptorsRequest = {
     return message;
   },
   fromAmino(_: FileDescriptorsRequestAmino): FileDescriptorsRequest {
-    return {};
+    const message = createBaseFileDescriptorsRequest();
+    return message;
   },
   toAmino(_: FileDescriptorsRequest): FileDescriptorsRequestAmino {
     const obj: any = {};
@@ -130,9 +131,9 @@ export const FileDescriptorsResponse = {
     return message;
   },
   fromAmino(object: FileDescriptorsResponseAmino): FileDescriptorsResponse {
-    return {
-      files: Array.isArray(object?.files) ? object.files.map((e: any) => FileDescriptorProto.fromAmino(e)) : []
-    };
+    const message = createBaseFileDescriptorsResponse();
+    message.files = object.files?.map(e => FileDescriptorProto.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: FileDescriptorsResponse): FileDescriptorsResponseAmino {
     const obj: any = {};

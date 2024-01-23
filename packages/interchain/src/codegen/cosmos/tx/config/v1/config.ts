@@ -23,12 +23,12 @@ export interface ConfigAmino {
    * skip_ante_handler defines whether the ante handler registration should be skipped in case an app wants to override
    * this functionality.
    */
-  skip_ante_handler: boolean;
+  skip_ante_handler?: boolean;
   /**
    * skip_post_handler defines whether the post handler registration should be skipped in case an app wants to override
    * this functionality.
    */
-  skip_post_handler: boolean;
+  skip_post_handler?: boolean;
 }
 export interface ConfigAminoMsg {
   type: "cosmos-sdk/Config";
@@ -84,10 +84,14 @@ export const Config = {
     return message;
   },
   fromAmino(object: ConfigAmino): Config {
-    return {
-      skipAnteHandler: object.skip_ante_handler,
-      skipPostHandler: object.skip_post_handler
-    };
+    const message = createBaseConfig();
+    if (object.skip_ante_handler !== undefined && object.skip_ante_handler !== null) {
+      message.skipAnteHandler = object.skip_ante_handler;
+    }
+    if (object.skip_post_handler !== undefined && object.skip_post_handler !== null) {
+      message.skipPostHandler = object.skip_post_handler;
+    }
+    return message;
   },
   toAmino(message: Config): ConfigAmino {
     const obj: any = {};

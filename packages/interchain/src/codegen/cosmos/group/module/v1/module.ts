@@ -24,12 +24,12 @@ export interface ModuleAmino {
    * max_execution_period defines the max duration after a proposal's voting period ends that members can send a MsgExec
    * to execute the proposal.
    */
-  max_execution_period?: DurationAmino;
+  max_execution_period: DurationAmino;
   /**
    * max_metadata_len defines the max length of the metadata bytes field for various entities within the group module.
    * Defaults to 255 if not explicitly set.
    */
-  max_metadata_len: string;
+  max_metadata_len?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -85,14 +85,18 @@ export const Module = {
     return message;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      maxExecutionPeriod: object?.max_execution_period ? Duration.fromAmino(object.max_execution_period) : undefined,
-      maxMetadataLen: BigInt(object.max_metadata_len)
-    };
+    const message = createBaseModule();
+    if (object.max_execution_period !== undefined && object.max_execution_period !== null) {
+      message.maxExecutionPeriod = Duration.fromAmino(object.max_execution_period);
+    }
+    if (object.max_metadata_len !== undefined && object.max_metadata_len !== null) {
+      message.maxMetadataLen = BigInt(object.max_metadata_len);
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
-    obj.max_execution_period = message.maxExecutionPeriod ? Duration.toAmino(message.maxExecutionPeriod) : undefined;
+    obj.max_execution_period = message.maxExecutionPeriod ? Duration.toAmino(message.maxExecutionPeriod) : Duration.fromPartial({});
     obj.max_metadata_len = message.maxMetadataLen ? message.maxMetadataLen.toString() : undefined;
     return obj;
   },

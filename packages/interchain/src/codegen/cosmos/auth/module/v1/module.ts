@@ -16,11 +16,11 @@ export interface ModuleProtoMsg {
 /** Module is the config object for the auth module. */
 export interface ModuleAmino {
   /** bech32_prefix is the bech32 account prefix for the app. */
-  bech32_prefix: string;
+  bech32_prefix?: string;
   /** module_account_permissions are module account permissions. */
-  module_account_permissions: ModuleAccountPermissionAmino[];
+  module_account_permissions?: ModuleAccountPermissionAmino[];
   /** authority defines the custom module authority. If not set, defaults to the governance module. */
-  authority: string;
+  authority?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -49,12 +49,12 @@ export interface ModuleAccountPermissionProtoMsg {
 /** ModuleAccountPermission represents permissions for a module account. */
 export interface ModuleAccountPermissionAmino {
   /** account is the name of the module. */
-  account: string;
+  account?: string;
   /**
    * permissions are the permissions this module has. Currently recognized
    * values are minter, burner and staking.
    */
-  permissions: string[];
+  permissions?: string[];
 }
 export interface ModuleAccountPermissionAminoMsg {
   type: "cosmos-sdk/ModuleAccountPermission";
@@ -118,11 +118,15 @@ export const Module = {
     return message;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      bech32Prefix: object.bech32_prefix,
-      moduleAccountPermissions: Array.isArray(object?.module_account_permissions) ? object.module_account_permissions.map((e: any) => ModuleAccountPermission.fromAmino(e)) : [],
-      authority: object.authority
-    };
+    const message = createBaseModule();
+    if (object.bech32_prefix !== undefined && object.bech32_prefix !== null) {
+      message.bech32Prefix = object.bech32_prefix;
+    }
+    message.moduleAccountPermissions = object.module_account_permissions?.map(e => ModuleAccountPermission.fromAmino(e)) || [];
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
@@ -202,10 +206,12 @@ export const ModuleAccountPermission = {
     return message;
   },
   fromAmino(object: ModuleAccountPermissionAmino): ModuleAccountPermission {
-    return {
-      account: object.account,
-      permissions: Array.isArray(object?.permissions) ? object.permissions.map((e: any) => e) : []
-    };
+    const message = createBaseModuleAccountPermission();
+    if (object.account !== undefined && object.account !== null) {
+      message.account = object.account;
+    }
+    message.permissions = object.permissions?.map(e => e) || [];
+    return message;
   },
   toAmino(message: ModuleAccountPermission): ModuleAccountPermissionAmino {
     const obj: any = {};

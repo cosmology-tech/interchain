@@ -1,5 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { DeepPartial } from "../../../helpers";
+import { DeepPartial, bytesFromBase64, base64FromBytes } from "../../../helpers";
 /** MsgInit defines the Create request type for the Msg/Create RPC method. */
 export interface MsgInit {
   /** sender is the address of the sender of this message. */
@@ -20,15 +20,15 @@ export interface MsgInitProtoMsg {
 /** MsgInit defines the Create request type for the Msg/Create RPC method. */
 export interface MsgInitAmino {
   /** sender is the address of the sender of this message. */
-  sender: string;
+  sender?: string;
   /** account_type is the type of the account to be created. */
-  account_type: string;
+  account_type?: string;
   /**
    * message is the message to be sent to the account, it's up to the account
    * implementation to decide what encoding format should be used to interpret
    * this message.
    */
-  message: Uint8Array;
+  message?: string;
 }
 export interface MsgInitAminoMsg {
   type: "cosmos-sdk/MsgInit";
@@ -54,9 +54,9 @@ export interface MsgInitResponseProtoMsg {
 /** MsgInitResponse defines the Create response type for the Msg/Create RPC method. */
 export interface MsgInitResponseAmino {
   /** account_address is the address of the newly created account. */
-  account_address: string;
+  account_address?: string;
   /** response is the response returned by the account implementation. */
-  response: Uint8Array;
+  response?: string;
 }
 export interface MsgInitResponseAminoMsg {
   type: "cosmos-sdk/MsgInitResponse";
@@ -83,11 +83,11 @@ export interface MsgExecuteProtoMsg {
 /** MsgExecute defines the Execute request type for the Msg/Execute RPC method. */
 export interface MsgExecuteAmino {
   /** sender is the address of the sender of this message. */
-  sender: string;
+  sender?: string;
   /** target is the address of the account to be executed. */
-  target: string;
+  target?: string;
   /** message is the message to be sent to the account, it's up to the account */
-  message: Uint8Array;
+  message?: string;
 }
 export interface MsgExecuteAminoMsg {
   type: "cosmos-sdk/MsgExecute";
@@ -111,7 +111,7 @@ export interface MsgExecuteResponseProtoMsg {
 /** MsgExecuteResponse defines the Execute response type for the Msg/Execute RPC method. */
 export interface MsgExecuteResponseAmino {
   /** response is the response returned by the account implementation. */
-  response: Uint8Array;
+  response?: string;
 }
 export interface MsgExecuteResponseAminoMsg {
   type: "cosmos-sdk/MsgExecuteResponse";
@@ -174,17 +174,23 @@ export const MsgInit = {
     return message;
   },
   fromAmino(object: MsgInitAmino): MsgInit {
-    return {
-      sender: object.sender,
-      accountType: object.account_type,
-      message: object.message
-    };
+    const message = createBaseMsgInit();
+    if (object.sender !== undefined && object.sender !== null) {
+      message.sender = object.sender;
+    }
+    if (object.account_type !== undefined && object.account_type !== null) {
+      message.accountType = object.account_type;
+    }
+    if (object.message !== undefined && object.message !== null) {
+      message.message = bytesFromBase64(object.message);
+    }
+    return message;
   },
   toAmino(message: MsgInit): MsgInitAmino {
     const obj: any = {};
     obj.sender = message.sender;
     obj.account_type = message.accountType;
-    obj.message = message.message;
+    obj.message = message.message ? base64FromBytes(message.message) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgInitAminoMsg): MsgInit {
@@ -254,15 +260,19 @@ export const MsgInitResponse = {
     return message;
   },
   fromAmino(object: MsgInitResponseAmino): MsgInitResponse {
-    return {
-      accountAddress: object.account_address,
-      response: object.response
-    };
+    const message = createBaseMsgInitResponse();
+    if (object.account_address !== undefined && object.account_address !== null) {
+      message.accountAddress = object.account_address;
+    }
+    if (object.response !== undefined && object.response !== null) {
+      message.response = bytesFromBase64(object.response);
+    }
+    return message;
   },
   toAmino(message: MsgInitResponse): MsgInitResponseAmino {
     const obj: any = {};
     obj.account_address = message.accountAddress;
-    obj.response = message.response;
+    obj.response = message.response ? base64FromBytes(message.response) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgInitResponseAminoMsg): MsgInitResponse {
@@ -340,17 +350,23 @@ export const MsgExecute = {
     return message;
   },
   fromAmino(object: MsgExecuteAmino): MsgExecute {
-    return {
-      sender: object.sender,
-      target: object.target,
-      message: object.message
-    };
+    const message = createBaseMsgExecute();
+    if (object.sender !== undefined && object.sender !== null) {
+      message.sender = object.sender;
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = object.target;
+    }
+    if (object.message !== undefined && object.message !== null) {
+      message.message = bytesFromBase64(object.message);
+    }
+    return message;
   },
   toAmino(message: MsgExecute): MsgExecuteAmino {
     const obj: any = {};
     obj.sender = message.sender;
     obj.target = message.target;
-    obj.message = message.message;
+    obj.message = message.message ? base64FromBytes(message.message) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgExecuteAminoMsg): MsgExecute {
@@ -412,13 +428,15 @@ export const MsgExecuteResponse = {
     return message;
   },
   fromAmino(object: MsgExecuteResponseAmino): MsgExecuteResponse {
-    return {
-      response: object.response
-    };
+    const message = createBaseMsgExecuteResponse();
+    if (object.response !== undefined && object.response !== null) {
+      message.response = bytesFromBase64(object.response);
+    }
+    return message;
   },
   toAmino(message: MsgExecuteResponse): MsgExecuteResponseAmino {
     const obj: any = {};
-    obj.response = message.response;
+    obj.response = message.response ? base64FromBytes(message.response) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgExecuteResponseAminoMsg): MsgExecuteResponse {

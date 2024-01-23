@@ -19,7 +19,7 @@ export interface MsgUpdateParamsProtoMsg {
 /** MsgUpdateParams defines the payload for Msg/UpdateParams */
 export interface MsgUpdateParamsAmino {
   /** signer address */
-  signer: string;
+  signer?: string;
   /**
    * params defines the 27-interchain-accounts/host parameters to update.
    * 
@@ -95,10 +95,14 @@ export const MsgUpdateParams = {
     return message;
   },
   fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
-    return {
-      signer: object.signer,
-      params: object?.params ? Params.fromAmino(object.params) : undefined
-    };
+    const message = createBaseMsgUpdateParams();
+    if (object.signer !== undefined && object.signer !== null) {
+      message.signer = object.signer;
+    }
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
   },
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
@@ -156,7 +160,8 @@ export const MsgUpdateParamsResponse = {
     return message;
   },
   fromAmino(_: MsgUpdateParamsResponseAmino): MsgUpdateParamsResponse {
-    return {};
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
   },
   toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
     const obj: any = {};

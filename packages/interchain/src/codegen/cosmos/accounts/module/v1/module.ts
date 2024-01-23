@@ -42,7 +42,8 @@ export const Module = {
     return message;
   },
   fromAmino(_: ModuleAmino): Module {
-    return {};
+    const message = createBaseModule();
+    return message;
   },
   toAmino(_: Module): ModuleAmino {
     const obj: any = {};

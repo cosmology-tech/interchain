@@ -23,9 +23,9 @@ export interface MsgSoftwareUpgradeProtoMsg {
  */
 export interface MsgSoftwareUpgradeAmino {
   /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
-  authority: string;
+  authority?: string;
   /** plan is the upgrade plan. */
-  plan?: PlanAmino;
+  plan: PlanAmino;
 }
 export interface MsgSoftwareUpgradeAminoMsg {
   type: "cosmos-sdk/MsgSoftwareUpgrade";
@@ -86,7 +86,7 @@ export interface MsgCancelUpgradeProtoMsg {
  */
 export interface MsgCancelUpgradeAmino {
   /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
-  authority: string;
+  authority?: string;
 }
 export interface MsgCancelUpgradeAminoMsg {
   type: "cosmos-sdk/MsgCancelUpgrade";
@@ -171,15 +171,19 @@ export const MsgSoftwareUpgrade = {
     return message;
   },
   fromAmino(object: MsgSoftwareUpgradeAmino): MsgSoftwareUpgrade {
-    return {
-      authority: object.authority,
-      plan: object?.plan ? Plan.fromAmino(object.plan) : undefined
-    };
+    const message = createBaseMsgSoftwareUpgrade();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.plan !== undefined && object.plan !== null) {
+      message.plan = Plan.fromAmino(object.plan);
+    }
+    return message;
   },
   toAmino(message: MsgSoftwareUpgrade): MsgSoftwareUpgradeAmino {
     const obj: any = {};
     obj.authority = message.authority;
-    obj.plan = message.plan ? Plan.toAmino(message.plan) : undefined;
+    obj.plan = message.plan ? Plan.toAmino(message.plan) : Plan.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: MsgSoftwareUpgradeAminoMsg): MsgSoftwareUpgrade {
@@ -232,7 +236,8 @@ export const MsgSoftwareUpgradeResponse = {
     return message;
   },
   fromAmino(_: MsgSoftwareUpgradeResponseAmino): MsgSoftwareUpgradeResponse {
-    return {};
+    const message = createBaseMsgSoftwareUpgradeResponse();
+    return message;
   },
   toAmino(_: MsgSoftwareUpgradeResponse): MsgSoftwareUpgradeResponseAmino {
     const obj: any = {};
@@ -297,9 +302,11 @@ export const MsgCancelUpgrade = {
     return message;
   },
   fromAmino(object: MsgCancelUpgradeAmino): MsgCancelUpgrade {
-    return {
-      authority: object.authority
-    };
+    const message = createBaseMsgCancelUpgrade();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    return message;
   },
   toAmino(message: MsgCancelUpgrade): MsgCancelUpgradeAmino {
     const obj: any = {};
@@ -356,7 +363,8 @@ export const MsgCancelUpgradeResponse = {
     return message;
   },
   fromAmino(_: MsgCancelUpgradeResponseAmino): MsgCancelUpgradeResponse {
-    return {};
+    const message = createBaseMsgCancelUpgradeResponse();
+    return message;
   },
   toAmino(_: MsgCancelUpgradeResponse): MsgCancelUpgradeResponseAmino {
     const obj: any = {};

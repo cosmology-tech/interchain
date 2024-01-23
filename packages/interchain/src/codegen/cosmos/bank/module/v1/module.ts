@@ -22,9 +22,9 @@ export interface ModuleAmino {
    * funds. If left empty it defaults to the list of account names supplied in the auth module configuration as
    * module_account_permissions
    */
-  blocked_module_accounts_override: string[];
+  blocked_module_accounts_override?: string[];
   /** authority defines the custom module authority. If not set, defaults to the governance module. */
-  authority: string;
+  authority?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -80,10 +80,12 @@ export const Module = {
     return message;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      blockedModuleAccountsOverride: Array.isArray(object?.blocked_module_accounts_override) ? object.blocked_module_accounts_override.map((e: any) => e) : [],
-      authority: object.authority
-    };
+    const message = createBaseModule();
+    message.blockedModuleAccountsOverride = object.blocked_module_accounts_override?.map(e => e) || [];
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};

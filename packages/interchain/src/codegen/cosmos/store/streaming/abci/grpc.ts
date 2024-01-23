@@ -4,8 +4,8 @@ import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { DeepPartial } from "../../../../helpers";
 /** ListenEndBlockRequest is the request type for the ListenEndBlock RPC method */
 export interface ListenFinalizeBlockRequest {
-  req: RequestFinalizeBlock;
-  res: ResponseFinalizeBlock;
+  req?: RequestFinalizeBlock;
+  res?: ResponseFinalizeBlock;
 }
 export interface ListenFinalizeBlockRequestProtoMsg {
   typeUrl: "/cosmos.store.streaming.abci.ListenFinalizeBlockRequest";
@@ -22,8 +22,8 @@ export interface ListenFinalizeBlockRequestAminoMsg {
 }
 /** ListenEndBlockRequest is the request type for the ListenEndBlock RPC method */
 export interface ListenFinalizeBlockRequestSDKType {
-  req: RequestFinalizeBlockSDKType;
-  res: ResponseFinalizeBlockSDKType;
+  req?: RequestFinalizeBlockSDKType;
+  res?: ResponseFinalizeBlockSDKType;
 }
 /** ListenEndBlockResponse is the response type for the ListenEndBlock RPC method */
 export interface ListenFinalizeBlockResponse {}
@@ -43,7 +43,7 @@ export interface ListenFinalizeBlockResponseSDKType {}
 export interface ListenCommitRequest {
   /** explicitly pass in block height as ResponseCommit does not contain this info */
   blockHeight: bigint;
-  res: ResponseCommit;
+  res?: ResponseCommit;
   changeSet: StoreKVPair[];
 }
 export interface ListenCommitRequestProtoMsg {
@@ -53,9 +53,9 @@ export interface ListenCommitRequestProtoMsg {
 /** ListenCommitRequest is the request type for the ListenCommit RPC method */
 export interface ListenCommitRequestAmino {
   /** explicitly pass in block height as ResponseCommit does not contain this info */
-  block_height: string;
+  block_height?: string;
   res?: ResponseCommitAmino;
-  change_set: StoreKVPairAmino[];
+  change_set?: StoreKVPairAmino[];
 }
 export interface ListenCommitRequestAminoMsg {
   type: "cosmos-sdk/ListenCommitRequest";
@@ -64,7 +64,7 @@ export interface ListenCommitRequestAminoMsg {
 /** ListenCommitRequest is the request type for the ListenCommit RPC method */
 export interface ListenCommitRequestSDKType {
   block_height: bigint;
-  res: ResponseCommitSDKType;
+  res?: ResponseCommitSDKType;
   change_set: StoreKVPairSDKType[];
 }
 /** ListenCommitResponse is the response type for the ListenCommit RPC method */
@@ -83,8 +83,8 @@ export interface ListenCommitResponseAminoMsg {
 export interface ListenCommitResponseSDKType {}
 function createBaseListenFinalizeBlockRequest(): ListenFinalizeBlockRequest {
   return {
-    req: RequestFinalizeBlock.fromPartial({}),
-    res: ResponseFinalizeBlock.fromPartial({})
+    req: undefined,
+    res: undefined
   };
 }
 export const ListenFinalizeBlockRequest = {
@@ -126,10 +126,14 @@ export const ListenFinalizeBlockRequest = {
     return message;
   },
   fromAmino(object: ListenFinalizeBlockRequestAmino): ListenFinalizeBlockRequest {
-    return {
-      req: object?.req ? RequestFinalizeBlock.fromAmino(object.req) : undefined,
-      res: object?.res ? ResponseFinalizeBlock.fromAmino(object.res) : undefined
-    };
+    const message = createBaseListenFinalizeBlockRequest();
+    if (object.req !== undefined && object.req !== null) {
+      message.req = RequestFinalizeBlock.fromAmino(object.req);
+    }
+    if (object.res !== undefined && object.res !== null) {
+      message.res = ResponseFinalizeBlock.fromAmino(object.res);
+    }
+    return message;
   },
   toAmino(message: ListenFinalizeBlockRequest): ListenFinalizeBlockRequestAmino {
     const obj: any = {};
@@ -187,7 +191,8 @@ export const ListenFinalizeBlockResponse = {
     return message;
   },
   fromAmino(_: ListenFinalizeBlockResponseAmino): ListenFinalizeBlockResponse {
-    return {};
+    const message = createBaseListenFinalizeBlockResponse();
+    return message;
   },
   toAmino(_: ListenFinalizeBlockResponse): ListenFinalizeBlockResponseAmino {
     const obj: any = {};
@@ -218,7 +223,7 @@ export const ListenFinalizeBlockResponse = {
 function createBaseListenCommitRequest(): ListenCommitRequest {
   return {
     blockHeight: BigInt(0),
-    res: ResponseCommit.fromPartial({}),
+    res: undefined,
     changeSet: []
   };
 }
@@ -268,11 +273,15 @@ export const ListenCommitRequest = {
     return message;
   },
   fromAmino(object: ListenCommitRequestAmino): ListenCommitRequest {
-    return {
-      blockHeight: BigInt(object.block_height),
-      res: object?.res ? ResponseCommit.fromAmino(object.res) : undefined,
-      changeSet: Array.isArray(object?.change_set) ? object.change_set.map((e: any) => StoreKVPair.fromAmino(e)) : []
-    };
+    const message = createBaseListenCommitRequest();
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = BigInt(object.block_height);
+    }
+    if (object.res !== undefined && object.res !== null) {
+      message.res = ResponseCommit.fromAmino(object.res);
+    }
+    message.changeSet = object.change_set?.map(e => StoreKVPair.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: ListenCommitRequest): ListenCommitRequestAmino {
     const obj: any = {};
@@ -335,7 +344,8 @@ export const ListenCommitResponse = {
     return message;
   },
   fromAmino(_: ListenCommitResponseAmino): ListenCommitResponse {
-    return {};
+    const message = createBaseListenCommitResponse();
+    return message;
   },
   toAmino(_: ListenCommitResponse): ListenCommitResponseAmino {
     const obj: any = {};

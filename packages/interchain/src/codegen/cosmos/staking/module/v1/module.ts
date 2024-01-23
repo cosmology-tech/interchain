@@ -26,13 +26,13 @@ export interface ModuleAmino {
    * of module names which provide a staking hooks instance. If no order is
    * provided, then hooks will be applied in alphabetical order of module names.
    */
-  hooks_order: string[];
+  hooks_order?: string[];
   /** authority defines the custom module authority. If not set, defaults to the governance module. */
-  authority: string;
+  authority?: string;
   /** bech32_prefix_validator is the bech32 validator prefix for the app. */
-  bech32_prefix_validator: string;
+  bech32_prefix_validator?: string;
   /** bech32_prefix_consensus is the bech32 consensus node prefix for the app. */
-  bech32_prefix_consensus: string;
+  bech32_prefix_consensus?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -106,12 +106,18 @@ export const Module = {
     return message;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      hooksOrder: Array.isArray(object?.hooks_order) ? object.hooks_order.map((e: any) => e) : [],
-      authority: object.authority,
-      bech32PrefixValidator: object.bech32_prefix_validator,
-      bech32PrefixConsensus: object.bech32_prefix_consensus
-    };
+    const message = createBaseModule();
+    message.hooksOrder = object.hooks_order?.map(e => e) || [];
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.bech32_prefix_validator !== undefined && object.bech32_prefix_validator !== null) {
+      message.bech32PrefixValidator = object.bech32_prefix_validator;
+    }
+    if (object.bech32_prefix_consensus !== undefined && object.bech32_prefix_consensus !== null) {
+      message.bech32PrefixConsensus = object.bech32_prefix_consensus;
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};

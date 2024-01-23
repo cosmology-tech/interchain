@@ -1,5 +1,5 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { DeepPartial } from "../../../helpers";
+import { DeepPartial, bytesFromBase64, base64FromBytes } from "../../../helpers";
 /** AccountQueryRequest is the request type for the Query/AccountQuery RPC */
 export interface AccountQueryRequest {
   /** target defines the account to be queried. */
@@ -14,9 +14,9 @@ export interface AccountQueryRequestProtoMsg {
 /** AccountQueryRequest is the request type for the Query/AccountQuery RPC */
 export interface AccountQueryRequestAmino {
   /** target defines the account to be queried. */
-  target: string;
+  target?: string;
   /** request defines the query message being sent to the account. */
-  request: Uint8Array;
+  request?: string;
 }
 export interface AccountQueryRequestAminoMsg {
   type: "cosmos-sdk/AccountQueryRequest";
@@ -39,7 +39,7 @@ export interface AccountQueryResponseProtoMsg {
 /** AccountQueryResponse is the response type for the Query/AccountQuery RPC method. */
 export interface AccountQueryResponseAmino {
   /** response defines the query response of the account. */
-  response: Uint8Array;
+  response?: string;
 }
 export interface AccountQueryResponseAminoMsg {
   type: "cosmos-sdk/AccountQueryResponse";
@@ -94,15 +94,19 @@ export const AccountQueryRequest = {
     return message;
   },
   fromAmino(object: AccountQueryRequestAmino): AccountQueryRequest {
-    return {
-      target: object.target,
-      request: object.request
-    };
+    const message = createBaseAccountQueryRequest();
+    if (object.target !== undefined && object.target !== null) {
+      message.target = object.target;
+    }
+    if (object.request !== undefined && object.request !== null) {
+      message.request = bytesFromBase64(object.request);
+    }
+    return message;
   },
   toAmino(message: AccountQueryRequest): AccountQueryRequestAmino {
     const obj: any = {};
     obj.target = message.target;
-    obj.request = message.request;
+    obj.request = message.request ? base64FromBytes(message.request) : undefined;
     return obj;
   },
   fromAminoMsg(object: AccountQueryRequestAminoMsg): AccountQueryRequest {
@@ -164,13 +168,15 @@ export const AccountQueryResponse = {
     return message;
   },
   fromAmino(object: AccountQueryResponseAmino): AccountQueryResponse {
-    return {
-      response: object.response
-    };
+    const message = createBaseAccountQueryResponse();
+    if (object.response !== undefined && object.response !== null) {
+      message.response = bytesFromBase64(object.response);
+    }
+    return message;
   },
   toAmino(message: AccountQueryResponse): AccountQueryResponseAmino {
     const obj: any = {};
-    obj.response = message.response;
+    obj.response = message.response ? base64FromBytes(message.response) : undefined;
     return obj;
   },
   fromAminoMsg(object: AccountQueryResponseAminoMsg): AccountQueryResponse {

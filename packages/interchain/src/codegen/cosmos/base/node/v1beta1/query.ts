@@ -1,6 +1,6 @@
 import { Timestamp } from "../../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
-import { DeepPartial, toTimestamp, fromTimestamp } from "../../../../helpers";
+import { DeepPartial, toTimestamp, fromTimestamp, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 /** ConfigRequest defines the request structure for the Config gRPC query. */
 export interface ConfigRequest {}
 export interface ConfigRequestProtoMsg {
@@ -28,10 +28,10 @@ export interface ConfigResponseProtoMsg {
 }
 /** ConfigResponse defines the response structure for the Config gRPC query. */
 export interface ConfigResponseAmino {
-  minimum_gas_price: string;
+  minimum_gas_price?: string;
   /** pruning settings */
-  pruning_keep_recent: string;
-  pruning_interval: string;
+  pruning_keep_recent?: string;
+  pruning_interval?: string;
 }
 export interface ConfigResponseAminoMsg {
   type: "cosmos-sdk/ConfigResponse";
@@ -64,7 +64,7 @@ export interface StatusResponse {
   /** current block height */
   height: bigint;
   /** block height timestamp */
-  timestamp: Date;
+  timestamp?: Date;
   /** app hash of the current block */
   appHash: Uint8Array;
   /** validator hash provided by the consensus header */
@@ -77,15 +77,15 @@ export interface StatusResponseProtoMsg {
 /** StateResponse defines the response structure for the status of a node. */
 export interface StatusResponseAmino {
   /** earliest block height available in the store */
-  earliest_store_height: string;
+  earliest_store_height?: string;
   /** current block height */
-  height: string;
+  height?: string;
   /** block height timestamp */
-  timestamp?: Date;
+  timestamp?: string;
   /** app hash of the current block */
-  app_hash: Uint8Array;
+  app_hash?: string;
   /** validator hash provided by the consensus header */
-  validator_hash: Uint8Array;
+  validator_hash?: string;
 }
 export interface StatusResponseAminoMsg {
   type: "cosmos-sdk/StatusResponse";
@@ -95,7 +95,7 @@ export interface StatusResponseAminoMsg {
 export interface StatusResponseSDKType {
   earliest_store_height: bigint;
   height: bigint;
-  timestamp: Date;
+  timestamp?: Date;
   app_hash: Uint8Array;
   validator_hash: Uint8Array;
 }
@@ -127,7 +127,8 @@ export const ConfigRequest = {
     return message;
   },
   fromAmino(_: ConfigRequestAmino): ConfigRequest {
-    return {};
+    const message = createBaseConfigRequest();
+    return message;
   },
   toAmino(_: ConfigRequest): ConfigRequestAmino {
     const obj: any = {};
@@ -208,11 +209,17 @@ export const ConfigResponse = {
     return message;
   },
   fromAmino(object: ConfigResponseAmino): ConfigResponse {
-    return {
-      minimumGasPrice: object.minimum_gas_price,
-      pruningKeepRecent: object.pruning_keep_recent,
-      pruningInterval: object.pruning_interval
-    };
+    const message = createBaseConfigResponse();
+    if (object.minimum_gas_price !== undefined && object.minimum_gas_price !== null) {
+      message.minimumGasPrice = object.minimum_gas_price;
+    }
+    if (object.pruning_keep_recent !== undefined && object.pruning_keep_recent !== null) {
+      message.pruningKeepRecent = object.pruning_keep_recent;
+    }
+    if (object.pruning_interval !== undefined && object.pruning_interval !== null) {
+      message.pruningInterval = object.pruning_interval;
+    }
+    return message;
   },
   toAmino(message: ConfigResponse): ConfigResponseAmino {
     const obj: any = {};
@@ -271,7 +278,8 @@ export const StatusRequest = {
     return message;
   },
   fromAmino(_: StatusRequestAmino): StatusRequest {
-    return {};
+    const message = createBaseStatusRequest();
+    return message;
   },
   toAmino(_: StatusRequest): StatusRequestAmino {
     const obj: any = {};
@@ -303,7 +311,7 @@ function createBaseStatusResponse(): StatusResponse {
   return {
     earliestStoreHeight: BigInt(0),
     height: BigInt(0),
-    timestamp: new Date(),
+    timestamp: undefined,
     appHash: new Uint8Array(),
     validatorHash: new Uint8Array()
   };
@@ -368,21 +376,31 @@ export const StatusResponse = {
     return message;
   },
   fromAmino(object: StatusResponseAmino): StatusResponse {
-    return {
-      earliestStoreHeight: BigInt(object.earliest_store_height),
-      height: BigInt(object.height),
-      timestamp: object.timestamp,
-      appHash: object.app_hash,
-      validatorHash: object.validator_hash
-    };
+    const message = createBaseStatusResponse();
+    if (object.earliest_store_height !== undefined && object.earliest_store_height !== null) {
+      message.earliestStoreHeight = BigInt(object.earliest_store_height);
+    }
+    if (object.height !== undefined && object.height !== null) {
+      message.height = BigInt(object.height);
+    }
+    if (object.timestamp !== undefined && object.timestamp !== null) {
+      message.timestamp = fromTimestamp(Timestamp.fromAmino(object.timestamp));
+    }
+    if (object.app_hash !== undefined && object.app_hash !== null) {
+      message.appHash = bytesFromBase64(object.app_hash);
+    }
+    if (object.validator_hash !== undefined && object.validator_hash !== null) {
+      message.validatorHash = bytesFromBase64(object.validator_hash);
+    }
+    return message;
   },
   toAmino(message: StatusResponse): StatusResponseAmino {
     const obj: any = {};
     obj.earliest_store_height = message.earliestStoreHeight ? message.earliestStoreHeight.toString() : undefined;
     obj.height = message.height ? message.height.toString() : undefined;
-    obj.timestamp = message.timestamp;
-    obj.app_hash = message.appHash;
-    obj.validator_hash = message.validatorHash;
+    obj.timestamp = message.timestamp ? Timestamp.toAmino(toTimestamp(message.timestamp)) : undefined;
+    obj.app_hash = message.appHash ? base64FromBytes(message.appHash) : undefined;
+    obj.validator_hash = message.validatorHash ? base64FromBytes(message.validatorHash) : undefined;
     return obj;
   },
   fromAminoMsg(object: StatusResponseAminoMsg): StatusResponse {

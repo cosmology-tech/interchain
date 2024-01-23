@@ -12,7 +12,7 @@ export interface QueryAccountRequestProtoMsg {
 }
 /** QueryAccountRequest is the request type for the Query/Account RPC method. */
 export interface QueryAccountRequestAmino {
-  address: string;
+  address?: string;
 }
 export interface QueryAccountRequestAminoMsg {
   type: "cosmos-sdk/QueryAccountRequest";
@@ -24,7 +24,7 @@ export interface QueryAccountRequestSDKType {
 }
 /** AccountResponse is the response type for the Query/Account RPC method. */
 export interface AccountResponse {
-  permission: Permissions;
+  permission?: Permissions;
 }
 export interface AccountResponseProtoMsg {
   typeUrl: "/cosmos.circuit.v1.AccountResponse";
@@ -40,7 +40,7 @@ export interface AccountResponseAminoMsg {
 }
 /** AccountResponse is the response type for the Query/Account RPC method. */
 export interface AccountResponseSDKType {
-  permission: PermissionsSDKType;
+  permission?: PermissionsSDKType;
 }
 /** QueryAccountsRequest is the request type for the Query/Accounts RPC method. */
 export interface QueryAccountsRequest {
@@ -68,7 +68,7 @@ export interface QueryAccountsRequestSDKType {
 export interface AccountsResponse {
   accounts: GenesisAccountPermissions[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse;
+  pagination?: PageResponse;
 }
 export interface AccountsResponseProtoMsg {
   typeUrl: "/cosmos.circuit.v1.AccountsResponse";
@@ -76,7 +76,7 @@ export interface AccountsResponseProtoMsg {
 }
 /** AccountsResponse is the response type for the Query/Accounts RPC method. */
 export interface AccountsResponseAmino {
-  accounts: GenesisAccountPermissionsAmino[];
+  accounts?: GenesisAccountPermissionsAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino;
 }
@@ -87,7 +87,7 @@ export interface AccountsResponseAminoMsg {
 /** AccountsResponse is the response type for the Query/Accounts RPC method. */
 export interface AccountsResponseSDKType {
   accounts: GenesisAccountPermissionsSDKType[];
-  pagination: PageResponseSDKType;
+  pagination?: PageResponseSDKType;
 }
 /** QueryDisableListRequest is the request type for the Query/DisabledList RPC method. */
 export interface QueryDisabledListRequest {}
@@ -113,7 +113,7 @@ export interface DisabledListResponseProtoMsg {
 }
 /** DisabledListResponse is the response type for the Query/DisabledList RPC method. */
 export interface DisabledListResponseAmino {
-  disabled_list: string[];
+  disabled_list?: string[];
 }
 export interface DisabledListResponseAminoMsg {
   type: "cosmos-sdk/DisabledListResponse";
@@ -160,9 +160,11 @@ export const QueryAccountRequest = {
     return message;
   },
   fromAmino(object: QueryAccountRequestAmino): QueryAccountRequest {
-    return {
-      address: object.address
-    };
+    const message = createBaseQueryAccountRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
   },
   toAmino(message: QueryAccountRequest): QueryAccountRequestAmino {
     const obj: any = {};
@@ -193,7 +195,7 @@ export const QueryAccountRequest = {
 };
 function createBaseAccountResponse(): AccountResponse {
   return {
-    permission: Permissions.fromPartial({})
+    permission: undefined
   };
 }
 export const AccountResponse = {
@@ -228,9 +230,11 @@ export const AccountResponse = {
     return message;
   },
   fromAmino(object: AccountResponseAmino): AccountResponse {
-    return {
-      permission: object?.permission ? Permissions.fromAmino(object.permission) : undefined
-    };
+    const message = createBaseAccountResponse();
+    if (object.permission !== undefined && object.permission !== null) {
+      message.permission = Permissions.fromAmino(object.permission);
+    }
+    return message;
   },
   toAmino(message: AccountResponse): AccountResponseAmino {
     const obj: any = {};
@@ -261,7 +265,7 @@ export const AccountResponse = {
 };
 function createBaseQueryAccountsRequest(): QueryAccountsRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAccountsRequest = {
@@ -296,9 +300,11 @@ export const QueryAccountsRequest = {
     return message;
   },
   fromAmino(object: QueryAccountsRequestAmino): QueryAccountsRequest {
-    return {
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryAccountsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryAccountsRequest): QueryAccountsRequestAmino {
     const obj: any = {};
@@ -330,7 +336,7 @@ export const QueryAccountsRequest = {
 function createBaseAccountsResponse(): AccountsResponse {
   return {
     accounts: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const AccountsResponse = {
@@ -372,10 +378,12 @@ export const AccountsResponse = {
     return message;
   },
   fromAmino(object: AccountsResponseAmino): AccountsResponse {
-    return {
-      accounts: Array.isArray(object?.accounts) ? object.accounts.map((e: any) => GenesisAccountPermissions.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseAccountsResponse();
+    message.accounts = object.accounts?.map(e => GenesisAccountPermissions.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: AccountsResponse): AccountsResponseAmino {
     const obj: any = {};
@@ -437,7 +445,8 @@ export const QueryDisabledListRequest = {
     return message;
   },
   fromAmino(_: QueryDisabledListRequestAmino): QueryDisabledListRequest {
-    return {};
+    const message = createBaseQueryDisabledListRequest();
+    return message;
   },
   toAmino(_: QueryDisabledListRequest): QueryDisabledListRequestAmino {
     const obj: any = {};
@@ -502,9 +511,9 @@ export const DisabledListResponse = {
     return message;
   },
   fromAmino(object: DisabledListResponseAmino): DisabledListResponse {
-    return {
-      disabledList: Array.isArray(object?.disabled_list) ? object.disabled_list.map((e: any) => e) : []
-    };
+    const message = createBaseDisabledListResponse();
+    message.disabledList = object.disabled_list?.map(e => e) || [];
+    return message;
   },
   toAmino(message: DisabledListResponse): DisabledListResponseAmino {
     const obj: any = {};

@@ -22,7 +22,7 @@ export interface QueryParamsResponse {
    * Please note that `params.version` is not populated in this response, it is
    * tracked separately in the x/upgrade module.
    */
-  params: ConsensusParams;
+  params?: ConsensusParams;
 }
 export interface QueryParamsResponseProtoMsg {
   typeUrl: "/cosmos.consensus.v1.QueryParamsResponse";
@@ -43,7 +43,7 @@ export interface QueryParamsResponseAminoMsg {
 }
 /** QueryParamsResponse defines the response type for querying x/consensus parameters. */
 export interface QueryParamsResponseSDKType {
-  params: ConsensusParamsSDKType;
+  params?: ConsensusParamsSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -73,7 +73,8 @@ export const QueryParamsRequest = {
     return message;
   },
   fromAmino(_: QueryParamsRequestAmino): QueryParamsRequest {
-    return {};
+    const message = createBaseQueryParamsRequest();
+    return message;
   },
   toAmino(_: QueryParamsRequest): QueryParamsRequestAmino {
     const obj: any = {};
@@ -103,7 +104,7 @@ export const QueryParamsRequest = {
 };
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
-    params: ConsensusParams.fromPartial({})
+    params: undefined
   };
 }
 export const QueryParamsResponse = {
@@ -138,9 +139,11 @@ export const QueryParamsResponse = {
     return message;
   },
   fromAmino(object: QueryParamsResponseAmino): QueryParamsResponse {
-    return {
-      params: object?.params ? ConsensusParams.fromAmino(object.params) : undefined
-    };
+    const message = createBaseQueryParamsResponse();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = ConsensusParams.fromAmino(object.params);
+    }
+    return message;
   },
   toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
     const obj: any = {};

@@ -14,9 +14,9 @@ export interface ModuleProtoMsg {
 /** Module is the config object of the crisis module. */
 export interface ModuleAmino {
   /** fee_collector_name is the name of the FeeCollector ModuleAccount. */
-  fee_collector_name: string;
+  fee_collector_name?: string;
   /** authority defines the custom module authority. If not set, defaults to the governance module. */
-  authority: string;
+  authority?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -72,10 +72,14 @@ export const Module = {
     return message;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      feeCollectorName: object.fee_collector_name,
-      authority: object.authority
-    };
+    const message = createBaseModule();
+    if (object.fee_collector_name !== undefined && object.fee_collector_name !== null) {
+      message.feeCollectorName = object.fee_collector_name;
+    }
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};

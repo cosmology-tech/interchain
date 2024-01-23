@@ -15,7 +15,7 @@ export interface MsgAuthorizeCircuitBreaker {
    * These will overwrite any existing permissions. LEVEL_NONE_UNSPECIFIED can
    * be specified to revoke all permissions.
    */
-  permissions: Permissions;
+  permissions?: Permissions;
 }
 export interface MsgAuthorizeCircuitBreakerProtoMsg {
   typeUrl: "/cosmos.circuit.v1.MsgAuthorizeCircuitBreaker";
@@ -27,9 +27,9 @@ export interface MsgAuthorizeCircuitBreakerAmino {
    * granter is the granter of the circuit breaker permissions and must have
    * LEVEL_SUPER_ADMIN.
    */
-  granter: string;
+  granter?: string;
   /** grantee is the account authorized with the provided permissions. */
-  grantee: string;
+  grantee?: string;
   /**
    * permissions are the circuit breaker permissions that the grantee receives.
    * These will overwrite any existing permissions. LEVEL_NONE_UNSPECIFIED can
@@ -45,7 +45,7 @@ export interface MsgAuthorizeCircuitBreakerAminoMsg {
 export interface MsgAuthorizeCircuitBreakerSDKType {
   granter: string;
   grantee: string;
-  permissions: PermissionsSDKType;
+  permissions?: PermissionsSDKType;
 }
 /** MsgAuthorizeCircuitBreakerResponse defines the Msg/AuthorizeCircuitBreaker response type. */
 export interface MsgAuthorizeCircuitBreakerResponse {
@@ -57,7 +57,7 @@ export interface MsgAuthorizeCircuitBreakerResponseProtoMsg {
 }
 /** MsgAuthorizeCircuitBreakerResponse defines the Msg/AuthorizeCircuitBreaker response type. */
 export interface MsgAuthorizeCircuitBreakerResponseAmino {
-  success: boolean;
+  success?: boolean;
 }
 export interface MsgAuthorizeCircuitBreakerResponseAminoMsg {
   type: "cosmos-sdk/MsgAuthorizeCircuitBreakerResponse";
@@ -87,7 +87,7 @@ export interface MsgTripCircuitBreakerProtoMsg {
 /** MsgTripCircuitBreaker defines the Msg/TripCircuitBreaker request type. */
 export interface MsgTripCircuitBreakerAmino {
   /** authority is the account authorized to trip the circuit breaker. */
-  authority: string;
+  authority?: string;
   /**
    * msg_type_urls specifies a list of type URLs to immediately stop processing.
    * IF IT IS LEFT EMPTY, ALL MSG PROCESSING WILL STOP IMMEDIATELY.
@@ -95,7 +95,7 @@ export interface MsgTripCircuitBreakerAmino {
    * authority does not have permissions to trip the specified msg type URLs
    * (or all URLs), the operation will fail.
    */
-  msg_type_urls: string[];
+  msg_type_urls?: string[];
 }
 export interface MsgTripCircuitBreakerAminoMsg {
   type: "cosmos-sdk/MsgTripCircuitBreaker";
@@ -116,7 +116,7 @@ export interface MsgTripCircuitBreakerResponseProtoMsg {
 }
 /** MsgTripCircuitBreakerResponse defines the Msg/TripCircuitBreaker response type. */
 export interface MsgTripCircuitBreakerResponseAmino {
-  success: boolean;
+  success?: boolean;
 }
 export interface MsgTripCircuitBreakerResponseAminoMsg {
   type: "cosmos-sdk/MsgTripCircuitBreakerResponse";
@@ -144,13 +144,13 @@ export interface MsgResetCircuitBreakerProtoMsg {
 /** MsgResetCircuitBreaker defines the Msg/ResetCircuitBreaker request type. */
 export interface MsgResetCircuitBreakerAmino {
   /** authority is the account authorized to trip or reset the circuit breaker. */
-  authority: string;
+  authority?: string;
   /**
    * msg_type_urls specifies a list of Msg type URLs to resume processing. If
    * it is left empty all Msg processing for type URLs that the account is
    * authorized to trip will resume.
    */
-  msg_type_urls: string[];
+  msg_type_urls?: string[];
 }
 export interface MsgResetCircuitBreakerAminoMsg {
   type: "cosmos-sdk/MsgResetCircuitBreaker";
@@ -171,7 +171,7 @@ export interface MsgResetCircuitBreakerResponseProtoMsg {
 }
 /** MsgResetCircuitBreakerResponse defines the Msg/ResetCircuitBreaker response type. */
 export interface MsgResetCircuitBreakerResponseAmino {
-  success: boolean;
+  success?: boolean;
 }
 export interface MsgResetCircuitBreakerResponseAminoMsg {
   type: "cosmos-sdk/MsgResetCircuitBreakerResponse";
@@ -185,7 +185,7 @@ function createBaseMsgAuthorizeCircuitBreaker(): MsgAuthorizeCircuitBreaker {
   return {
     granter: "",
     grantee: "",
-    permissions: Permissions.fromPartial({})
+    permissions: undefined
   };
 }
 export const MsgAuthorizeCircuitBreaker = {
@@ -234,11 +234,17 @@ export const MsgAuthorizeCircuitBreaker = {
     return message;
   },
   fromAmino(object: MsgAuthorizeCircuitBreakerAmino): MsgAuthorizeCircuitBreaker {
-    return {
-      granter: object.granter,
-      grantee: object.grantee,
-      permissions: object?.permissions ? Permissions.fromAmino(object.permissions) : undefined
-    };
+    const message = createBaseMsgAuthorizeCircuitBreaker();
+    if (object.granter !== undefined && object.granter !== null) {
+      message.granter = object.granter;
+    }
+    if (object.grantee !== undefined && object.grantee !== null) {
+      message.grantee = object.grantee;
+    }
+    if (object.permissions !== undefined && object.permissions !== null) {
+      message.permissions = Permissions.fromAmino(object.permissions);
+    }
+    return message;
   },
   toAmino(message: MsgAuthorizeCircuitBreaker): MsgAuthorizeCircuitBreakerAmino {
     const obj: any = {};
@@ -306,9 +312,11 @@ export const MsgAuthorizeCircuitBreakerResponse = {
     return message;
   },
   fromAmino(object: MsgAuthorizeCircuitBreakerResponseAmino): MsgAuthorizeCircuitBreakerResponse {
-    return {
-      success: object.success
-    };
+    const message = createBaseMsgAuthorizeCircuitBreakerResponse();
+    if (object.success !== undefined && object.success !== null) {
+      message.success = object.success;
+    }
+    return message;
   },
   toAmino(message: MsgAuthorizeCircuitBreakerResponse): MsgAuthorizeCircuitBreakerResponseAmino {
     const obj: any = {};
@@ -382,10 +390,12 @@ export const MsgTripCircuitBreaker = {
     return message;
   },
   fromAmino(object: MsgTripCircuitBreakerAmino): MsgTripCircuitBreaker {
-    return {
-      authority: object.authority,
-      msgTypeUrls: Array.isArray(object?.msg_type_urls) ? object.msg_type_urls.map((e: any) => e) : []
-    };
+    const message = createBaseMsgTripCircuitBreaker();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    message.msgTypeUrls = object.msg_type_urls?.map(e => e) || [];
+    return message;
   },
   toAmino(message: MsgTripCircuitBreaker): MsgTripCircuitBreakerAmino {
     const obj: any = {};
@@ -456,9 +466,11 @@ export const MsgTripCircuitBreakerResponse = {
     return message;
   },
   fromAmino(object: MsgTripCircuitBreakerResponseAmino): MsgTripCircuitBreakerResponse {
-    return {
-      success: object.success
-    };
+    const message = createBaseMsgTripCircuitBreakerResponse();
+    if (object.success !== undefined && object.success !== null) {
+      message.success = object.success;
+    }
+    return message;
   },
   toAmino(message: MsgTripCircuitBreakerResponse): MsgTripCircuitBreakerResponseAmino {
     const obj: any = {};
@@ -532,10 +544,12 @@ export const MsgResetCircuitBreaker = {
     return message;
   },
   fromAmino(object: MsgResetCircuitBreakerAmino): MsgResetCircuitBreaker {
-    return {
-      authority: object.authority,
-      msgTypeUrls: Array.isArray(object?.msg_type_urls) ? object.msg_type_urls.map((e: any) => e) : []
-    };
+    const message = createBaseMsgResetCircuitBreaker();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    message.msgTypeUrls = object.msg_type_urls?.map(e => e) || [];
+    return message;
   },
   toAmino(message: MsgResetCircuitBreaker): MsgResetCircuitBreakerAmino {
     const obj: any = {};
@@ -606,9 +620,11 @@ export const MsgResetCircuitBreakerResponse = {
     return message;
   },
   fromAmino(object: MsgResetCircuitBreakerResponseAmino): MsgResetCircuitBreakerResponse {
-    return {
-      success: object.success
-    };
+    const message = createBaseMsgResetCircuitBreakerResponse();
+    if (object.success !== undefined && object.success !== null) {
+      message.success = object.success;
+    }
+    return message;
   },
   toAmino(message: MsgResetCircuitBreakerResponse): MsgResetCircuitBreakerResponseAmino {
     const obj: any = {};

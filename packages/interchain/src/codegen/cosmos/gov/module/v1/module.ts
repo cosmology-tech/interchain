@@ -20,9 +20,9 @@ export interface ModuleAmino {
    * max_metadata_len defines the maximum proposal metadata length.
    * Defaults to 255 if not explicitly set.
    */
-  max_metadata_len: string;
+  max_metadata_len?: string;
   /** authority defines the custom module authority. If not set, defaults to the governance module. */
-  authority: string;
+  authority?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -78,10 +78,14 @@ export const Module = {
     return message;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      maxMetadataLen: BigInt(object.max_metadata_len),
-      authority: object.authority
-    };
+    const message = createBaseModule();
+    if (object.max_metadata_len !== undefined && object.max_metadata_len !== null) {
+      message.maxMetadataLen = BigInt(object.max_metadata_len);
+    }
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
