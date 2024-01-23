@@ -101,6 +101,7 @@ telescope({
       type: "tendermint",
       enabled: true,
       camelCase: true,
+      useConnectComet: true,
     },
     packages: {
       cosmos: {

@@ -66,11 +66,11 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@cosmjs/amino": "0.29.4",
-    "@cosmjs/proto-signing": "0.29.4",
-    "@cosmjs/stargate": "0.29.4",
-    "@cosmjs/tendermint-rpc": "^0.29.4",
-    "@cosmology/lcd": "^0.12.0"
+    "@cosmjs/amino": "0.32.2",
+    "@cosmjs/proto-signing": "0.32.2",
+    "@cosmjs/stargate": "0.32.2",
+    "@cosmjs/tendermint-rpc": "0.32.2",
+    "@cosmology/lcd": "^0.13.3"
   },
   "gitHead": "e679e23197b229f16d124e49b11e89c61ce94a30"
 }
