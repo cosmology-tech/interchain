@@ -122,6 +122,7 @@ telescope({
     rpcClients: {
       enabled: true,
       camelCase: true,
+      useConnectComet: true,
     },
   },
 })
