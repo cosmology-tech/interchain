@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** BIP44Params is used as path field in ledger item in Record. */
 export interface BIP44Params {
   /** purpose is a constant set to 44' (or 0x8000002C) following the BIP43 recommendation */
@@ -23,18 +24,18 @@ export interface BIP44ParamsProtoMsg {
 /** BIP44Params is used as path field in ledger item in Record. */
 export interface BIP44ParamsAmino {
   /** purpose is a constant set to 44' (or 0x8000002C) following the BIP43 recommendation */
-  purpose: number;
+  purpose?: number;
   /** coin_type is a constant that improves privacy */
-  coin_type: number;
+  coin_type?: number;
   /** account splits the key space into independent user identities */
-  account: number;
+  account?: number;
   /**
    * change is a constant used for public derivation. Constant 0 is used for external chain and constant 1 for internal
    * chain.
    */
-  change: boolean;
+  change?: boolean;
   /** address_index is used as child index in BIP32 derivation */
-  address_index: number;
+  address_index?: number;
 }
 export interface BIP44ParamsAminoMsg {
   type: "crypto/keys/hd/BIP44Params";
@@ -60,6 +61,15 @@ function createBaseBIP44Params(): BIP44Params {
 export const BIP44Params = {
   typeUrl: "/cosmos.crypto.hd.v1.BIP44Params",
   aminoType: "crypto/keys/hd/BIP44Params",
+  is(o: any): o is BIP44Params {
+    return o && (o.$typeUrl === BIP44Params.typeUrl || typeof o.purpose === "number" && typeof o.coinType === "number" && typeof o.account === "number" && typeof o.change === "boolean" && typeof o.addressIndex === "number");
+  },
+  isSDK(o: any): o is BIP44ParamsSDKType {
+    return o && (o.$typeUrl === BIP44Params.typeUrl || typeof o.purpose === "number" && typeof o.coin_type === "number" && typeof o.account === "number" && typeof o.change === "boolean" && typeof o.address_index === "number");
+  },
+  isAmino(o: any): o is BIP44ParamsAmino {
+    return o && (o.$typeUrl === BIP44Params.typeUrl || typeof o.purpose === "number" && typeof o.coin_type === "number" && typeof o.account === "number" && typeof o.change === "boolean" && typeof o.address_index === "number");
+  },
   encode(message: BIP44Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.purpose !== 0) {
       writer.uint32(8).uint32(message.purpose);
@@ -153,13 +163,23 @@ export const BIP44Params = {
     return obj;
   },
   fromAmino(object: BIP44ParamsAmino): BIP44Params {
-    return {
-      purpose: object.purpose,
-      coinType: object.coin_type,
-      account: object.account,
-      change: object.change,
-      addressIndex: object.address_index
-    };
+    const message = createBaseBIP44Params();
+    if (object.purpose !== undefined && object.purpose !== null) {
+      message.purpose = object.purpose;
+    }
+    if (object.coin_type !== undefined && object.coin_type !== null) {
+      message.coinType = object.coin_type;
+    }
+    if (object.account !== undefined && object.account !== null) {
+      message.account = object.account;
+    }
+    if (object.change !== undefined && object.change !== null) {
+      message.change = object.change;
+    }
+    if (object.address_index !== undefined && object.address_index !== null) {
+      message.addressIndex = object.address_index;
+    }
+    return message;
   },
   toAmino(message: BIP44Params): BIP44ParamsAmino {
     const obj: any = {};
@@ -192,3 +212,5 @@ export const BIP44Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(BIP44Params.typeUrl, BIP44Params);
+GlobalDecoderRegistry.registerAminoProtoMapping(BIP44Params.aminoType, BIP44Params.typeUrl);

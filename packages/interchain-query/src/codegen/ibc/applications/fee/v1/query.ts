@@ -5,6 +5,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../../cosmos/base/v1beta1/co
 import { FeeEnabledChannel, FeeEnabledChannelAmino, FeeEnabledChannelSDKType } from "./genesis";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** QueryIncentivizedPacketsRequest defines the request type for the IncentivizedPackets rpc */
 export interface QueryIncentivizedPacketsRequest {
   /** pagination defines an optional pagination for the request. */
@@ -21,7 +22,7 @@ export interface QueryIncentivizedPacketsRequestAmino {
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequestAmino | undefined;
   /** block height at which to query */
-  query_height: string;
+  query_height?: string;
 }
 export interface QueryIncentivizedPacketsRequestAminoMsg {
   type: "cosmos-sdk/QueryIncentivizedPacketsRequest";
@@ -37,7 +38,7 @@ export interface QueryIncentivizedPacketsResponse {
   /** list of identified fees for incentivized packets */
   incentivizedPackets: IdentifiedPacketFees[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryIncentivizedPacketsResponseProtoMsg {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketsResponse";
@@ -46,7 +47,7 @@ export interface QueryIncentivizedPacketsResponseProtoMsg {
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPackets rpc */
 export interface QueryIncentivizedPacketsResponseAmino {
   /** list of identified fees for incentivized packets */
-  incentivized_packets: IdentifiedPacketFeesAmino[];
+  incentivized_packets?: IdentifiedPacketFeesAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -57,7 +58,7 @@ export interface QueryIncentivizedPacketsResponseAminoMsg {
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPackets rpc */
 export interface QueryIncentivizedPacketsResponseSDKType {
   incentivized_packets: IdentifiedPacketFeesSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /** QueryIncentivizedPacketRequest defines the request type for the IncentivizedPacket rpc */
 export interface QueryIncentivizedPacketRequest {
@@ -75,7 +76,7 @@ export interface QueryIncentivizedPacketRequestAmino {
   /** unique packet identifier comprised of channel ID, port ID and sequence */
   packet_id?: PacketIdAmino | undefined;
   /** block height at which to query */
-  query_height: string;
+  query_height?: string;
 }
 export interface QueryIncentivizedPacketRequestAminoMsg {
   type: "cosmos-sdk/QueryIncentivizedPacketRequest";
@@ -131,10 +132,10 @@ export interface QueryIncentivizedPacketsForChannelRequestProtoMsg {
 export interface QueryIncentivizedPacketsForChannelRequestAmino {
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequestAmino | undefined;
-  port_id: string;
-  channel_id: string;
+  port_id?: string;
+  channel_id?: string;
   /** Height to query at */
-  query_height: string;
+  query_height?: string;
 }
 export interface QueryIncentivizedPacketsForChannelRequestAminoMsg {
   type: "cosmos-sdk/QueryIncentivizedPacketsForChannelRequest";
@@ -155,7 +156,7 @@ export interface QueryIncentivizedPacketsForChannelResponse {
   /** Map of all incentivized_packets */
   incentivizedPackets: IdentifiedPacketFees[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryIncentivizedPacketsForChannelResponseProtoMsg {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketsForChannelResponse";
@@ -164,7 +165,7 @@ export interface QueryIncentivizedPacketsForChannelResponseProtoMsg {
 /** QueryIncentivizedPacketsResponse defines the response type for the incentivized packets RPC */
 export interface QueryIncentivizedPacketsForChannelResponseAmino {
   /** Map of all incentivized_packets */
-  incentivized_packets: IdentifiedPacketFeesAmino[];
+  incentivized_packets?: IdentifiedPacketFeesAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -175,7 +176,7 @@ export interface QueryIncentivizedPacketsForChannelResponseAminoMsg {
 /** QueryIncentivizedPacketsResponse defines the response type for the incentivized packets RPC */
 export interface QueryIncentivizedPacketsForChannelResponseSDKType {
   incentivized_packets: IdentifiedPacketFeesSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /** QueryTotalRecvFeesRequest defines the request type for the TotalRecvFees rpc */
 export interface QueryTotalRecvFeesRequest {
@@ -211,7 +212,7 @@ export interface QueryTotalRecvFeesResponseProtoMsg {
 /** QueryTotalRecvFeesResponse defines the response type for the TotalRecvFees rpc */
 export interface QueryTotalRecvFeesResponseAmino {
   /** the total packet receive fees */
-  recv_fees: CoinAmino[];
+  recv_fees?: CoinAmino[];
 }
 export interface QueryTotalRecvFeesResponseAminoMsg {
   type: "cosmos-sdk/QueryTotalRecvFeesResponse";
@@ -255,7 +256,7 @@ export interface QueryTotalAckFeesResponseProtoMsg {
 /** QueryTotalAckFeesResponse defines the response type for the TotalAckFees rpc */
 export interface QueryTotalAckFeesResponseAmino {
   /** the total packet acknowledgement fees */
-  ack_fees: CoinAmino[];
+  ack_fees?: CoinAmino[];
 }
 export interface QueryTotalAckFeesResponseAminoMsg {
   type: "cosmos-sdk/QueryTotalAckFeesResponse";
@@ -299,7 +300,7 @@ export interface QueryTotalTimeoutFeesResponseProtoMsg {
 /** QueryTotalTimeoutFeesResponse defines the response type for the TotalTimeoutFees rpc */
 export interface QueryTotalTimeoutFeesResponseAmino {
   /** the total packet timeout fees */
-  timeout_fees: CoinAmino[];
+  timeout_fees?: CoinAmino[];
 }
 export interface QueryTotalTimeoutFeesResponseAminoMsg {
   type: "cosmos-sdk/QueryTotalTimeoutFeesResponse";
@@ -323,9 +324,9 @@ export interface QueryPayeeRequestProtoMsg {
 /** QueryPayeeRequest defines the request type for the Payee rpc */
 export interface QueryPayeeRequestAmino {
   /** unique channel identifier */
-  channel_id: string;
+  channel_id?: string;
   /** the relayer address to which the distribution address is registered */
-  relayer: string;
+  relayer?: string;
 }
 export interface QueryPayeeRequestAminoMsg {
   type: "cosmos-sdk/QueryPayeeRequest";
@@ -348,7 +349,7 @@ export interface QueryPayeeResponseProtoMsg {
 /** QueryPayeeResponse defines the response type for the Payee rpc */
 export interface QueryPayeeResponseAmino {
   /** the payee address to which packet fees are paid out */
-  payee_address: string;
+  payee_address?: string;
 }
 export interface QueryPayeeResponseAminoMsg {
   type: "cosmos-sdk/QueryPayeeResponse";
@@ -372,9 +373,9 @@ export interface QueryCounterpartyPayeeRequestProtoMsg {
 /** QueryCounterpartyPayeeRequest defines the request type for the CounterpartyPayee rpc */
 export interface QueryCounterpartyPayeeRequestAmino {
   /** unique channel identifier */
-  channel_id: string;
+  channel_id?: string;
   /** the relayer address to which the counterparty is registered */
-  relayer: string;
+  relayer?: string;
 }
 export interface QueryCounterpartyPayeeRequestAminoMsg {
   type: "cosmos-sdk/QueryCounterpartyPayeeRequest";
@@ -397,7 +398,7 @@ export interface QueryCounterpartyPayeeResponseProtoMsg {
 /** QueryCounterpartyPayeeResponse defines the response type for the CounterpartyPayee rpc */
 export interface QueryCounterpartyPayeeResponseAmino {
   /** the counterparty payee address used to compensate forward relaying */
-  counterparty_payee: string;
+  counterparty_payee?: string;
 }
 export interface QueryCounterpartyPayeeResponseAminoMsg {
   type: "cosmos-sdk/QueryCounterpartyPayeeResponse";
@@ -423,7 +424,7 @@ export interface QueryFeeEnabledChannelsRequestAmino {
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequestAmino | undefined;
   /** block height at which to query */
-  query_height: string;
+  query_height?: string;
 }
 export interface QueryFeeEnabledChannelsRequestAminoMsg {
   type: "cosmos-sdk/QueryFeeEnabledChannelsRequest";
@@ -439,7 +440,7 @@ export interface QueryFeeEnabledChannelsResponse {
   /** list of fee enabled channels */
   feeEnabledChannels: FeeEnabledChannel[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryFeeEnabledChannelsResponseProtoMsg {
   typeUrl: "/ibc.applications.fee.v1.QueryFeeEnabledChannelsResponse";
@@ -448,7 +449,7 @@ export interface QueryFeeEnabledChannelsResponseProtoMsg {
 /** QueryFeeEnabledChannelsResponse defines the response type for the FeeEnabledChannels rpc */
 export interface QueryFeeEnabledChannelsResponseAmino {
   /** list of fee enabled channels */
-  fee_enabled_channels: FeeEnabledChannelAmino[];
+  fee_enabled_channels?: FeeEnabledChannelAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -459,7 +460,7 @@ export interface QueryFeeEnabledChannelsResponseAminoMsg {
 /** QueryFeeEnabledChannelsResponse defines the response type for the FeeEnabledChannels rpc */
 export interface QueryFeeEnabledChannelsResponseSDKType {
   fee_enabled_channels: FeeEnabledChannelSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /** QueryFeeEnabledChannelRequest defines the request type for the FeeEnabledChannel rpc */
 export interface QueryFeeEnabledChannelRequest {
@@ -475,9 +476,9 @@ export interface QueryFeeEnabledChannelRequestProtoMsg {
 /** QueryFeeEnabledChannelRequest defines the request type for the FeeEnabledChannel rpc */
 export interface QueryFeeEnabledChannelRequestAmino {
   /** unique port identifier */
-  port_id: string;
+  port_id?: string;
   /** unique channel identifier */
-  channel_id: string;
+  channel_id?: string;
 }
 export interface QueryFeeEnabledChannelRequestAminoMsg {
   type: "cosmos-sdk/QueryFeeEnabledChannelRequest";
@@ -500,7 +501,7 @@ export interface QueryFeeEnabledChannelResponseProtoMsg {
 /** QueryFeeEnabledChannelResponse defines the response type for the FeeEnabledChannel rpc */
 export interface QueryFeeEnabledChannelResponseAmino {
   /** boolean flag representing the fee enabled channel status */
-  fee_enabled: boolean;
+  fee_enabled?: boolean;
 }
 export interface QueryFeeEnabledChannelResponseAminoMsg {
   type: "cosmos-sdk/QueryFeeEnabledChannelResponse";
@@ -512,13 +513,22 @@ export interface QueryFeeEnabledChannelResponseSDKType {
 }
 function createBaseQueryIncentivizedPacketsRequest(): QueryIncentivizedPacketsRequest {
   return {
-    pagination: PageRequest.fromPartial({}),
+    pagination: undefined,
     queryHeight: BigInt(0)
   };
 }
 export const QueryIncentivizedPacketsRequest = {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketsRequest",
   aminoType: "cosmos-sdk/QueryIncentivizedPacketsRequest",
+  is(o: any): o is QueryIncentivizedPacketsRequest {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsRequest.typeUrl || typeof o.queryHeight === "bigint");
+  },
+  isSDK(o: any): o is QueryIncentivizedPacketsRequestSDKType {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsRequest.typeUrl || typeof o.query_height === "bigint");
+  },
+  isAmino(o: any): o is QueryIncentivizedPacketsRequestAmino {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsRequest.typeUrl || typeof o.query_height === "bigint");
+  },
   encode(message: QueryIncentivizedPacketsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -579,10 +589,14 @@ export const QueryIncentivizedPacketsRequest = {
     return obj;
   },
   fromAmino(object: QueryIncentivizedPacketsRequestAmino): QueryIncentivizedPacketsRequest {
-    return {
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined,
-      queryHeight: BigInt(object.query_height)
-    };
+    const message = createBaseQueryIncentivizedPacketsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    if (object.query_height !== undefined && object.query_height !== null) {
+      message.queryHeight = BigInt(object.query_height);
+    }
+    return message;
   },
   toAmino(message: QueryIncentivizedPacketsRequest): QueryIncentivizedPacketsRequestAmino {
     const obj: any = {};
@@ -612,15 +626,26 @@ export const QueryIncentivizedPacketsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryIncentivizedPacketsRequest.typeUrl, QueryIncentivizedPacketsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryIncentivizedPacketsRequest.aminoType, QueryIncentivizedPacketsRequest.typeUrl);
 function createBaseQueryIncentivizedPacketsResponse(): QueryIncentivizedPacketsResponse {
   return {
     incentivizedPackets: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryIncentivizedPacketsResponse = {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketsResponse",
   aminoType: "cosmos-sdk/QueryIncentivizedPacketsResponse",
+  is(o: any): o is QueryIncentivizedPacketsResponse {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsResponse.typeUrl || Array.isArray(o.incentivizedPackets) && (!o.incentivizedPackets.length || IdentifiedPacketFees.is(o.incentivizedPackets[0])));
+  },
+  isSDK(o: any): o is QueryIncentivizedPacketsResponseSDKType {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsResponse.typeUrl || Array.isArray(o.incentivized_packets) && (!o.incentivized_packets.length || IdentifiedPacketFees.isSDK(o.incentivized_packets[0])));
+  },
+  isAmino(o: any): o is QueryIncentivizedPacketsResponseAmino {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsResponse.typeUrl || Array.isArray(o.incentivized_packets) && (!o.incentivized_packets.length || IdentifiedPacketFees.isAmino(o.incentivized_packets[0])));
+  },
   encode(message: QueryIncentivizedPacketsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.incentivizedPackets) {
       IdentifiedPacketFees.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -689,10 +714,12 @@ export const QueryIncentivizedPacketsResponse = {
     return obj;
   },
   fromAmino(object: QueryIncentivizedPacketsResponseAmino): QueryIncentivizedPacketsResponse {
-    return {
-      incentivizedPackets: Array.isArray(object?.incentivized_packets) ? object.incentivized_packets.map((e: any) => IdentifiedPacketFees.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryIncentivizedPacketsResponse();
+    message.incentivizedPackets = object.incentivized_packets?.map(e => IdentifiedPacketFees.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryIncentivizedPacketsResponse): QueryIncentivizedPacketsResponseAmino {
     const obj: any = {};
@@ -726,6 +753,8 @@ export const QueryIncentivizedPacketsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryIncentivizedPacketsResponse.typeUrl, QueryIncentivizedPacketsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryIncentivizedPacketsResponse.aminoType, QueryIncentivizedPacketsResponse.typeUrl);
 function createBaseQueryIncentivizedPacketRequest(): QueryIncentivizedPacketRequest {
   return {
     packetId: PacketId.fromPartial({}),
@@ -735,6 +764,15 @@ function createBaseQueryIncentivizedPacketRequest(): QueryIncentivizedPacketRequ
 export const QueryIncentivizedPacketRequest = {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketRequest",
   aminoType: "cosmos-sdk/QueryIncentivizedPacketRequest",
+  is(o: any): o is QueryIncentivizedPacketRequest {
+    return o && (o.$typeUrl === QueryIncentivizedPacketRequest.typeUrl || PacketId.is(o.packetId) && typeof o.queryHeight === "bigint");
+  },
+  isSDK(o: any): o is QueryIncentivizedPacketRequestSDKType {
+    return o && (o.$typeUrl === QueryIncentivizedPacketRequest.typeUrl || PacketId.isSDK(o.packet_id) && typeof o.query_height === "bigint");
+  },
+  isAmino(o: any): o is QueryIncentivizedPacketRequestAmino {
+    return o && (o.$typeUrl === QueryIncentivizedPacketRequest.typeUrl || PacketId.isAmino(o.packet_id) && typeof o.query_height === "bigint");
+  },
   encode(message: QueryIncentivizedPacketRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.packetId !== undefined) {
       PacketId.encode(message.packetId, writer.uint32(10).fork()).ldelim();
@@ -795,10 +833,14 @@ export const QueryIncentivizedPacketRequest = {
     return obj;
   },
   fromAmino(object: QueryIncentivizedPacketRequestAmino): QueryIncentivizedPacketRequest {
-    return {
-      packetId: object?.packet_id ? PacketId.fromAmino(object.packet_id) : undefined,
-      queryHeight: BigInt(object.query_height)
-    };
+    const message = createBaseQueryIncentivizedPacketRequest();
+    if (object.packet_id !== undefined && object.packet_id !== null) {
+      message.packetId = PacketId.fromAmino(object.packet_id);
+    }
+    if (object.query_height !== undefined && object.query_height !== null) {
+      message.queryHeight = BigInt(object.query_height);
+    }
+    return message;
   },
   toAmino(message: QueryIncentivizedPacketRequest): QueryIncentivizedPacketRequestAmino {
     const obj: any = {};
@@ -828,6 +870,8 @@ export const QueryIncentivizedPacketRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryIncentivizedPacketRequest.typeUrl, QueryIncentivizedPacketRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryIncentivizedPacketRequest.aminoType, QueryIncentivizedPacketRequest.typeUrl);
 function createBaseQueryIncentivizedPacketResponse(): QueryIncentivizedPacketResponse {
   return {
     incentivizedPacket: IdentifiedPacketFees.fromPartial({})
@@ -836,6 +880,15 @@ function createBaseQueryIncentivizedPacketResponse(): QueryIncentivizedPacketRes
 export const QueryIncentivizedPacketResponse = {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketResponse",
   aminoType: "cosmos-sdk/QueryIncentivizedPacketResponse",
+  is(o: any): o is QueryIncentivizedPacketResponse {
+    return o && (o.$typeUrl === QueryIncentivizedPacketResponse.typeUrl || IdentifiedPacketFees.is(o.incentivizedPacket));
+  },
+  isSDK(o: any): o is QueryIncentivizedPacketResponseSDKType {
+    return o && (o.$typeUrl === QueryIncentivizedPacketResponse.typeUrl || IdentifiedPacketFees.isSDK(o.incentivized_packet));
+  },
+  isAmino(o: any): o is QueryIncentivizedPacketResponseAmino {
+    return o && (o.$typeUrl === QueryIncentivizedPacketResponse.typeUrl || IdentifiedPacketFees.isAmino(o.incentivized_packet));
+  },
   encode(message: QueryIncentivizedPacketResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.incentivizedPacket !== undefined) {
       IdentifiedPacketFees.encode(message.incentivizedPacket, writer.uint32(10).fork()).ldelim();
@@ -885,9 +938,11 @@ export const QueryIncentivizedPacketResponse = {
     return obj;
   },
   fromAmino(object: QueryIncentivizedPacketResponseAmino): QueryIncentivizedPacketResponse {
-    return {
-      incentivizedPacket: object?.incentivized_packet ? IdentifiedPacketFees.fromAmino(object.incentivized_packet) : undefined
-    };
+    const message = createBaseQueryIncentivizedPacketResponse();
+    if (object.incentivized_packet !== undefined && object.incentivized_packet !== null) {
+      message.incentivizedPacket = IdentifiedPacketFees.fromAmino(object.incentivized_packet);
+    }
+    return message;
   },
   toAmino(message: QueryIncentivizedPacketResponse): QueryIncentivizedPacketResponseAmino {
     const obj: any = {};
@@ -916,9 +971,11 @@ export const QueryIncentivizedPacketResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryIncentivizedPacketResponse.typeUrl, QueryIncentivizedPacketResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryIncentivizedPacketResponse.aminoType, QueryIncentivizedPacketResponse.typeUrl);
 function createBaseQueryIncentivizedPacketsForChannelRequest(): QueryIncentivizedPacketsForChannelRequest {
   return {
-    pagination: PageRequest.fromPartial({}),
+    pagination: undefined,
     portId: "",
     channelId: "",
     queryHeight: BigInt(0)
@@ -927,6 +984,15 @@ function createBaseQueryIncentivizedPacketsForChannelRequest(): QueryIncentivize
 export const QueryIncentivizedPacketsForChannelRequest = {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketsForChannelRequest",
   aminoType: "cosmos-sdk/QueryIncentivizedPacketsForChannelRequest",
+  is(o: any): o is QueryIncentivizedPacketsForChannelRequest {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsForChannelRequest.typeUrl || typeof o.portId === "string" && typeof o.channelId === "string" && typeof o.queryHeight === "bigint");
+  },
+  isSDK(o: any): o is QueryIncentivizedPacketsForChannelRequestSDKType {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsForChannelRequest.typeUrl || typeof o.port_id === "string" && typeof o.channel_id === "string" && typeof o.query_height === "bigint");
+  },
+  isAmino(o: any): o is QueryIncentivizedPacketsForChannelRequestAmino {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsForChannelRequest.typeUrl || typeof o.port_id === "string" && typeof o.channel_id === "string" && typeof o.query_height === "bigint");
+  },
   encode(message: QueryIncentivizedPacketsForChannelRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -1009,12 +1075,20 @@ export const QueryIncentivizedPacketsForChannelRequest = {
     return obj;
   },
   fromAmino(object: QueryIncentivizedPacketsForChannelRequestAmino): QueryIncentivizedPacketsForChannelRequest {
-    return {
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined,
-      portId: object.port_id,
-      channelId: object.channel_id,
-      queryHeight: BigInt(object.query_height)
-    };
+    const message = createBaseQueryIncentivizedPacketsForChannelRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    if (object.port_id !== undefined && object.port_id !== null) {
+      message.portId = object.port_id;
+    }
+    if (object.channel_id !== undefined && object.channel_id !== null) {
+      message.channelId = object.channel_id;
+    }
+    if (object.query_height !== undefined && object.query_height !== null) {
+      message.queryHeight = BigInt(object.query_height);
+    }
+    return message;
   },
   toAmino(message: QueryIncentivizedPacketsForChannelRequest): QueryIncentivizedPacketsForChannelRequestAmino {
     const obj: any = {};
@@ -1046,15 +1120,26 @@ export const QueryIncentivizedPacketsForChannelRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryIncentivizedPacketsForChannelRequest.typeUrl, QueryIncentivizedPacketsForChannelRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryIncentivizedPacketsForChannelRequest.aminoType, QueryIncentivizedPacketsForChannelRequest.typeUrl);
 function createBaseQueryIncentivizedPacketsForChannelResponse(): QueryIncentivizedPacketsForChannelResponse {
   return {
     incentivizedPackets: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryIncentivizedPacketsForChannelResponse = {
   typeUrl: "/ibc.applications.fee.v1.QueryIncentivizedPacketsForChannelResponse",
   aminoType: "cosmos-sdk/QueryIncentivizedPacketsForChannelResponse",
+  is(o: any): o is QueryIncentivizedPacketsForChannelResponse {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsForChannelResponse.typeUrl || Array.isArray(o.incentivizedPackets) && (!o.incentivizedPackets.length || IdentifiedPacketFees.is(o.incentivizedPackets[0])));
+  },
+  isSDK(o: any): o is QueryIncentivizedPacketsForChannelResponseSDKType {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsForChannelResponse.typeUrl || Array.isArray(o.incentivized_packets) && (!o.incentivized_packets.length || IdentifiedPacketFees.isSDK(o.incentivized_packets[0])));
+  },
+  isAmino(o: any): o is QueryIncentivizedPacketsForChannelResponseAmino {
+    return o && (o.$typeUrl === QueryIncentivizedPacketsForChannelResponse.typeUrl || Array.isArray(o.incentivized_packets) && (!o.incentivized_packets.length || IdentifiedPacketFees.isAmino(o.incentivized_packets[0])));
+  },
   encode(message: QueryIncentivizedPacketsForChannelResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.incentivizedPackets) {
       IdentifiedPacketFees.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1123,10 +1208,12 @@ export const QueryIncentivizedPacketsForChannelResponse = {
     return obj;
   },
   fromAmino(object: QueryIncentivizedPacketsForChannelResponseAmino): QueryIncentivizedPacketsForChannelResponse {
-    return {
-      incentivizedPackets: Array.isArray(object?.incentivized_packets) ? object.incentivized_packets.map((e: any) => IdentifiedPacketFees.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryIncentivizedPacketsForChannelResponse();
+    message.incentivizedPackets = object.incentivized_packets?.map(e => IdentifiedPacketFees.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryIncentivizedPacketsForChannelResponse): QueryIncentivizedPacketsForChannelResponseAmino {
     const obj: any = {};
@@ -1160,6 +1247,8 @@ export const QueryIncentivizedPacketsForChannelResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryIncentivizedPacketsForChannelResponse.typeUrl, QueryIncentivizedPacketsForChannelResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryIncentivizedPacketsForChannelResponse.aminoType, QueryIncentivizedPacketsForChannelResponse.typeUrl);
 function createBaseQueryTotalRecvFeesRequest(): QueryTotalRecvFeesRequest {
   return {
     packetId: PacketId.fromPartial({})
@@ -1168,6 +1257,15 @@ function createBaseQueryTotalRecvFeesRequest(): QueryTotalRecvFeesRequest {
 export const QueryTotalRecvFeesRequest = {
   typeUrl: "/ibc.applications.fee.v1.QueryTotalRecvFeesRequest",
   aminoType: "cosmos-sdk/QueryTotalRecvFeesRequest",
+  is(o: any): o is QueryTotalRecvFeesRequest {
+    return o && (o.$typeUrl === QueryTotalRecvFeesRequest.typeUrl || PacketId.is(o.packetId));
+  },
+  isSDK(o: any): o is QueryTotalRecvFeesRequestSDKType {
+    return o && (o.$typeUrl === QueryTotalRecvFeesRequest.typeUrl || PacketId.isSDK(o.packet_id));
+  },
+  isAmino(o: any): o is QueryTotalRecvFeesRequestAmino {
+    return o && (o.$typeUrl === QueryTotalRecvFeesRequest.typeUrl || PacketId.isAmino(o.packet_id));
+  },
   encode(message: QueryTotalRecvFeesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.packetId !== undefined) {
       PacketId.encode(message.packetId, writer.uint32(10).fork()).ldelim();
@@ -1217,9 +1315,11 @@ export const QueryTotalRecvFeesRequest = {
     return obj;
   },
   fromAmino(object: QueryTotalRecvFeesRequestAmino): QueryTotalRecvFeesRequest {
-    return {
-      packetId: object?.packet_id ? PacketId.fromAmino(object.packet_id) : undefined
-    };
+    const message = createBaseQueryTotalRecvFeesRequest();
+    if (object.packet_id !== undefined && object.packet_id !== null) {
+      message.packetId = PacketId.fromAmino(object.packet_id);
+    }
+    return message;
   },
   toAmino(message: QueryTotalRecvFeesRequest): QueryTotalRecvFeesRequestAmino {
     const obj: any = {};
@@ -1248,6 +1348,8 @@ export const QueryTotalRecvFeesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryTotalRecvFeesRequest.typeUrl, QueryTotalRecvFeesRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryTotalRecvFeesRequest.aminoType, QueryTotalRecvFeesRequest.typeUrl);
 function createBaseQueryTotalRecvFeesResponse(): QueryTotalRecvFeesResponse {
   return {
     recvFees: []
@@ -1256,6 +1358,15 @@ function createBaseQueryTotalRecvFeesResponse(): QueryTotalRecvFeesResponse {
 export const QueryTotalRecvFeesResponse = {
   typeUrl: "/ibc.applications.fee.v1.QueryTotalRecvFeesResponse",
   aminoType: "cosmos-sdk/QueryTotalRecvFeesResponse",
+  is(o: any): o is QueryTotalRecvFeesResponse {
+    return o && (o.$typeUrl === QueryTotalRecvFeesResponse.typeUrl || Array.isArray(o.recvFees) && (!o.recvFees.length || Coin.is(o.recvFees[0])));
+  },
+  isSDK(o: any): o is QueryTotalRecvFeesResponseSDKType {
+    return o && (o.$typeUrl === QueryTotalRecvFeesResponse.typeUrl || Array.isArray(o.recv_fees) && (!o.recv_fees.length || Coin.isSDK(o.recv_fees[0])));
+  },
+  isAmino(o: any): o is QueryTotalRecvFeesResponseAmino {
+    return o && (o.$typeUrl === QueryTotalRecvFeesResponse.typeUrl || Array.isArray(o.recv_fees) && (!o.recv_fees.length || Coin.isAmino(o.recv_fees[0])));
+  },
   encode(message: QueryTotalRecvFeesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.recvFees) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1313,9 +1424,9 @@ export const QueryTotalRecvFeesResponse = {
     return obj;
   },
   fromAmino(object: QueryTotalRecvFeesResponseAmino): QueryTotalRecvFeesResponse {
-    return {
-      recvFees: Array.isArray(object?.recv_fees) ? object.recv_fees.map((e: any) => Coin.fromAmino(e)) : []
-    };
+    const message = createBaseQueryTotalRecvFeesResponse();
+    message.recvFees = object.recv_fees?.map(e => Coin.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: QueryTotalRecvFeesResponse): QueryTotalRecvFeesResponseAmino {
     const obj: any = {};
@@ -1348,6 +1459,8 @@ export const QueryTotalRecvFeesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryTotalRecvFeesResponse.typeUrl, QueryTotalRecvFeesResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryTotalRecvFeesResponse.aminoType, QueryTotalRecvFeesResponse.typeUrl);
 function createBaseQueryTotalAckFeesRequest(): QueryTotalAckFeesRequest {
   return {
     packetId: PacketId.fromPartial({})
@@ -1356,6 +1469,15 @@ function createBaseQueryTotalAckFeesRequest(): QueryTotalAckFeesRequest {
 export const QueryTotalAckFeesRequest = {
   typeUrl: "/ibc.applications.fee.v1.QueryTotalAckFeesRequest",
   aminoType: "cosmos-sdk/QueryTotalAckFeesRequest",
+  is(o: any): o is QueryTotalAckFeesRequest {
+    return o && (o.$typeUrl === QueryTotalAckFeesRequest.typeUrl || PacketId.is(o.packetId));
+  },
+  isSDK(o: any): o is QueryTotalAckFeesRequestSDKType {
+    return o && (o.$typeUrl === QueryTotalAckFeesRequest.typeUrl || PacketId.isSDK(o.packet_id));
+  },
+  isAmino(o: any): o is QueryTotalAckFeesRequestAmino {
+    return o && (o.$typeUrl === QueryTotalAckFeesRequest.typeUrl || PacketId.isAmino(o.packet_id));
+  },
   encode(message: QueryTotalAckFeesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.packetId !== undefined) {
       PacketId.encode(message.packetId, writer.uint32(10).fork()).ldelim();
@@ -1405,9 +1527,11 @@ export const QueryTotalAckFeesRequest = {
     return obj;
   },
   fromAmino(object: QueryTotalAckFeesRequestAmino): QueryTotalAckFeesRequest {
-    return {
-      packetId: object?.packet_id ? PacketId.fromAmino(object.packet_id) : undefined
-    };
+    const message = createBaseQueryTotalAckFeesRequest();
+    if (object.packet_id !== undefined && object.packet_id !== null) {
+      message.packetId = PacketId.fromAmino(object.packet_id);
+    }
+    return message;
   },
   toAmino(message: QueryTotalAckFeesRequest): QueryTotalAckFeesRequestAmino {
     const obj: any = {};
@@ -1436,6 +1560,8 @@ export const QueryTotalAckFeesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryTotalAckFeesRequest.typeUrl, QueryTotalAckFeesRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryTotalAckFeesRequest.aminoType, QueryTotalAckFeesRequest.typeUrl);
 function createBaseQueryTotalAckFeesResponse(): QueryTotalAckFeesResponse {
   return {
     ackFees: []
@@ -1444,6 +1570,15 @@ function createBaseQueryTotalAckFeesResponse(): QueryTotalAckFeesResponse {
 export const QueryTotalAckFeesResponse = {
   typeUrl: "/ibc.applications.fee.v1.QueryTotalAckFeesResponse",
   aminoType: "cosmos-sdk/QueryTotalAckFeesResponse",
+  is(o: any): o is QueryTotalAckFeesResponse {
+    return o && (o.$typeUrl === QueryTotalAckFeesResponse.typeUrl || Array.isArray(o.ackFees) && (!o.ackFees.length || Coin.is(o.ackFees[0])));
+  },
+  isSDK(o: any): o is QueryTotalAckFeesResponseSDKType {
+    return o && (o.$typeUrl === QueryTotalAckFeesResponse.typeUrl || Array.isArray(o.ack_fees) && (!o.ack_fees.length || Coin.isSDK(o.ack_fees[0])));
+  },
+  isAmino(o: any): o is QueryTotalAckFeesResponseAmino {
+    return o && (o.$typeUrl === QueryTotalAckFeesResponse.typeUrl || Array.isArray(o.ack_fees) && (!o.ack_fees.length || Coin.isAmino(o.ack_fees[0])));
+  },
   encode(message: QueryTotalAckFeesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.ackFees) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1501,9 +1636,9 @@ export const QueryTotalAckFeesResponse = {
     return obj;
   },
   fromAmino(object: QueryTotalAckFeesResponseAmino): QueryTotalAckFeesResponse {
-    return {
-      ackFees: Array.isArray(object?.ack_fees) ? object.ack_fees.map((e: any) => Coin.fromAmino(e)) : []
-    };
+    const message = createBaseQueryTotalAckFeesResponse();
+    message.ackFees = object.ack_fees?.map(e => Coin.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: QueryTotalAckFeesResponse): QueryTotalAckFeesResponseAmino {
     const obj: any = {};
@@ -1536,6 +1671,8 @@ export const QueryTotalAckFeesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryTotalAckFeesResponse.typeUrl, QueryTotalAckFeesResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryTotalAckFeesResponse.aminoType, QueryTotalAckFeesResponse.typeUrl);
 function createBaseQueryTotalTimeoutFeesRequest(): QueryTotalTimeoutFeesRequest {
   return {
     packetId: PacketId.fromPartial({})
@@ -1544,6 +1681,15 @@ function createBaseQueryTotalTimeoutFeesRequest(): QueryTotalTimeoutFeesRequest 
 export const QueryTotalTimeoutFeesRequest = {
   typeUrl: "/ibc.applications.fee.v1.QueryTotalTimeoutFeesRequest",
   aminoType: "cosmos-sdk/QueryTotalTimeoutFeesRequest",
+  is(o: any): o is QueryTotalTimeoutFeesRequest {
+    return o && (o.$typeUrl === QueryTotalTimeoutFeesRequest.typeUrl || PacketId.is(o.packetId));
+  },
+  isSDK(o: any): o is QueryTotalTimeoutFeesRequestSDKType {
+    return o && (o.$typeUrl === QueryTotalTimeoutFeesRequest.typeUrl || PacketId.isSDK(o.packet_id));
+  },
+  isAmino(o: any): o is QueryTotalTimeoutFeesRequestAmino {
+    return o && (o.$typeUrl === QueryTotalTimeoutFeesRequest.typeUrl || PacketId.isAmino(o.packet_id));
+  },
   encode(message: QueryTotalTimeoutFeesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.packetId !== undefined) {
       PacketId.encode(message.packetId, writer.uint32(10).fork()).ldelim();
@@ -1593,9 +1739,11 @@ export const QueryTotalTimeoutFeesRequest = {
     return obj;
   },
   fromAmino(object: QueryTotalTimeoutFeesRequestAmino): QueryTotalTimeoutFeesRequest {
-    return {
-      packetId: object?.packet_id ? PacketId.fromAmino(object.packet_id) : undefined
-    };
+    const message = createBaseQueryTotalTimeoutFeesRequest();
+    if (object.packet_id !== undefined && object.packet_id !== null) {
+      message.packetId = PacketId.fromAmino(object.packet_id);
+    }
+    return message;
   },
   toAmino(message: QueryTotalTimeoutFeesRequest): QueryTotalTimeoutFeesRequestAmino {
     const obj: any = {};
@@ -1624,6 +1772,8 @@ export const QueryTotalTimeoutFeesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryTotalTimeoutFeesRequest.typeUrl, QueryTotalTimeoutFeesRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryTotalTimeoutFeesRequest.aminoType, QueryTotalTimeoutFeesRequest.typeUrl);
 function createBaseQueryTotalTimeoutFeesResponse(): QueryTotalTimeoutFeesResponse {
   return {
     timeoutFees: []
@@ -1632,6 +1782,15 @@ function createBaseQueryTotalTimeoutFeesResponse(): QueryTotalTimeoutFeesRespons
 export const QueryTotalTimeoutFeesResponse = {
   typeUrl: "/ibc.applications.fee.v1.QueryTotalTimeoutFeesResponse",
   aminoType: "cosmos-sdk/QueryTotalTimeoutFeesResponse",
+  is(o: any): o is QueryTotalTimeoutFeesResponse {
+    return o && (o.$typeUrl === QueryTotalTimeoutFeesResponse.typeUrl || Array.isArray(o.timeoutFees) && (!o.timeoutFees.length || Coin.is(o.timeoutFees[0])));
+  },
+  isSDK(o: any): o is QueryTotalTimeoutFeesResponseSDKType {
+    return o && (o.$typeUrl === QueryTotalTimeoutFeesResponse.typeUrl || Array.isArray(o.timeout_fees) && (!o.timeout_fees.length || Coin.isSDK(o.timeout_fees[0])));
+  },
+  isAmino(o: any): o is QueryTotalTimeoutFeesResponseAmino {
+    return o && (o.$typeUrl === QueryTotalTimeoutFeesResponse.typeUrl || Array.isArray(o.timeout_fees) && (!o.timeout_fees.length || Coin.isAmino(o.timeout_fees[0])));
+  },
   encode(message: QueryTotalTimeoutFeesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.timeoutFees) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1689,9 +1848,9 @@ export const QueryTotalTimeoutFeesResponse = {
     return obj;
   },
   fromAmino(object: QueryTotalTimeoutFeesResponseAmino): QueryTotalTimeoutFeesResponse {
-    return {
-      timeoutFees: Array.isArray(object?.timeout_fees) ? object.timeout_fees.map((e: any) => Coin.fromAmino(e)) : []
-    };
+    const message = createBaseQueryTotalTimeoutFeesResponse();
+    message.timeoutFees = object.timeout_fees?.map(e => Coin.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: QueryTotalTimeoutFeesResponse): QueryTotalTimeoutFeesResponseAmino {
     const obj: any = {};
@@ -1724,6 +1883,8 @@ export const QueryTotalTimeoutFeesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryTotalTimeoutFeesResponse.typeUrl, QueryTotalTimeoutFeesResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryTotalTimeoutFeesResponse.aminoType, QueryTotalTimeoutFeesResponse.typeUrl);
 function createBaseQueryPayeeRequest(): QueryPayeeRequest {
   return {
     channelId: "",
@@ -1733,6 +1894,15 @@ function createBaseQueryPayeeRequest(): QueryPayeeRequest {
 export const QueryPayeeRequest = {
   typeUrl: "/ibc.applications.fee.v1.QueryPayeeRequest",
   aminoType: "cosmos-sdk/QueryPayeeRequest",
+  is(o: any): o is QueryPayeeRequest {
+    return o && (o.$typeUrl === QueryPayeeRequest.typeUrl || typeof o.channelId === "string" && typeof o.relayer === "string");
+  },
+  isSDK(o: any): o is QueryPayeeRequestSDKType {
+    return o && (o.$typeUrl === QueryPayeeRequest.typeUrl || typeof o.channel_id === "string" && typeof o.relayer === "string");
+  },
+  isAmino(o: any): o is QueryPayeeRequestAmino {
+    return o && (o.$typeUrl === QueryPayeeRequest.typeUrl || typeof o.channel_id === "string" && typeof o.relayer === "string");
+  },
   encode(message: QueryPayeeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channelId !== "") {
       writer.uint32(10).string(message.channelId);
@@ -1793,10 +1963,14 @@ export const QueryPayeeRequest = {
     return obj;
   },
   fromAmino(object: QueryPayeeRequestAmino): QueryPayeeRequest {
-    return {
-      channelId: object.channel_id,
-      relayer: object.relayer
-    };
+    const message = createBaseQueryPayeeRequest();
+    if (object.channel_id !== undefined && object.channel_id !== null) {
+      message.channelId = object.channel_id;
+    }
+    if (object.relayer !== undefined && object.relayer !== null) {
+      message.relayer = object.relayer;
+    }
+    return message;
   },
   toAmino(message: QueryPayeeRequest): QueryPayeeRequestAmino {
     const obj: any = {};
@@ -1826,6 +2000,8 @@ export const QueryPayeeRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPayeeRequest.typeUrl, QueryPayeeRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryPayeeRequest.aminoType, QueryPayeeRequest.typeUrl);
 function createBaseQueryPayeeResponse(): QueryPayeeResponse {
   return {
     payeeAddress: ""
@@ -1834,6 +2010,15 @@ function createBaseQueryPayeeResponse(): QueryPayeeResponse {
 export const QueryPayeeResponse = {
   typeUrl: "/ibc.applications.fee.v1.QueryPayeeResponse",
   aminoType: "cosmos-sdk/QueryPayeeResponse",
+  is(o: any): o is QueryPayeeResponse {
+    return o && (o.$typeUrl === QueryPayeeResponse.typeUrl || typeof o.payeeAddress === "string");
+  },
+  isSDK(o: any): o is QueryPayeeResponseSDKType {
+    return o && (o.$typeUrl === QueryPayeeResponse.typeUrl || typeof o.payee_address === "string");
+  },
+  isAmino(o: any): o is QueryPayeeResponseAmino {
+    return o && (o.$typeUrl === QueryPayeeResponse.typeUrl || typeof o.payee_address === "string");
+  },
   encode(message: QueryPayeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.payeeAddress !== "") {
       writer.uint32(10).string(message.payeeAddress);
@@ -1883,9 +2068,11 @@ export const QueryPayeeResponse = {
     return obj;
   },
   fromAmino(object: QueryPayeeResponseAmino): QueryPayeeResponse {
-    return {
-      payeeAddress: object.payee_address
-    };
+    const message = createBaseQueryPayeeResponse();
+    if (object.payee_address !== undefined && object.payee_address !== null) {
+      message.payeeAddress = object.payee_address;
+    }
+    return message;
   },
   toAmino(message: QueryPayeeResponse): QueryPayeeResponseAmino {
     const obj: any = {};
@@ -1914,6 +2101,8 @@ export const QueryPayeeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPayeeResponse.typeUrl, QueryPayeeResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryPayeeResponse.aminoType, QueryPayeeResponse.typeUrl);
 function createBaseQueryCounterpartyPayeeRequest(): QueryCounterpartyPayeeRequest {
   return {
     channelId: "",
@@ -1923,6 +2112,15 @@ function createBaseQueryCounterpartyPayeeRequest(): QueryCounterpartyPayeeReques
 export const QueryCounterpartyPayeeRequest = {
   typeUrl: "/ibc.applications.fee.v1.QueryCounterpartyPayeeRequest",
   aminoType: "cosmos-sdk/QueryCounterpartyPayeeRequest",
+  is(o: any): o is QueryCounterpartyPayeeRequest {
+    return o && (o.$typeUrl === QueryCounterpartyPayeeRequest.typeUrl || typeof o.channelId === "string" && typeof o.relayer === "string");
+  },
+  isSDK(o: any): o is QueryCounterpartyPayeeRequestSDKType {
+    return o && (o.$typeUrl === QueryCounterpartyPayeeRequest.typeUrl || typeof o.channel_id === "string" && typeof o.relayer === "string");
+  },
+  isAmino(o: any): o is QueryCounterpartyPayeeRequestAmino {
+    return o && (o.$typeUrl === QueryCounterpartyPayeeRequest.typeUrl || typeof o.channel_id === "string" && typeof o.relayer === "string");
+  },
   encode(message: QueryCounterpartyPayeeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channelId !== "") {
       writer.uint32(10).string(message.channelId);
@@ -1983,10 +2181,14 @@ export const QueryCounterpartyPayeeRequest = {
     return obj;
   },
   fromAmino(object: QueryCounterpartyPayeeRequestAmino): QueryCounterpartyPayeeRequest {
-    return {
-      channelId: object.channel_id,
-      relayer: object.relayer
-    };
+    const message = createBaseQueryCounterpartyPayeeRequest();
+    if (object.channel_id !== undefined && object.channel_id !== null) {
+      message.channelId = object.channel_id;
+    }
+    if (object.relayer !== undefined && object.relayer !== null) {
+      message.relayer = object.relayer;
+    }
+    return message;
   },
   toAmino(message: QueryCounterpartyPayeeRequest): QueryCounterpartyPayeeRequestAmino {
     const obj: any = {};
@@ -2016,6 +2218,8 @@ export const QueryCounterpartyPayeeRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryCounterpartyPayeeRequest.typeUrl, QueryCounterpartyPayeeRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryCounterpartyPayeeRequest.aminoType, QueryCounterpartyPayeeRequest.typeUrl);
 function createBaseQueryCounterpartyPayeeResponse(): QueryCounterpartyPayeeResponse {
   return {
     counterpartyPayee: ""
@@ -2024,6 +2228,15 @@ function createBaseQueryCounterpartyPayeeResponse(): QueryCounterpartyPayeeRespo
 export const QueryCounterpartyPayeeResponse = {
   typeUrl: "/ibc.applications.fee.v1.QueryCounterpartyPayeeResponse",
   aminoType: "cosmos-sdk/QueryCounterpartyPayeeResponse",
+  is(o: any): o is QueryCounterpartyPayeeResponse {
+    return o && (o.$typeUrl === QueryCounterpartyPayeeResponse.typeUrl || typeof o.counterpartyPayee === "string");
+  },
+  isSDK(o: any): o is QueryCounterpartyPayeeResponseSDKType {
+    return o && (o.$typeUrl === QueryCounterpartyPayeeResponse.typeUrl || typeof o.counterparty_payee === "string");
+  },
+  isAmino(o: any): o is QueryCounterpartyPayeeResponseAmino {
+    return o && (o.$typeUrl === QueryCounterpartyPayeeResponse.typeUrl || typeof o.counterparty_payee === "string");
+  },
   encode(message: QueryCounterpartyPayeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.counterpartyPayee !== "") {
       writer.uint32(10).string(message.counterpartyPayee);
@@ -2073,9 +2286,11 @@ export const QueryCounterpartyPayeeResponse = {
     return obj;
   },
   fromAmino(object: QueryCounterpartyPayeeResponseAmino): QueryCounterpartyPayeeResponse {
-    return {
-      counterpartyPayee: object.counterparty_payee
-    };
+    const message = createBaseQueryCounterpartyPayeeResponse();
+    if (object.counterparty_payee !== undefined && object.counterparty_payee !== null) {
+      message.counterpartyPayee = object.counterparty_payee;
+    }
+    return message;
   },
   toAmino(message: QueryCounterpartyPayeeResponse): QueryCounterpartyPayeeResponseAmino {
     const obj: any = {};
@@ -2104,15 +2319,26 @@ export const QueryCounterpartyPayeeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryCounterpartyPayeeResponse.typeUrl, QueryCounterpartyPayeeResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryCounterpartyPayeeResponse.aminoType, QueryCounterpartyPayeeResponse.typeUrl);
 function createBaseQueryFeeEnabledChannelsRequest(): QueryFeeEnabledChannelsRequest {
   return {
-    pagination: PageRequest.fromPartial({}),
+    pagination: undefined,
     queryHeight: BigInt(0)
   };
 }
 export const QueryFeeEnabledChannelsRequest = {
   typeUrl: "/ibc.applications.fee.v1.QueryFeeEnabledChannelsRequest",
   aminoType: "cosmos-sdk/QueryFeeEnabledChannelsRequest",
+  is(o: any): o is QueryFeeEnabledChannelsRequest {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelsRequest.typeUrl || typeof o.queryHeight === "bigint");
+  },
+  isSDK(o: any): o is QueryFeeEnabledChannelsRequestSDKType {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelsRequest.typeUrl || typeof o.query_height === "bigint");
+  },
+  isAmino(o: any): o is QueryFeeEnabledChannelsRequestAmino {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelsRequest.typeUrl || typeof o.query_height === "bigint");
+  },
   encode(message: QueryFeeEnabledChannelsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -2173,10 +2399,14 @@ export const QueryFeeEnabledChannelsRequest = {
     return obj;
   },
   fromAmino(object: QueryFeeEnabledChannelsRequestAmino): QueryFeeEnabledChannelsRequest {
-    return {
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined,
-      queryHeight: BigInt(object.query_height)
-    };
+    const message = createBaseQueryFeeEnabledChannelsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    if (object.query_height !== undefined && object.query_height !== null) {
+      message.queryHeight = BigInt(object.query_height);
+    }
+    return message;
   },
   toAmino(message: QueryFeeEnabledChannelsRequest): QueryFeeEnabledChannelsRequestAmino {
     const obj: any = {};
@@ -2206,15 +2436,26 @@ export const QueryFeeEnabledChannelsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryFeeEnabledChannelsRequest.typeUrl, QueryFeeEnabledChannelsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryFeeEnabledChannelsRequest.aminoType, QueryFeeEnabledChannelsRequest.typeUrl);
 function createBaseQueryFeeEnabledChannelsResponse(): QueryFeeEnabledChannelsResponse {
   return {
     feeEnabledChannels: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryFeeEnabledChannelsResponse = {
   typeUrl: "/ibc.applications.fee.v1.QueryFeeEnabledChannelsResponse",
   aminoType: "cosmos-sdk/QueryFeeEnabledChannelsResponse",
+  is(o: any): o is QueryFeeEnabledChannelsResponse {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelsResponse.typeUrl || Array.isArray(o.feeEnabledChannels) && (!o.feeEnabledChannels.length || FeeEnabledChannel.is(o.feeEnabledChannels[0])));
+  },
+  isSDK(o: any): o is QueryFeeEnabledChannelsResponseSDKType {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelsResponse.typeUrl || Array.isArray(o.fee_enabled_channels) && (!o.fee_enabled_channels.length || FeeEnabledChannel.isSDK(o.fee_enabled_channels[0])));
+  },
+  isAmino(o: any): o is QueryFeeEnabledChannelsResponseAmino {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelsResponse.typeUrl || Array.isArray(o.fee_enabled_channels) && (!o.fee_enabled_channels.length || FeeEnabledChannel.isAmino(o.fee_enabled_channels[0])));
+  },
   encode(message: QueryFeeEnabledChannelsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.feeEnabledChannels) {
       FeeEnabledChannel.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -2283,10 +2524,12 @@ export const QueryFeeEnabledChannelsResponse = {
     return obj;
   },
   fromAmino(object: QueryFeeEnabledChannelsResponseAmino): QueryFeeEnabledChannelsResponse {
-    return {
-      feeEnabledChannels: Array.isArray(object?.fee_enabled_channels) ? object.fee_enabled_channels.map((e: any) => FeeEnabledChannel.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryFeeEnabledChannelsResponse();
+    message.feeEnabledChannels = object.fee_enabled_channels?.map(e => FeeEnabledChannel.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryFeeEnabledChannelsResponse): QueryFeeEnabledChannelsResponseAmino {
     const obj: any = {};
@@ -2320,6 +2563,8 @@ export const QueryFeeEnabledChannelsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryFeeEnabledChannelsResponse.typeUrl, QueryFeeEnabledChannelsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryFeeEnabledChannelsResponse.aminoType, QueryFeeEnabledChannelsResponse.typeUrl);
 function createBaseQueryFeeEnabledChannelRequest(): QueryFeeEnabledChannelRequest {
   return {
     portId: "",
@@ -2329,6 +2574,15 @@ function createBaseQueryFeeEnabledChannelRequest(): QueryFeeEnabledChannelReques
 export const QueryFeeEnabledChannelRequest = {
   typeUrl: "/ibc.applications.fee.v1.QueryFeeEnabledChannelRequest",
   aminoType: "cosmos-sdk/QueryFeeEnabledChannelRequest",
+  is(o: any): o is QueryFeeEnabledChannelRequest {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelRequest.typeUrl || typeof o.portId === "string" && typeof o.channelId === "string");
+  },
+  isSDK(o: any): o is QueryFeeEnabledChannelRequestSDKType {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelRequest.typeUrl || typeof o.port_id === "string" && typeof o.channel_id === "string");
+  },
+  isAmino(o: any): o is QueryFeeEnabledChannelRequestAmino {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelRequest.typeUrl || typeof o.port_id === "string" && typeof o.channel_id === "string");
+  },
   encode(message: QueryFeeEnabledChannelRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
@@ -2389,10 +2643,14 @@ export const QueryFeeEnabledChannelRequest = {
     return obj;
   },
   fromAmino(object: QueryFeeEnabledChannelRequestAmino): QueryFeeEnabledChannelRequest {
-    return {
-      portId: object.port_id,
-      channelId: object.channel_id
-    };
+    const message = createBaseQueryFeeEnabledChannelRequest();
+    if (object.port_id !== undefined && object.port_id !== null) {
+      message.portId = object.port_id;
+    }
+    if (object.channel_id !== undefined && object.channel_id !== null) {
+      message.channelId = object.channel_id;
+    }
+    return message;
   },
   toAmino(message: QueryFeeEnabledChannelRequest): QueryFeeEnabledChannelRequestAmino {
     const obj: any = {};
@@ -2422,6 +2680,8 @@ export const QueryFeeEnabledChannelRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryFeeEnabledChannelRequest.typeUrl, QueryFeeEnabledChannelRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryFeeEnabledChannelRequest.aminoType, QueryFeeEnabledChannelRequest.typeUrl);
 function createBaseQueryFeeEnabledChannelResponse(): QueryFeeEnabledChannelResponse {
   return {
     feeEnabled: false
@@ -2430,6 +2690,15 @@ function createBaseQueryFeeEnabledChannelResponse(): QueryFeeEnabledChannelRespo
 export const QueryFeeEnabledChannelResponse = {
   typeUrl: "/ibc.applications.fee.v1.QueryFeeEnabledChannelResponse",
   aminoType: "cosmos-sdk/QueryFeeEnabledChannelResponse",
+  is(o: any): o is QueryFeeEnabledChannelResponse {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelResponse.typeUrl || typeof o.feeEnabled === "boolean");
+  },
+  isSDK(o: any): o is QueryFeeEnabledChannelResponseSDKType {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelResponse.typeUrl || typeof o.fee_enabled === "boolean");
+  },
+  isAmino(o: any): o is QueryFeeEnabledChannelResponseAmino {
+    return o && (o.$typeUrl === QueryFeeEnabledChannelResponse.typeUrl || typeof o.fee_enabled === "boolean");
+  },
   encode(message: QueryFeeEnabledChannelResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeEnabled === true) {
       writer.uint32(8).bool(message.feeEnabled);
@@ -2479,9 +2748,11 @@ export const QueryFeeEnabledChannelResponse = {
     return obj;
   },
   fromAmino(object: QueryFeeEnabledChannelResponseAmino): QueryFeeEnabledChannelResponse {
-    return {
-      feeEnabled: object.fee_enabled
-    };
+    const message = createBaseQueryFeeEnabledChannelResponse();
+    if (object.fee_enabled !== undefined && object.fee_enabled !== null) {
+      message.feeEnabled = object.fee_enabled;
+    }
+    return message;
   },
   toAmino(message: QueryFeeEnabledChannelResponse): QueryFeeEnabledChannelResponseAmino {
     const obj: any = {};
@@ -2510,3 +2781,5 @@ export const QueryFeeEnabledChannelResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryFeeEnabledChannelResponse.typeUrl, QueryFeeEnabledChannelResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryFeeEnabledChannelResponse.aminoType, QueryFeeEnabledChannelResponse.typeUrl);

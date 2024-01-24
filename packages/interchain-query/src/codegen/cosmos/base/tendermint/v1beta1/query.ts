@@ -10,6 +10,7 @@ import { BlockSDKType as Block2SDKType } from "./types";
 import { DefaultNodeInfo, DefaultNodeInfoAmino, DefaultNodeInfoSDKType } from "../../../../tendermint/p2p/types";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, bytesFromBase64, base64FromBytes } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** GetValidatorSetByHeightRequest is the request type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetValidatorSetByHeightRequest {
   height: bigint;
@@ -22,7 +23,7 @@ export interface GetValidatorSetByHeightRequestProtoMsg {
 }
 /** GetValidatorSetByHeightRequest is the request type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetValidatorSetByHeightRequestAmino {
-  height: string;
+  height?: string;
   /** pagination defines an pagination for the request. */
   pagination?: PageRequestAmino | undefined;
 }
@@ -40,7 +41,7 @@ export interface GetValidatorSetByHeightResponse {
   blockHeight: bigint;
   validators: Validator[];
   /** pagination defines an pagination for the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface GetValidatorSetByHeightResponseProtoMsg {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightResponse";
@@ -48,8 +49,8 @@ export interface GetValidatorSetByHeightResponseProtoMsg {
 }
 /** GetValidatorSetByHeightResponse is the response type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetValidatorSetByHeightResponseAmino {
-  block_height: string;
-  validators: ValidatorAmino[];
+  block_height?: string;
+  validators?: ValidatorAmino[];
   /** pagination defines an pagination for the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -61,7 +62,7 @@ export interface GetValidatorSetByHeightResponseAminoMsg {
 export interface GetValidatorSetByHeightResponseSDKType {
   block_height: bigint;
   validators: ValidatorSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /** GetLatestValidatorSetRequest is the request type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetLatestValidatorSetRequest {
@@ -90,7 +91,7 @@ export interface GetLatestValidatorSetResponse {
   blockHeight: bigint;
   validators: Validator[];
   /** pagination defines an pagination for the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface GetLatestValidatorSetResponseProtoMsg {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetLatestValidatorSetResponse";
@@ -98,8 +99,8 @@ export interface GetLatestValidatorSetResponseProtoMsg {
 }
 /** GetLatestValidatorSetResponse is the response type for the Query/GetValidatorSetByHeight RPC method. */
 export interface GetLatestValidatorSetResponseAmino {
-  block_height: string;
-  validators: ValidatorAmino[];
+  block_height?: string;
+  validators?: ValidatorAmino[];
   /** pagination defines an pagination for the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -111,12 +112,12 @@ export interface GetLatestValidatorSetResponseAminoMsg {
 export interface GetLatestValidatorSetResponseSDKType {
   block_height: bigint;
   validators: ValidatorSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /** Validator is the type for the validator-set. */
 export interface Validator {
   address: string;
-  pubKey: Any | undefined;
+  pubKey?: Any | undefined;
   votingPower: bigint;
   proposerPriority: bigint;
 }
@@ -126,10 +127,10 @@ export interface ValidatorProtoMsg {
 }
 /** Validator is the type for the validator-set. */
 export interface ValidatorAmino {
-  address: string;
+  address?: string;
   pub_key?: AnyAmino | undefined;
-  voting_power: string;
-  proposer_priority: string;
+  voting_power?: string;
+  proposer_priority?: string;
 }
 export interface ValidatorAminoMsg {
   type: "cosmos-sdk/Validator";
@@ -138,7 +139,7 @@ export interface ValidatorAminoMsg {
 /** Validator is the type for the validator-set. */
 export interface ValidatorSDKType {
   address: string;
-  pub_key: AnySDKType | undefined;
+  pub_key?: AnySDKType | undefined;
   voting_power: bigint;
   proposer_priority: bigint;
 }
@@ -152,7 +153,7 @@ export interface GetBlockByHeightRequestProtoMsg {
 }
 /** GetBlockByHeightRequest is the request type for the Query/GetBlockByHeight RPC method. */
 export interface GetBlockByHeightRequestAmino {
-  height: string;
+  height?: string;
 }
 export interface GetBlockByHeightRequestAminoMsg {
   type: "cosmos-sdk/GetBlockByHeightRequest";
@@ -164,11 +165,11 @@ export interface GetBlockByHeightRequestSDKType {
 }
 /** GetBlockByHeightResponse is the response type for the Query/GetBlockByHeight RPC method. */
 export interface GetBlockByHeightResponse {
-  blockId: BlockID | undefined;
+  blockId?: BlockID | undefined;
   /** Deprecated: please use `sdk_block` instead */
-  block: Block1 | undefined;
+  block?: Block1 | undefined;
   /** Since: cosmos-sdk 0.47 */
-  sdkBlock: Block2 | undefined;
+  sdkBlock?: Block2 | undefined;
 }
 export interface GetBlockByHeightResponseProtoMsg {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetBlockByHeightResponse";
@@ -188,9 +189,9 @@ export interface GetBlockByHeightResponseAminoMsg {
 }
 /** GetBlockByHeightResponse is the response type for the Query/GetBlockByHeight RPC method. */
 export interface GetBlockByHeightResponseSDKType {
-  block_id: BlockIDSDKType | undefined;
-  block: Block1SDKType | undefined;
-  sdk_block: Block2SDKType | undefined;
+  block_id?: BlockIDSDKType | undefined;
+  block?: Block1SDKType | undefined;
+  sdk_block?: Block2SDKType | undefined;
 }
 /** GetLatestBlockRequest is the request type for the Query/GetLatestBlock RPC method. */
 export interface GetLatestBlockRequest {}
@@ -208,11 +209,11 @@ export interface GetLatestBlockRequestAminoMsg {
 export interface GetLatestBlockRequestSDKType {}
 /** GetLatestBlockResponse is the response type for the Query/GetLatestBlock RPC method. */
 export interface GetLatestBlockResponse {
-  blockId: BlockID | undefined;
+  blockId?: BlockID | undefined;
   /** Deprecated: please use `sdk_block` instead */
-  block: Block1 | undefined;
+  block?: Block1 | undefined;
   /** Since: cosmos-sdk 0.47 */
-  sdkBlock: Block2 | undefined;
+  sdkBlock?: Block2 | undefined;
 }
 export interface GetLatestBlockResponseProtoMsg {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetLatestBlockResponse";
@@ -232,9 +233,9 @@ export interface GetLatestBlockResponseAminoMsg {
 }
 /** GetLatestBlockResponse is the response type for the Query/GetLatestBlock RPC method. */
 export interface GetLatestBlockResponseSDKType {
-  block_id: BlockIDSDKType | undefined;
-  block: Block1SDKType | undefined;
-  sdk_block: Block2SDKType | undefined;
+  block_id?: BlockIDSDKType | undefined;
+  block?: Block1SDKType | undefined;
+  sdk_block?: Block2SDKType | undefined;
 }
 /** GetSyncingRequest is the request type for the Query/GetSyncing RPC method. */
 export interface GetSyncingRequest {}
@@ -260,7 +261,7 @@ export interface GetSyncingResponseProtoMsg {
 }
 /** GetSyncingResponse is the response type for the Query/GetSyncing RPC method. */
 export interface GetSyncingResponseAmino {
-  syncing: boolean;
+  syncing?: boolean;
 }
 export interface GetSyncingResponseAminoMsg {
   type: "cosmos-sdk/GetSyncingResponse";
@@ -286,8 +287,8 @@ export interface GetNodeInfoRequestAminoMsg {
 export interface GetNodeInfoRequestSDKType {}
 /** GetNodeInfoResponse is the response type for the Query/GetNodeInfo RPC method. */
 export interface GetNodeInfoResponse {
-  defaultNodeInfo: DefaultNodeInfo | undefined;
-  applicationVersion: VersionInfo | undefined;
+  defaultNodeInfo?: DefaultNodeInfo | undefined;
+  applicationVersion?: VersionInfo | undefined;
 }
 export interface GetNodeInfoResponseProtoMsg {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetNodeInfoResponse";
@@ -304,8 +305,8 @@ export interface GetNodeInfoResponseAminoMsg {
 }
 /** GetNodeInfoResponse is the response type for the Query/GetNodeInfo RPC method. */
 export interface GetNodeInfoResponseSDKType {
-  default_node_info: DefaultNodeInfoSDKType | undefined;
-  application_version: VersionInfoSDKType | undefined;
+  default_node_info?: DefaultNodeInfoSDKType | undefined;
+  application_version?: VersionInfoSDKType | undefined;
 }
 /** VersionInfo is the type for the GetNodeInfoResponse message. */
 export interface VersionInfo {
@@ -325,15 +326,15 @@ export interface VersionInfoProtoMsg {
 }
 /** VersionInfo is the type for the GetNodeInfoResponse message. */
 export interface VersionInfoAmino {
-  name: string;
-  app_name: string;
-  version: string;
-  git_commit: string;
-  build_tags: string;
-  go_version: string;
-  build_deps: ModuleAmino[];
+  name?: string;
+  app_name?: string;
+  version?: string;
+  git_commit?: string;
+  build_tags?: string;
+  go_version?: string;
+  build_deps?: ModuleAmino[];
   /** Since: cosmos-sdk 0.43 */
-  cosmos_sdk_version: string;
+  cosmos_sdk_version?: string;
 }
 export interface VersionInfoAminoMsg {
   type: "cosmos-sdk/VersionInfo";
@@ -366,11 +367,11 @@ export interface ModuleProtoMsg {
 /** Module is the type for VersionInfo */
 export interface ModuleAmino {
   /** module path */
-  path: string;
+  path?: string;
   /** module version */
-  version: string;
+  version?: string;
   /** checksum */
-  sum: string;
+  sum?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -395,10 +396,10 @@ export interface ABCIQueryRequestProtoMsg {
 }
 /** ABCIQueryRequest defines the request structure for the ABCIQuery gRPC query. */
 export interface ABCIQueryRequestAmino {
-  data: Uint8Array;
-  path: string;
-  height: string;
-  prove: boolean;
+  data?: string;
+  path?: string;
+  height?: string;
+  prove?: boolean;
 }
 export interface ABCIQueryRequestAminoMsg {
   type: "cosmos-sdk/ABCIQueryRequest";
@@ -426,7 +427,7 @@ export interface ABCIQueryResponse {
   index: bigint;
   key: Uint8Array;
   value: Uint8Array;
-  proofOps: ProofOps | undefined;
+  proofOps?: ProofOps | undefined;
   height: bigint;
   codespace: string;
 }
@@ -441,17 +442,17 @@ export interface ABCIQueryResponseProtoMsg {
  * Tendermint.
  */
 export interface ABCIQueryResponseAmino {
-  code: number;
+  code?: number;
   /** nondeterministic */
-  log: string;
+  log?: string;
   /** nondeterministic */
-  info: string;
-  index: string;
-  key: Uint8Array;
-  value: Uint8Array;
+  info?: string;
+  index?: string;
+  key?: string;
+  value?: string;
   proof_ops?: ProofOpsAmino | undefined;
-  height: string;
-  codespace: string;
+  height?: string;
+  codespace?: string;
 }
 export interface ABCIQueryResponseAminoMsg {
   type: "cosmos-sdk/ABCIQueryResponse";
@@ -470,7 +471,7 @@ export interface ABCIQueryResponseSDKType {
   index: bigint;
   key: Uint8Array;
   value: Uint8Array;
-  proof_ops: ProofOpsSDKType | undefined;
+  proof_ops?: ProofOpsSDKType | undefined;
   height: bigint;
   codespace: string;
 }
@@ -498,9 +499,9 @@ export interface ProofOpProtoMsg {
  * Note: This type is a duplicate of the ProofOp proto type defined in Tendermint.
  */
 export interface ProofOpAmino {
-  type: string;
-  key: Uint8Array;
-  data: Uint8Array;
+  type?: string;
+  key?: string;
+  data?: string;
 }
 export interface ProofOpAminoMsg {
   type: "cosmos-sdk/ProofOp";
@@ -553,12 +554,21 @@ export interface ProofOpsSDKType {
 function createBaseGetValidatorSetByHeightRequest(): GetValidatorSetByHeightRequest {
   return {
     height: BigInt(0),
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const GetValidatorSetByHeightRequest = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightRequest",
   aminoType: "cosmos-sdk/GetValidatorSetByHeightRequest",
+  is(o: any): o is GetValidatorSetByHeightRequest {
+    return o && (o.$typeUrl === GetValidatorSetByHeightRequest.typeUrl || typeof o.height === "bigint");
+  },
+  isSDK(o: any): o is GetValidatorSetByHeightRequestSDKType {
+    return o && (o.$typeUrl === GetValidatorSetByHeightRequest.typeUrl || typeof o.height === "bigint");
+  },
+  isAmino(o: any): o is GetValidatorSetByHeightRequestAmino {
+    return o && (o.$typeUrl === GetValidatorSetByHeightRequest.typeUrl || typeof o.height === "bigint");
+  },
   encode(message: GetValidatorSetByHeightRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.height !== BigInt(0)) {
       writer.uint32(8).int64(message.height);
@@ -619,10 +629,14 @@ export const GetValidatorSetByHeightRequest = {
     return obj;
   },
   fromAmino(object: GetValidatorSetByHeightRequestAmino): GetValidatorSetByHeightRequest {
-    return {
-      height: BigInt(object.height),
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseGetValidatorSetByHeightRequest();
+    if (object.height !== undefined && object.height !== null) {
+      message.height = BigInt(object.height);
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: GetValidatorSetByHeightRequest): GetValidatorSetByHeightRequestAmino {
     const obj: any = {};
@@ -652,16 +666,27 @@ export const GetValidatorSetByHeightRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetValidatorSetByHeightRequest.typeUrl, GetValidatorSetByHeightRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetValidatorSetByHeightRequest.aminoType, GetValidatorSetByHeightRequest.typeUrl);
 function createBaseGetValidatorSetByHeightResponse(): GetValidatorSetByHeightResponse {
   return {
     blockHeight: BigInt(0),
     validators: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const GetValidatorSetByHeightResponse = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightResponse",
   aminoType: "cosmos-sdk/GetValidatorSetByHeightResponse",
+  is(o: any): o is GetValidatorSetByHeightResponse {
+    return o && (o.$typeUrl === GetValidatorSetByHeightResponse.typeUrl || typeof o.blockHeight === "bigint" && Array.isArray(o.validators) && (!o.validators.length || Validator.is(o.validators[0])));
+  },
+  isSDK(o: any): o is GetValidatorSetByHeightResponseSDKType {
+    return o && (o.$typeUrl === GetValidatorSetByHeightResponse.typeUrl || typeof o.block_height === "bigint" && Array.isArray(o.validators) && (!o.validators.length || Validator.isSDK(o.validators[0])));
+  },
+  isAmino(o: any): o is GetValidatorSetByHeightResponseAmino {
+    return o && (o.$typeUrl === GetValidatorSetByHeightResponse.typeUrl || typeof o.block_height === "bigint" && Array.isArray(o.validators) && (!o.validators.length || Validator.isAmino(o.validators[0])));
+  },
   encode(message: GetValidatorSetByHeightResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeight !== BigInt(0)) {
       writer.uint32(8).int64(message.blockHeight);
@@ -741,11 +766,15 @@ export const GetValidatorSetByHeightResponse = {
     return obj;
   },
   fromAmino(object: GetValidatorSetByHeightResponseAmino): GetValidatorSetByHeightResponse {
-    return {
-      blockHeight: BigInt(object.block_height),
-      validators: Array.isArray(object?.validators) ? object.validators.map((e: any) => Validator.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseGetValidatorSetByHeightResponse();
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = BigInt(object.block_height);
+    }
+    message.validators = object.validators?.map(e => Validator.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: GetValidatorSetByHeightResponse): GetValidatorSetByHeightResponseAmino {
     const obj: any = {};
@@ -780,14 +809,25 @@ export const GetValidatorSetByHeightResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetValidatorSetByHeightResponse.typeUrl, GetValidatorSetByHeightResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetValidatorSetByHeightResponse.aminoType, GetValidatorSetByHeightResponse.typeUrl);
 function createBaseGetLatestValidatorSetRequest(): GetLatestValidatorSetRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const GetLatestValidatorSetRequest = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetLatestValidatorSetRequest",
   aminoType: "cosmos-sdk/GetLatestValidatorSetRequest",
+  is(o: any): o is GetLatestValidatorSetRequest {
+    return o && o.$typeUrl === GetLatestValidatorSetRequest.typeUrl;
+  },
+  isSDK(o: any): o is GetLatestValidatorSetRequestSDKType {
+    return o && o.$typeUrl === GetLatestValidatorSetRequest.typeUrl;
+  },
+  isAmino(o: any): o is GetLatestValidatorSetRequestAmino {
+    return o && o.$typeUrl === GetLatestValidatorSetRequest.typeUrl;
+  },
   encode(message: GetLatestValidatorSetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -837,9 +877,11 @@ export const GetLatestValidatorSetRequest = {
     return obj;
   },
   fromAmino(object: GetLatestValidatorSetRequestAmino): GetLatestValidatorSetRequest {
-    return {
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseGetLatestValidatorSetRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: GetLatestValidatorSetRequest): GetLatestValidatorSetRequestAmino {
     const obj: any = {};
@@ -868,16 +910,27 @@ export const GetLatestValidatorSetRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetLatestValidatorSetRequest.typeUrl, GetLatestValidatorSetRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetLatestValidatorSetRequest.aminoType, GetLatestValidatorSetRequest.typeUrl);
 function createBaseGetLatestValidatorSetResponse(): GetLatestValidatorSetResponse {
   return {
     blockHeight: BigInt(0),
     validators: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const GetLatestValidatorSetResponse = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetLatestValidatorSetResponse",
   aminoType: "cosmos-sdk/GetLatestValidatorSetResponse",
+  is(o: any): o is GetLatestValidatorSetResponse {
+    return o && (o.$typeUrl === GetLatestValidatorSetResponse.typeUrl || typeof o.blockHeight === "bigint" && Array.isArray(o.validators) && (!o.validators.length || Validator.is(o.validators[0])));
+  },
+  isSDK(o: any): o is GetLatestValidatorSetResponseSDKType {
+    return o && (o.$typeUrl === GetLatestValidatorSetResponse.typeUrl || typeof o.block_height === "bigint" && Array.isArray(o.validators) && (!o.validators.length || Validator.isSDK(o.validators[0])));
+  },
+  isAmino(o: any): o is GetLatestValidatorSetResponseAmino {
+    return o && (o.$typeUrl === GetLatestValidatorSetResponse.typeUrl || typeof o.block_height === "bigint" && Array.isArray(o.validators) && (!o.validators.length || Validator.isAmino(o.validators[0])));
+  },
   encode(message: GetLatestValidatorSetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeight !== BigInt(0)) {
       writer.uint32(8).int64(message.blockHeight);
@@ -957,11 +1010,15 @@ export const GetLatestValidatorSetResponse = {
     return obj;
   },
   fromAmino(object: GetLatestValidatorSetResponseAmino): GetLatestValidatorSetResponse {
-    return {
-      blockHeight: BigInt(object.block_height),
-      validators: Array.isArray(object?.validators) ? object.validators.map((e: any) => Validator.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseGetLatestValidatorSetResponse();
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = BigInt(object.block_height);
+    }
+    message.validators = object.validators?.map(e => Validator.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: GetLatestValidatorSetResponse): GetLatestValidatorSetResponseAmino {
     const obj: any = {};
@@ -996,10 +1053,12 @@ export const GetLatestValidatorSetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetLatestValidatorSetResponse.typeUrl, GetLatestValidatorSetResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetLatestValidatorSetResponse.aminoType, GetLatestValidatorSetResponse.typeUrl);
 function createBaseValidator(): Validator {
   return {
     address: "",
-    pubKey: Any.fromPartial({}),
+    pubKey: undefined,
     votingPower: BigInt(0),
     proposerPriority: BigInt(0)
   };
@@ -1007,6 +1066,15 @@ function createBaseValidator(): Validator {
 export const Validator = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.Validator",
   aminoType: "cosmos-sdk/Validator",
+  is(o: any): o is Validator {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.votingPower === "bigint" && typeof o.proposerPriority === "bigint");
+  },
+  isSDK(o: any): o is ValidatorSDKType {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.voting_power === "bigint" && typeof o.proposer_priority === "bigint");
+  },
+  isAmino(o: any): o is ValidatorAmino {
+    return o && (o.$typeUrl === Validator.typeUrl || typeof o.address === "string" && typeof o.voting_power === "bigint" && typeof o.proposer_priority === "bigint");
+  },
   encode(message: Validator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -1089,12 +1157,20 @@ export const Validator = {
     return obj;
   },
   fromAmino(object: ValidatorAmino): Validator {
-    return {
-      address: object.address,
-      pubKey: object?.pub_key ? Any.fromAmino(object.pub_key) : undefined,
-      votingPower: BigInt(object.voting_power),
-      proposerPriority: BigInt(object.proposer_priority)
-    };
+    const message = createBaseValidator();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.pub_key !== undefined && object.pub_key !== null) {
+      message.pubKey = Any.fromAmino(object.pub_key);
+    }
+    if (object.voting_power !== undefined && object.voting_power !== null) {
+      message.votingPower = BigInt(object.voting_power);
+    }
+    if (object.proposer_priority !== undefined && object.proposer_priority !== null) {
+      message.proposerPriority = BigInt(object.proposer_priority);
+    }
+    return message;
   },
   toAmino(message: Validator): ValidatorAmino {
     const obj: any = {};
@@ -1126,6 +1202,8 @@ export const Validator = {
     };
   }
 };
+GlobalDecoderRegistry.register(Validator.typeUrl, Validator);
+GlobalDecoderRegistry.registerAminoProtoMapping(Validator.aminoType, Validator.typeUrl);
 function createBaseGetBlockByHeightRequest(): GetBlockByHeightRequest {
   return {
     height: BigInt(0)
@@ -1134,6 +1212,15 @@ function createBaseGetBlockByHeightRequest(): GetBlockByHeightRequest {
 export const GetBlockByHeightRequest = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetBlockByHeightRequest",
   aminoType: "cosmos-sdk/GetBlockByHeightRequest",
+  is(o: any): o is GetBlockByHeightRequest {
+    return o && (o.$typeUrl === GetBlockByHeightRequest.typeUrl || typeof o.height === "bigint");
+  },
+  isSDK(o: any): o is GetBlockByHeightRequestSDKType {
+    return o && (o.$typeUrl === GetBlockByHeightRequest.typeUrl || typeof o.height === "bigint");
+  },
+  isAmino(o: any): o is GetBlockByHeightRequestAmino {
+    return o && (o.$typeUrl === GetBlockByHeightRequest.typeUrl || typeof o.height === "bigint");
+  },
   encode(message: GetBlockByHeightRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.height !== BigInt(0)) {
       writer.uint32(8).int64(message.height);
@@ -1183,9 +1270,11 @@ export const GetBlockByHeightRequest = {
     return obj;
   },
   fromAmino(object: GetBlockByHeightRequestAmino): GetBlockByHeightRequest {
-    return {
-      height: BigInt(object.height)
-    };
+    const message = createBaseGetBlockByHeightRequest();
+    if (object.height !== undefined && object.height !== null) {
+      message.height = BigInt(object.height);
+    }
+    return message;
   },
   toAmino(message: GetBlockByHeightRequest): GetBlockByHeightRequestAmino {
     const obj: any = {};
@@ -1214,16 +1303,27 @@ export const GetBlockByHeightRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetBlockByHeightRequest.typeUrl, GetBlockByHeightRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetBlockByHeightRequest.aminoType, GetBlockByHeightRequest.typeUrl);
 function createBaseGetBlockByHeightResponse(): GetBlockByHeightResponse {
   return {
-    blockId: BlockID.fromPartial({}),
-    block: Block1.fromPartial({}),
-    sdkBlock: Block2.fromPartial({})
+    blockId: undefined,
+    block: undefined,
+    sdkBlock: undefined
   };
 }
 export const GetBlockByHeightResponse = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetBlockByHeightResponse",
   aminoType: "cosmos-sdk/GetBlockByHeightResponse",
+  is(o: any): o is GetBlockByHeightResponse {
+    return o && o.$typeUrl === GetBlockByHeightResponse.typeUrl;
+  },
+  isSDK(o: any): o is GetBlockByHeightResponseSDKType {
+    return o && o.$typeUrl === GetBlockByHeightResponse.typeUrl;
+  },
+  isAmino(o: any): o is GetBlockByHeightResponseAmino {
+    return o && o.$typeUrl === GetBlockByHeightResponse.typeUrl;
+  },
   encode(message: GetBlockByHeightResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockId !== undefined) {
       BlockID.encode(message.blockId, writer.uint32(10).fork()).ldelim();
@@ -1295,11 +1395,17 @@ export const GetBlockByHeightResponse = {
     return obj;
   },
   fromAmino(object: GetBlockByHeightResponseAmino): GetBlockByHeightResponse {
-    return {
-      blockId: object?.block_id ? BlockID.fromAmino(object.block_id) : undefined,
-      block: object?.block ? Block1.fromAmino(object.block) : undefined,
-      sdkBlock: object?.sdk_block ? Block2.fromAmino(object.sdk_block) : undefined
-    };
+    const message = createBaseGetBlockByHeightResponse();
+    if (object.block_id !== undefined && object.block_id !== null) {
+      message.blockId = BlockID.fromAmino(object.block_id);
+    }
+    if (object.block !== undefined && object.block !== null) {
+      message.block = Block1.fromAmino(object.block);
+    }
+    if (object.sdk_block !== undefined && object.sdk_block !== null) {
+      message.sdkBlock = Block2.fromAmino(object.sdk_block);
+    }
+    return message;
   },
   toAmino(message: GetBlockByHeightResponse): GetBlockByHeightResponseAmino {
     const obj: any = {};
@@ -1330,12 +1436,23 @@ export const GetBlockByHeightResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetBlockByHeightResponse.typeUrl, GetBlockByHeightResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetBlockByHeightResponse.aminoType, GetBlockByHeightResponse.typeUrl);
 function createBaseGetLatestBlockRequest(): GetLatestBlockRequest {
   return {};
 }
 export const GetLatestBlockRequest = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetLatestBlockRequest",
   aminoType: "cosmos-sdk/GetLatestBlockRequest",
+  is(o: any): o is GetLatestBlockRequest {
+    return o && o.$typeUrl === GetLatestBlockRequest.typeUrl;
+  },
+  isSDK(o: any): o is GetLatestBlockRequestSDKType {
+    return o && o.$typeUrl === GetLatestBlockRequest.typeUrl;
+  },
+  isAmino(o: any): o is GetLatestBlockRequestAmino {
+    return o && o.$typeUrl === GetLatestBlockRequest.typeUrl;
+  },
   encode(_: GetLatestBlockRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -1372,7 +1489,8 @@ export const GetLatestBlockRequest = {
     return obj;
   },
   fromAmino(_: GetLatestBlockRequestAmino): GetLatestBlockRequest {
-    return {};
+    const message = createBaseGetLatestBlockRequest();
+    return message;
   },
   toAmino(_: GetLatestBlockRequest): GetLatestBlockRequestAmino {
     const obj: any = {};
@@ -1400,16 +1518,27 @@ export const GetLatestBlockRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetLatestBlockRequest.typeUrl, GetLatestBlockRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetLatestBlockRequest.aminoType, GetLatestBlockRequest.typeUrl);
 function createBaseGetLatestBlockResponse(): GetLatestBlockResponse {
   return {
-    blockId: BlockID.fromPartial({}),
-    block: Block1.fromPartial({}),
-    sdkBlock: Block2.fromPartial({})
+    blockId: undefined,
+    block: undefined,
+    sdkBlock: undefined
   };
 }
 export const GetLatestBlockResponse = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetLatestBlockResponse",
   aminoType: "cosmos-sdk/GetLatestBlockResponse",
+  is(o: any): o is GetLatestBlockResponse {
+    return o && o.$typeUrl === GetLatestBlockResponse.typeUrl;
+  },
+  isSDK(o: any): o is GetLatestBlockResponseSDKType {
+    return o && o.$typeUrl === GetLatestBlockResponse.typeUrl;
+  },
+  isAmino(o: any): o is GetLatestBlockResponseAmino {
+    return o && o.$typeUrl === GetLatestBlockResponse.typeUrl;
+  },
   encode(message: GetLatestBlockResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockId !== undefined) {
       BlockID.encode(message.blockId, writer.uint32(10).fork()).ldelim();
@@ -1481,11 +1610,17 @@ export const GetLatestBlockResponse = {
     return obj;
   },
   fromAmino(object: GetLatestBlockResponseAmino): GetLatestBlockResponse {
-    return {
-      blockId: object?.block_id ? BlockID.fromAmino(object.block_id) : undefined,
-      block: object?.block ? Block1.fromAmino(object.block) : undefined,
-      sdkBlock: object?.sdk_block ? Block2.fromAmino(object.sdk_block) : undefined
-    };
+    const message = createBaseGetLatestBlockResponse();
+    if (object.block_id !== undefined && object.block_id !== null) {
+      message.blockId = BlockID.fromAmino(object.block_id);
+    }
+    if (object.block !== undefined && object.block !== null) {
+      message.block = Block1.fromAmino(object.block);
+    }
+    if (object.sdk_block !== undefined && object.sdk_block !== null) {
+      message.sdkBlock = Block2.fromAmino(object.sdk_block);
+    }
+    return message;
   },
   toAmino(message: GetLatestBlockResponse): GetLatestBlockResponseAmino {
     const obj: any = {};
@@ -1516,12 +1651,23 @@ export const GetLatestBlockResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetLatestBlockResponse.typeUrl, GetLatestBlockResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetLatestBlockResponse.aminoType, GetLatestBlockResponse.typeUrl);
 function createBaseGetSyncingRequest(): GetSyncingRequest {
   return {};
 }
 export const GetSyncingRequest = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetSyncingRequest",
   aminoType: "cosmos-sdk/GetSyncingRequest",
+  is(o: any): o is GetSyncingRequest {
+    return o && o.$typeUrl === GetSyncingRequest.typeUrl;
+  },
+  isSDK(o: any): o is GetSyncingRequestSDKType {
+    return o && o.$typeUrl === GetSyncingRequest.typeUrl;
+  },
+  isAmino(o: any): o is GetSyncingRequestAmino {
+    return o && o.$typeUrl === GetSyncingRequest.typeUrl;
+  },
   encode(_: GetSyncingRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -1558,7 +1704,8 @@ export const GetSyncingRequest = {
     return obj;
   },
   fromAmino(_: GetSyncingRequestAmino): GetSyncingRequest {
-    return {};
+    const message = createBaseGetSyncingRequest();
+    return message;
   },
   toAmino(_: GetSyncingRequest): GetSyncingRequestAmino {
     const obj: any = {};
@@ -1586,6 +1733,8 @@ export const GetSyncingRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetSyncingRequest.typeUrl, GetSyncingRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetSyncingRequest.aminoType, GetSyncingRequest.typeUrl);
 function createBaseGetSyncingResponse(): GetSyncingResponse {
   return {
     syncing: false
@@ -1594,6 +1743,15 @@ function createBaseGetSyncingResponse(): GetSyncingResponse {
 export const GetSyncingResponse = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetSyncingResponse",
   aminoType: "cosmos-sdk/GetSyncingResponse",
+  is(o: any): o is GetSyncingResponse {
+    return o && (o.$typeUrl === GetSyncingResponse.typeUrl || typeof o.syncing === "boolean");
+  },
+  isSDK(o: any): o is GetSyncingResponseSDKType {
+    return o && (o.$typeUrl === GetSyncingResponse.typeUrl || typeof o.syncing === "boolean");
+  },
+  isAmino(o: any): o is GetSyncingResponseAmino {
+    return o && (o.$typeUrl === GetSyncingResponse.typeUrl || typeof o.syncing === "boolean");
+  },
   encode(message: GetSyncingResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.syncing === true) {
       writer.uint32(8).bool(message.syncing);
@@ -1643,9 +1801,11 @@ export const GetSyncingResponse = {
     return obj;
   },
   fromAmino(object: GetSyncingResponseAmino): GetSyncingResponse {
-    return {
-      syncing: object.syncing
-    };
+    const message = createBaseGetSyncingResponse();
+    if (object.syncing !== undefined && object.syncing !== null) {
+      message.syncing = object.syncing;
+    }
+    return message;
   },
   toAmino(message: GetSyncingResponse): GetSyncingResponseAmino {
     const obj: any = {};
@@ -1674,12 +1834,23 @@ export const GetSyncingResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetSyncingResponse.typeUrl, GetSyncingResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetSyncingResponse.aminoType, GetSyncingResponse.typeUrl);
 function createBaseGetNodeInfoRequest(): GetNodeInfoRequest {
   return {};
 }
 export const GetNodeInfoRequest = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetNodeInfoRequest",
   aminoType: "cosmos-sdk/GetNodeInfoRequest",
+  is(o: any): o is GetNodeInfoRequest {
+    return o && o.$typeUrl === GetNodeInfoRequest.typeUrl;
+  },
+  isSDK(o: any): o is GetNodeInfoRequestSDKType {
+    return o && o.$typeUrl === GetNodeInfoRequest.typeUrl;
+  },
+  isAmino(o: any): o is GetNodeInfoRequestAmino {
+    return o && o.$typeUrl === GetNodeInfoRequest.typeUrl;
+  },
   encode(_: GetNodeInfoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -1716,7 +1887,8 @@ export const GetNodeInfoRequest = {
     return obj;
   },
   fromAmino(_: GetNodeInfoRequestAmino): GetNodeInfoRequest {
-    return {};
+    const message = createBaseGetNodeInfoRequest();
+    return message;
   },
   toAmino(_: GetNodeInfoRequest): GetNodeInfoRequestAmino {
     const obj: any = {};
@@ -1744,15 +1916,26 @@ export const GetNodeInfoRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetNodeInfoRequest.typeUrl, GetNodeInfoRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetNodeInfoRequest.aminoType, GetNodeInfoRequest.typeUrl);
 function createBaseGetNodeInfoResponse(): GetNodeInfoResponse {
   return {
-    defaultNodeInfo: DefaultNodeInfo.fromPartial({}),
-    applicationVersion: VersionInfo.fromPartial({})
+    defaultNodeInfo: undefined,
+    applicationVersion: undefined
   };
 }
 export const GetNodeInfoResponse = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.GetNodeInfoResponse",
   aminoType: "cosmos-sdk/GetNodeInfoResponse",
+  is(o: any): o is GetNodeInfoResponse {
+    return o && o.$typeUrl === GetNodeInfoResponse.typeUrl;
+  },
+  isSDK(o: any): o is GetNodeInfoResponseSDKType {
+    return o && o.$typeUrl === GetNodeInfoResponse.typeUrl;
+  },
+  isAmino(o: any): o is GetNodeInfoResponseAmino {
+    return o && o.$typeUrl === GetNodeInfoResponse.typeUrl;
+  },
   encode(message: GetNodeInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.defaultNodeInfo !== undefined) {
       DefaultNodeInfo.encode(message.defaultNodeInfo, writer.uint32(10).fork()).ldelim();
@@ -1813,10 +1996,14 @@ export const GetNodeInfoResponse = {
     return obj;
   },
   fromAmino(object: GetNodeInfoResponseAmino): GetNodeInfoResponse {
-    return {
-      defaultNodeInfo: object?.default_node_info ? DefaultNodeInfo.fromAmino(object.default_node_info) : undefined,
-      applicationVersion: object?.application_version ? VersionInfo.fromAmino(object.application_version) : undefined
-    };
+    const message = createBaseGetNodeInfoResponse();
+    if (object.default_node_info !== undefined && object.default_node_info !== null) {
+      message.defaultNodeInfo = DefaultNodeInfo.fromAmino(object.default_node_info);
+    }
+    if (object.application_version !== undefined && object.application_version !== null) {
+      message.applicationVersion = VersionInfo.fromAmino(object.application_version);
+    }
+    return message;
   },
   toAmino(message: GetNodeInfoResponse): GetNodeInfoResponseAmino {
     const obj: any = {};
@@ -1846,6 +2033,8 @@ export const GetNodeInfoResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetNodeInfoResponse.typeUrl, GetNodeInfoResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetNodeInfoResponse.aminoType, GetNodeInfoResponse.typeUrl);
 function createBaseVersionInfo(): VersionInfo {
   return {
     name: "",
@@ -1861,6 +2050,15 @@ function createBaseVersionInfo(): VersionInfo {
 export const VersionInfo = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.VersionInfo",
   aminoType: "cosmos-sdk/VersionInfo",
+  is(o: any): o is VersionInfo {
+    return o && (o.$typeUrl === VersionInfo.typeUrl || typeof o.name === "string" && typeof o.appName === "string" && typeof o.version === "string" && typeof o.gitCommit === "string" && typeof o.buildTags === "string" && typeof o.goVersion === "string" && Array.isArray(o.buildDeps) && (!o.buildDeps.length || Module.is(o.buildDeps[0])) && typeof o.cosmosSdkVersion === "string");
+  },
+  isSDK(o: any): o is VersionInfoSDKType {
+    return o && (o.$typeUrl === VersionInfo.typeUrl || typeof o.name === "string" && typeof o.app_name === "string" && typeof o.version === "string" && typeof o.git_commit === "string" && typeof o.build_tags === "string" && typeof o.go_version === "string" && Array.isArray(o.build_deps) && (!o.build_deps.length || Module.isSDK(o.build_deps[0])) && typeof o.cosmos_sdk_version === "string");
+  },
+  isAmino(o: any): o is VersionInfoAmino {
+    return o && (o.$typeUrl === VersionInfo.typeUrl || typeof o.name === "string" && typeof o.app_name === "string" && typeof o.version === "string" && typeof o.git_commit === "string" && typeof o.build_tags === "string" && typeof o.go_version === "string" && Array.isArray(o.build_deps) && (!o.build_deps.length || Module.isAmino(o.build_deps[0])) && typeof o.cosmos_sdk_version === "string");
+  },
   encode(message: VersionInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -1995,16 +2193,30 @@ export const VersionInfo = {
     return obj;
   },
   fromAmino(object: VersionInfoAmino): VersionInfo {
-    return {
-      name: object.name,
-      appName: object.app_name,
-      version: object.version,
-      gitCommit: object.git_commit,
-      buildTags: object.build_tags,
-      goVersion: object.go_version,
-      buildDeps: Array.isArray(object?.build_deps) ? object.build_deps.map((e: any) => Module.fromAmino(e)) : [],
-      cosmosSdkVersion: object.cosmos_sdk_version
-    };
+    const message = createBaseVersionInfo();
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    }
+    if (object.app_name !== undefined && object.app_name !== null) {
+      message.appName = object.app_name;
+    }
+    if (object.version !== undefined && object.version !== null) {
+      message.version = object.version;
+    }
+    if (object.git_commit !== undefined && object.git_commit !== null) {
+      message.gitCommit = object.git_commit;
+    }
+    if (object.build_tags !== undefined && object.build_tags !== null) {
+      message.buildTags = object.build_tags;
+    }
+    if (object.go_version !== undefined && object.go_version !== null) {
+      message.goVersion = object.go_version;
+    }
+    message.buildDeps = object.build_deps?.map(e => Module.fromAmino(e)) || [];
+    if (object.cosmos_sdk_version !== undefined && object.cosmos_sdk_version !== null) {
+      message.cosmosSdkVersion = object.cosmos_sdk_version;
+    }
+    return message;
   },
   toAmino(message: VersionInfo): VersionInfoAmino {
     const obj: any = {};
@@ -2044,6 +2256,8 @@ export const VersionInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(VersionInfo.typeUrl, VersionInfo);
+GlobalDecoderRegistry.registerAminoProtoMapping(VersionInfo.aminoType, VersionInfo.typeUrl);
 function createBaseModule(): Module {
   return {
     path: "",
@@ -2054,6 +2268,15 @@ function createBaseModule(): Module {
 export const Module = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.Module",
   aminoType: "cosmos-sdk/Module",
+  is(o: any): o is Module {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.path === "string" && typeof o.version === "string" && typeof o.sum === "string");
+  },
+  isSDK(o: any): o is ModuleSDKType {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.path === "string" && typeof o.version === "string" && typeof o.sum === "string");
+  },
+  isAmino(o: any): o is ModuleAmino {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.path === "string" && typeof o.version === "string" && typeof o.sum === "string");
+  },
   encode(message: Module, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.path !== "") {
       writer.uint32(10).string(message.path);
@@ -2125,11 +2348,17 @@ export const Module = {
     return obj;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      path: object.path,
-      version: object.version,
-      sum: object.sum
-    };
+    const message = createBaseModule();
+    if (object.path !== undefined && object.path !== null) {
+      message.path = object.path;
+    }
+    if (object.version !== undefined && object.version !== null) {
+      message.version = object.version;
+    }
+    if (object.sum !== undefined && object.sum !== null) {
+      message.sum = object.sum;
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
@@ -2160,6 +2389,8 @@ export const Module = {
     };
   }
 };
+GlobalDecoderRegistry.register(Module.typeUrl, Module);
+GlobalDecoderRegistry.registerAminoProtoMapping(Module.aminoType, Module.typeUrl);
 function createBaseABCIQueryRequest(): ABCIQueryRequest {
   return {
     data: new Uint8Array(),
@@ -2171,6 +2402,15 @@ function createBaseABCIQueryRequest(): ABCIQueryRequest {
 export const ABCIQueryRequest = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.ABCIQueryRequest",
   aminoType: "cosmos-sdk/ABCIQueryRequest",
+  is(o: any): o is ABCIQueryRequest {
+    return o && (o.$typeUrl === ABCIQueryRequest.typeUrl || (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.path === "string" && typeof o.height === "bigint" && typeof o.prove === "boolean");
+  },
+  isSDK(o: any): o is ABCIQueryRequestSDKType {
+    return o && (o.$typeUrl === ABCIQueryRequest.typeUrl || (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.path === "string" && typeof o.height === "bigint" && typeof o.prove === "boolean");
+  },
+  isAmino(o: any): o is ABCIQueryRequestAmino {
+    return o && (o.$typeUrl === ABCIQueryRequest.typeUrl || (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.path === "string" && typeof o.height === "bigint" && typeof o.prove === "boolean");
+  },
   encode(message: ABCIQueryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.data.length !== 0) {
       writer.uint32(10).bytes(message.data);
@@ -2253,16 +2493,24 @@ export const ABCIQueryRequest = {
     return obj;
   },
   fromAmino(object: ABCIQueryRequestAmino): ABCIQueryRequest {
-    return {
-      data: object.data,
-      path: object.path,
-      height: BigInt(object.height),
-      prove: object.prove
-    };
+    const message = createBaseABCIQueryRequest();
+    if (object.data !== undefined && object.data !== null) {
+      message.data = bytesFromBase64(object.data);
+    }
+    if (object.path !== undefined && object.path !== null) {
+      message.path = object.path;
+    }
+    if (object.height !== undefined && object.height !== null) {
+      message.height = BigInt(object.height);
+    }
+    if (object.prove !== undefined && object.prove !== null) {
+      message.prove = object.prove;
+    }
+    return message;
   },
   toAmino(message: ABCIQueryRequest): ABCIQueryRequestAmino {
     const obj: any = {};
-    obj.data = message.data;
+    obj.data = message.data ? base64FromBytes(message.data) : undefined;
     obj.path = message.path;
     obj.height = message.height ? message.height.toString() : undefined;
     obj.prove = message.prove;
@@ -2290,6 +2538,8 @@ export const ABCIQueryRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(ABCIQueryRequest.typeUrl, ABCIQueryRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(ABCIQueryRequest.aminoType, ABCIQueryRequest.typeUrl);
 function createBaseABCIQueryResponse(): ABCIQueryResponse {
   return {
     code: 0,
@@ -2298,7 +2548,7 @@ function createBaseABCIQueryResponse(): ABCIQueryResponse {
     index: BigInt(0),
     key: new Uint8Array(),
     value: new Uint8Array(),
-    proofOps: ProofOps.fromPartial({}),
+    proofOps: undefined,
     height: BigInt(0),
     codespace: ""
   };
@@ -2306,6 +2556,15 @@ function createBaseABCIQueryResponse(): ABCIQueryResponse {
 export const ABCIQueryResponse = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.ABCIQueryResponse",
   aminoType: "cosmos-sdk/ABCIQueryResponse",
+  is(o: any): o is ABCIQueryResponse {
+    return o && (o.$typeUrl === ABCIQueryResponse.typeUrl || typeof o.code === "number" && typeof o.log === "string" && typeof o.info === "string" && typeof o.index === "bigint" && (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string") && typeof o.height === "bigint" && typeof o.codespace === "string");
+  },
+  isSDK(o: any): o is ABCIQueryResponseSDKType {
+    return o && (o.$typeUrl === ABCIQueryResponse.typeUrl || typeof o.code === "number" && typeof o.log === "string" && typeof o.info === "string" && typeof o.index === "bigint" && (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string") && typeof o.height === "bigint" && typeof o.codespace === "string");
+  },
+  isAmino(o: any): o is ABCIQueryResponseAmino {
+    return o && (o.$typeUrl === ABCIQueryResponse.typeUrl || typeof o.code === "number" && typeof o.log === "string" && typeof o.info === "string" && typeof o.index === "bigint" && (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string") && typeof o.height === "bigint" && typeof o.codespace === "string");
+  },
   encode(message: ABCIQueryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.code !== 0) {
       writer.uint32(8).uint32(message.code);
@@ -2443,17 +2702,35 @@ export const ABCIQueryResponse = {
     return obj;
   },
   fromAmino(object: ABCIQueryResponseAmino): ABCIQueryResponse {
-    return {
-      code: object.code,
-      log: object.log,
-      info: object.info,
-      index: BigInt(object.index),
-      key: object.key,
-      value: object.value,
-      proofOps: object?.proof_ops ? ProofOps.fromAmino(object.proof_ops) : undefined,
-      height: BigInt(object.height),
-      codespace: object.codespace
-    };
+    const message = createBaseABCIQueryResponse();
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    }
+    if (object.log !== undefined && object.log !== null) {
+      message.log = object.log;
+    }
+    if (object.info !== undefined && object.info !== null) {
+      message.info = object.info;
+    }
+    if (object.index !== undefined && object.index !== null) {
+      message.index = BigInt(object.index);
+    }
+    if (object.key !== undefined && object.key !== null) {
+      message.key = bytesFromBase64(object.key);
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = bytesFromBase64(object.value);
+    }
+    if (object.proof_ops !== undefined && object.proof_ops !== null) {
+      message.proofOps = ProofOps.fromAmino(object.proof_ops);
+    }
+    if (object.height !== undefined && object.height !== null) {
+      message.height = BigInt(object.height);
+    }
+    if (object.codespace !== undefined && object.codespace !== null) {
+      message.codespace = object.codespace;
+    }
+    return message;
   },
   toAmino(message: ABCIQueryResponse): ABCIQueryResponseAmino {
     const obj: any = {};
@@ -2461,8 +2738,8 @@ export const ABCIQueryResponse = {
     obj.log = message.log;
     obj.info = message.info;
     obj.index = message.index ? message.index.toString() : undefined;
-    obj.key = message.key;
-    obj.value = message.value;
+    obj.key = message.key ? base64FromBytes(message.key) : undefined;
+    obj.value = message.value ? base64FromBytes(message.value) : undefined;
     obj.proof_ops = message.proofOps ? ProofOps.toAmino(message.proofOps) : undefined;
     obj.height = message.height ? message.height.toString() : undefined;
     obj.codespace = message.codespace;
@@ -2490,6 +2767,8 @@ export const ABCIQueryResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(ABCIQueryResponse.typeUrl, ABCIQueryResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(ABCIQueryResponse.aminoType, ABCIQueryResponse.typeUrl);
 function createBaseProofOp(): ProofOp {
   return {
     type: "",
@@ -2500,6 +2779,15 @@ function createBaseProofOp(): ProofOp {
 export const ProofOp = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.ProofOp",
   aminoType: "cosmos-sdk/ProofOp",
+  is(o: any): o is ProofOp {
+    return o && (o.$typeUrl === ProofOp.typeUrl || typeof o.type === "string" && (o.key instanceof Uint8Array || typeof o.key === "string") && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isSDK(o: any): o is ProofOpSDKType {
+    return o && (o.$typeUrl === ProofOp.typeUrl || typeof o.type === "string" && (o.key instanceof Uint8Array || typeof o.key === "string") && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isAmino(o: any): o is ProofOpAmino {
+    return o && (o.$typeUrl === ProofOp.typeUrl || typeof o.type === "string" && (o.key instanceof Uint8Array || typeof o.key === "string") && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
   encode(message: ProofOp, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.type !== "") {
       writer.uint32(10).string(message.type);
@@ -2571,17 +2859,23 @@ export const ProofOp = {
     return obj;
   },
   fromAmino(object: ProofOpAmino): ProofOp {
-    return {
-      type: object.type,
-      key: object.key,
-      data: object.data
-    };
+    const message = createBaseProofOp();
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    }
+    if (object.key !== undefined && object.key !== null) {
+      message.key = bytesFromBase64(object.key);
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = bytesFromBase64(object.data);
+    }
+    return message;
   },
   toAmino(message: ProofOp): ProofOpAmino {
     const obj: any = {};
     obj.type = message.type;
-    obj.key = message.key;
-    obj.data = message.data;
+    obj.key = message.key ? base64FromBytes(message.key) : undefined;
+    obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;
   },
   fromAminoMsg(object: ProofOpAminoMsg): ProofOp {
@@ -2606,6 +2900,8 @@ export const ProofOp = {
     };
   }
 };
+GlobalDecoderRegistry.register(ProofOp.typeUrl, ProofOp);
+GlobalDecoderRegistry.registerAminoProtoMapping(ProofOp.aminoType, ProofOp.typeUrl);
 function createBaseProofOps(): ProofOps {
   return {
     ops: []
@@ -2614,6 +2910,15 @@ function createBaseProofOps(): ProofOps {
 export const ProofOps = {
   typeUrl: "/cosmos.base.tendermint.v1beta1.ProofOps",
   aminoType: "cosmos-sdk/ProofOps",
+  is(o: any): o is ProofOps {
+    return o && (o.$typeUrl === ProofOps.typeUrl || Array.isArray(o.ops) && (!o.ops.length || ProofOp.is(o.ops[0])));
+  },
+  isSDK(o: any): o is ProofOpsSDKType {
+    return o && (o.$typeUrl === ProofOps.typeUrl || Array.isArray(o.ops) && (!o.ops.length || ProofOp.isSDK(o.ops[0])));
+  },
+  isAmino(o: any): o is ProofOpsAmino {
+    return o && (o.$typeUrl === ProofOps.typeUrl || Array.isArray(o.ops) && (!o.ops.length || ProofOp.isAmino(o.ops[0])));
+  },
   encode(message: ProofOps, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.ops) {
       ProofOp.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -2671,9 +2976,9 @@ export const ProofOps = {
     return obj;
   },
   fromAmino(object: ProofOpsAmino): ProofOps {
-    return {
-      ops: Array.isArray(object?.ops) ? object.ops.map((e: any) => ProofOp.fromAmino(e)) : []
-    };
+    const message = createBaseProofOps();
+    message.ops = object.ops?.map(e => ProofOp.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: ProofOps): ProofOpsAmino {
     const obj: any = {};
@@ -2706,3 +3011,5 @@ export const ProofOps = {
     };
   }
 };
+GlobalDecoderRegistry.register(ProofOps.typeUrl, ProofOps);
+GlobalDecoderRegistry.registerAminoProtoMapping(ProofOps.aminoType, ProofOps.typeUrl);

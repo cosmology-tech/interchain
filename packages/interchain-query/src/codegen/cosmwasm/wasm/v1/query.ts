@@ -2,6 +2,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { ContractInfo, ContractInfoAmino, ContractInfoSDKType, ContractCodeHistoryEntry, ContractCodeHistoryEntryAmino, ContractCodeHistoryEntrySDKType, Model, ModelAmino, ModelSDKType, AccessConfig, AccessConfigAmino, AccessConfigSDKType, Params, ParamsAmino, ParamsSDKType } from "./types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 import { toUtf8, fromUtf8 } from "@cosmjs/encoding";
 /**
  * QueryContractInfoRequest is the request type for the Query/ContractInfo RPC
@@ -21,7 +22,7 @@ export interface QueryContractInfoRequestProtoMsg {
  */
 export interface QueryContractInfoRequestAmino {
   /** address is the address of the contract to query */
-  address: string;
+  address?: string;
 }
 export interface QueryContractInfoRequestAminoMsg {
   type: "wasm/QueryContractInfoRequest";
@@ -53,8 +54,8 @@ export interface QueryContractInfoResponseProtoMsg {
  */
 export interface QueryContractInfoResponseAmino {
   /** address is the address of the contract */
-  address: string;
-  contract_info?: ContractInfoAmino | undefined;
+  address?: string;
+  contract_info: ContractInfoAmino | undefined;
 }
 export interface QueryContractInfoResponseAminoMsg {
   type: "wasm/QueryContractInfoResponse";
@@ -88,7 +89,7 @@ export interface QueryContractHistoryRequestProtoMsg {
  */
 export interface QueryContractHistoryRequestAmino {
   /** address is the address of the contract to query */
-  address: string;
+  address?: string;
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequestAmino | undefined;
 }
@@ -111,7 +112,7 @@ export interface QueryContractHistoryRequestSDKType {
 export interface QueryContractHistoryResponse {
   entries: ContractCodeHistoryEntry[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryContractHistoryResponseProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractHistoryResponse";
@@ -136,7 +137,7 @@ export interface QueryContractHistoryResponseAminoMsg {
  */
 export interface QueryContractHistoryResponseSDKType {
   entries: ContractCodeHistoryEntrySDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /**
  * QueryContractsByCodeRequest is the request type for the Query/ContractsByCode
@@ -163,7 +164,7 @@ export interface QueryContractsByCodeRequestAmino {
    * grpc-gateway_out does not support Go style CodID
    * pagination defines an optional pagination for the request.
    */
-  code_id: string;
+  code_id?: string;
   pagination?: PageRequestAmino | undefined;
 }
 export interface QueryContractsByCodeRequestAminoMsg {
@@ -186,7 +187,7 @@ export interface QueryContractsByCodeResponse {
   /** contracts are a set of contract addresses */
   contracts: string[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryContractsByCodeResponseProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractsByCodeResponse";
@@ -198,7 +199,7 @@ export interface QueryContractsByCodeResponseProtoMsg {
  */
 export interface QueryContractsByCodeResponseAmino {
   /** contracts are a set of contract addresses */
-  contracts: string[];
+  contracts?: string[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -212,7 +213,7 @@ export interface QueryContractsByCodeResponseAminoMsg {
  */
 export interface QueryContractsByCodeResponseSDKType {
   contracts: string[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /**
  * QueryAllContractStateRequest is the request type for the
@@ -234,7 +235,7 @@ export interface QueryAllContractStateRequestProtoMsg {
  */
 export interface QueryAllContractStateRequestAmino {
   /** address is the address of the contract */
-  address: string;
+  address?: string;
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequestAmino | undefined;
 }
@@ -257,7 +258,7 @@ export interface QueryAllContractStateRequestSDKType {
 export interface QueryAllContractStateResponse {
   models: Model[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryAllContractStateResponseProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.QueryAllContractStateResponse";
@@ -282,7 +283,7 @@ export interface QueryAllContractStateResponseAminoMsg {
  */
 export interface QueryAllContractStateResponseSDKType {
   models: ModelSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /**
  * QueryRawContractStateRequest is the request type for the
@@ -303,8 +304,8 @@ export interface QueryRawContractStateRequestProtoMsg {
  */
 export interface QueryRawContractStateRequestAmino {
   /** address is the address of the contract */
-  address: string;
-  query_data: Uint8Array;
+  address?: string;
+  query_data?: string;
 }
 export interface QueryRawContractStateRequestAminoMsg {
   type: "wasm/QueryRawContractStateRequest";
@@ -336,7 +337,7 @@ export interface QueryRawContractStateResponseProtoMsg {
  */
 export interface QueryRawContractStateResponseAmino {
   /** Data contains the raw store data */
-  data: Uint8Array;
+  data?: string;
 }
 export interface QueryRawContractStateResponseAminoMsg {
   type: "wasm/QueryRawContractStateResponse";
@@ -369,9 +370,9 @@ export interface QuerySmartContractStateRequestProtoMsg {
  */
 export interface QuerySmartContractStateRequestAmino {
   /** address is the address of the contract */
-  address: string;
+  address?: string;
   /** QueryData contains the query data passed to the contract */
-  query_data: Uint8Array;
+  query_data?: any;
 }
 export interface QuerySmartContractStateRequestAminoMsg {
   type: "wasm/QuerySmartContractStateRequest";
@@ -403,7 +404,7 @@ export interface QuerySmartContractStateResponseProtoMsg {
  */
 export interface QuerySmartContractStateResponseAmino {
   /** Data contains the json data returned from the smart contract */
-  data: Uint8Array;
+  data?: any;
 }
 export interface QuerySmartContractStateResponseAminoMsg {
   type: "wasm/QuerySmartContractStateResponse";
@@ -428,7 +429,7 @@ export interface QueryCodeRequestProtoMsg {
 /** QueryCodeRequest is the request type for the Query/Code RPC method */
 export interface QueryCodeRequestAmino {
   /** grpc-gateway_out does not support Go style CodID */
-  code_id: string;
+  code_id?: string;
 }
 export interface QueryCodeRequestAminoMsg {
   type: "wasm/QueryCodeRequest";
@@ -451,10 +452,10 @@ export interface CodeInfoResponseProtoMsg {
 }
 /** CodeInfoResponse contains code meta data from CodeInfo */
 export interface CodeInfoResponseAmino {
-  code_id: string;
-  creator: string;
-  data_hash: Uint8Array;
-  instantiate_permission?: AccessConfigAmino | undefined;
+  code_id?: string;
+  creator?: string;
+  data_hash?: string;
+  instantiate_permission: AccessConfigAmino | undefined;
 }
 export interface CodeInfoResponseAminoMsg {
   type: "wasm/CodeInfoResponse";
@@ -469,7 +470,7 @@ export interface CodeInfoResponseSDKType {
 }
 /** QueryCodeResponse is the response type for the Query/Code RPC method */
 export interface QueryCodeResponse {
-  codeInfo: CodeInfoResponse | undefined;
+  codeInfo?: CodeInfoResponse | undefined;
   data: Uint8Array;
 }
 export interface QueryCodeResponseProtoMsg {
@@ -479,7 +480,7 @@ export interface QueryCodeResponseProtoMsg {
 /** QueryCodeResponse is the response type for the Query/Code RPC method */
 export interface QueryCodeResponseAmino {
   code_info?: CodeInfoResponseAmino | undefined;
-  data: Uint8Array;
+  data?: string;
 }
 export interface QueryCodeResponseAminoMsg {
   type: "wasm/QueryCodeResponse";
@@ -487,7 +488,7 @@ export interface QueryCodeResponseAminoMsg {
 }
 /** QueryCodeResponse is the response type for the Query/Code RPC method */
 export interface QueryCodeResponseSDKType {
-  code_info: CodeInfoResponseSDKType | undefined;
+  code_info?: CodeInfoResponseSDKType | undefined;
   data: Uint8Array;
 }
 /** QueryCodesRequest is the request type for the Query/Codes RPC method */
@@ -516,7 +517,7 @@ export interface QueryCodesRequestSDKType {
 export interface QueryCodesResponse {
   codeInfos: CodeInfoResponse[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryCodesResponseProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.QueryCodesResponse";
@@ -535,7 +536,7 @@ export interface QueryCodesResponseAminoMsg {
 /** QueryCodesResponse is the response type for the Query/Codes RPC method */
 export interface QueryCodesResponseSDKType {
   code_infos: CodeInfoResponseSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /**
  * QueryPinnedCodesRequest is the request type for the Query/PinnedCodes
@@ -575,7 +576,7 @@ export interface QueryPinnedCodesRequestSDKType {
 export interface QueryPinnedCodesResponse {
   codeIds: bigint[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryPinnedCodesResponseProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.QueryPinnedCodesResponse";
@@ -586,7 +587,7 @@ export interface QueryPinnedCodesResponseProtoMsg {
  * Query/PinnedCodes RPC method
  */
 export interface QueryPinnedCodesResponseAmino {
-  code_ids: string[];
+  code_ids?: string[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -600,7 +601,7 @@ export interface QueryPinnedCodesResponseAminoMsg {
  */
 export interface QueryPinnedCodesResponseSDKType {
   code_ids: bigint[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /** QueryParamsRequest is the request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
@@ -628,7 +629,7 @@ export interface QueryParamsResponseProtoMsg {
 /** QueryParamsResponse is the response type for the Query/Params RPC method. */
 export interface QueryParamsResponseAmino {
   /** params defines the parameters of the module. */
-  params?: ParamsAmino | undefined;
+  params: ParamsAmino | undefined;
 }
 export interface QueryParamsResponseAminoMsg {
   type: "wasm/QueryParamsResponse";
@@ -658,7 +659,7 @@ export interface QueryContractsByCreatorRequestProtoMsg {
  */
 export interface QueryContractsByCreatorRequestAmino {
   /** CreatorAddress is the address of contract creator */
-  creator_address: string;
+  creator_address?: string;
   /** Pagination defines an optional pagination for the request. */
   pagination?: PageRequestAmino | undefined;
 }
@@ -682,7 +683,7 @@ export interface QueryContractsByCreatorResponse {
   /** ContractAddresses result set */
   contractAddresses: string[];
   /** Pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryContractsByCreatorResponseProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractsByCreatorResponse";
@@ -694,7 +695,7 @@ export interface QueryContractsByCreatorResponseProtoMsg {
  */
 export interface QueryContractsByCreatorResponseAmino {
   /** ContractAddresses result set */
-  contract_addresses: string[];
+  contract_addresses?: string[];
   /** Pagination defines the pagination in the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -708,7 +709,7 @@ export interface QueryContractsByCreatorResponseAminoMsg {
  */
 export interface QueryContractsByCreatorResponseSDKType {
   contract_addresses: string[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 function createBaseQueryContractInfoRequest(): QueryContractInfoRequest {
   return {
@@ -718,6 +719,15 @@ function createBaseQueryContractInfoRequest(): QueryContractInfoRequest {
 export const QueryContractInfoRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractInfoRequest",
   aminoType: "wasm/QueryContractInfoRequest",
+  is(o: any): o is QueryContractInfoRequest {
+    return o && (o.$typeUrl === QueryContractInfoRequest.typeUrl || typeof o.address === "string");
+  },
+  isSDK(o: any): o is QueryContractInfoRequestSDKType {
+    return o && (o.$typeUrl === QueryContractInfoRequest.typeUrl || typeof o.address === "string");
+  },
+  isAmino(o: any): o is QueryContractInfoRequestAmino {
+    return o && (o.$typeUrl === QueryContractInfoRequest.typeUrl || typeof o.address === "string");
+  },
   encode(message: QueryContractInfoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -767,9 +777,11 @@ export const QueryContractInfoRequest = {
     return obj;
   },
   fromAmino(object: QueryContractInfoRequestAmino): QueryContractInfoRequest {
-    return {
-      address: object.address
-    };
+    const message = createBaseQueryContractInfoRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
   },
   toAmino(message: QueryContractInfoRequest): QueryContractInfoRequestAmino {
     const obj: any = {};
@@ -798,6 +810,8 @@ export const QueryContractInfoRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryContractInfoRequest.typeUrl, QueryContractInfoRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryContractInfoRequest.aminoType, QueryContractInfoRequest.typeUrl);
 function createBaseQueryContractInfoResponse(): QueryContractInfoResponse {
   return {
     address: "",
@@ -807,6 +821,15 @@ function createBaseQueryContractInfoResponse(): QueryContractInfoResponse {
 export const QueryContractInfoResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractInfoResponse",
   aminoType: "wasm/QueryContractInfoResponse",
+  is(o: any): o is QueryContractInfoResponse {
+    return o && (o.$typeUrl === QueryContractInfoResponse.typeUrl || typeof o.address === "string" && ContractInfo.is(o.contractInfo));
+  },
+  isSDK(o: any): o is QueryContractInfoResponseSDKType {
+    return o && (o.$typeUrl === QueryContractInfoResponse.typeUrl || typeof o.address === "string" && ContractInfo.isSDK(o.contract_info));
+  },
+  isAmino(o: any): o is QueryContractInfoResponseAmino {
+    return o && (o.$typeUrl === QueryContractInfoResponse.typeUrl || typeof o.address === "string" && ContractInfo.isAmino(o.contract_info));
+  },
   encode(message: QueryContractInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -867,15 +890,19 @@ export const QueryContractInfoResponse = {
     return obj;
   },
   fromAmino(object: QueryContractInfoResponseAmino): QueryContractInfoResponse {
-    return {
-      address: object.address,
-      contractInfo: object?.contract_info ? ContractInfo.fromAmino(object.contract_info) : undefined
-    };
+    const message = createBaseQueryContractInfoResponse();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.contract_info !== undefined && object.contract_info !== null) {
+      message.contractInfo = ContractInfo.fromAmino(object.contract_info);
+    }
+    return message;
   },
   toAmino(message: QueryContractInfoResponse): QueryContractInfoResponseAmino {
     const obj: any = {};
     obj.address = message.address;
-    obj.contract_info = message.contractInfo ? ContractInfo.toAmino(message.contractInfo) : undefined;
+    obj.contract_info = message.contractInfo ? ContractInfo.toAmino(message.contractInfo) : ContractInfo.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: QueryContractInfoResponseAminoMsg): QueryContractInfoResponse {
@@ -900,15 +927,26 @@ export const QueryContractInfoResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryContractInfoResponse.typeUrl, QueryContractInfoResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryContractInfoResponse.aminoType, QueryContractInfoResponse.typeUrl);
 function createBaseQueryContractHistoryRequest(): QueryContractHistoryRequest {
   return {
     address: "",
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryContractHistoryRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractHistoryRequest",
   aminoType: "wasm/QueryContractHistoryRequest",
+  is(o: any): o is QueryContractHistoryRequest {
+    return o && (o.$typeUrl === QueryContractHistoryRequest.typeUrl || typeof o.address === "string");
+  },
+  isSDK(o: any): o is QueryContractHistoryRequestSDKType {
+    return o && (o.$typeUrl === QueryContractHistoryRequest.typeUrl || typeof o.address === "string");
+  },
+  isAmino(o: any): o is QueryContractHistoryRequestAmino {
+    return o && (o.$typeUrl === QueryContractHistoryRequest.typeUrl || typeof o.address === "string");
+  },
   encode(message: QueryContractHistoryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -969,10 +1007,14 @@ export const QueryContractHistoryRequest = {
     return obj;
   },
   fromAmino(object: QueryContractHistoryRequestAmino): QueryContractHistoryRequest {
-    return {
-      address: object.address,
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryContractHistoryRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryContractHistoryRequest): QueryContractHistoryRequestAmino {
     const obj: any = {};
@@ -1002,15 +1044,26 @@ export const QueryContractHistoryRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryContractHistoryRequest.typeUrl, QueryContractHistoryRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryContractHistoryRequest.aminoType, QueryContractHistoryRequest.typeUrl);
 function createBaseQueryContractHistoryResponse(): QueryContractHistoryResponse {
   return {
     entries: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryContractHistoryResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractHistoryResponse",
   aminoType: "wasm/QueryContractHistoryResponse",
+  is(o: any): o is QueryContractHistoryResponse {
+    return o && (o.$typeUrl === QueryContractHistoryResponse.typeUrl || Array.isArray(o.entries) && (!o.entries.length || ContractCodeHistoryEntry.is(o.entries[0])));
+  },
+  isSDK(o: any): o is QueryContractHistoryResponseSDKType {
+    return o && (o.$typeUrl === QueryContractHistoryResponse.typeUrl || Array.isArray(o.entries) && (!o.entries.length || ContractCodeHistoryEntry.isSDK(o.entries[0])));
+  },
+  isAmino(o: any): o is QueryContractHistoryResponseAmino {
+    return o && (o.$typeUrl === QueryContractHistoryResponse.typeUrl || Array.isArray(o.entries) && (!o.entries.length || ContractCodeHistoryEntry.isAmino(o.entries[0])));
+  },
   encode(message: QueryContractHistoryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.entries) {
       ContractCodeHistoryEntry.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1079,10 +1132,12 @@ export const QueryContractHistoryResponse = {
     return obj;
   },
   fromAmino(object: QueryContractHistoryResponseAmino): QueryContractHistoryResponse {
-    return {
-      entries: Array.isArray(object?.entries) ? object.entries.map((e: any) => ContractCodeHistoryEntry.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryContractHistoryResponse();
+    message.entries = object.entries?.map(e => ContractCodeHistoryEntry.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryContractHistoryResponse): QueryContractHistoryResponseAmino {
     const obj: any = {};
@@ -1116,15 +1171,26 @@ export const QueryContractHistoryResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryContractHistoryResponse.typeUrl, QueryContractHistoryResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryContractHistoryResponse.aminoType, QueryContractHistoryResponse.typeUrl);
 function createBaseQueryContractsByCodeRequest(): QueryContractsByCodeRequest {
   return {
     codeId: BigInt(0),
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryContractsByCodeRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractsByCodeRequest",
   aminoType: "wasm/QueryContractsByCodeRequest",
+  is(o: any): o is QueryContractsByCodeRequest {
+    return o && (o.$typeUrl === QueryContractsByCodeRequest.typeUrl || typeof o.codeId === "bigint");
+  },
+  isSDK(o: any): o is QueryContractsByCodeRequestSDKType {
+    return o && (o.$typeUrl === QueryContractsByCodeRequest.typeUrl || typeof o.code_id === "bigint");
+  },
+  isAmino(o: any): o is QueryContractsByCodeRequestAmino {
+    return o && (o.$typeUrl === QueryContractsByCodeRequest.typeUrl || typeof o.code_id === "bigint");
+  },
   encode(message: QueryContractsByCodeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.codeId !== BigInt(0)) {
       writer.uint32(8).uint64(message.codeId);
@@ -1185,10 +1251,14 @@ export const QueryContractsByCodeRequest = {
     return obj;
   },
   fromAmino(object: QueryContractsByCodeRequestAmino): QueryContractsByCodeRequest {
-    return {
-      codeId: BigInt(object.code_id),
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryContractsByCodeRequest();
+    if (object.code_id !== undefined && object.code_id !== null) {
+      message.codeId = BigInt(object.code_id);
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryContractsByCodeRequest): QueryContractsByCodeRequestAmino {
     const obj: any = {};
@@ -1218,15 +1288,26 @@ export const QueryContractsByCodeRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryContractsByCodeRequest.typeUrl, QueryContractsByCodeRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryContractsByCodeRequest.aminoType, QueryContractsByCodeRequest.typeUrl);
 function createBaseQueryContractsByCodeResponse(): QueryContractsByCodeResponse {
   return {
     contracts: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryContractsByCodeResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractsByCodeResponse",
   aminoType: "wasm/QueryContractsByCodeResponse",
+  is(o: any): o is QueryContractsByCodeResponse {
+    return o && (o.$typeUrl === QueryContractsByCodeResponse.typeUrl || Array.isArray(o.contracts) && (!o.contracts.length || typeof o.contracts[0] === "string"));
+  },
+  isSDK(o: any): o is QueryContractsByCodeResponseSDKType {
+    return o && (o.$typeUrl === QueryContractsByCodeResponse.typeUrl || Array.isArray(o.contracts) && (!o.contracts.length || typeof o.contracts[0] === "string"));
+  },
+  isAmino(o: any): o is QueryContractsByCodeResponseAmino {
+    return o && (o.$typeUrl === QueryContractsByCodeResponse.typeUrl || Array.isArray(o.contracts) && (!o.contracts.length || typeof o.contracts[0] === "string"));
+  },
   encode(message: QueryContractsByCodeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.contracts) {
       writer.uint32(10).string(v!);
@@ -1295,10 +1376,12 @@ export const QueryContractsByCodeResponse = {
     return obj;
   },
   fromAmino(object: QueryContractsByCodeResponseAmino): QueryContractsByCodeResponse {
-    return {
-      contracts: Array.isArray(object?.contracts) ? object.contracts.map((e: any) => e) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryContractsByCodeResponse();
+    message.contracts = object.contracts?.map(e => e) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryContractsByCodeResponse): QueryContractsByCodeResponseAmino {
     const obj: any = {};
@@ -1332,15 +1415,26 @@ export const QueryContractsByCodeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryContractsByCodeResponse.typeUrl, QueryContractsByCodeResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryContractsByCodeResponse.aminoType, QueryContractsByCodeResponse.typeUrl);
 function createBaseQueryAllContractStateRequest(): QueryAllContractStateRequest {
   return {
     address: "",
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllContractStateRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QueryAllContractStateRequest",
   aminoType: "wasm/QueryAllContractStateRequest",
+  is(o: any): o is QueryAllContractStateRequest {
+    return o && (o.$typeUrl === QueryAllContractStateRequest.typeUrl || typeof o.address === "string");
+  },
+  isSDK(o: any): o is QueryAllContractStateRequestSDKType {
+    return o && (o.$typeUrl === QueryAllContractStateRequest.typeUrl || typeof o.address === "string");
+  },
+  isAmino(o: any): o is QueryAllContractStateRequestAmino {
+    return o && (o.$typeUrl === QueryAllContractStateRequest.typeUrl || typeof o.address === "string");
+  },
   encode(message: QueryAllContractStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -1401,10 +1495,14 @@ export const QueryAllContractStateRequest = {
     return obj;
   },
   fromAmino(object: QueryAllContractStateRequestAmino): QueryAllContractStateRequest {
-    return {
-      address: object.address,
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryAllContractStateRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryAllContractStateRequest): QueryAllContractStateRequestAmino {
     const obj: any = {};
@@ -1434,15 +1532,26 @@ export const QueryAllContractStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllContractStateRequest.typeUrl, QueryAllContractStateRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAllContractStateRequest.aminoType, QueryAllContractStateRequest.typeUrl);
 function createBaseQueryAllContractStateResponse(): QueryAllContractStateResponse {
   return {
     models: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAllContractStateResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QueryAllContractStateResponse",
   aminoType: "wasm/QueryAllContractStateResponse",
+  is(o: any): o is QueryAllContractStateResponse {
+    return o && (o.$typeUrl === QueryAllContractStateResponse.typeUrl || Array.isArray(o.models) && (!o.models.length || Model.is(o.models[0])));
+  },
+  isSDK(o: any): o is QueryAllContractStateResponseSDKType {
+    return o && (o.$typeUrl === QueryAllContractStateResponse.typeUrl || Array.isArray(o.models) && (!o.models.length || Model.isSDK(o.models[0])));
+  },
+  isAmino(o: any): o is QueryAllContractStateResponseAmino {
+    return o && (o.$typeUrl === QueryAllContractStateResponse.typeUrl || Array.isArray(o.models) && (!o.models.length || Model.isAmino(o.models[0])));
+  },
   encode(message: QueryAllContractStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.models) {
       Model.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1511,10 +1620,12 @@ export const QueryAllContractStateResponse = {
     return obj;
   },
   fromAmino(object: QueryAllContractStateResponseAmino): QueryAllContractStateResponse {
-    return {
-      models: Array.isArray(object?.models) ? object.models.map((e: any) => Model.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryAllContractStateResponse();
+    message.models = object.models?.map(e => Model.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryAllContractStateResponse): QueryAllContractStateResponseAmino {
     const obj: any = {};
@@ -1548,6 +1659,8 @@ export const QueryAllContractStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllContractStateResponse.typeUrl, QueryAllContractStateResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAllContractStateResponse.aminoType, QueryAllContractStateResponse.typeUrl);
 function createBaseQueryRawContractStateRequest(): QueryRawContractStateRequest {
   return {
     address: "",
@@ -1557,6 +1670,15 @@ function createBaseQueryRawContractStateRequest(): QueryRawContractStateRequest 
 export const QueryRawContractStateRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QueryRawContractStateRequest",
   aminoType: "wasm/QueryRawContractStateRequest",
+  is(o: any): o is QueryRawContractStateRequest {
+    return o && (o.$typeUrl === QueryRawContractStateRequest.typeUrl || typeof o.address === "string" && (o.queryData instanceof Uint8Array || typeof o.queryData === "string"));
+  },
+  isSDK(o: any): o is QueryRawContractStateRequestSDKType {
+    return o && (o.$typeUrl === QueryRawContractStateRequest.typeUrl || typeof o.address === "string" && (o.query_data instanceof Uint8Array || typeof o.query_data === "string"));
+  },
+  isAmino(o: any): o is QueryRawContractStateRequestAmino {
+    return o && (o.$typeUrl === QueryRawContractStateRequest.typeUrl || typeof o.address === "string" && (o.query_data instanceof Uint8Array || typeof o.query_data === "string"));
+  },
   encode(message: QueryRawContractStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -1617,15 +1739,19 @@ export const QueryRawContractStateRequest = {
     return obj;
   },
   fromAmino(object: QueryRawContractStateRequestAmino): QueryRawContractStateRequest {
-    return {
-      address: object.address,
-      queryData: object.query_data
-    };
+    const message = createBaseQueryRawContractStateRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.query_data !== undefined && object.query_data !== null) {
+      message.queryData = bytesFromBase64(object.query_data);
+    }
+    return message;
   },
   toAmino(message: QueryRawContractStateRequest): QueryRawContractStateRequestAmino {
     const obj: any = {};
     obj.address = message.address;
-    obj.query_data = message.queryData;
+    obj.query_data = message.queryData ? base64FromBytes(message.queryData) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryRawContractStateRequestAminoMsg): QueryRawContractStateRequest {
@@ -1650,6 +1776,8 @@ export const QueryRawContractStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryRawContractStateRequest.typeUrl, QueryRawContractStateRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryRawContractStateRequest.aminoType, QueryRawContractStateRequest.typeUrl);
 function createBaseQueryRawContractStateResponse(): QueryRawContractStateResponse {
   return {
     data: new Uint8Array()
@@ -1658,6 +1786,15 @@ function createBaseQueryRawContractStateResponse(): QueryRawContractStateRespons
 export const QueryRawContractStateResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QueryRawContractStateResponse",
   aminoType: "wasm/QueryRawContractStateResponse",
+  is(o: any): o is QueryRawContractStateResponse {
+    return o && (o.$typeUrl === QueryRawContractStateResponse.typeUrl || o.data instanceof Uint8Array || typeof o.data === "string");
+  },
+  isSDK(o: any): o is QueryRawContractStateResponseSDKType {
+    return o && (o.$typeUrl === QueryRawContractStateResponse.typeUrl || o.data instanceof Uint8Array || typeof o.data === "string");
+  },
+  isAmino(o: any): o is QueryRawContractStateResponseAmino {
+    return o && (o.$typeUrl === QueryRawContractStateResponse.typeUrl || o.data instanceof Uint8Array || typeof o.data === "string");
+  },
   encode(message: QueryRawContractStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.data.length !== 0) {
       writer.uint32(10).bytes(message.data);
@@ -1707,13 +1844,15 @@ export const QueryRawContractStateResponse = {
     return obj;
   },
   fromAmino(object: QueryRawContractStateResponseAmino): QueryRawContractStateResponse {
-    return {
-      data: object.data
-    };
+    const message = createBaseQueryRawContractStateResponse();
+    if (object.data !== undefined && object.data !== null) {
+      message.data = bytesFromBase64(object.data);
+    }
+    return message;
   },
   toAmino(message: QueryRawContractStateResponse): QueryRawContractStateResponseAmino {
     const obj: any = {};
-    obj.data = message.data;
+    obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryRawContractStateResponseAminoMsg): QueryRawContractStateResponse {
@@ -1738,6 +1877,8 @@ export const QueryRawContractStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryRawContractStateResponse.typeUrl, QueryRawContractStateResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryRawContractStateResponse.aminoType, QueryRawContractStateResponse.typeUrl);
 function createBaseQuerySmartContractStateRequest(): QuerySmartContractStateRequest {
   return {
     address: "",
@@ -1747,6 +1888,15 @@ function createBaseQuerySmartContractStateRequest(): QuerySmartContractStateRequ
 export const QuerySmartContractStateRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QuerySmartContractStateRequest",
   aminoType: "wasm/QuerySmartContractStateRequest",
+  is(o: any): o is QuerySmartContractStateRequest {
+    return o && (o.$typeUrl === QuerySmartContractStateRequest.typeUrl || typeof o.address === "string" && (o.queryData instanceof Uint8Array || typeof o.queryData === "string"));
+  },
+  isSDK(o: any): o is QuerySmartContractStateRequestSDKType {
+    return o && (o.$typeUrl === QuerySmartContractStateRequest.typeUrl || typeof o.address === "string" && (o.query_data instanceof Uint8Array || typeof o.query_data === "string"));
+  },
+  isAmino(o: any): o is QuerySmartContractStateRequestAmino {
+    return o && (o.$typeUrl === QuerySmartContractStateRequest.typeUrl || typeof o.address === "string" && (o.query_data instanceof Uint8Array || typeof o.query_data === "string"));
+  },
   encode(message: QuerySmartContractStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -1807,10 +1957,14 @@ export const QuerySmartContractStateRequest = {
     return obj;
   },
   fromAmino(object: QuerySmartContractStateRequestAmino): QuerySmartContractStateRequest {
-    return {
-      address: object.address,
-      queryData: toUtf8(JSON.stringify(object.query_data))
-    };
+    const message = createBaseQuerySmartContractStateRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.query_data !== undefined && object.query_data !== null) {
+      message.queryData = toUtf8(JSON.stringify(object.query_data));
+    }
+    return message;
   },
   toAmino(message: QuerySmartContractStateRequest): QuerySmartContractStateRequestAmino {
     const obj: any = {};
@@ -1840,6 +1994,8 @@ export const QuerySmartContractStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySmartContractStateRequest.typeUrl, QuerySmartContractStateRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QuerySmartContractStateRequest.aminoType, QuerySmartContractStateRequest.typeUrl);
 function createBaseQuerySmartContractStateResponse(): QuerySmartContractStateResponse {
   return {
     data: new Uint8Array()
@@ -1848,6 +2004,15 @@ function createBaseQuerySmartContractStateResponse(): QuerySmartContractStateRes
 export const QuerySmartContractStateResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QuerySmartContractStateResponse",
   aminoType: "wasm/QuerySmartContractStateResponse",
+  is(o: any): o is QuerySmartContractStateResponse {
+    return o && (o.$typeUrl === QuerySmartContractStateResponse.typeUrl || o.data instanceof Uint8Array || typeof o.data === "string");
+  },
+  isSDK(o: any): o is QuerySmartContractStateResponseSDKType {
+    return o && (o.$typeUrl === QuerySmartContractStateResponse.typeUrl || o.data instanceof Uint8Array || typeof o.data === "string");
+  },
+  isAmino(o: any): o is QuerySmartContractStateResponseAmino {
+    return o && (o.$typeUrl === QuerySmartContractStateResponse.typeUrl || o.data instanceof Uint8Array || typeof o.data === "string");
+  },
   encode(message: QuerySmartContractStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.data.length !== 0) {
       writer.uint32(10).bytes(message.data);
@@ -1897,9 +2062,11 @@ export const QuerySmartContractStateResponse = {
     return obj;
   },
   fromAmino(object: QuerySmartContractStateResponseAmino): QuerySmartContractStateResponse {
-    return {
-      data: toUtf8(JSON.stringify(object.data))
-    };
+    const message = createBaseQuerySmartContractStateResponse();
+    if (object.data !== undefined && object.data !== null) {
+      message.data = toUtf8(JSON.stringify(object.data));
+    }
+    return message;
   },
   toAmino(message: QuerySmartContractStateResponse): QuerySmartContractStateResponseAmino {
     const obj: any = {};
@@ -1928,6 +2095,8 @@ export const QuerySmartContractStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySmartContractStateResponse.typeUrl, QuerySmartContractStateResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QuerySmartContractStateResponse.aminoType, QuerySmartContractStateResponse.typeUrl);
 function createBaseQueryCodeRequest(): QueryCodeRequest {
   return {
     codeId: BigInt(0)
@@ -1936,6 +2105,15 @@ function createBaseQueryCodeRequest(): QueryCodeRequest {
 export const QueryCodeRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QueryCodeRequest",
   aminoType: "wasm/QueryCodeRequest",
+  is(o: any): o is QueryCodeRequest {
+    return o && (o.$typeUrl === QueryCodeRequest.typeUrl || typeof o.codeId === "bigint");
+  },
+  isSDK(o: any): o is QueryCodeRequestSDKType {
+    return o && (o.$typeUrl === QueryCodeRequest.typeUrl || typeof o.code_id === "bigint");
+  },
+  isAmino(o: any): o is QueryCodeRequestAmino {
+    return o && (o.$typeUrl === QueryCodeRequest.typeUrl || typeof o.code_id === "bigint");
+  },
   encode(message: QueryCodeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.codeId !== BigInt(0)) {
       writer.uint32(8).uint64(message.codeId);
@@ -1985,9 +2163,11 @@ export const QueryCodeRequest = {
     return obj;
   },
   fromAmino(object: QueryCodeRequestAmino): QueryCodeRequest {
-    return {
-      codeId: BigInt(object.code_id)
-    };
+    const message = createBaseQueryCodeRequest();
+    if (object.code_id !== undefined && object.code_id !== null) {
+      message.codeId = BigInt(object.code_id);
+    }
+    return message;
   },
   toAmino(message: QueryCodeRequest): QueryCodeRequestAmino {
     const obj: any = {};
@@ -2016,6 +2196,8 @@ export const QueryCodeRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryCodeRequest.typeUrl, QueryCodeRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryCodeRequest.aminoType, QueryCodeRequest.typeUrl);
 function createBaseCodeInfoResponse(): CodeInfoResponse {
   return {
     codeId: BigInt(0),
@@ -2027,6 +2209,15 @@ function createBaseCodeInfoResponse(): CodeInfoResponse {
 export const CodeInfoResponse = {
   typeUrl: "/cosmwasm.wasm.v1.CodeInfoResponse",
   aminoType: "wasm/CodeInfoResponse",
+  is(o: any): o is CodeInfoResponse {
+    return o && (o.$typeUrl === CodeInfoResponse.typeUrl || typeof o.codeId === "bigint" && typeof o.creator === "string" && (o.dataHash instanceof Uint8Array || typeof o.dataHash === "string") && AccessConfig.is(o.instantiatePermission));
+  },
+  isSDK(o: any): o is CodeInfoResponseSDKType {
+    return o && (o.$typeUrl === CodeInfoResponse.typeUrl || typeof o.code_id === "bigint" && typeof o.creator === "string" && (o.data_hash instanceof Uint8Array || typeof o.data_hash === "string") && AccessConfig.isSDK(o.instantiate_permission));
+  },
+  isAmino(o: any): o is CodeInfoResponseAmino {
+    return o && (o.$typeUrl === CodeInfoResponse.typeUrl || typeof o.code_id === "bigint" && typeof o.creator === "string" && (o.data_hash instanceof Uint8Array || typeof o.data_hash === "string") && AccessConfig.isAmino(o.instantiate_permission));
+  },
   encode(message: CodeInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.codeId !== BigInt(0)) {
       writer.uint32(8).uint64(message.codeId);
@@ -2109,19 +2300,27 @@ export const CodeInfoResponse = {
     return obj;
   },
   fromAmino(object: CodeInfoResponseAmino): CodeInfoResponse {
-    return {
-      codeId: BigInt(object.code_id),
-      creator: object.creator,
-      dataHash: object.data_hash,
-      instantiatePermission: object?.instantiate_permission ? AccessConfig.fromAmino(object.instantiate_permission) : undefined
-    };
+    const message = createBaseCodeInfoResponse();
+    if (object.code_id !== undefined && object.code_id !== null) {
+      message.codeId = BigInt(object.code_id);
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    }
+    if (object.data_hash !== undefined && object.data_hash !== null) {
+      message.dataHash = bytesFromBase64(object.data_hash);
+    }
+    if (object.instantiate_permission !== undefined && object.instantiate_permission !== null) {
+      message.instantiatePermission = AccessConfig.fromAmino(object.instantiate_permission);
+    }
+    return message;
   },
   toAmino(message: CodeInfoResponse): CodeInfoResponseAmino {
     const obj: any = {};
     obj.code_id = message.codeId ? message.codeId.toString() : undefined;
     obj.creator = message.creator;
-    obj.data_hash = message.dataHash;
-    obj.instantiate_permission = message.instantiatePermission ? AccessConfig.toAmino(message.instantiatePermission) : undefined;
+    obj.data_hash = message.dataHash ? base64FromBytes(message.dataHash) : undefined;
+    obj.instantiate_permission = message.instantiatePermission ? AccessConfig.toAmino(message.instantiatePermission) : AccessConfig.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: CodeInfoResponseAminoMsg): CodeInfoResponse {
@@ -2146,15 +2345,26 @@ export const CodeInfoResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(CodeInfoResponse.typeUrl, CodeInfoResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(CodeInfoResponse.aminoType, CodeInfoResponse.typeUrl);
 function createBaseQueryCodeResponse(): QueryCodeResponse {
   return {
-    codeInfo: CodeInfoResponse.fromPartial({}),
+    codeInfo: undefined,
     data: new Uint8Array()
   };
 }
 export const QueryCodeResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QueryCodeResponse",
   aminoType: "wasm/QueryCodeResponse",
+  is(o: any): o is QueryCodeResponse {
+    return o && (o.$typeUrl === QueryCodeResponse.typeUrl || o.data instanceof Uint8Array || typeof o.data === "string");
+  },
+  isSDK(o: any): o is QueryCodeResponseSDKType {
+    return o && (o.$typeUrl === QueryCodeResponse.typeUrl || o.data instanceof Uint8Array || typeof o.data === "string");
+  },
+  isAmino(o: any): o is QueryCodeResponseAmino {
+    return o && (o.$typeUrl === QueryCodeResponse.typeUrl || o.data instanceof Uint8Array || typeof o.data === "string");
+  },
   encode(message: QueryCodeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.codeInfo !== undefined) {
       CodeInfoResponse.encode(message.codeInfo, writer.uint32(10).fork()).ldelim();
@@ -2215,15 +2425,19 @@ export const QueryCodeResponse = {
     return obj;
   },
   fromAmino(object: QueryCodeResponseAmino): QueryCodeResponse {
-    return {
-      codeInfo: object?.code_info ? CodeInfoResponse.fromAmino(object.code_info) : undefined,
-      data: object.data
-    };
+    const message = createBaseQueryCodeResponse();
+    if (object.code_info !== undefined && object.code_info !== null) {
+      message.codeInfo = CodeInfoResponse.fromAmino(object.code_info);
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = bytesFromBase64(object.data);
+    }
+    return message;
   },
   toAmino(message: QueryCodeResponse): QueryCodeResponseAmino {
     const obj: any = {};
     obj.code_info = message.codeInfo ? CodeInfoResponse.toAmino(message.codeInfo) : undefined;
-    obj.data = message.data;
+    obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryCodeResponseAminoMsg): QueryCodeResponse {
@@ -2248,14 +2462,25 @@ export const QueryCodeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryCodeResponse.typeUrl, QueryCodeResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryCodeResponse.aminoType, QueryCodeResponse.typeUrl);
 function createBaseQueryCodesRequest(): QueryCodesRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryCodesRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QueryCodesRequest",
   aminoType: "wasm/QueryCodesRequest",
+  is(o: any): o is QueryCodesRequest {
+    return o && o.$typeUrl === QueryCodesRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryCodesRequestSDKType {
+    return o && o.$typeUrl === QueryCodesRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryCodesRequestAmino {
+    return o && o.$typeUrl === QueryCodesRequest.typeUrl;
+  },
   encode(message: QueryCodesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -2305,9 +2530,11 @@ export const QueryCodesRequest = {
     return obj;
   },
   fromAmino(object: QueryCodesRequestAmino): QueryCodesRequest {
-    return {
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryCodesRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryCodesRequest): QueryCodesRequestAmino {
     const obj: any = {};
@@ -2336,15 +2563,26 @@ export const QueryCodesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryCodesRequest.typeUrl, QueryCodesRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryCodesRequest.aminoType, QueryCodesRequest.typeUrl);
 function createBaseQueryCodesResponse(): QueryCodesResponse {
   return {
     codeInfos: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryCodesResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QueryCodesResponse",
   aminoType: "wasm/QueryCodesResponse",
+  is(o: any): o is QueryCodesResponse {
+    return o && (o.$typeUrl === QueryCodesResponse.typeUrl || Array.isArray(o.codeInfos) && (!o.codeInfos.length || CodeInfoResponse.is(o.codeInfos[0])));
+  },
+  isSDK(o: any): o is QueryCodesResponseSDKType {
+    return o && (o.$typeUrl === QueryCodesResponse.typeUrl || Array.isArray(o.code_infos) && (!o.code_infos.length || CodeInfoResponse.isSDK(o.code_infos[0])));
+  },
+  isAmino(o: any): o is QueryCodesResponseAmino {
+    return o && (o.$typeUrl === QueryCodesResponse.typeUrl || Array.isArray(o.code_infos) && (!o.code_infos.length || CodeInfoResponse.isAmino(o.code_infos[0])));
+  },
   encode(message: QueryCodesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.codeInfos) {
       CodeInfoResponse.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -2413,10 +2651,12 @@ export const QueryCodesResponse = {
     return obj;
   },
   fromAmino(object: QueryCodesResponseAmino): QueryCodesResponse {
-    return {
-      codeInfos: Array.isArray(object?.code_infos) ? object.code_infos.map((e: any) => CodeInfoResponse.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryCodesResponse();
+    message.codeInfos = object.code_infos?.map(e => CodeInfoResponse.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryCodesResponse): QueryCodesResponseAmino {
     const obj: any = {};
@@ -2450,14 +2690,25 @@ export const QueryCodesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryCodesResponse.typeUrl, QueryCodesResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryCodesResponse.aminoType, QueryCodesResponse.typeUrl);
 function createBaseQueryPinnedCodesRequest(): QueryPinnedCodesRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryPinnedCodesRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QueryPinnedCodesRequest",
   aminoType: "wasm/QueryPinnedCodesRequest",
+  is(o: any): o is QueryPinnedCodesRequest {
+    return o && o.$typeUrl === QueryPinnedCodesRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryPinnedCodesRequestSDKType {
+    return o && o.$typeUrl === QueryPinnedCodesRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryPinnedCodesRequestAmino {
+    return o && o.$typeUrl === QueryPinnedCodesRequest.typeUrl;
+  },
   encode(message: QueryPinnedCodesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
@@ -2507,9 +2758,11 @@ export const QueryPinnedCodesRequest = {
     return obj;
   },
   fromAmino(object: QueryPinnedCodesRequestAmino): QueryPinnedCodesRequest {
-    return {
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryPinnedCodesRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryPinnedCodesRequest): QueryPinnedCodesRequestAmino {
     const obj: any = {};
@@ -2538,15 +2791,26 @@ export const QueryPinnedCodesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPinnedCodesRequest.typeUrl, QueryPinnedCodesRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryPinnedCodesRequest.aminoType, QueryPinnedCodesRequest.typeUrl);
 function createBaseQueryPinnedCodesResponse(): QueryPinnedCodesResponse {
   return {
     codeIds: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryPinnedCodesResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QueryPinnedCodesResponse",
   aminoType: "wasm/QueryPinnedCodesResponse",
+  is(o: any): o is QueryPinnedCodesResponse {
+    return o && (o.$typeUrl === QueryPinnedCodesResponse.typeUrl || Array.isArray(o.codeIds) && (!o.codeIds.length || typeof o.codeIds[0] === "bigint"));
+  },
+  isSDK(o: any): o is QueryPinnedCodesResponseSDKType {
+    return o && (o.$typeUrl === QueryPinnedCodesResponse.typeUrl || Array.isArray(o.code_ids) && (!o.code_ids.length || typeof o.code_ids[0] === "bigint"));
+  },
+  isAmino(o: any): o is QueryPinnedCodesResponseAmino {
+    return o && (o.$typeUrl === QueryPinnedCodesResponse.typeUrl || Array.isArray(o.code_ids) && (!o.code_ids.length || typeof o.code_ids[0] === "bigint"));
+  },
   encode(message: QueryPinnedCodesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     writer.uint32(10).fork();
     for (const v of message.codeIds) {
@@ -2624,10 +2888,12 @@ export const QueryPinnedCodesResponse = {
     return obj;
   },
   fromAmino(object: QueryPinnedCodesResponseAmino): QueryPinnedCodesResponse {
-    return {
-      codeIds: Array.isArray(object?.code_ids) ? object.code_ids.map((e: any) => BigInt(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryPinnedCodesResponse();
+    message.codeIds = object.code_ids?.map(e => BigInt(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryPinnedCodesResponse): QueryPinnedCodesResponseAmino {
     const obj: any = {};
@@ -2661,12 +2927,23 @@ export const QueryPinnedCodesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryPinnedCodesResponse.typeUrl, QueryPinnedCodesResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryPinnedCodesResponse.aminoType, QueryPinnedCodesResponse.typeUrl);
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
 export const QueryParamsRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QueryParamsRequest",
   aminoType: "wasm/QueryParamsRequest",
+  is(o: any): o is QueryParamsRequest {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryParamsRequestSDKType {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryParamsRequestAmino {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -2703,7 +2980,8 @@ export const QueryParamsRequest = {
     return obj;
   },
   fromAmino(_: QueryParamsRequestAmino): QueryParamsRequest {
-    return {};
+    const message = createBaseQueryParamsRequest();
+    return message;
   },
   toAmino(_: QueryParamsRequest): QueryParamsRequestAmino {
     const obj: any = {};
@@ -2731,6 +3009,8 @@ export const QueryParamsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsRequest.typeUrl, QueryParamsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryParamsRequest.aminoType, QueryParamsRequest.typeUrl);
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
     params: Params.fromPartial({})
@@ -2739,6 +3019,15 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 export const QueryParamsResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QueryParamsResponse",
   aminoType: "wasm/QueryParamsResponse",
+  is(o: any): o is QueryParamsResponse {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is QueryParamsResponseSDKType {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is QueryParamsResponseAmino {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -2788,13 +3077,15 @@ export const QueryParamsResponse = {
     return obj;
   },
   fromAmino(object: QueryParamsResponseAmino): QueryParamsResponse {
-    return {
-      params: object?.params ? Params.fromAmino(object.params) : undefined
-    };
+    const message = createBaseQueryParamsResponse();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
   },
   toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
@@ -2819,15 +3110,26 @@ export const QueryParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsResponse.typeUrl, QueryParamsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryParamsResponse.aminoType, QueryParamsResponse.typeUrl);
 function createBaseQueryContractsByCreatorRequest(): QueryContractsByCreatorRequest {
   return {
     creatorAddress: "",
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryContractsByCreatorRequest = {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractsByCreatorRequest",
   aminoType: "wasm/QueryContractsByCreatorRequest",
+  is(o: any): o is QueryContractsByCreatorRequest {
+    return o && (o.$typeUrl === QueryContractsByCreatorRequest.typeUrl || typeof o.creatorAddress === "string");
+  },
+  isSDK(o: any): o is QueryContractsByCreatorRequestSDKType {
+    return o && (o.$typeUrl === QueryContractsByCreatorRequest.typeUrl || typeof o.creator_address === "string");
+  },
+  isAmino(o: any): o is QueryContractsByCreatorRequestAmino {
+    return o && (o.$typeUrl === QueryContractsByCreatorRequest.typeUrl || typeof o.creator_address === "string");
+  },
   encode(message: QueryContractsByCreatorRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creatorAddress !== "") {
       writer.uint32(10).string(message.creatorAddress);
@@ -2888,10 +3190,14 @@ export const QueryContractsByCreatorRequest = {
     return obj;
   },
   fromAmino(object: QueryContractsByCreatorRequestAmino): QueryContractsByCreatorRequest {
-    return {
-      creatorAddress: object.creator_address,
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryContractsByCreatorRequest();
+    if (object.creator_address !== undefined && object.creator_address !== null) {
+      message.creatorAddress = object.creator_address;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryContractsByCreatorRequest): QueryContractsByCreatorRequestAmino {
     const obj: any = {};
@@ -2921,15 +3227,26 @@ export const QueryContractsByCreatorRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryContractsByCreatorRequest.typeUrl, QueryContractsByCreatorRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryContractsByCreatorRequest.aminoType, QueryContractsByCreatorRequest.typeUrl);
 function createBaseQueryContractsByCreatorResponse(): QueryContractsByCreatorResponse {
   return {
     contractAddresses: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryContractsByCreatorResponse = {
   typeUrl: "/cosmwasm.wasm.v1.QueryContractsByCreatorResponse",
   aminoType: "wasm/QueryContractsByCreatorResponse",
+  is(o: any): o is QueryContractsByCreatorResponse {
+    return o && (o.$typeUrl === QueryContractsByCreatorResponse.typeUrl || Array.isArray(o.contractAddresses) && (!o.contractAddresses.length || typeof o.contractAddresses[0] === "string"));
+  },
+  isSDK(o: any): o is QueryContractsByCreatorResponseSDKType {
+    return o && (o.$typeUrl === QueryContractsByCreatorResponse.typeUrl || Array.isArray(o.contract_addresses) && (!o.contract_addresses.length || typeof o.contract_addresses[0] === "string"));
+  },
+  isAmino(o: any): o is QueryContractsByCreatorResponseAmino {
+    return o && (o.$typeUrl === QueryContractsByCreatorResponse.typeUrl || Array.isArray(o.contract_addresses) && (!o.contract_addresses.length || typeof o.contract_addresses[0] === "string"));
+  },
   encode(message: QueryContractsByCreatorResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.contractAddresses) {
       writer.uint32(10).string(v!);
@@ -2998,10 +3315,12 @@ export const QueryContractsByCreatorResponse = {
     return obj;
   },
   fromAmino(object: QueryContractsByCreatorResponseAmino): QueryContractsByCreatorResponse {
-    return {
-      contractAddresses: Array.isArray(object?.contract_addresses) ? object.contract_addresses.map((e: any) => e) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryContractsByCreatorResponse();
+    message.contractAddresses = object.contract_addresses?.map(e => e) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryContractsByCreatorResponse): QueryContractsByCreatorResponseAmino {
     const obj: any = {};
@@ -3035,3 +3354,5 @@ export const QueryContractsByCreatorResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryContractsByCreatorResponse.typeUrl, QueryContractsByCreatorResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryContractsByCreatorResponse.aminoType, QueryContractsByCreatorResponse.typeUrl);

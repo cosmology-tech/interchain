@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** Module is the config object of the staking module. */
 export interface Module {
   /**
@@ -26,13 +27,13 @@ export interface ModuleAmino {
    * of module names which provide a staking hooks instance. If no order is
    * provided, then hooks will be applied in alphabetical order of module names.
    */
-  hooks_order: string[];
+  hooks_order?: string[];
   /** authority defines the custom module authority. If not set, defaults to the governance module. */
-  authority: string;
+  authority?: string;
   /** bech32_prefix_validator is the bech32 validator prefix for the app. */
-  bech32_prefix_validator: string;
+  bech32_prefix_validator?: string;
   /** bech32_prefix_consensus is the bech32 consensus node prefix for the app. */
-  bech32_prefix_consensus: string;
+  bech32_prefix_consensus?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -56,6 +57,15 @@ function createBaseModule(): Module {
 export const Module = {
   typeUrl: "/cosmos.staking.module.v1.Module",
   aminoType: "cosmos-sdk/Module",
+  is(o: any): o is Module {
+    return o && (o.$typeUrl === Module.typeUrl || Array.isArray(o.hooksOrder) && (!o.hooksOrder.length || typeof o.hooksOrder[0] === "string") && typeof o.authority === "string" && typeof o.bech32PrefixValidator === "string" && typeof o.bech32PrefixConsensus === "string");
+  },
+  isSDK(o: any): o is ModuleSDKType {
+    return o && (o.$typeUrl === Module.typeUrl || Array.isArray(o.hooks_order) && (!o.hooks_order.length || typeof o.hooks_order[0] === "string") && typeof o.authority === "string" && typeof o.bech32_prefix_validator === "string" && typeof o.bech32_prefix_consensus === "string");
+  },
+  isAmino(o: any): o is ModuleAmino {
+    return o && (o.$typeUrl === Module.typeUrl || Array.isArray(o.hooks_order) && (!o.hooks_order.length || typeof o.hooks_order[0] === "string") && typeof o.authority === "string" && typeof o.bech32_prefix_validator === "string" && typeof o.bech32_prefix_consensus === "string");
+  },
   encode(message: Module, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.hooksOrder) {
       writer.uint32(10).string(v!);
@@ -146,12 +156,18 @@ export const Module = {
     return obj;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      hooksOrder: Array.isArray(object?.hooks_order) ? object.hooks_order.map((e: any) => e) : [],
-      authority: object.authority,
-      bech32PrefixValidator: object.bech32_prefix_validator,
-      bech32PrefixConsensus: object.bech32_prefix_consensus
-    };
+    const message = createBaseModule();
+    message.hooksOrder = object.hooks_order?.map(e => e) || [];
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.bech32_prefix_validator !== undefined && object.bech32_prefix_validator !== null) {
+      message.bech32PrefixValidator = object.bech32_prefix_validator;
+    }
+    if (object.bech32_prefix_consensus !== undefined && object.bech32_prefix_consensus !== null) {
+      message.bech32PrefixConsensus = object.bech32_prefix_consensus;
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
@@ -187,3 +203,5 @@ export const Module = {
     };
   }
 };
+GlobalDecoderRegistry.register(Module.typeUrl, Module);
+GlobalDecoderRegistry.registerAminoProtoMapping(Module.aminoType, Module.typeUrl);

@@ -1,6 +1,7 @@
 import { CapabilityOwners, CapabilityOwnersAmino, CapabilityOwnersSDKType } from "./capability";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, DeepPartial } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 /** GenesisOwners defines the capability owners with their corresponding index. */
 export interface GenesisOwners {
   /** index is the index of the capability owner. */
@@ -15,9 +16,9 @@ export interface GenesisOwnersProtoMsg {
 /** GenesisOwners defines the capability owners with their corresponding index. */
 export interface GenesisOwnersAmino {
   /** index is the index of the capability owner. */
-  index: string;
+  index?: string;
   /** index_owners are the owners at the given index. */
-  index_owners?: CapabilityOwnersAmino | undefined;
+  index_owners: CapabilityOwnersAmino | undefined;
 }
 export interface GenesisOwnersAminoMsg {
   type: "/capability.v1.GenesisOwners";
@@ -45,7 +46,7 @@ export interface GenesisStateProtoMsg {
 /** GenesisState defines the capability module's genesis state. */
 export interface GenesisStateAmino {
   /** index is the capability global index. */
-  index: string;
+  index?: string;
   /**
    * owners represents a map from index to owners of the capability index
    * index key is string to allow amino marshalling.
@@ -69,6 +70,15 @@ function createBaseGenesisOwners(): GenesisOwners {
 }
 export const GenesisOwners = {
   typeUrl: "/capability.v1.GenesisOwners",
+  is(o: any): o is GenesisOwners {
+    return o && (o.$typeUrl === GenesisOwners.typeUrl || typeof o.index === "bigint" && CapabilityOwners.is(o.indexOwners));
+  },
+  isSDK(o: any): o is GenesisOwnersSDKType {
+    return o && (o.$typeUrl === GenesisOwners.typeUrl || typeof o.index === "bigint" && CapabilityOwners.isSDK(o.index_owners));
+  },
+  isAmino(o: any): o is GenesisOwnersAmino {
+    return o && (o.$typeUrl === GenesisOwners.typeUrl || typeof o.index === "bigint" && CapabilityOwners.isAmino(o.index_owners));
+  },
   encode(message: GenesisOwners, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.index !== BigInt(0)) {
       writer.uint32(8).uint64(message.index);
@@ -129,15 +139,19 @@ export const GenesisOwners = {
     return obj;
   },
   fromAmino(object: GenesisOwnersAmino): GenesisOwners {
-    return {
-      index: BigInt(object.index),
-      indexOwners: object?.index_owners ? CapabilityOwners.fromAmino(object.index_owners) : undefined
-    };
+    const message = createBaseGenesisOwners();
+    if (object.index !== undefined && object.index !== null) {
+      message.index = BigInt(object.index);
+    }
+    if (object.index_owners !== undefined && object.index_owners !== null) {
+      message.indexOwners = CapabilityOwners.fromAmino(object.index_owners);
+    }
+    return message;
   },
   toAmino(message: GenesisOwners): GenesisOwnersAmino {
     const obj: any = {};
     obj.index = message.index ? message.index.toString() : undefined;
-    obj.index_owners = message.indexOwners ? CapabilityOwners.toAmino(message.indexOwners) : undefined;
+    obj.index_owners = message.indexOwners ? CapabilityOwners.toAmino(message.indexOwners) : CapabilityOwners.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: GenesisOwnersAminoMsg): GenesisOwners {
@@ -156,6 +170,7 @@ export const GenesisOwners = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisOwners.typeUrl, GenesisOwners);
 function createBaseGenesisState(): GenesisState {
   return {
     index: BigInt(0),
@@ -164,6 +179,15 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/capability.v1.GenesisState",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || typeof o.index === "bigint" && Array.isArray(o.owners) && (!o.owners.length || GenesisOwners.is(o.owners[0])));
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || typeof o.index === "bigint" && Array.isArray(o.owners) && (!o.owners.length || GenesisOwners.isSDK(o.owners[0])));
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || typeof o.index === "bigint" && Array.isArray(o.owners) && (!o.owners.length || GenesisOwners.isAmino(o.owners[0])));
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.index !== BigInt(0)) {
       writer.uint32(8).uint64(message.index);
@@ -232,10 +256,12 @@ export const GenesisState = {
     return obj;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
-    return {
-      index: BigInt(object.index),
-      owners: Array.isArray(object?.owners) ? object.owners.map((e: any) => GenesisOwners.fromAmino(e)) : []
-    };
+    const message = createBaseGenesisState();
+    if (object.index !== undefined && object.index !== null) {
+      message.index = BigInt(object.index);
+    }
+    message.owners = object.owners?.map(e => GenesisOwners.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: GenesisState): GenesisStateAmino {
     const obj: any = {};
@@ -263,3 +289,4 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);

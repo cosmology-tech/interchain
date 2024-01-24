@@ -17,7 +17,6 @@ out
 
 
 # dist
-dist
 main
 
 
@@ -67,6 +66,8 @@ yarn.lock
 # AUTOMATED DONT EDIT
 /varint.js
 /utf8.js
+/types.js
+/registry.js
 /react-query.js
 /index.js
 /hooks.js
@@ -84,22 +85,18 @@ yarn.lock
 /amino
 /varint.js.map
 /utf8.js.map
+/types.js.map
+/registry.js.map
 /react-query.js.map
 /index.js.map
 /hooks.js.map
 /helpers.js.map
 /extern.js.map
 /binary.js.map
-/varint.mjs
-/utf8.mjs
-/react-query.mjs
-/index.mjs
-/hooks.mjs
-/helpers.mjs
-/extern.mjs
-/binary.mjs
 /varint.d.ts
 /utf8.d.ts
+/types.d.ts
+/registry.d.ts
 /react-query.d.ts
 /index.d.ts
 /hooks.d.ts
@@ -108,4 +105,4 @@ yarn.lock
 /binary.d.ts
 
 # END publish-scripts
-    
+

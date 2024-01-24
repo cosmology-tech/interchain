@@ -1,6 +1,7 @@
 import { ResponseCommit, ResponseCommitAmino, ResponseCommitSDKType, RequestFinalizeBlock, RequestFinalizeBlockAmino, RequestFinalizeBlockSDKType, ResponseFinalizeBlock, ResponseFinalizeBlockAmino, ResponseFinalizeBlockSDKType } from "../../../tendermint/abci/types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /**
  * StoreKVPair is a KVStore KVPair used for listening to state changes (Sets and Deletes)
  * It optionally includes the StoreKey for the originating KVStore and a Boolean flag to distinguish between Sets and
@@ -29,11 +30,11 @@ export interface StoreKVPairProtoMsg {
  */
 export interface StoreKVPairAmino {
   /** the store key for the KVStore this pair originates from */
-  store_key: string;
+  store_key?: string;
   /** true indicates a delete operation, false indicates a set operation */
-  delete: boolean;
-  key: Uint8Array;
-  value: Uint8Array;
+  delete?: boolean;
+  key?: string;
+  value?: string;
 }
 export interface StoreKVPairAminoMsg {
   type: "cosmos-sdk/StoreKVPair";
@@ -57,10 +58,10 @@ export interface StoreKVPairSDKType {
  * the file streamer dump them into files together with the state changes.
  */
 export interface BlockMetadata {
-  responseCommit: ResponseCommit | undefined;
-  requestFinalizeBlock: RequestFinalizeBlock | undefined;
+  responseCommit?: ResponseCommit | undefined;
+  requestFinalizeBlock?: RequestFinalizeBlock | undefined;
   /** TODO: should we renumber this? */
-  responseFinalizeBlock: ResponseFinalizeBlock | undefined;
+  responseFinalizeBlock?: ResponseFinalizeBlock | undefined;
 }
 export interface BlockMetadataProtoMsg {
   typeUrl: "/cosmos.store.v1beta1.BlockMetadata";
@@ -85,9 +86,9 @@ export interface BlockMetadataAminoMsg {
  * the file streamer dump them into files together with the state changes.
  */
 export interface BlockMetadataSDKType {
-  response_commit: ResponseCommitSDKType | undefined;
-  request_finalize_block: RequestFinalizeBlockSDKType | undefined;
-  response_finalize_block: ResponseFinalizeBlockSDKType | undefined;
+  response_commit?: ResponseCommitSDKType | undefined;
+  request_finalize_block?: RequestFinalizeBlockSDKType | undefined;
+  response_finalize_block?: ResponseFinalizeBlockSDKType | undefined;
 }
 function createBaseStoreKVPair(): StoreKVPair {
   return {
@@ -100,6 +101,15 @@ function createBaseStoreKVPair(): StoreKVPair {
 export const StoreKVPair = {
   typeUrl: "/cosmos.store.v1beta1.StoreKVPair",
   aminoType: "cosmos-sdk/StoreKVPair",
+  is(o: any): o is StoreKVPair {
+    return o && (o.$typeUrl === StoreKVPair.typeUrl || typeof o.storeKey === "string" && typeof o.delete === "boolean" && (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
+  isSDK(o: any): o is StoreKVPairSDKType {
+    return o && (o.$typeUrl === StoreKVPair.typeUrl || typeof o.store_key === "string" && typeof o.delete === "boolean" && (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
+  isAmino(o: any): o is StoreKVPairAmino {
+    return o && (o.$typeUrl === StoreKVPair.typeUrl || typeof o.store_key === "string" && typeof o.delete === "boolean" && (o.key instanceof Uint8Array || typeof o.key === "string") && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
   encode(message: StoreKVPair, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.storeKey !== "") {
       writer.uint32(10).string(message.storeKey);
@@ -182,19 +192,27 @@ export const StoreKVPair = {
     return obj;
   },
   fromAmino(object: StoreKVPairAmino): StoreKVPair {
-    return {
-      storeKey: object.store_key,
-      delete: object.delete,
-      key: object.key,
-      value: object.value
-    };
+    const message = createBaseStoreKVPair();
+    if (object.store_key !== undefined && object.store_key !== null) {
+      message.storeKey = object.store_key;
+    }
+    if (object.delete !== undefined && object.delete !== null) {
+      message.delete = object.delete;
+    }
+    if (object.key !== undefined && object.key !== null) {
+      message.key = bytesFromBase64(object.key);
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = bytesFromBase64(object.value);
+    }
+    return message;
   },
   toAmino(message: StoreKVPair): StoreKVPairAmino {
     const obj: any = {};
     obj.store_key = message.storeKey;
     obj.delete = message.delete;
-    obj.key = message.key;
-    obj.value = message.value;
+    obj.key = message.key ? base64FromBytes(message.key) : undefined;
+    obj.value = message.value ? base64FromBytes(message.value) : undefined;
     return obj;
   },
   fromAminoMsg(object: StoreKVPairAminoMsg): StoreKVPair {
@@ -219,16 +237,27 @@ export const StoreKVPair = {
     };
   }
 };
+GlobalDecoderRegistry.register(StoreKVPair.typeUrl, StoreKVPair);
+GlobalDecoderRegistry.registerAminoProtoMapping(StoreKVPair.aminoType, StoreKVPair.typeUrl);
 function createBaseBlockMetadata(): BlockMetadata {
   return {
-    responseCommit: ResponseCommit.fromPartial({}),
-    requestFinalizeBlock: RequestFinalizeBlock.fromPartial({}),
-    responseFinalizeBlock: ResponseFinalizeBlock.fromPartial({})
+    responseCommit: undefined,
+    requestFinalizeBlock: undefined,
+    responseFinalizeBlock: undefined
   };
 }
 export const BlockMetadata = {
   typeUrl: "/cosmos.store.v1beta1.BlockMetadata",
   aminoType: "cosmos-sdk/BlockMetadata",
+  is(o: any): o is BlockMetadata {
+    return o && o.$typeUrl === BlockMetadata.typeUrl;
+  },
+  isSDK(o: any): o is BlockMetadataSDKType {
+    return o && o.$typeUrl === BlockMetadata.typeUrl;
+  },
+  isAmino(o: any): o is BlockMetadataAmino {
+    return o && o.$typeUrl === BlockMetadata.typeUrl;
+  },
   encode(message: BlockMetadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.responseCommit !== undefined) {
       ResponseCommit.encode(message.responseCommit, writer.uint32(50).fork()).ldelim();
@@ -300,11 +329,17 @@ export const BlockMetadata = {
     return obj;
   },
   fromAmino(object: BlockMetadataAmino): BlockMetadata {
-    return {
-      responseCommit: object?.response_commit ? ResponseCommit.fromAmino(object.response_commit) : undefined,
-      requestFinalizeBlock: object?.request_finalize_block ? RequestFinalizeBlock.fromAmino(object.request_finalize_block) : undefined,
-      responseFinalizeBlock: object?.response_finalize_block ? ResponseFinalizeBlock.fromAmino(object.response_finalize_block) : undefined
-    };
+    const message = createBaseBlockMetadata();
+    if (object.response_commit !== undefined && object.response_commit !== null) {
+      message.responseCommit = ResponseCommit.fromAmino(object.response_commit);
+    }
+    if (object.request_finalize_block !== undefined && object.request_finalize_block !== null) {
+      message.requestFinalizeBlock = RequestFinalizeBlock.fromAmino(object.request_finalize_block);
+    }
+    if (object.response_finalize_block !== undefined && object.response_finalize_block !== null) {
+      message.responseFinalizeBlock = ResponseFinalizeBlock.fromAmino(object.response_finalize_block);
+    }
+    return message;
   },
   toAmino(message: BlockMetadata): BlockMetadataAmino {
     const obj: any = {};
@@ -335,3 +370,5 @@ export const BlockMetadata = {
     };
   }
 };
+GlobalDecoderRegistry.register(BlockMetadata.typeUrl, BlockMetadata);
+GlobalDecoderRegistry.registerAminoProtoMapping(BlockMetadata.aminoType, BlockMetadata.typeUrl);

@@ -2,6 +2,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { Params, ParamsAmino, ParamsSDKType, ValidatorSigningInfo, ValidatorSigningInfoAmino, ValidatorSigningInfoSDKType } from "./slashing";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { DeepPartial, isSet } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** QueryParamsRequest is the request type for the Query/Params RPC method */
 export interface QueryParamsRequest {}
 export interface QueryParamsRequestProtoMsg {
@@ -26,7 +27,7 @@ export interface QueryParamsResponseProtoMsg {
 }
 /** QueryParamsResponse is the response type for the Query/Params RPC method */
 export interface QueryParamsResponseAmino {
-  params?: ParamsAmino | undefined;
+  params: ParamsAmino | undefined;
 }
 export interface QueryParamsResponseAminoMsg {
   type: "cosmos-sdk/QueryParamsResponse";
@@ -54,7 +55,7 @@ export interface QuerySigningInfoRequestProtoMsg {
  */
 export interface QuerySigningInfoRequestAmino {
   /** cons_address is the address to query signing info of */
-  cons_address: string;
+  cons_address?: string;
 }
 export interface QuerySigningInfoRequestAminoMsg {
   type: "cosmos-sdk/QuerySigningInfoRequest";
@@ -85,7 +86,7 @@ export interface QuerySigningInfoResponseProtoMsg {
  */
 export interface QuerySigningInfoResponseAmino {
   /** val_signing_info is the signing info of requested val cons address */
-  val_signing_info?: ValidatorSigningInfoAmino | undefined;
+  val_signing_info: ValidatorSigningInfoAmino | undefined;
 }
 export interface QuerySigningInfoResponseAminoMsg {
   type: "cosmos-sdk/QuerySigningInfoResponse";
@@ -134,7 +135,7 @@ export interface QuerySigningInfosRequestSDKType {
 export interface QuerySigningInfosResponse {
   /** info is the signing info of all validators */
   info: ValidatorSigningInfo[];
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QuerySigningInfosResponseProtoMsg {
   typeUrl: "/cosmos.slashing.v1beta1.QuerySigningInfosResponse";
@@ -159,7 +160,7 @@ export interface QuerySigningInfosResponseAminoMsg {
  */
 export interface QuerySigningInfosResponseSDKType {
   info: ValidatorSigningInfoSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -167,6 +168,15 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 export const QueryParamsRequest = {
   typeUrl: "/cosmos.slashing.v1beta1.QueryParamsRequest",
   aminoType: "cosmos-sdk/QueryParamsRequest",
+  is(o: any): o is QueryParamsRequest {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryParamsRequestSDKType {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryParamsRequestAmino {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -203,7 +213,8 @@ export const QueryParamsRequest = {
     return obj;
   },
   fromAmino(_: QueryParamsRequestAmino): QueryParamsRequest {
-    return {};
+    const message = createBaseQueryParamsRequest();
+    return message;
   },
   toAmino(_: QueryParamsRequest): QueryParamsRequestAmino {
     const obj: any = {};
@@ -231,6 +242,8 @@ export const QueryParamsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsRequest.typeUrl, QueryParamsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryParamsRequest.aminoType, QueryParamsRequest.typeUrl);
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
     params: Params.fromPartial({})
@@ -239,6 +252,15 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 export const QueryParamsResponse = {
   typeUrl: "/cosmos.slashing.v1beta1.QueryParamsResponse",
   aminoType: "cosmos-sdk/QueryParamsResponse",
+  is(o: any): o is QueryParamsResponse {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is QueryParamsResponseSDKType {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is QueryParamsResponseAmino {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -288,13 +310,15 @@ export const QueryParamsResponse = {
     return obj;
   },
   fromAmino(object: QueryParamsResponseAmino): QueryParamsResponse {
-    return {
-      params: object?.params ? Params.fromAmino(object.params) : undefined
-    };
+    const message = createBaseQueryParamsResponse();
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
   },
   toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
@@ -319,6 +343,8 @@ export const QueryParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsResponse.typeUrl, QueryParamsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryParamsResponse.aminoType, QueryParamsResponse.typeUrl);
 function createBaseQuerySigningInfoRequest(): QuerySigningInfoRequest {
   return {
     consAddress: ""
@@ -327,6 +353,15 @@ function createBaseQuerySigningInfoRequest(): QuerySigningInfoRequest {
 export const QuerySigningInfoRequest = {
   typeUrl: "/cosmos.slashing.v1beta1.QuerySigningInfoRequest",
   aminoType: "cosmos-sdk/QuerySigningInfoRequest",
+  is(o: any): o is QuerySigningInfoRequest {
+    return o && (o.$typeUrl === QuerySigningInfoRequest.typeUrl || typeof o.consAddress === "string");
+  },
+  isSDK(o: any): o is QuerySigningInfoRequestSDKType {
+    return o && (o.$typeUrl === QuerySigningInfoRequest.typeUrl || typeof o.cons_address === "string");
+  },
+  isAmino(o: any): o is QuerySigningInfoRequestAmino {
+    return o && (o.$typeUrl === QuerySigningInfoRequest.typeUrl || typeof o.cons_address === "string");
+  },
   encode(message: QuerySigningInfoRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.consAddress !== "") {
       writer.uint32(10).string(message.consAddress);
@@ -376,9 +411,11 @@ export const QuerySigningInfoRequest = {
     return obj;
   },
   fromAmino(object: QuerySigningInfoRequestAmino): QuerySigningInfoRequest {
-    return {
-      consAddress: object.cons_address
-    };
+    const message = createBaseQuerySigningInfoRequest();
+    if (object.cons_address !== undefined && object.cons_address !== null) {
+      message.consAddress = object.cons_address;
+    }
+    return message;
   },
   toAmino(message: QuerySigningInfoRequest): QuerySigningInfoRequestAmino {
     const obj: any = {};
@@ -407,6 +444,8 @@ export const QuerySigningInfoRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySigningInfoRequest.typeUrl, QuerySigningInfoRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QuerySigningInfoRequest.aminoType, QuerySigningInfoRequest.typeUrl);
 function createBaseQuerySigningInfoResponse(): QuerySigningInfoResponse {
   return {
     valSigningInfo: ValidatorSigningInfo.fromPartial({})
@@ -415,6 +454,15 @@ function createBaseQuerySigningInfoResponse(): QuerySigningInfoResponse {
 export const QuerySigningInfoResponse = {
   typeUrl: "/cosmos.slashing.v1beta1.QuerySigningInfoResponse",
   aminoType: "cosmos-sdk/QuerySigningInfoResponse",
+  is(o: any): o is QuerySigningInfoResponse {
+    return o && (o.$typeUrl === QuerySigningInfoResponse.typeUrl || ValidatorSigningInfo.is(o.valSigningInfo));
+  },
+  isSDK(o: any): o is QuerySigningInfoResponseSDKType {
+    return o && (o.$typeUrl === QuerySigningInfoResponse.typeUrl || ValidatorSigningInfo.isSDK(o.val_signing_info));
+  },
+  isAmino(o: any): o is QuerySigningInfoResponseAmino {
+    return o && (o.$typeUrl === QuerySigningInfoResponse.typeUrl || ValidatorSigningInfo.isAmino(o.val_signing_info));
+  },
   encode(message: QuerySigningInfoResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.valSigningInfo !== undefined) {
       ValidatorSigningInfo.encode(message.valSigningInfo, writer.uint32(10).fork()).ldelim();
@@ -464,13 +512,15 @@ export const QuerySigningInfoResponse = {
     return obj;
   },
   fromAmino(object: QuerySigningInfoResponseAmino): QuerySigningInfoResponse {
-    return {
-      valSigningInfo: object?.val_signing_info ? ValidatorSigningInfo.fromAmino(object.val_signing_info) : undefined
-    };
+    const message = createBaseQuerySigningInfoResponse();
+    if (object.val_signing_info !== undefined && object.val_signing_info !== null) {
+      message.valSigningInfo = ValidatorSigningInfo.fromAmino(object.val_signing_info);
+    }
+    return message;
   },
   toAmino(message: QuerySigningInfoResponse): QuerySigningInfoResponseAmino {
     const obj: any = {};
-    obj.val_signing_info = message.valSigningInfo ? ValidatorSigningInfo.toAmino(message.valSigningInfo) : undefined;
+    obj.val_signing_info = message.valSigningInfo ? ValidatorSigningInfo.toAmino(message.valSigningInfo) : ValidatorSigningInfo.fromPartial({});
     return obj;
   },
   fromAminoMsg(object: QuerySigningInfoResponseAminoMsg): QuerySigningInfoResponse {
@@ -495,14 +545,25 @@ export const QuerySigningInfoResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySigningInfoResponse.typeUrl, QuerySigningInfoResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QuerySigningInfoResponse.aminoType, QuerySigningInfoResponse.typeUrl);
 function createBaseQuerySigningInfosRequest(): QuerySigningInfosRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QuerySigningInfosRequest = {
   typeUrl: "/cosmos.slashing.v1beta1.QuerySigningInfosRequest",
   aminoType: "cosmos-sdk/QuerySigningInfosRequest",
+  is(o: any): o is QuerySigningInfosRequest {
+    return o && o.$typeUrl === QuerySigningInfosRequest.typeUrl;
+  },
+  isSDK(o: any): o is QuerySigningInfosRequestSDKType {
+    return o && o.$typeUrl === QuerySigningInfosRequest.typeUrl;
+  },
+  isAmino(o: any): o is QuerySigningInfosRequestAmino {
+    return o && o.$typeUrl === QuerySigningInfosRequest.typeUrl;
+  },
   encode(message: QuerySigningInfosRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -552,9 +613,11 @@ export const QuerySigningInfosRequest = {
     return obj;
   },
   fromAmino(object: QuerySigningInfosRequestAmino): QuerySigningInfosRequest {
-    return {
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQuerySigningInfosRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QuerySigningInfosRequest): QuerySigningInfosRequestAmino {
     const obj: any = {};
@@ -583,15 +646,26 @@ export const QuerySigningInfosRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySigningInfosRequest.typeUrl, QuerySigningInfosRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QuerySigningInfosRequest.aminoType, QuerySigningInfosRequest.typeUrl);
 function createBaseQuerySigningInfosResponse(): QuerySigningInfosResponse {
   return {
     info: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QuerySigningInfosResponse = {
   typeUrl: "/cosmos.slashing.v1beta1.QuerySigningInfosResponse",
   aminoType: "cosmos-sdk/QuerySigningInfosResponse",
+  is(o: any): o is QuerySigningInfosResponse {
+    return o && (o.$typeUrl === QuerySigningInfosResponse.typeUrl || Array.isArray(o.info) && (!o.info.length || ValidatorSigningInfo.is(o.info[0])));
+  },
+  isSDK(o: any): o is QuerySigningInfosResponseSDKType {
+    return o && (o.$typeUrl === QuerySigningInfosResponse.typeUrl || Array.isArray(o.info) && (!o.info.length || ValidatorSigningInfo.isSDK(o.info[0])));
+  },
+  isAmino(o: any): o is QuerySigningInfosResponseAmino {
+    return o && (o.$typeUrl === QuerySigningInfosResponse.typeUrl || Array.isArray(o.info) && (!o.info.length || ValidatorSigningInfo.isAmino(o.info[0])));
+  },
   encode(message: QuerySigningInfosResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.info) {
       ValidatorSigningInfo.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -660,10 +734,12 @@ export const QuerySigningInfosResponse = {
     return obj;
   },
   fromAmino(object: QuerySigningInfosResponseAmino): QuerySigningInfosResponse {
-    return {
-      info: Array.isArray(object?.info) ? object.info.map((e: any) => ValidatorSigningInfo.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQuerySigningInfosResponse();
+    message.info = object.info?.map(e => ValidatorSigningInfo.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QuerySigningInfosResponse): QuerySigningInfosResponseAmino {
     const obj: any = {};
@@ -697,3 +773,5 @@ export const QuerySigningInfosResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySigningInfosResponse.typeUrl, QuerySigningInfosResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QuerySigningInfosResponse.aminoType, QuerySigningInfosResponse.typeUrl);

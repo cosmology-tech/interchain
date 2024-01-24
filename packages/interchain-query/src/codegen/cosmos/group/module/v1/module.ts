@@ -1,6 +1,7 @@
 import { Duration, DurationAmino, DurationSDKType } from "../../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** Module is the config object of the group module. */
 export interface Module {
   /**
@@ -24,12 +25,12 @@ export interface ModuleAmino {
    * max_execution_period defines the max duration after a proposal's voting period ends that members can send a MsgExec
    * to execute the proposal.
    */
-  max_execution_period?: DurationAmino | undefined;
+  max_execution_period: DurationAmino | undefined;
   /**
    * max_metadata_len defines the max length of the metadata bytes field for various entities within the group module.
    * Defaults to 255 if not explicitly set.
    */
-  max_metadata_len: string;
+  max_metadata_len?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -49,6 +50,15 @@ function createBaseModule(): Module {
 export const Module = {
   typeUrl: "/cosmos.group.module.v1.Module",
   aminoType: "cosmos-sdk/Module",
+  is(o: any): o is Module {
+    return o && (o.$typeUrl === Module.typeUrl || Duration.is(o.maxExecutionPeriod) && typeof o.maxMetadataLen === "bigint");
+  },
+  isSDK(o: any): o is ModuleSDKType {
+    return o && (o.$typeUrl === Module.typeUrl || Duration.isSDK(o.max_execution_period) && typeof o.max_metadata_len === "bigint");
+  },
+  isAmino(o: any): o is ModuleAmino {
+    return o && (o.$typeUrl === Module.typeUrl || Duration.isAmino(o.max_execution_period) && typeof o.max_metadata_len === "bigint");
+  },
   encode(message: Module, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maxExecutionPeriod !== undefined) {
       Duration.encode(message.maxExecutionPeriod, writer.uint32(10).fork()).ldelim();
@@ -109,14 +119,18 @@ export const Module = {
     return obj;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      maxExecutionPeriod: object?.max_execution_period ? Duration.fromAmino(object.max_execution_period) : undefined,
-      maxMetadataLen: BigInt(object.max_metadata_len)
-    };
+    const message = createBaseModule();
+    if (object.max_execution_period !== undefined && object.max_execution_period !== null) {
+      message.maxExecutionPeriod = Duration.fromAmino(object.max_execution_period);
+    }
+    if (object.max_metadata_len !== undefined && object.max_metadata_len !== null) {
+      message.maxMetadataLen = BigInt(object.max_metadata_len);
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
-    obj.max_execution_period = message.maxExecutionPeriod ? Duration.toAmino(message.maxExecutionPeriod) : undefined;
+    obj.max_execution_period = message.maxExecutionPeriod ? Duration.toAmino(message.maxExecutionPeriod) : Duration.fromPartial({});
     obj.max_metadata_len = message.maxMetadataLen ? message.maxMetadataLen.toString() : undefined;
     return obj;
   },
@@ -142,3 +156,5 @@ export const Module = {
     };
   }
 };
+GlobalDecoderRegistry.register(Module.typeUrl, Module);
+GlobalDecoderRegistry.registerAminoProtoMapping(Module.aminoType, Module.typeUrl);

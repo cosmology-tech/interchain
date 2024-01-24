@@ -4,12 +4,14 @@ import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { DeepPartial, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
+import { toUtf8, fromUtf8 } from "@cosmjs/encoding";
 /**
  * StoreCodeAuthorization defines authorization for wasm code upload.
  * Since: wasmd 0.42
  */
 export interface StoreCodeAuthorization {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.StoreCodeAuthorization";
   /** Grants for code upload */
   grants: CodeGrant[];
 }
@@ -34,7 +36,7 @@ export interface StoreCodeAuthorizationAminoMsg {
  * Since: wasmd 0.42
  */
 export interface StoreCodeAuthorizationSDKType {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.StoreCodeAuthorization";
   grants: CodeGrantSDKType[];
 }
 /**
@@ -42,7 +44,7 @@ export interface StoreCodeAuthorizationSDKType {
  * Since: wasmd 0.30
  */
 export interface ContractExecutionAuthorization {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.ContractExecutionAuthorization";
   /** Grants for contract executions */
   grants: ContractGrant[];
 }
@@ -67,7 +69,7 @@ export interface ContractExecutionAuthorizationAminoMsg {
  * Since: wasmd 0.30
  */
 export interface ContractExecutionAuthorizationSDKType {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.ContractExecutionAuthorization";
   grants: ContractGrantSDKType[];
 }
 /**
@@ -75,7 +77,7 @@ export interface ContractExecutionAuthorizationSDKType {
  * migration. Since: wasmd 0.30
  */
 export interface ContractMigrationAuthorization {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.ContractMigrationAuthorization";
   /** Grants for contract migrations */
   grants: ContractGrant[];
 }
@@ -100,7 +102,7 @@ export interface ContractMigrationAuthorizationAminoMsg {
  * migration. Since: wasmd 0.30
  */
 export interface ContractMigrationAuthorizationSDKType {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.ContractMigrationAuthorization";
   grants: ContractGrantSDKType[];
 }
 /** CodeGrant a granted permission for a single code */
@@ -115,7 +117,7 @@ export interface CodeGrant {
    * on contract creation.
    * Optional
    */
-  instantiatePermission: AccessConfig | undefined;
+  instantiatePermission?: AccessConfig | undefined;
 }
 export interface CodeGrantProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.CodeGrant";
@@ -127,7 +129,7 @@ export interface CodeGrantAmino {
    * CodeHash is the unique identifier created by wasmvm
    * Wildcard "*" is used to specify any kind of grant.
    */
-  code_hash: Uint8Array;
+  code_hash?: string;
   /**
    * InstantiatePermission is the superset access control to apply
    * on contract creation.
@@ -142,7 +144,7 @@ export interface CodeGrantAminoMsg {
 /** CodeGrant a granted permission for a single code */
 export interface CodeGrantSDKType {
   code_hash: Uint8Array;
-  instantiate_permission: AccessConfigSDKType | undefined;
+  instantiate_permission?: AccessConfigSDKType | undefined;
 }
 /**
  * ContractGrant a granted permission for a single contract
@@ -155,13 +157,13 @@ export interface ContractGrant {
    * Limit defines execution limits that are enforced and updated when the grant
    * is applied. When the limit lapsed the grant is removed.
    */
-  limit: MaxCallsLimit | MaxFundsLimit | CombinedLimit | Any | undefined;
+  limit?: MaxCallsLimit | MaxFundsLimit | CombinedLimit | Any | undefined;
   /**
    * Filter define more fine-grained control on the message payload passed
    * to the contract in the operation. When no filter applies on execution, the
    * operation is prohibited.
    */
-  filter: AllowAllMessagesFilter | AcceptedMessageKeysFilter | AcceptedMessagesFilter | Any | undefined;
+  filter?: AllowAllMessagesFilter | AcceptedMessageKeysFilter | AcceptedMessagesFilter | Any | undefined;
 }
 export interface ContractGrantProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.ContractGrant";
@@ -186,7 +188,7 @@ export type ContractGrantEncoded = Omit<ContractGrant, "limit" | "filter"> & {
  */
 export interface ContractGrantAmino {
   /** Contract is the bech32 address of the smart contract */
-  contract: string;
+  contract?: string;
   /**
    * Limit defines execution limits that are enforced and updated when the grant
    * is applied. When the limit lapsed the grant is removed.
@@ -209,15 +211,15 @@ export interface ContractGrantAminoMsg {
  */
 export interface ContractGrantSDKType {
   contract: string;
-  limit: MaxCallsLimitSDKType | MaxFundsLimitSDKType | CombinedLimitSDKType | AnySDKType | undefined;
-  filter: AllowAllMessagesFilterSDKType | AcceptedMessageKeysFilterSDKType | AcceptedMessagesFilterSDKType | AnySDKType | undefined;
+  limit?: MaxCallsLimitSDKType | MaxFundsLimitSDKType | CombinedLimitSDKType | AnySDKType | undefined;
+  filter?: AllowAllMessagesFilterSDKType | AcceptedMessageKeysFilterSDKType | AcceptedMessagesFilterSDKType | AnySDKType | undefined;
 }
 /**
  * MaxCallsLimit limited number of calls to the contract. No funds transferable.
  * Since: wasmd 0.30
  */
 export interface MaxCallsLimit {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.MaxCallsLimit";
   /** Remaining number that is decremented on each execution */
   remaining: bigint;
 }
@@ -231,7 +233,7 @@ export interface MaxCallsLimitProtoMsg {
  */
 export interface MaxCallsLimitAmino {
   /** Remaining number that is decremented on each execution */
-  remaining: string;
+  remaining?: string;
 }
 export interface MaxCallsLimitAminoMsg {
   type: "wasm/MaxCallsLimit";
@@ -242,7 +244,7 @@ export interface MaxCallsLimitAminoMsg {
  * Since: wasmd 0.30
  */
 export interface MaxCallsLimitSDKType {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.MaxCallsLimit";
   remaining: bigint;
 }
 /**
@@ -250,7 +252,7 @@ export interface MaxCallsLimitSDKType {
  * Since: wasmd 0.30
  */
 export interface MaxFundsLimit {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.MaxFundsLimit";
   /** Amounts is the maximal amount of tokens transferable to the contract. */
   amounts: Coin[];
 }
@@ -275,7 +277,7 @@ export interface MaxFundsLimitAminoMsg {
  * Since: wasmd 0.30
  */
 export interface MaxFundsLimitSDKType {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.MaxFundsLimit";
   amounts: CoinSDKType[];
 }
 /**
@@ -284,7 +286,7 @@ export interface MaxFundsLimitSDKType {
  * Since: wasmd 0.30
  */
 export interface CombinedLimit {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.CombinedLimit";
   /** Remaining number that is decremented on each execution */
   callsRemaining: bigint;
   /** Amounts is the maximal amount of tokens transferable to the contract. */
@@ -301,7 +303,7 @@ export interface CombinedLimitProtoMsg {
  */
 export interface CombinedLimitAmino {
   /** Remaining number that is decremented on each execution */
-  calls_remaining: string;
+  calls_remaining?: string;
   /** Amounts is the maximal amount of tokens transferable to the contract. */
   amounts: CoinAmino[];
 }
@@ -315,7 +317,7 @@ export interface CombinedLimitAminoMsg {
  * Since: wasmd 0.30
  */
 export interface CombinedLimitSDKType {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.CombinedLimit";
   calls_remaining: bigint;
   amounts: CoinSDKType[];
 }
@@ -325,7 +327,7 @@ export interface CombinedLimitSDKType {
  * Since: wasmd 0.30
  */
 export interface AllowAllMessagesFilter {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.AllowAllMessagesFilter";
 }
 export interface AllowAllMessagesFilterProtoMsg {
   typeUrl: "/cosmwasm.wasm.v1.AllowAllMessagesFilter";
@@ -347,7 +349,7 @@ export interface AllowAllMessagesFilterAminoMsg {
  * Since: wasmd 0.30
  */
 export interface AllowAllMessagesFilterSDKType {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.AllowAllMessagesFilter";
 }
 /**
  * AcceptedMessageKeysFilter accept only the specific contract message keys in
@@ -355,7 +357,7 @@ export interface AllowAllMessagesFilterSDKType {
  * Since: wasmd 0.30
  */
 export interface AcceptedMessageKeysFilter {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.AcceptedMessageKeysFilter";
   /** Messages is the list of unique keys */
   keys: string[];
 }
@@ -370,7 +372,7 @@ export interface AcceptedMessageKeysFilterProtoMsg {
  */
 export interface AcceptedMessageKeysFilterAmino {
   /** Messages is the list of unique keys */
-  keys: string[];
+  keys?: string[];
 }
 export interface AcceptedMessageKeysFilterAminoMsg {
   type: "wasm/AcceptedMessageKeysFilter";
@@ -382,7 +384,7 @@ export interface AcceptedMessageKeysFilterAminoMsg {
  * Since: wasmd 0.30
  */
 export interface AcceptedMessageKeysFilterSDKType {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.AcceptedMessageKeysFilter";
   keys: string[];
 }
 /**
@@ -391,7 +393,7 @@ export interface AcceptedMessageKeysFilterSDKType {
  * Since: wasmd 0.30
  */
 export interface AcceptedMessagesFilter {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.AcceptedMessagesFilter";
   /** Messages is the list of raw contract messages */
   messages: Uint8Array[];
 }
@@ -406,7 +408,7 @@ export interface AcceptedMessagesFilterProtoMsg {
  */
 export interface AcceptedMessagesFilterAmino {
   /** Messages is the list of raw contract messages */
-  messages: Uint8Array[];
+  messages?: any[];
 }
 export interface AcceptedMessagesFilterAminoMsg {
   type: "wasm/AcceptedMessagesFilter";
@@ -418,7 +420,7 @@ export interface AcceptedMessagesFilterAminoMsg {
  * Since: wasmd 0.30
  */
 export interface AcceptedMessagesFilterSDKType {
-  $typeUrl?: string;
+  $typeUrl?: "/cosmwasm.wasm.v1.AcceptedMessagesFilter";
   messages: Uint8Array[];
 }
 function createBaseStoreCodeAuthorization(): StoreCodeAuthorization {
@@ -430,6 +432,15 @@ function createBaseStoreCodeAuthorization(): StoreCodeAuthorization {
 export const StoreCodeAuthorization = {
   typeUrl: "/cosmwasm.wasm.v1.StoreCodeAuthorization",
   aminoType: "wasm/StoreCodeAuthorization",
+  is(o: any): o is StoreCodeAuthorization {
+    return o && (o.$typeUrl === StoreCodeAuthorization.typeUrl || Array.isArray(o.grants) && (!o.grants.length || CodeGrant.is(o.grants[0])));
+  },
+  isSDK(o: any): o is StoreCodeAuthorizationSDKType {
+    return o && (o.$typeUrl === StoreCodeAuthorization.typeUrl || Array.isArray(o.grants) && (!o.grants.length || CodeGrant.isSDK(o.grants[0])));
+  },
+  isAmino(o: any): o is StoreCodeAuthorizationAmino {
+    return o && (o.$typeUrl === StoreCodeAuthorization.typeUrl || Array.isArray(o.grants) && (!o.grants.length || CodeGrant.isAmino(o.grants[0])));
+  },
   encode(message: StoreCodeAuthorization, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.grants) {
       CodeGrant.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -487,9 +498,9 @@ export const StoreCodeAuthorization = {
     return obj;
   },
   fromAmino(object: StoreCodeAuthorizationAmino): StoreCodeAuthorization {
-    return {
-      grants: Array.isArray(object?.grants) ? object.grants.map((e: any) => CodeGrant.fromAmino(e)) : []
-    };
+    const message = createBaseStoreCodeAuthorization();
+    message.grants = object.grants?.map(e => CodeGrant.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: StoreCodeAuthorization): StoreCodeAuthorizationAmino {
     const obj: any = {};
@@ -522,6 +533,8 @@ export const StoreCodeAuthorization = {
     };
   }
 };
+GlobalDecoderRegistry.register(StoreCodeAuthorization.typeUrl, StoreCodeAuthorization);
+GlobalDecoderRegistry.registerAminoProtoMapping(StoreCodeAuthorization.aminoType, StoreCodeAuthorization.typeUrl);
 function createBaseContractExecutionAuthorization(): ContractExecutionAuthorization {
   return {
     $typeUrl: "/cosmwasm.wasm.v1.ContractExecutionAuthorization",
@@ -531,6 +544,15 @@ function createBaseContractExecutionAuthorization(): ContractExecutionAuthorizat
 export const ContractExecutionAuthorization = {
   typeUrl: "/cosmwasm.wasm.v1.ContractExecutionAuthorization",
   aminoType: "wasm/ContractExecutionAuthorization",
+  is(o: any): o is ContractExecutionAuthorization {
+    return o && (o.$typeUrl === ContractExecutionAuthorization.typeUrl || Array.isArray(o.grants) && (!o.grants.length || ContractGrant.is(o.grants[0])));
+  },
+  isSDK(o: any): o is ContractExecutionAuthorizationSDKType {
+    return o && (o.$typeUrl === ContractExecutionAuthorization.typeUrl || Array.isArray(o.grants) && (!o.grants.length || ContractGrant.isSDK(o.grants[0])));
+  },
+  isAmino(o: any): o is ContractExecutionAuthorizationAmino {
+    return o && (o.$typeUrl === ContractExecutionAuthorization.typeUrl || Array.isArray(o.grants) && (!o.grants.length || ContractGrant.isAmino(o.grants[0])));
+  },
   encode(message: ContractExecutionAuthorization, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.grants) {
       ContractGrant.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -588,9 +610,9 @@ export const ContractExecutionAuthorization = {
     return obj;
   },
   fromAmino(object: ContractExecutionAuthorizationAmino): ContractExecutionAuthorization {
-    return {
-      grants: Array.isArray(object?.grants) ? object.grants.map((e: any) => ContractGrant.fromAmino(e)) : []
-    };
+    const message = createBaseContractExecutionAuthorization();
+    message.grants = object.grants?.map(e => ContractGrant.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: ContractExecutionAuthorization): ContractExecutionAuthorizationAmino {
     const obj: any = {};
@@ -623,6 +645,8 @@ export const ContractExecutionAuthorization = {
     };
   }
 };
+GlobalDecoderRegistry.register(ContractExecutionAuthorization.typeUrl, ContractExecutionAuthorization);
+GlobalDecoderRegistry.registerAminoProtoMapping(ContractExecutionAuthorization.aminoType, ContractExecutionAuthorization.typeUrl);
 function createBaseContractMigrationAuthorization(): ContractMigrationAuthorization {
   return {
     $typeUrl: "/cosmwasm.wasm.v1.ContractMigrationAuthorization",
@@ -632,6 +656,15 @@ function createBaseContractMigrationAuthorization(): ContractMigrationAuthorizat
 export const ContractMigrationAuthorization = {
   typeUrl: "/cosmwasm.wasm.v1.ContractMigrationAuthorization",
   aminoType: "wasm/ContractMigrationAuthorization",
+  is(o: any): o is ContractMigrationAuthorization {
+    return o && (o.$typeUrl === ContractMigrationAuthorization.typeUrl || Array.isArray(o.grants) && (!o.grants.length || ContractGrant.is(o.grants[0])));
+  },
+  isSDK(o: any): o is ContractMigrationAuthorizationSDKType {
+    return o && (o.$typeUrl === ContractMigrationAuthorization.typeUrl || Array.isArray(o.grants) && (!o.grants.length || ContractGrant.isSDK(o.grants[0])));
+  },
+  isAmino(o: any): o is ContractMigrationAuthorizationAmino {
+    return o && (o.$typeUrl === ContractMigrationAuthorization.typeUrl || Array.isArray(o.grants) && (!o.grants.length || ContractGrant.isAmino(o.grants[0])));
+  },
   encode(message: ContractMigrationAuthorization, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.grants) {
       ContractGrant.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -689,9 +722,9 @@ export const ContractMigrationAuthorization = {
     return obj;
   },
   fromAmino(object: ContractMigrationAuthorizationAmino): ContractMigrationAuthorization {
-    return {
-      grants: Array.isArray(object?.grants) ? object.grants.map((e: any) => ContractGrant.fromAmino(e)) : []
-    };
+    const message = createBaseContractMigrationAuthorization();
+    message.grants = object.grants?.map(e => ContractGrant.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: ContractMigrationAuthorization): ContractMigrationAuthorizationAmino {
     const obj: any = {};
@@ -724,15 +757,26 @@ export const ContractMigrationAuthorization = {
     };
   }
 };
+GlobalDecoderRegistry.register(ContractMigrationAuthorization.typeUrl, ContractMigrationAuthorization);
+GlobalDecoderRegistry.registerAminoProtoMapping(ContractMigrationAuthorization.aminoType, ContractMigrationAuthorization.typeUrl);
 function createBaseCodeGrant(): CodeGrant {
   return {
     codeHash: new Uint8Array(),
-    instantiatePermission: AccessConfig.fromPartial({})
+    instantiatePermission: undefined
   };
 }
 export const CodeGrant = {
   typeUrl: "/cosmwasm.wasm.v1.CodeGrant",
   aminoType: "wasm/CodeGrant",
+  is(o: any): o is CodeGrant {
+    return o && (o.$typeUrl === CodeGrant.typeUrl || o.codeHash instanceof Uint8Array || typeof o.codeHash === "string");
+  },
+  isSDK(o: any): o is CodeGrantSDKType {
+    return o && (o.$typeUrl === CodeGrant.typeUrl || o.code_hash instanceof Uint8Array || typeof o.code_hash === "string");
+  },
+  isAmino(o: any): o is CodeGrantAmino {
+    return o && (o.$typeUrl === CodeGrant.typeUrl || o.code_hash instanceof Uint8Array || typeof o.code_hash === "string");
+  },
   encode(message: CodeGrant, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.codeHash.length !== 0) {
       writer.uint32(10).bytes(message.codeHash);
@@ -793,14 +837,18 @@ export const CodeGrant = {
     return obj;
   },
   fromAmino(object: CodeGrantAmino): CodeGrant {
-    return {
-      codeHash: object.code_hash,
-      instantiatePermission: object?.instantiate_permission ? AccessConfig.fromAmino(object.instantiate_permission) : undefined
-    };
+    const message = createBaseCodeGrant();
+    if (object.code_hash !== undefined && object.code_hash !== null) {
+      message.codeHash = bytesFromBase64(object.code_hash);
+    }
+    if (object.instantiate_permission !== undefined && object.instantiate_permission !== null) {
+      message.instantiatePermission = AccessConfig.fromAmino(object.instantiate_permission);
+    }
+    return message;
   },
   toAmino(message: CodeGrant): CodeGrantAmino {
     const obj: any = {};
-    obj.code_hash = message.codeHash;
+    obj.code_hash = message.codeHash ? base64FromBytes(message.codeHash) : undefined;
     obj.instantiate_permission = message.instantiatePermission ? AccessConfig.toAmino(message.instantiatePermission) : undefined;
     return obj;
   },
@@ -826,25 +874,36 @@ export const CodeGrant = {
     };
   }
 };
+GlobalDecoderRegistry.register(CodeGrant.typeUrl, CodeGrant);
+GlobalDecoderRegistry.registerAminoProtoMapping(CodeGrant.aminoType, CodeGrant.typeUrl);
 function createBaseContractGrant(): ContractGrant {
   return {
     contract: "",
-    limit: Any.fromPartial({}),
-    filter: Any.fromPartial({})
+    limit: undefined,
+    filter: undefined
   };
 }
 export const ContractGrant = {
   typeUrl: "/cosmwasm.wasm.v1.ContractGrant",
   aminoType: "wasm/ContractGrant",
+  is(o: any): o is ContractGrant {
+    return o && (o.$typeUrl === ContractGrant.typeUrl || typeof o.contract === "string");
+  },
+  isSDK(o: any): o is ContractGrantSDKType {
+    return o && (o.$typeUrl === ContractGrant.typeUrl || typeof o.contract === "string");
+  },
+  isAmino(o: any): o is ContractGrantAmino {
+    return o && (o.$typeUrl === ContractGrant.typeUrl || typeof o.contract === "string");
+  },
   encode(message: ContractGrant, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.contract !== "") {
       writer.uint32(10).string(message.contract);
     }
     if (message.limit !== undefined) {
-      Any.encode((message.limit as Any), writer.uint32(18).fork()).ldelim();
+      Any.encode(GlobalDecoderRegistry.wrapAny(message.limit), writer.uint32(18).fork()).ldelim();
     }
     if (message.filter !== undefined) {
-      Any.encode((message.filter as Any), writer.uint32(26).fork()).ldelim();
+      Any.encode(GlobalDecoderRegistry.wrapAny(message.filter), writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -859,10 +918,10 @@ export const ContractGrant = {
           message.contract = reader.string();
           break;
         case 2:
-          message.limit = (Cosmwasm_wasmv1ContractAuthzLimitX_InterfaceDecoder(reader) as Any);
+          message.limit = GlobalDecoderRegistry.unwrapAny(reader);
           break;
         case 3:
-          message.filter = (Cosmwasm_wasmv1ContractAuthzFilterX_InterfaceDecoder(reader) as Any);
+          message.filter = GlobalDecoderRegistry.unwrapAny(reader);
           break;
         default:
           reader.skipType(tag & 7);
@@ -874,50 +933,56 @@ export const ContractGrant = {
   fromJSON(object: any): ContractGrant {
     return {
       contract: isSet(object.contract) ? String(object.contract) : "",
-      limit: isSet(object.limit) ? Any.fromJSON(object.limit) : undefined,
-      filter: isSet(object.filter) ? Any.fromJSON(object.filter) : undefined
+      limit: isSet(object.limit) ? GlobalDecoderRegistry.fromJSON(object.limit) : undefined,
+      filter: isSet(object.filter) ? GlobalDecoderRegistry.fromJSON(object.filter) : undefined
     };
   },
   toJSON(message: ContractGrant): unknown {
     const obj: any = {};
     message.contract !== undefined && (obj.contract = message.contract);
-    message.limit !== undefined && (obj.limit = message.limit ? Any.toJSON(message.limit) : undefined);
-    message.filter !== undefined && (obj.filter = message.filter ? Any.toJSON(message.filter) : undefined);
+    message.limit !== undefined && (obj.limit = message.limit ? GlobalDecoderRegistry.toJSON(message.limit) : undefined);
+    message.filter !== undefined && (obj.filter = message.filter ? GlobalDecoderRegistry.toJSON(message.filter) : undefined);
     return obj;
   },
   fromPartial(object: DeepPartial<ContractGrant>): ContractGrant {
     const message = createBaseContractGrant();
     message.contract = object.contract ?? "";
-    message.limit = object.limit !== undefined && object.limit !== null ? Any.fromPartial(object.limit) : undefined;
-    message.filter = object.filter !== undefined && object.filter !== null ? Any.fromPartial(object.filter) : undefined;
+    message.limit = object.limit !== undefined && object.limit !== null ? GlobalDecoderRegistry.fromPartial(object.limit) : undefined;
+    message.filter = object.filter !== undefined && object.filter !== null ? GlobalDecoderRegistry.fromPartial(object.filter) : undefined;
     return message;
   },
   fromSDK(object: ContractGrantSDKType): ContractGrant {
     return {
       contract: object?.contract,
-      limit: object.limit ? Any.fromSDK(object.limit) : undefined,
-      filter: object.filter ? Any.fromSDK(object.filter) : undefined
+      limit: object.limit ? GlobalDecoderRegistry.fromSDK(object.limit) : undefined,
+      filter: object.filter ? GlobalDecoderRegistry.fromSDK(object.filter) : undefined
     };
   },
   toSDK(message: ContractGrant): ContractGrantSDKType {
     const obj: any = {};
     obj.contract = message.contract;
-    message.limit !== undefined && (obj.limit = message.limit ? Any.toSDK(message.limit) : undefined);
-    message.filter !== undefined && (obj.filter = message.filter ? Any.toSDK(message.filter) : undefined);
+    message.limit !== undefined && (obj.limit = message.limit ? GlobalDecoderRegistry.toSDK(message.limit) : undefined);
+    message.filter !== undefined && (obj.filter = message.filter ? GlobalDecoderRegistry.toSDK(message.filter) : undefined);
     return obj;
   },
   fromAmino(object: ContractGrantAmino): ContractGrant {
-    return {
-      contract: object.contract,
-      limit: object?.limit ? Cosmwasm_wasmv1ContractAuthzLimitX_FromAmino(object.limit) : undefined,
-      filter: object?.filter ? Cosmwasm_wasmv1ContractAuthzFilterX_FromAmino(object.filter) : undefined
-    };
+    const message = createBaseContractGrant();
+    if (object.contract !== undefined && object.contract !== null) {
+      message.contract = object.contract;
+    }
+    if (object.limit !== undefined && object.limit !== null) {
+      message.limit = GlobalDecoderRegistry.fromAminoMsg(object.limit);
+    }
+    if (object.filter !== undefined && object.filter !== null) {
+      message.filter = GlobalDecoderRegistry.fromAminoMsg(object.filter);
+    }
+    return message;
   },
   toAmino(message: ContractGrant): ContractGrantAmino {
     const obj: any = {};
     obj.contract = message.contract;
-    obj.limit = message.limit ? Cosmwasm_wasmv1ContractAuthzLimitX_ToAmino((message.limit as Any)) : undefined;
-    obj.filter = message.filter ? Cosmwasm_wasmv1ContractAuthzFilterX_ToAmino((message.filter as Any)) : undefined;
+    obj.limit = message.limit ? GlobalDecoderRegistry.toAminoMsg(message.limit) : undefined;
+    obj.filter = message.filter ? GlobalDecoderRegistry.toAminoMsg(message.filter) : undefined;
     return obj;
   },
   fromAminoMsg(object: ContractGrantAminoMsg): ContractGrant {
@@ -942,6 +1007,8 @@ export const ContractGrant = {
     };
   }
 };
+GlobalDecoderRegistry.register(ContractGrant.typeUrl, ContractGrant);
+GlobalDecoderRegistry.registerAminoProtoMapping(ContractGrant.aminoType, ContractGrant.typeUrl);
 function createBaseMaxCallsLimit(): MaxCallsLimit {
   return {
     $typeUrl: "/cosmwasm.wasm.v1.MaxCallsLimit",
@@ -951,6 +1018,15 @@ function createBaseMaxCallsLimit(): MaxCallsLimit {
 export const MaxCallsLimit = {
   typeUrl: "/cosmwasm.wasm.v1.MaxCallsLimit",
   aminoType: "wasm/MaxCallsLimit",
+  is(o: any): o is MaxCallsLimit {
+    return o && (o.$typeUrl === MaxCallsLimit.typeUrl || typeof o.remaining === "bigint");
+  },
+  isSDK(o: any): o is MaxCallsLimitSDKType {
+    return o && (o.$typeUrl === MaxCallsLimit.typeUrl || typeof o.remaining === "bigint");
+  },
+  isAmino(o: any): o is MaxCallsLimitAmino {
+    return o && (o.$typeUrl === MaxCallsLimit.typeUrl || typeof o.remaining === "bigint");
+  },
   encode(message: MaxCallsLimit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.remaining !== BigInt(0)) {
       writer.uint32(8).uint64(message.remaining);
@@ -1000,9 +1076,11 @@ export const MaxCallsLimit = {
     return obj;
   },
   fromAmino(object: MaxCallsLimitAmino): MaxCallsLimit {
-    return {
-      remaining: BigInt(object.remaining)
-    };
+    const message = createBaseMaxCallsLimit();
+    if (object.remaining !== undefined && object.remaining !== null) {
+      message.remaining = BigInt(object.remaining);
+    }
+    return message;
   },
   toAmino(message: MaxCallsLimit): MaxCallsLimitAmino {
     const obj: any = {};
@@ -1031,6 +1109,8 @@ export const MaxCallsLimit = {
     };
   }
 };
+GlobalDecoderRegistry.register(MaxCallsLimit.typeUrl, MaxCallsLimit);
+GlobalDecoderRegistry.registerAminoProtoMapping(MaxCallsLimit.aminoType, MaxCallsLimit.typeUrl);
 function createBaseMaxFundsLimit(): MaxFundsLimit {
   return {
     $typeUrl: "/cosmwasm.wasm.v1.MaxFundsLimit",
@@ -1040,6 +1120,15 @@ function createBaseMaxFundsLimit(): MaxFundsLimit {
 export const MaxFundsLimit = {
   typeUrl: "/cosmwasm.wasm.v1.MaxFundsLimit",
   aminoType: "wasm/MaxFundsLimit",
+  is(o: any): o is MaxFundsLimit {
+    return o && (o.$typeUrl === MaxFundsLimit.typeUrl || Array.isArray(o.amounts) && (!o.amounts.length || Coin.is(o.amounts[0])));
+  },
+  isSDK(o: any): o is MaxFundsLimitSDKType {
+    return o && (o.$typeUrl === MaxFundsLimit.typeUrl || Array.isArray(o.amounts) && (!o.amounts.length || Coin.isSDK(o.amounts[0])));
+  },
+  isAmino(o: any): o is MaxFundsLimitAmino {
+    return o && (o.$typeUrl === MaxFundsLimit.typeUrl || Array.isArray(o.amounts) && (!o.amounts.length || Coin.isAmino(o.amounts[0])));
+  },
   encode(message: MaxFundsLimit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amounts) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1097,9 +1186,9 @@ export const MaxFundsLimit = {
     return obj;
   },
   fromAmino(object: MaxFundsLimitAmino): MaxFundsLimit {
-    return {
-      amounts: Array.isArray(object?.amounts) ? object.amounts.map((e: any) => Coin.fromAmino(e)) : []
-    };
+    const message = createBaseMaxFundsLimit();
+    message.amounts = object.amounts?.map(e => Coin.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: MaxFundsLimit): MaxFundsLimitAmino {
     const obj: any = {};
@@ -1132,6 +1221,8 @@ export const MaxFundsLimit = {
     };
   }
 };
+GlobalDecoderRegistry.register(MaxFundsLimit.typeUrl, MaxFundsLimit);
+GlobalDecoderRegistry.registerAminoProtoMapping(MaxFundsLimit.aminoType, MaxFundsLimit.typeUrl);
 function createBaseCombinedLimit(): CombinedLimit {
   return {
     $typeUrl: "/cosmwasm.wasm.v1.CombinedLimit",
@@ -1142,6 +1233,15 @@ function createBaseCombinedLimit(): CombinedLimit {
 export const CombinedLimit = {
   typeUrl: "/cosmwasm.wasm.v1.CombinedLimit",
   aminoType: "wasm/CombinedLimit",
+  is(o: any): o is CombinedLimit {
+    return o && (o.$typeUrl === CombinedLimit.typeUrl || typeof o.callsRemaining === "bigint" && Array.isArray(o.amounts) && (!o.amounts.length || Coin.is(o.amounts[0])));
+  },
+  isSDK(o: any): o is CombinedLimitSDKType {
+    return o && (o.$typeUrl === CombinedLimit.typeUrl || typeof o.calls_remaining === "bigint" && Array.isArray(o.amounts) && (!o.amounts.length || Coin.isSDK(o.amounts[0])));
+  },
+  isAmino(o: any): o is CombinedLimitAmino {
+    return o && (o.$typeUrl === CombinedLimit.typeUrl || typeof o.calls_remaining === "bigint" && Array.isArray(o.amounts) && (!o.amounts.length || Coin.isAmino(o.amounts[0])));
+  },
   encode(message: CombinedLimit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.callsRemaining !== BigInt(0)) {
       writer.uint32(8).uint64(message.callsRemaining);
@@ -1210,10 +1310,12 @@ export const CombinedLimit = {
     return obj;
   },
   fromAmino(object: CombinedLimitAmino): CombinedLimit {
-    return {
-      callsRemaining: BigInt(object.calls_remaining),
-      amounts: Array.isArray(object?.amounts) ? object.amounts.map((e: any) => Coin.fromAmino(e)) : []
-    };
+    const message = createBaseCombinedLimit();
+    if (object.calls_remaining !== undefined && object.calls_remaining !== null) {
+      message.callsRemaining = BigInt(object.calls_remaining);
+    }
+    message.amounts = object.amounts?.map(e => Coin.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: CombinedLimit): CombinedLimitAmino {
     const obj: any = {};
@@ -1247,6 +1349,8 @@ export const CombinedLimit = {
     };
   }
 };
+GlobalDecoderRegistry.register(CombinedLimit.typeUrl, CombinedLimit);
+GlobalDecoderRegistry.registerAminoProtoMapping(CombinedLimit.aminoType, CombinedLimit.typeUrl);
 function createBaseAllowAllMessagesFilter(): AllowAllMessagesFilter {
   return {
     $typeUrl: "/cosmwasm.wasm.v1.AllowAllMessagesFilter"
@@ -1255,6 +1359,15 @@ function createBaseAllowAllMessagesFilter(): AllowAllMessagesFilter {
 export const AllowAllMessagesFilter = {
   typeUrl: "/cosmwasm.wasm.v1.AllowAllMessagesFilter",
   aminoType: "wasm/AllowAllMessagesFilter",
+  is(o: any): o is AllowAllMessagesFilter {
+    return o && o.$typeUrl === AllowAllMessagesFilter.typeUrl;
+  },
+  isSDK(o: any): o is AllowAllMessagesFilterSDKType {
+    return o && o.$typeUrl === AllowAllMessagesFilter.typeUrl;
+  },
+  isAmino(o: any): o is AllowAllMessagesFilterAmino {
+    return o && o.$typeUrl === AllowAllMessagesFilter.typeUrl;
+  },
   encode(_: AllowAllMessagesFilter, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -1291,7 +1404,8 @@ export const AllowAllMessagesFilter = {
     return obj;
   },
   fromAmino(_: AllowAllMessagesFilterAmino): AllowAllMessagesFilter {
-    return {};
+    const message = createBaseAllowAllMessagesFilter();
+    return message;
   },
   toAmino(_: AllowAllMessagesFilter): AllowAllMessagesFilterAmino {
     const obj: any = {};
@@ -1319,6 +1433,8 @@ export const AllowAllMessagesFilter = {
     };
   }
 };
+GlobalDecoderRegistry.register(AllowAllMessagesFilter.typeUrl, AllowAllMessagesFilter);
+GlobalDecoderRegistry.registerAminoProtoMapping(AllowAllMessagesFilter.aminoType, AllowAllMessagesFilter.typeUrl);
 function createBaseAcceptedMessageKeysFilter(): AcceptedMessageKeysFilter {
   return {
     $typeUrl: "/cosmwasm.wasm.v1.AcceptedMessageKeysFilter",
@@ -1328,6 +1444,15 @@ function createBaseAcceptedMessageKeysFilter(): AcceptedMessageKeysFilter {
 export const AcceptedMessageKeysFilter = {
   typeUrl: "/cosmwasm.wasm.v1.AcceptedMessageKeysFilter",
   aminoType: "wasm/AcceptedMessageKeysFilter",
+  is(o: any): o is AcceptedMessageKeysFilter {
+    return o && (o.$typeUrl === AcceptedMessageKeysFilter.typeUrl || Array.isArray(o.keys) && (!o.keys.length || typeof o.keys[0] === "string"));
+  },
+  isSDK(o: any): o is AcceptedMessageKeysFilterSDKType {
+    return o && (o.$typeUrl === AcceptedMessageKeysFilter.typeUrl || Array.isArray(o.keys) && (!o.keys.length || typeof o.keys[0] === "string"));
+  },
+  isAmino(o: any): o is AcceptedMessageKeysFilterAmino {
+    return o && (o.$typeUrl === AcceptedMessageKeysFilter.typeUrl || Array.isArray(o.keys) && (!o.keys.length || typeof o.keys[0] === "string"));
+  },
   encode(message: AcceptedMessageKeysFilter, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.keys) {
       writer.uint32(10).string(v!);
@@ -1385,9 +1510,9 @@ export const AcceptedMessageKeysFilter = {
     return obj;
   },
   fromAmino(object: AcceptedMessageKeysFilterAmino): AcceptedMessageKeysFilter {
-    return {
-      keys: Array.isArray(object?.keys) ? object.keys.map((e: any) => e) : []
-    };
+    const message = createBaseAcceptedMessageKeysFilter();
+    message.keys = object.keys?.map(e => e) || [];
+    return message;
   },
   toAmino(message: AcceptedMessageKeysFilter): AcceptedMessageKeysFilterAmino {
     const obj: any = {};
@@ -1420,6 +1545,8 @@ export const AcceptedMessageKeysFilter = {
     };
   }
 };
+GlobalDecoderRegistry.register(AcceptedMessageKeysFilter.typeUrl, AcceptedMessageKeysFilter);
+GlobalDecoderRegistry.registerAminoProtoMapping(AcceptedMessageKeysFilter.aminoType, AcceptedMessageKeysFilter.typeUrl);
 function createBaseAcceptedMessagesFilter(): AcceptedMessagesFilter {
   return {
     $typeUrl: "/cosmwasm.wasm.v1.AcceptedMessagesFilter",
@@ -1429,6 +1556,15 @@ function createBaseAcceptedMessagesFilter(): AcceptedMessagesFilter {
 export const AcceptedMessagesFilter = {
   typeUrl: "/cosmwasm.wasm.v1.AcceptedMessagesFilter",
   aminoType: "wasm/AcceptedMessagesFilter",
+  is(o: any): o is AcceptedMessagesFilter {
+    return o && (o.$typeUrl === AcceptedMessagesFilter.typeUrl || Array.isArray(o.messages) && (!o.messages.length || o.messages[0] instanceof Uint8Array || typeof o.messages[0] === "string"));
+  },
+  isSDK(o: any): o is AcceptedMessagesFilterSDKType {
+    return o && (o.$typeUrl === AcceptedMessagesFilter.typeUrl || Array.isArray(o.messages) && (!o.messages.length || o.messages[0] instanceof Uint8Array || typeof o.messages[0] === "string"));
+  },
+  isAmino(o: any): o is AcceptedMessagesFilterAmino {
+    return o && (o.$typeUrl === AcceptedMessagesFilter.typeUrl || Array.isArray(o.messages) && (!o.messages.length || o.messages[0] instanceof Uint8Array || typeof o.messages[0] === "string"));
+  },
   encode(message: AcceptedMessagesFilter, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.messages) {
       writer.uint32(10).bytes(v!);
@@ -1486,14 +1622,14 @@ export const AcceptedMessagesFilter = {
     return obj;
   },
   fromAmino(object: AcceptedMessagesFilterAmino): AcceptedMessagesFilter {
-    return {
-      messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => e) : []
-    };
+    const message = createBaseAcceptedMessagesFilter();
+    message.messages = object.messages?.map(e => toUtf8(JSON.stringify(e))) || [];
+    return message;
   },
   toAmino(message: AcceptedMessagesFilter): AcceptedMessagesFilterAmino {
     const obj: any = {};
     if (message.messages) {
-      obj.messages = message.messages.map(e => e);
+      obj.messages = message.messages.map(e => JSON.parse(fromUtf8(e)));
     } else {
       obj.messages = [];
     }
@@ -1521,115 +1657,5 @@ export const AcceptedMessagesFilter = {
     };
   }
 };
-export const Cosmwasm_wasmv1ContractAuthzLimitX_InterfaceDecoder = (input: BinaryReader | Uint8Array): MaxCallsLimit | MaxFundsLimit | CombinedLimit | Any => {
-  const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-  const data = Any.decode(reader, reader.uint32());
-  switch (data.typeUrl) {
-    case "/cosmwasm.wasm.v1.MaxCallsLimit":
-      return MaxCallsLimit.decode(data.value);
-    case "/cosmwasm.wasm.v1.MaxFundsLimit":
-      return MaxFundsLimit.decode(data.value);
-    case "/cosmwasm.wasm.v1.CombinedLimit":
-      return CombinedLimit.decode(data.value);
-    default:
-      return data;
-  }
-};
-export const Cosmwasm_wasmv1ContractAuthzLimitX_FromAmino = (content: AnyAmino) => {
-  switch (content.type) {
-    case "wasm/MaxCallsLimit":
-      return Any.fromPartial({
-        typeUrl: "/cosmwasm.wasm.v1.MaxCallsLimit",
-        value: MaxCallsLimit.encode(MaxCallsLimit.fromPartial(MaxCallsLimit.fromAmino(content.value))).finish()
-      });
-    case "wasm/MaxFundsLimit":
-      return Any.fromPartial({
-        typeUrl: "/cosmwasm.wasm.v1.MaxFundsLimit",
-        value: MaxFundsLimit.encode(MaxFundsLimit.fromPartial(MaxFundsLimit.fromAmino(content.value))).finish()
-      });
-    case "wasm/CombinedLimit":
-      return Any.fromPartial({
-        typeUrl: "/cosmwasm.wasm.v1.CombinedLimit",
-        value: CombinedLimit.encode(CombinedLimit.fromPartial(CombinedLimit.fromAmino(content.value))).finish()
-      });
-    default:
-      return Any.fromAmino(content);
-  }
-};
-export const Cosmwasm_wasmv1ContractAuthzLimitX_ToAmino = (content: Any) => {
-  switch (content.typeUrl) {
-    case "/cosmwasm.wasm.v1.MaxCallsLimit":
-      return {
-        type: "wasm/MaxCallsLimit",
-        value: MaxCallsLimit.toAmino(MaxCallsLimit.decode(content.value))
-      };
-    case "/cosmwasm.wasm.v1.MaxFundsLimit":
-      return {
-        type: "wasm/MaxFundsLimit",
-        value: MaxFundsLimit.toAmino(MaxFundsLimit.decode(content.value))
-      };
-    case "/cosmwasm.wasm.v1.CombinedLimit":
-      return {
-        type: "wasm/CombinedLimit",
-        value: CombinedLimit.toAmino(CombinedLimit.decode(content.value))
-      };
-    default:
-      return Any.toAmino(content);
-  }
-};
-export const Cosmwasm_wasmv1ContractAuthzFilterX_InterfaceDecoder = (input: BinaryReader | Uint8Array): AllowAllMessagesFilter | AcceptedMessageKeysFilter | AcceptedMessagesFilter | Any => {
-  const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-  const data = Any.decode(reader, reader.uint32());
-  switch (data.typeUrl) {
-    case "/cosmwasm.wasm.v1.AllowAllMessagesFilter":
-      return AllowAllMessagesFilter.decode(data.value);
-    case "/cosmwasm.wasm.v1.AcceptedMessageKeysFilter":
-      return AcceptedMessageKeysFilter.decode(data.value);
-    case "/cosmwasm.wasm.v1.AcceptedMessagesFilter":
-      return AcceptedMessagesFilter.decode(data.value);
-    default:
-      return data;
-  }
-};
-export const Cosmwasm_wasmv1ContractAuthzFilterX_FromAmino = (content: AnyAmino) => {
-  switch (content.type) {
-    case "wasm/AllowAllMessagesFilter":
-      return Any.fromPartial({
-        typeUrl: "/cosmwasm.wasm.v1.AllowAllMessagesFilter",
-        value: AllowAllMessagesFilter.encode(AllowAllMessagesFilter.fromPartial(AllowAllMessagesFilter.fromAmino(content.value))).finish()
-      });
-    case "wasm/AcceptedMessageKeysFilter":
-      return Any.fromPartial({
-        typeUrl: "/cosmwasm.wasm.v1.AcceptedMessageKeysFilter",
-        value: AcceptedMessageKeysFilter.encode(AcceptedMessageKeysFilter.fromPartial(AcceptedMessageKeysFilter.fromAmino(content.value))).finish()
-      });
-    case "wasm/AcceptedMessagesFilter":
-      return Any.fromPartial({
-        typeUrl: "/cosmwasm.wasm.v1.AcceptedMessagesFilter",
-        value: AcceptedMessagesFilter.encode(AcceptedMessagesFilter.fromPartial(AcceptedMessagesFilter.fromAmino(content.value))).finish()
-      });
-    default:
-      return Any.fromAmino(content);
-  }
-};
-export const Cosmwasm_wasmv1ContractAuthzFilterX_ToAmino = (content: Any) => {
-  switch (content.typeUrl) {
-    case "/cosmwasm.wasm.v1.AllowAllMessagesFilter":
-      return {
-        type: "wasm/AllowAllMessagesFilter",
-        value: AllowAllMessagesFilter.toAmino(AllowAllMessagesFilter.decode(content.value))
-      };
-    case "/cosmwasm.wasm.v1.AcceptedMessageKeysFilter":
-      return {
-        type: "wasm/AcceptedMessageKeysFilter",
-        value: AcceptedMessageKeysFilter.toAmino(AcceptedMessageKeysFilter.decode(content.value))
-      };
-    case "/cosmwasm.wasm.v1.AcceptedMessagesFilter":
-      return {
-        type: "wasm/AcceptedMessagesFilter",
-        value: AcceptedMessagesFilter.toAmino(AcceptedMessagesFilter.decode(content.value))
-      };
-    default:
-      return Any.toAmino(content);
-  }
-};
+GlobalDecoderRegistry.register(AcceptedMessagesFilter.typeUrl, AcceptedMessagesFilter);
+GlobalDecoderRegistry.registerAminoProtoMapping(AcceptedMessagesFilter.aminoType, AcceptedMessagesFilter.typeUrl);

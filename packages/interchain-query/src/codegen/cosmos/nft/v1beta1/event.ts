@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** EventSend is emitted on Msg/Send */
 export interface EventSend {
   /** class_id associated with the nft */
@@ -18,13 +19,13 @@ export interface EventSendProtoMsg {
 /** EventSend is emitted on Msg/Send */
 export interface EventSendAmino {
   /** class_id associated with the nft */
-  class_id: string;
+  class_id?: string;
   /** id is a unique identifier of the nft */
-  id: string;
+  id?: string;
   /** sender is the address of the owner of nft */
-  sender: string;
+  sender?: string;
   /** receiver is the receiver address of nft */
-  receiver: string;
+  receiver?: string;
 }
 export interface EventSendAminoMsg {
   type: "cosmos-sdk/EventSend";
@@ -53,11 +54,11 @@ export interface EventMintProtoMsg {
 /** EventMint is emitted on Mint */
 export interface EventMintAmino {
   /** class_id associated with the nft */
-  class_id: string;
+  class_id?: string;
   /** id is a unique identifier of the nft */
-  id: string;
+  id?: string;
   /** owner is the owner address of the nft */
-  owner: string;
+  owner?: string;
 }
 export interface EventMintAminoMsg {
   type: "cosmos-sdk/EventMint";
@@ -85,11 +86,11 @@ export interface EventBurnProtoMsg {
 /** EventBurn is emitted on Burn */
 export interface EventBurnAmino {
   /** class_id associated with the nft */
-  class_id: string;
+  class_id?: string;
   /** id is a unique identifier of the nft */
-  id: string;
+  id?: string;
   /** owner is the owner address of the nft */
-  owner: string;
+  owner?: string;
 }
 export interface EventBurnAminoMsg {
   type: "cosmos-sdk/EventBurn";
@@ -112,6 +113,15 @@ function createBaseEventSend(): EventSend {
 export const EventSend = {
   typeUrl: "/cosmos.nft.v1beta1.EventSend",
   aminoType: "cosmos-sdk/EventSend",
+  is(o: any): o is EventSend {
+    return o && (o.$typeUrl === EventSend.typeUrl || typeof o.classId === "string" && typeof o.id === "string" && typeof o.sender === "string" && typeof o.receiver === "string");
+  },
+  isSDK(o: any): o is EventSendSDKType {
+    return o && (o.$typeUrl === EventSend.typeUrl || typeof o.class_id === "string" && typeof o.id === "string" && typeof o.sender === "string" && typeof o.receiver === "string");
+  },
+  isAmino(o: any): o is EventSendAmino {
+    return o && (o.$typeUrl === EventSend.typeUrl || typeof o.class_id === "string" && typeof o.id === "string" && typeof o.sender === "string" && typeof o.receiver === "string");
+  },
   encode(message: EventSend, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.classId !== "") {
       writer.uint32(10).string(message.classId);
@@ -194,12 +204,20 @@ export const EventSend = {
     return obj;
   },
   fromAmino(object: EventSendAmino): EventSend {
-    return {
-      classId: object.class_id,
-      id: object.id,
-      sender: object.sender,
-      receiver: object.receiver
-    };
+    const message = createBaseEventSend();
+    if (object.class_id !== undefined && object.class_id !== null) {
+      message.classId = object.class_id;
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    if (object.sender !== undefined && object.sender !== null) {
+      message.sender = object.sender;
+    }
+    if (object.receiver !== undefined && object.receiver !== null) {
+      message.receiver = object.receiver;
+    }
+    return message;
   },
   toAmino(message: EventSend): EventSendAmino {
     const obj: any = {};
@@ -231,6 +249,8 @@ export const EventSend = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSend.typeUrl, EventSend);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventSend.aminoType, EventSend.typeUrl);
 function createBaseEventMint(): EventMint {
   return {
     classId: "",
@@ -241,6 +261,15 @@ function createBaseEventMint(): EventMint {
 export const EventMint = {
   typeUrl: "/cosmos.nft.v1beta1.EventMint",
   aminoType: "cosmos-sdk/EventMint",
+  is(o: any): o is EventMint {
+    return o && (o.$typeUrl === EventMint.typeUrl || typeof o.classId === "string" && typeof o.id === "string" && typeof o.owner === "string");
+  },
+  isSDK(o: any): o is EventMintSDKType {
+    return o && (o.$typeUrl === EventMint.typeUrl || typeof o.class_id === "string" && typeof o.id === "string" && typeof o.owner === "string");
+  },
+  isAmino(o: any): o is EventMintAmino {
+    return o && (o.$typeUrl === EventMint.typeUrl || typeof o.class_id === "string" && typeof o.id === "string" && typeof o.owner === "string");
+  },
   encode(message: EventMint, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.classId !== "") {
       writer.uint32(10).string(message.classId);
@@ -312,11 +341,17 @@ export const EventMint = {
     return obj;
   },
   fromAmino(object: EventMintAmino): EventMint {
-    return {
-      classId: object.class_id,
-      id: object.id,
-      owner: object.owner
-    };
+    const message = createBaseEventMint();
+    if (object.class_id !== undefined && object.class_id !== null) {
+      message.classId = object.class_id;
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner;
+    }
+    return message;
   },
   toAmino(message: EventMint): EventMintAmino {
     const obj: any = {};
@@ -347,6 +382,8 @@ export const EventMint = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventMint.typeUrl, EventMint);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventMint.aminoType, EventMint.typeUrl);
 function createBaseEventBurn(): EventBurn {
   return {
     classId: "",
@@ -357,6 +394,15 @@ function createBaseEventBurn(): EventBurn {
 export const EventBurn = {
   typeUrl: "/cosmos.nft.v1beta1.EventBurn",
   aminoType: "cosmos-sdk/EventBurn",
+  is(o: any): o is EventBurn {
+    return o && (o.$typeUrl === EventBurn.typeUrl || typeof o.classId === "string" && typeof o.id === "string" && typeof o.owner === "string");
+  },
+  isSDK(o: any): o is EventBurnSDKType {
+    return o && (o.$typeUrl === EventBurn.typeUrl || typeof o.class_id === "string" && typeof o.id === "string" && typeof o.owner === "string");
+  },
+  isAmino(o: any): o is EventBurnAmino {
+    return o && (o.$typeUrl === EventBurn.typeUrl || typeof o.class_id === "string" && typeof o.id === "string" && typeof o.owner === "string");
+  },
   encode(message: EventBurn, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.classId !== "") {
       writer.uint32(10).string(message.classId);
@@ -428,11 +474,17 @@ export const EventBurn = {
     return obj;
   },
   fromAmino(object: EventBurnAmino): EventBurn {
-    return {
-      classId: object.class_id,
-      id: object.id,
-      owner: object.owner
-    };
+    const message = createBaseEventBurn();
+    if (object.class_id !== undefined && object.class_id !== null) {
+      message.classId = object.class_id;
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner;
+    }
+    return message;
   },
   toAmino(message: EventBurn): EventBurnAmino {
     const obj: any = {};
@@ -463,3 +515,5 @@ export const EventBurn = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventBurn.typeUrl, EventBurn);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventBurn.aminoType, EventBurn.typeUrl);

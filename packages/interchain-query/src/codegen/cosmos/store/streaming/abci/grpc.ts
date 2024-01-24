@@ -2,10 +2,11 @@ import { RequestFinalizeBlock, RequestFinalizeBlockAmino, RequestFinalizeBlockSD
 import { StoreKVPair, StoreKVPairAmino, StoreKVPairSDKType } from "../../v1beta1/listening";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** ListenEndBlockRequest is the request type for the ListenEndBlock RPC method */
 export interface ListenFinalizeBlockRequest {
-  req: RequestFinalizeBlock | undefined;
-  res: ResponseFinalizeBlock | undefined;
+  req?: RequestFinalizeBlock | undefined;
+  res?: ResponseFinalizeBlock | undefined;
 }
 export interface ListenFinalizeBlockRequestProtoMsg {
   typeUrl: "/cosmos.store.streaming.abci.ListenFinalizeBlockRequest";
@@ -22,8 +23,8 @@ export interface ListenFinalizeBlockRequestAminoMsg {
 }
 /** ListenEndBlockRequest is the request type for the ListenEndBlock RPC method */
 export interface ListenFinalizeBlockRequestSDKType {
-  req: RequestFinalizeBlockSDKType | undefined;
-  res: ResponseFinalizeBlockSDKType | undefined;
+  req?: RequestFinalizeBlockSDKType | undefined;
+  res?: ResponseFinalizeBlockSDKType | undefined;
 }
 /** ListenEndBlockResponse is the response type for the ListenEndBlock RPC method */
 export interface ListenFinalizeBlockResponse {}
@@ -43,7 +44,7 @@ export interface ListenFinalizeBlockResponseSDKType {}
 export interface ListenCommitRequest {
   /** explicitly pass in block height as ResponseCommit does not contain this info */
   blockHeight: bigint;
-  res: ResponseCommit | undefined;
+  res?: ResponseCommit | undefined;
   changeSet: StoreKVPair[];
 }
 export interface ListenCommitRequestProtoMsg {
@@ -53,9 +54,9 @@ export interface ListenCommitRequestProtoMsg {
 /** ListenCommitRequest is the request type for the ListenCommit RPC method */
 export interface ListenCommitRequestAmino {
   /** explicitly pass in block height as ResponseCommit does not contain this info */
-  block_height: string;
+  block_height?: string;
   res?: ResponseCommitAmino | undefined;
-  change_set: StoreKVPairAmino[];
+  change_set?: StoreKVPairAmino[];
 }
 export interface ListenCommitRequestAminoMsg {
   type: "cosmos-sdk/ListenCommitRequest";
@@ -64,7 +65,7 @@ export interface ListenCommitRequestAminoMsg {
 /** ListenCommitRequest is the request type for the ListenCommit RPC method */
 export interface ListenCommitRequestSDKType {
   block_height: bigint;
-  res: ResponseCommitSDKType | undefined;
+  res?: ResponseCommitSDKType | undefined;
   change_set: StoreKVPairSDKType[];
 }
 /** ListenCommitResponse is the response type for the ListenCommit RPC method */
@@ -83,13 +84,22 @@ export interface ListenCommitResponseAminoMsg {
 export interface ListenCommitResponseSDKType {}
 function createBaseListenFinalizeBlockRequest(): ListenFinalizeBlockRequest {
   return {
-    req: RequestFinalizeBlock.fromPartial({}),
-    res: ResponseFinalizeBlock.fromPartial({})
+    req: undefined,
+    res: undefined
   };
 }
 export const ListenFinalizeBlockRequest = {
   typeUrl: "/cosmos.store.streaming.abci.ListenFinalizeBlockRequest",
   aminoType: "cosmos-sdk/ListenFinalizeBlockRequest",
+  is(o: any): o is ListenFinalizeBlockRequest {
+    return o && o.$typeUrl === ListenFinalizeBlockRequest.typeUrl;
+  },
+  isSDK(o: any): o is ListenFinalizeBlockRequestSDKType {
+    return o && o.$typeUrl === ListenFinalizeBlockRequest.typeUrl;
+  },
+  isAmino(o: any): o is ListenFinalizeBlockRequestAmino {
+    return o && o.$typeUrl === ListenFinalizeBlockRequest.typeUrl;
+  },
   encode(message: ListenFinalizeBlockRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.req !== undefined) {
       RequestFinalizeBlock.encode(message.req, writer.uint32(10).fork()).ldelim();
@@ -150,10 +160,14 @@ export const ListenFinalizeBlockRequest = {
     return obj;
   },
   fromAmino(object: ListenFinalizeBlockRequestAmino): ListenFinalizeBlockRequest {
-    return {
-      req: object?.req ? RequestFinalizeBlock.fromAmino(object.req) : undefined,
-      res: object?.res ? ResponseFinalizeBlock.fromAmino(object.res) : undefined
-    };
+    const message = createBaseListenFinalizeBlockRequest();
+    if (object.req !== undefined && object.req !== null) {
+      message.req = RequestFinalizeBlock.fromAmino(object.req);
+    }
+    if (object.res !== undefined && object.res !== null) {
+      message.res = ResponseFinalizeBlock.fromAmino(object.res);
+    }
+    return message;
   },
   toAmino(message: ListenFinalizeBlockRequest): ListenFinalizeBlockRequestAmino {
     const obj: any = {};
@@ -183,12 +197,23 @@ export const ListenFinalizeBlockRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(ListenFinalizeBlockRequest.typeUrl, ListenFinalizeBlockRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(ListenFinalizeBlockRequest.aminoType, ListenFinalizeBlockRequest.typeUrl);
 function createBaseListenFinalizeBlockResponse(): ListenFinalizeBlockResponse {
   return {};
 }
 export const ListenFinalizeBlockResponse = {
   typeUrl: "/cosmos.store.streaming.abci.ListenFinalizeBlockResponse",
   aminoType: "cosmos-sdk/ListenFinalizeBlockResponse",
+  is(o: any): o is ListenFinalizeBlockResponse {
+    return o && o.$typeUrl === ListenFinalizeBlockResponse.typeUrl;
+  },
+  isSDK(o: any): o is ListenFinalizeBlockResponseSDKType {
+    return o && o.$typeUrl === ListenFinalizeBlockResponse.typeUrl;
+  },
+  isAmino(o: any): o is ListenFinalizeBlockResponseAmino {
+    return o && o.$typeUrl === ListenFinalizeBlockResponse.typeUrl;
+  },
   encode(_: ListenFinalizeBlockResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -225,7 +250,8 @@ export const ListenFinalizeBlockResponse = {
     return obj;
   },
   fromAmino(_: ListenFinalizeBlockResponseAmino): ListenFinalizeBlockResponse {
-    return {};
+    const message = createBaseListenFinalizeBlockResponse();
+    return message;
   },
   toAmino(_: ListenFinalizeBlockResponse): ListenFinalizeBlockResponseAmino {
     const obj: any = {};
@@ -253,16 +279,27 @@ export const ListenFinalizeBlockResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(ListenFinalizeBlockResponse.typeUrl, ListenFinalizeBlockResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(ListenFinalizeBlockResponse.aminoType, ListenFinalizeBlockResponse.typeUrl);
 function createBaseListenCommitRequest(): ListenCommitRequest {
   return {
     blockHeight: BigInt(0),
-    res: ResponseCommit.fromPartial({}),
+    res: undefined,
     changeSet: []
   };
 }
 export const ListenCommitRequest = {
   typeUrl: "/cosmos.store.streaming.abci.ListenCommitRequest",
   aminoType: "cosmos-sdk/ListenCommitRequest",
+  is(o: any): o is ListenCommitRequest {
+    return o && (o.$typeUrl === ListenCommitRequest.typeUrl || typeof o.blockHeight === "bigint" && Array.isArray(o.changeSet) && (!o.changeSet.length || StoreKVPair.is(o.changeSet[0])));
+  },
+  isSDK(o: any): o is ListenCommitRequestSDKType {
+    return o && (o.$typeUrl === ListenCommitRequest.typeUrl || typeof o.block_height === "bigint" && Array.isArray(o.change_set) && (!o.change_set.length || StoreKVPair.isSDK(o.change_set[0])));
+  },
+  isAmino(o: any): o is ListenCommitRequestAmino {
+    return o && (o.$typeUrl === ListenCommitRequest.typeUrl || typeof o.block_height === "bigint" && Array.isArray(o.change_set) && (!o.change_set.length || StoreKVPair.isAmino(o.change_set[0])));
+  },
   encode(message: ListenCommitRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeight !== BigInt(0)) {
       writer.uint32(8).int64(message.blockHeight);
@@ -342,11 +379,15 @@ export const ListenCommitRequest = {
     return obj;
   },
   fromAmino(object: ListenCommitRequestAmino): ListenCommitRequest {
-    return {
-      blockHeight: BigInt(object.block_height),
-      res: object?.res ? ResponseCommit.fromAmino(object.res) : undefined,
-      changeSet: Array.isArray(object?.change_set) ? object.change_set.map((e: any) => StoreKVPair.fromAmino(e)) : []
-    };
+    const message = createBaseListenCommitRequest();
+    if (object.block_height !== undefined && object.block_height !== null) {
+      message.blockHeight = BigInt(object.block_height);
+    }
+    if (object.res !== undefined && object.res !== null) {
+      message.res = ResponseCommit.fromAmino(object.res);
+    }
+    message.changeSet = object.change_set?.map(e => StoreKVPair.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: ListenCommitRequest): ListenCommitRequestAmino {
     const obj: any = {};
@@ -381,12 +422,23 @@ export const ListenCommitRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(ListenCommitRequest.typeUrl, ListenCommitRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(ListenCommitRequest.aminoType, ListenCommitRequest.typeUrl);
 function createBaseListenCommitResponse(): ListenCommitResponse {
   return {};
 }
 export const ListenCommitResponse = {
   typeUrl: "/cosmos.store.streaming.abci.ListenCommitResponse",
   aminoType: "cosmos-sdk/ListenCommitResponse",
+  is(o: any): o is ListenCommitResponse {
+    return o && o.$typeUrl === ListenCommitResponse.typeUrl;
+  },
+  isSDK(o: any): o is ListenCommitResponseSDKType {
+    return o && o.$typeUrl === ListenCommitResponse.typeUrl;
+  },
+  isAmino(o: any): o is ListenCommitResponseAmino {
+    return o && o.$typeUrl === ListenCommitResponse.typeUrl;
+  },
   encode(_: ListenCommitResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -423,7 +475,8 @@ export const ListenCommitResponse = {
     return obj;
   },
   fromAmino(_: ListenCommitResponseAmino): ListenCommitResponse {
-    return {};
+    const message = createBaseListenCommitResponse();
+    return message;
   },
   toAmino(_: ListenCommitResponse): ListenCommitResponseAmino {
     const obj: any = {};
@@ -451,3 +504,5 @@ export const ListenCommitResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(ListenCommitResponse.typeUrl, ListenCommitResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(ListenCommitResponse.aminoType, ListenCommitResponse.typeUrl);

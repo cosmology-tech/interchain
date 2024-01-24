@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /**
  * Metadata defines a set of protocol specific data encoded into the ICS27 channel version bytestring
  * See ICS004: https://github.com/cosmos/ibc/tree/master/spec/core/ics-004-channel-and-packet-semantics#Versioning
@@ -31,20 +32,20 @@ export interface MetadataProtoMsg {
  */
 export interface MetadataAmino {
   /** version defines the ICS27 protocol version */
-  version: string;
+  version?: string;
   /** controller_connection_id is the connection identifier associated with the controller chain */
-  controller_connection_id: string;
+  controller_connection_id?: string;
   /** host_connection_id is the connection identifier associated with the host chain */
-  host_connection_id: string;
+  host_connection_id?: string;
   /**
    * address defines the interchain account address to be fulfilled upon the OnChanOpenTry handshake step
    * NOTE: the address field is empty on the OnChanOpenInit handshake step
    */
-  address: string;
+  address?: string;
   /** encoding defines the supported codec format */
-  encoding: string;
+  encoding?: string;
   /** tx_type defines the type of transactions the interchain account can execute */
-  tx_type: string;
+  tx_type?: string;
 }
 export interface MetadataAminoMsg {
   type: "cosmos-sdk/Metadata";
@@ -75,6 +76,15 @@ function createBaseMetadata(): Metadata {
 export const Metadata = {
   typeUrl: "/ibc.applications.interchain_accounts.v1.Metadata",
   aminoType: "cosmos-sdk/Metadata",
+  is(o: any): o is Metadata {
+    return o && (o.$typeUrl === Metadata.typeUrl || typeof o.version === "string" && typeof o.controllerConnectionId === "string" && typeof o.hostConnectionId === "string" && typeof o.address === "string" && typeof o.encoding === "string" && typeof o.txType === "string");
+  },
+  isSDK(o: any): o is MetadataSDKType {
+    return o && (o.$typeUrl === Metadata.typeUrl || typeof o.version === "string" && typeof o.controller_connection_id === "string" && typeof o.host_connection_id === "string" && typeof o.address === "string" && typeof o.encoding === "string" && typeof o.tx_type === "string");
+  },
+  isAmino(o: any): o is MetadataAmino {
+    return o && (o.$typeUrl === Metadata.typeUrl || typeof o.version === "string" && typeof o.controller_connection_id === "string" && typeof o.host_connection_id === "string" && typeof o.address === "string" && typeof o.encoding === "string" && typeof o.tx_type === "string");
+  },
   encode(message: Metadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.version !== "") {
       writer.uint32(10).string(message.version);
@@ -179,14 +189,26 @@ export const Metadata = {
     return obj;
   },
   fromAmino(object: MetadataAmino): Metadata {
-    return {
-      version: object.version,
-      controllerConnectionId: object.controller_connection_id,
-      hostConnectionId: object.host_connection_id,
-      address: object.address,
-      encoding: object.encoding,
-      txType: object.tx_type
-    };
+    const message = createBaseMetadata();
+    if (object.version !== undefined && object.version !== null) {
+      message.version = object.version;
+    }
+    if (object.controller_connection_id !== undefined && object.controller_connection_id !== null) {
+      message.controllerConnectionId = object.controller_connection_id;
+    }
+    if (object.host_connection_id !== undefined && object.host_connection_id !== null) {
+      message.hostConnectionId = object.host_connection_id;
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.encoding !== undefined && object.encoding !== null) {
+      message.encoding = object.encoding;
+    }
+    if (object.tx_type !== undefined && object.tx_type !== null) {
+      message.txType = object.tx_type;
+    }
+    return message;
   },
   toAmino(message: Metadata): MetadataAmino {
     const obj: any = {};
@@ -220,3 +242,5 @@ export const Metadata = {
     };
   }
 };
+GlobalDecoderRegistry.register(Metadata.typeUrl, Metadata);
+GlobalDecoderRegistry.registerAminoProtoMapping(Metadata.aminoType, Metadata.typeUrl);

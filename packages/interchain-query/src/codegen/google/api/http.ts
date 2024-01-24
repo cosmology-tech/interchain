@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, DeepPartial } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 /**
  * Defines the HTTP configuration for an API service. It contains a list of
  * [HttpRule][google.api.HttpRule], each specifying the mapping of an RPC method
@@ -37,7 +38,7 @@ export interface HttpAmino {
    * 
    * **NOTE:** All service configuration rules follow "last one wins" order.
    */
-  rules: HttpRuleAmino[];
+  rules?: HttpRuleAmino[];
   /**
    * When set to true, URL path parameters will be fully URI-decoded except in
    * cases of single segment matches in reserved expansion, where "%2F" will be
@@ -46,7 +47,7 @@ export interface HttpAmino {
    * The default behavior is to not decode RFC 6570 reserved characters in multi
    * segment matches.
    */
-  fully_decode_reserved_expansion: boolean;
+  fully_decode_reserved_expansion?: boolean;
 }
 export interface HttpAminoMsg {
   type: "/google.api.Http";
@@ -665,7 +666,7 @@ export interface HttpRuleAmino {
    * 
    * Refer to [selector][google.api.DocumentationRule.selector] for syntax details.
    */
-  selector: string;
+  selector?: string;
   /**
    * Maps to HTTP GET. Used for listing and getting information about
    * resources.
@@ -694,7 +695,7 @@ export interface HttpRuleAmino {
    * NOTE: the referred field must be present at the top-level of the request
    * message type.
    */
-  body: string;
+  body?: string;
   /**
    * Optional. The name of the response field whose value is mapped to the HTTP
    * response body. When omitted, the entire response message will be used
@@ -703,13 +704,13 @@ export interface HttpRuleAmino {
    * NOTE: The referred field must be present at the top-level of the response
    * message type.
    */
-  response_body: string;
+  response_body?: string;
   /**
    * Additional HTTP bindings for the selector. Nested bindings must
    * not contain an `additional_bindings` field themselves (that is,
    * the nesting may only be one level deep).
    */
-  additional_bindings: HttpRuleAmino[];
+  additional_bindings?: HttpRuleAmino[];
 }
 export interface HttpRuleAminoMsg {
   type: "/google.api.HttpRule";
@@ -1012,9 +1013,9 @@ export interface CustomHttpPatternProtoMsg {
 /** A custom pattern is used for defining custom HTTP verb. */
 export interface CustomHttpPatternAmino {
   /** The name of this custom HTTP verb. */
-  kind: string;
+  kind?: string;
   /** The path matched by this custom verb. */
-  path: string;
+  path?: string;
 }
 export interface CustomHttpPatternAminoMsg {
   type: "/google.api.CustomHttpPattern";
@@ -1033,6 +1034,15 @@ function createBaseHttp(): Http {
 }
 export const Http = {
   typeUrl: "/google.api.Http",
+  is(o: any): o is Http {
+    return o && (o.$typeUrl === Http.typeUrl || Array.isArray(o.rules) && (!o.rules.length || HttpRule.is(o.rules[0])) && typeof o.fullyDecodeReservedExpansion === "boolean");
+  },
+  isSDK(o: any): o is HttpSDKType {
+    return o && (o.$typeUrl === Http.typeUrl || Array.isArray(o.rules) && (!o.rules.length || HttpRule.isSDK(o.rules[0])) && typeof o.fully_decode_reserved_expansion === "boolean");
+  },
+  isAmino(o: any): o is HttpAmino {
+    return o && (o.$typeUrl === Http.typeUrl || Array.isArray(o.rules) && (!o.rules.length || HttpRule.isAmino(o.rules[0])) && typeof o.fully_decode_reserved_expansion === "boolean");
+  },
   encode(message: Http, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.rules) {
       HttpRule.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1101,10 +1111,12 @@ export const Http = {
     return obj;
   },
   fromAmino(object: HttpAmino): Http {
-    return {
-      rules: Array.isArray(object?.rules) ? object.rules.map((e: any) => HttpRule.fromAmino(e)) : [],
-      fullyDecodeReservedExpansion: object.fully_decode_reserved_expansion
-    };
+    const message = createBaseHttp();
+    message.rules = object.rules?.map(e => HttpRule.fromAmino(e)) || [];
+    if (object.fully_decode_reserved_expansion !== undefined && object.fully_decode_reserved_expansion !== null) {
+      message.fullyDecodeReservedExpansion = object.fully_decode_reserved_expansion;
+    }
+    return message;
   },
   toAmino(message: Http): HttpAmino {
     const obj: any = {};
@@ -1132,6 +1144,7 @@ export const Http = {
     };
   }
 };
+GlobalDecoderRegistry.register(Http.typeUrl, Http);
 function createBaseHttpRule(): HttpRule {
   return {
     selector: "",
@@ -1148,6 +1161,15 @@ function createBaseHttpRule(): HttpRule {
 }
 export const HttpRule = {
   typeUrl: "/google.api.HttpRule",
+  is(o: any): o is HttpRule {
+    return o && (o.$typeUrl === HttpRule.typeUrl || typeof o.selector === "string" && typeof o.body === "string" && typeof o.responseBody === "string" && Array.isArray(o.additionalBindings) && (!o.additionalBindings.length || HttpRule.is(o.additionalBindings[0])));
+  },
+  isSDK(o: any): o is HttpRuleSDKType {
+    return o && (o.$typeUrl === HttpRule.typeUrl || typeof o.selector === "string" && typeof o.body === "string" && typeof o.response_body === "string" && Array.isArray(o.additional_bindings) && (!o.additional_bindings.length || HttpRule.isSDK(o.additional_bindings[0])));
+  },
+  isAmino(o: any): o is HttpRuleAmino {
+    return o && (o.$typeUrl === HttpRule.typeUrl || typeof o.selector === "string" && typeof o.body === "string" && typeof o.response_body === "string" && Array.isArray(o.additional_bindings) && (!o.additional_bindings.length || HttpRule.isAmino(o.additional_bindings[0])));
+  },
   encode(message: HttpRule, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.selector !== "") {
       writer.uint32(10).string(message.selector);
@@ -1304,18 +1326,36 @@ export const HttpRule = {
     return obj;
   },
   fromAmino(object: HttpRuleAmino): HttpRule {
-    return {
-      selector: object.selector,
-      get: object?.get,
-      put: object?.put,
-      post: object?.post,
-      delete: object?.delete,
-      patch: object?.patch,
-      custom: object?.custom ? CustomHttpPattern.fromAmino(object.custom) : undefined,
-      body: object.body,
-      responseBody: object.response_body,
-      additionalBindings: Array.isArray(object?.additional_bindings) ? object.additional_bindings.map((e: any) => HttpRule.fromAmino(e)) : []
-    };
+    const message = createBaseHttpRule();
+    if (object.selector !== undefined && object.selector !== null) {
+      message.selector = object.selector;
+    }
+    if (object.get !== undefined && object.get !== null) {
+      message.get = object.get;
+    }
+    if (object.put !== undefined && object.put !== null) {
+      message.put = object.put;
+    }
+    if (object.post !== undefined && object.post !== null) {
+      message.post = object.post;
+    }
+    if (object.delete !== undefined && object.delete !== null) {
+      message.delete = object.delete;
+    }
+    if (object.patch !== undefined && object.patch !== null) {
+      message.patch = object.patch;
+    }
+    if (object.custom !== undefined && object.custom !== null) {
+      message.custom = CustomHttpPattern.fromAmino(object.custom);
+    }
+    if (object.body !== undefined && object.body !== null) {
+      message.body = object.body;
+    }
+    if (object.response_body !== undefined && object.response_body !== null) {
+      message.responseBody = object.response_body;
+    }
+    message.additionalBindings = object.additional_bindings?.map(e => HttpRule.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: HttpRule): HttpRuleAmino {
     const obj: any = {};
@@ -1351,6 +1391,7 @@ export const HttpRule = {
     };
   }
 };
+GlobalDecoderRegistry.register(HttpRule.typeUrl, HttpRule);
 function createBaseCustomHttpPattern(): CustomHttpPattern {
   return {
     kind: "",
@@ -1359,6 +1400,15 @@ function createBaseCustomHttpPattern(): CustomHttpPattern {
 }
 export const CustomHttpPattern = {
   typeUrl: "/google.api.CustomHttpPattern",
+  is(o: any): o is CustomHttpPattern {
+    return o && (o.$typeUrl === CustomHttpPattern.typeUrl || typeof o.kind === "string" && typeof o.path === "string");
+  },
+  isSDK(o: any): o is CustomHttpPatternSDKType {
+    return o && (o.$typeUrl === CustomHttpPattern.typeUrl || typeof o.kind === "string" && typeof o.path === "string");
+  },
+  isAmino(o: any): o is CustomHttpPatternAmino {
+    return o && (o.$typeUrl === CustomHttpPattern.typeUrl || typeof o.kind === "string" && typeof o.path === "string");
+  },
   encode(message: CustomHttpPattern, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.kind !== "") {
       writer.uint32(10).string(message.kind);
@@ -1419,10 +1469,14 @@ export const CustomHttpPattern = {
     return obj;
   },
   fromAmino(object: CustomHttpPatternAmino): CustomHttpPattern {
-    return {
-      kind: object.kind,
-      path: object.path
-    };
+    const message = createBaseCustomHttpPattern();
+    if (object.kind !== undefined && object.kind !== null) {
+      message.kind = object.kind;
+    }
+    if (object.path !== undefined && object.path !== null) {
+      message.path = object.path;
+    }
+    return message;
   },
   toAmino(message: CustomHttpPattern): CustomHttpPatternAmino {
     const obj: any = {};
@@ -1446,3 +1500,4 @@ export const CustomHttpPattern = {
     };
   }
 };
+GlobalDecoderRegistry.register(CustomHttpPattern.typeUrl, CustomHttpPattern);

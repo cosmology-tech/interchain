@@ -82,7 +82,7 @@ import { isSet, bytesFromBase64, base64FromBytes, DeepPartial } from "../../help
  *     }
  */
 export interface Any {
-  $typeUrl?: string;
+  $typeUrl?: "/google.protobuf.Any" | string;
   /**
    * A URL/resource name that uniquely identifies the type of the serialized
    * protocol buffer message. This string must contain at least
@@ -321,7 +321,7 @@ export interface AnyAminoMsg {
  *     }
  */
 export interface AnySDKType {
-  $typeUrl?: string;
+  $typeUrl?: "/google.protobuf.Any" | string;
   type_url: string;
   value: Uint8Array;
 }
@@ -334,6 +334,15 @@ function createBaseAny(): Any {
 }
 export const Any = {
   typeUrl: "/google.protobuf.Any",
+  is(o: any): o is Any {
+    return o && (o.$typeUrl === Any.typeUrl || typeof o.typeUrl === "string" && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
+  isSDK(o: any): o is AnySDKType {
+    return o && (o.$typeUrl === Any.typeUrl || typeof o.type_url === "string" && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
+  isAmino(o: any): o is AnyAmino {
+    return o && (o.$typeUrl === Any.typeUrl || typeof o.type === "string" && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
   encode(message: Any, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.typeUrl !== "") {
       writer.uint32(10).string(message.typeUrl);

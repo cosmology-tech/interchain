@@ -36,6 +36,7 @@ telescope({
     },
     interfaces: {
       enabled: true,
+      useGlobalDecoderRegistry: true,
       useUnionTypes: true,
     },
     prototypes: {
@@ -84,6 +85,16 @@ telescope({
     },
     reactQuery: {
       enabled: true,
+      instantExport: {
+        include: {
+          patterns: ["**"],
+        },
+        nameMapping: {
+          useAuthModuleAccounts: "cosmos.auth.v1beta1.useModuleAccounts",
+          useBankBalance: "cosmos.bank.v1beta1.useBalance",
+          useNftBalance: "cosmos.nft.v1beta1.useBalance",
+        },
+      },
     },
     aminoEncoding: {
       enabled: true,

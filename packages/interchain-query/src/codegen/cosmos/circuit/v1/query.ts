@@ -2,6 +2,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { Permissions, PermissionsAmino, PermissionsSDKType, GenesisAccountPermissions, GenesisAccountPermissionsAmino, GenesisAccountPermissionsSDKType } from "./types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** QueryAccountRequest is the request type for the Query/Account RPC method. */
 export interface QueryAccountRequest {
   address: string;
@@ -12,7 +13,7 @@ export interface QueryAccountRequestProtoMsg {
 }
 /** QueryAccountRequest is the request type for the Query/Account RPC method. */
 export interface QueryAccountRequestAmino {
-  address: string;
+  address?: string;
 }
 export interface QueryAccountRequestAminoMsg {
   type: "cosmos-sdk/QueryAccountRequest";
@@ -24,7 +25,7 @@ export interface QueryAccountRequestSDKType {
 }
 /** AccountResponse is the response type for the Query/Account RPC method. */
 export interface AccountResponse {
-  permission: Permissions | undefined;
+  permission?: Permissions | undefined;
 }
 export interface AccountResponseProtoMsg {
   typeUrl: "/cosmos.circuit.v1.AccountResponse";
@@ -40,7 +41,7 @@ export interface AccountResponseAminoMsg {
 }
 /** AccountResponse is the response type for the Query/Account RPC method. */
 export interface AccountResponseSDKType {
-  permission: PermissionsSDKType | undefined;
+  permission?: PermissionsSDKType | undefined;
 }
 /** QueryAccountsRequest is the request type for the Query/Accounts RPC method. */
 export interface QueryAccountsRequest {
@@ -68,7 +69,7 @@ export interface QueryAccountsRequestSDKType {
 export interface AccountsResponse {
   accounts: GenesisAccountPermissions[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface AccountsResponseProtoMsg {
   typeUrl: "/cosmos.circuit.v1.AccountsResponse";
@@ -76,7 +77,7 @@ export interface AccountsResponseProtoMsg {
 }
 /** AccountsResponse is the response type for the Query/Accounts RPC method. */
 export interface AccountsResponseAmino {
-  accounts: GenesisAccountPermissionsAmino[];
+  accounts?: GenesisAccountPermissionsAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -87,7 +88,7 @@ export interface AccountsResponseAminoMsg {
 /** AccountsResponse is the response type for the Query/Accounts RPC method. */
 export interface AccountsResponseSDKType {
   accounts: GenesisAccountPermissionsSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /** QueryDisableListRequest is the request type for the Query/DisabledList RPC method. */
 export interface QueryDisabledListRequest {}
@@ -113,7 +114,7 @@ export interface DisabledListResponseProtoMsg {
 }
 /** DisabledListResponse is the response type for the Query/DisabledList RPC method. */
 export interface DisabledListResponseAmino {
-  disabled_list: string[];
+  disabled_list?: string[];
 }
 export interface DisabledListResponseAminoMsg {
   type: "cosmos-sdk/DisabledListResponse";
@@ -131,6 +132,15 @@ function createBaseQueryAccountRequest(): QueryAccountRequest {
 export const QueryAccountRequest = {
   typeUrl: "/cosmos.circuit.v1.QueryAccountRequest",
   aminoType: "cosmos-sdk/QueryAccountRequest",
+  is(o: any): o is QueryAccountRequest {
+    return o && (o.$typeUrl === QueryAccountRequest.typeUrl || typeof o.address === "string");
+  },
+  isSDK(o: any): o is QueryAccountRequestSDKType {
+    return o && (o.$typeUrl === QueryAccountRequest.typeUrl || typeof o.address === "string");
+  },
+  isAmino(o: any): o is QueryAccountRequestAmino {
+    return o && (o.$typeUrl === QueryAccountRequest.typeUrl || typeof o.address === "string");
+  },
   encode(message: QueryAccountRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -180,9 +190,11 @@ export const QueryAccountRequest = {
     return obj;
   },
   fromAmino(object: QueryAccountRequestAmino): QueryAccountRequest {
-    return {
-      address: object.address
-    };
+    const message = createBaseQueryAccountRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
   },
   toAmino(message: QueryAccountRequest): QueryAccountRequestAmino {
     const obj: any = {};
@@ -211,14 +223,25 @@ export const QueryAccountRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAccountRequest.typeUrl, QueryAccountRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAccountRequest.aminoType, QueryAccountRequest.typeUrl);
 function createBaseAccountResponse(): AccountResponse {
   return {
-    permission: Permissions.fromPartial({})
+    permission: undefined
   };
 }
 export const AccountResponse = {
   typeUrl: "/cosmos.circuit.v1.AccountResponse",
   aminoType: "cosmos-sdk/AccountResponse",
+  is(o: any): o is AccountResponse {
+    return o && o.$typeUrl === AccountResponse.typeUrl;
+  },
+  isSDK(o: any): o is AccountResponseSDKType {
+    return o && o.$typeUrl === AccountResponse.typeUrl;
+  },
+  isAmino(o: any): o is AccountResponseAmino {
+    return o && o.$typeUrl === AccountResponse.typeUrl;
+  },
   encode(message: AccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.permission !== undefined) {
       Permissions.encode(message.permission, writer.uint32(10).fork()).ldelim();
@@ -268,9 +291,11 @@ export const AccountResponse = {
     return obj;
   },
   fromAmino(object: AccountResponseAmino): AccountResponse {
-    return {
-      permission: object?.permission ? Permissions.fromAmino(object.permission) : undefined
-    };
+    const message = createBaseAccountResponse();
+    if (object.permission !== undefined && object.permission !== null) {
+      message.permission = Permissions.fromAmino(object.permission);
+    }
+    return message;
   },
   toAmino(message: AccountResponse): AccountResponseAmino {
     const obj: any = {};
@@ -299,14 +324,25 @@ export const AccountResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(AccountResponse.typeUrl, AccountResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(AccountResponse.aminoType, AccountResponse.typeUrl);
 function createBaseQueryAccountsRequest(): QueryAccountsRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryAccountsRequest = {
   typeUrl: "/cosmos.circuit.v1.QueryAccountsRequest",
   aminoType: "cosmos-sdk/QueryAccountsRequest",
+  is(o: any): o is QueryAccountsRequest {
+    return o && o.$typeUrl === QueryAccountsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAccountsRequestSDKType {
+    return o && o.$typeUrl === QueryAccountsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAccountsRequestAmino {
+    return o && o.$typeUrl === QueryAccountsRequest.typeUrl;
+  },
   encode(message: QueryAccountsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -356,9 +392,11 @@ export const QueryAccountsRequest = {
     return obj;
   },
   fromAmino(object: QueryAccountsRequestAmino): QueryAccountsRequest {
-    return {
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryAccountsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryAccountsRequest): QueryAccountsRequestAmino {
     const obj: any = {};
@@ -387,15 +425,26 @@ export const QueryAccountsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAccountsRequest.typeUrl, QueryAccountsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAccountsRequest.aminoType, QueryAccountsRequest.typeUrl);
 function createBaseAccountsResponse(): AccountsResponse {
   return {
     accounts: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const AccountsResponse = {
   typeUrl: "/cosmos.circuit.v1.AccountsResponse",
   aminoType: "cosmos-sdk/AccountsResponse",
+  is(o: any): o is AccountsResponse {
+    return o && (o.$typeUrl === AccountsResponse.typeUrl || Array.isArray(o.accounts) && (!o.accounts.length || GenesisAccountPermissions.is(o.accounts[0])));
+  },
+  isSDK(o: any): o is AccountsResponseSDKType {
+    return o && (o.$typeUrl === AccountsResponse.typeUrl || Array.isArray(o.accounts) && (!o.accounts.length || GenesisAccountPermissions.isSDK(o.accounts[0])));
+  },
+  isAmino(o: any): o is AccountsResponseAmino {
+    return o && (o.$typeUrl === AccountsResponse.typeUrl || Array.isArray(o.accounts) && (!o.accounts.length || GenesisAccountPermissions.isAmino(o.accounts[0])));
+  },
   encode(message: AccountsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.accounts) {
       GenesisAccountPermissions.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -464,10 +513,12 @@ export const AccountsResponse = {
     return obj;
   },
   fromAmino(object: AccountsResponseAmino): AccountsResponse {
-    return {
-      accounts: Array.isArray(object?.accounts) ? object.accounts.map((e: any) => GenesisAccountPermissions.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseAccountsResponse();
+    message.accounts = object.accounts?.map(e => GenesisAccountPermissions.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: AccountsResponse): AccountsResponseAmino {
     const obj: any = {};
@@ -501,12 +552,23 @@ export const AccountsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(AccountsResponse.typeUrl, AccountsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(AccountsResponse.aminoType, AccountsResponse.typeUrl);
 function createBaseQueryDisabledListRequest(): QueryDisabledListRequest {
   return {};
 }
 export const QueryDisabledListRequest = {
   typeUrl: "/cosmos.circuit.v1.QueryDisabledListRequest",
   aminoType: "cosmos-sdk/QueryDisabledListRequest",
+  is(o: any): o is QueryDisabledListRequest {
+    return o && o.$typeUrl === QueryDisabledListRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryDisabledListRequestSDKType {
+    return o && o.$typeUrl === QueryDisabledListRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryDisabledListRequestAmino {
+    return o && o.$typeUrl === QueryDisabledListRequest.typeUrl;
+  },
   encode(_: QueryDisabledListRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -543,7 +605,8 @@ export const QueryDisabledListRequest = {
     return obj;
   },
   fromAmino(_: QueryDisabledListRequestAmino): QueryDisabledListRequest {
-    return {};
+    const message = createBaseQueryDisabledListRequest();
+    return message;
   },
   toAmino(_: QueryDisabledListRequest): QueryDisabledListRequestAmino {
     const obj: any = {};
@@ -571,6 +634,8 @@ export const QueryDisabledListRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryDisabledListRequest.typeUrl, QueryDisabledListRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryDisabledListRequest.aminoType, QueryDisabledListRequest.typeUrl);
 function createBaseDisabledListResponse(): DisabledListResponse {
   return {
     disabledList: []
@@ -579,6 +644,15 @@ function createBaseDisabledListResponse(): DisabledListResponse {
 export const DisabledListResponse = {
   typeUrl: "/cosmos.circuit.v1.DisabledListResponse",
   aminoType: "cosmos-sdk/DisabledListResponse",
+  is(o: any): o is DisabledListResponse {
+    return o && (o.$typeUrl === DisabledListResponse.typeUrl || Array.isArray(o.disabledList) && (!o.disabledList.length || typeof o.disabledList[0] === "string"));
+  },
+  isSDK(o: any): o is DisabledListResponseSDKType {
+    return o && (o.$typeUrl === DisabledListResponse.typeUrl || Array.isArray(o.disabled_list) && (!o.disabled_list.length || typeof o.disabled_list[0] === "string"));
+  },
+  isAmino(o: any): o is DisabledListResponseAmino {
+    return o && (o.$typeUrl === DisabledListResponse.typeUrl || Array.isArray(o.disabled_list) && (!o.disabled_list.length || typeof o.disabled_list[0] === "string"));
+  },
   encode(message: DisabledListResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.disabledList) {
       writer.uint32(10).string(v!);
@@ -636,9 +710,9 @@ export const DisabledListResponse = {
     return obj;
   },
   fromAmino(object: DisabledListResponseAmino): DisabledListResponse {
-    return {
-      disabledList: Array.isArray(object?.disabled_list) ? object.disabled_list.map((e: any) => e) : []
-    };
+    const message = createBaseDisabledListResponse();
+    message.disabledList = object.disabled_list?.map(e => e) || [];
+    return message;
   },
   toAmino(message: DisabledListResponse): DisabledListResponseAmino {
     const obj: any = {};
@@ -671,3 +745,5 @@ export const DisabledListResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(DisabledListResponse.typeUrl, DisabledListResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(DisabledListResponse.aminoType, DisabledListResponse.typeUrl);

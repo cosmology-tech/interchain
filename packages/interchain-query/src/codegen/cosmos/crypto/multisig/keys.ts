@@ -1,6 +1,7 @@
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /**
  * LegacyAminoPubKey specifies a public key type
  * which nests multiple public keys and a threshold,
@@ -20,8 +21,8 @@ export interface LegacyAminoPubKeyProtoMsg {
  * it uses legacy amino address rules.
  */
 export interface LegacyAminoPubKeyAmino {
-  threshold: number;
-  public_keys: AnyAmino[];
+  threshold?: number;
+  public_keys?: AnyAmino[];
 }
 export interface LegacyAminoPubKeyAminoMsg {
   type: "tendermint/PubKeyMultisigThreshold";
@@ -45,6 +46,15 @@ function createBaseLegacyAminoPubKey(): LegacyAminoPubKey {
 export const LegacyAminoPubKey = {
   typeUrl: "/cosmos.crypto.multisig.LegacyAminoPubKey",
   aminoType: "tendermint/PubKeyMultisigThreshold",
+  is(o: any): o is LegacyAminoPubKey {
+    return o && (o.$typeUrl === LegacyAminoPubKey.typeUrl || typeof o.threshold === "number" && Array.isArray(o.publicKeys) && (!o.publicKeys.length || Any.is(o.publicKeys[0])));
+  },
+  isSDK(o: any): o is LegacyAminoPubKeySDKType {
+    return o && (o.$typeUrl === LegacyAminoPubKey.typeUrl || typeof o.threshold === "number" && Array.isArray(o.public_keys) && (!o.public_keys.length || Any.isSDK(o.public_keys[0])));
+  },
+  isAmino(o: any): o is LegacyAminoPubKeyAmino {
+    return o && (o.$typeUrl === LegacyAminoPubKey.typeUrl || typeof o.threshold === "number" && Array.isArray(o.public_keys) && (!o.public_keys.length || Any.isAmino(o.public_keys[0])));
+  },
   encode(message: LegacyAminoPubKey, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.threshold !== 0) {
       writer.uint32(8).uint32(message.threshold);
@@ -113,10 +123,12 @@ export const LegacyAminoPubKey = {
     return obj;
   },
   fromAmino(object: LegacyAminoPubKeyAmino): LegacyAminoPubKey {
-    return {
-      threshold: object.threshold,
-      publicKeys: Array.isArray(object?.public_keys) ? object.public_keys.map((e: any) => Any.fromAmino(e)) : []
-    };
+    const message = createBaseLegacyAminoPubKey();
+    if (object.threshold !== undefined && object.threshold !== null) {
+      message.threshold = object.threshold;
+    }
+    message.publicKeys = object.public_keys?.map(e => Any.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: LegacyAminoPubKey): LegacyAminoPubKeyAmino {
     const obj: any = {};
@@ -150,3 +162,5 @@ export const LegacyAminoPubKey = {
     };
   }
 };
+GlobalDecoderRegistry.register(LegacyAminoPubKey.typeUrl, LegacyAminoPubKey);
+GlobalDecoderRegistry.registerAminoProtoMapping(LegacyAminoPubKey.aminoType, LegacyAminoPubKey.typeUrl);

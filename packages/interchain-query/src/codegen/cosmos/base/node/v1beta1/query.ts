@@ -1,6 +1,7 @@
 import { Timestamp } from "../../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { DeepPartial, isSet, toTimestamp, fromTimestamp, bytesFromBase64, base64FromBytes } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** ConfigRequest defines the request structure for the Config gRPC query. */
 export interface ConfigRequest {}
 export interface ConfigRequestProtoMsg {
@@ -28,10 +29,10 @@ export interface ConfigResponseProtoMsg {
 }
 /** ConfigResponse defines the response structure for the Config gRPC query. */
 export interface ConfigResponseAmino {
-  minimum_gas_price: string;
+  minimum_gas_price?: string;
   /** pruning settings */
-  pruning_keep_recent: string;
-  pruning_interval: string;
+  pruning_keep_recent?: string;
+  pruning_interval?: string;
 }
 export interface ConfigResponseAminoMsg {
   type: "cosmos-sdk/ConfigResponse";
@@ -64,7 +65,7 @@ export interface StatusResponse {
   /** current block height */
   height: bigint;
   /** block height timestamp */
-  timestamp: Date | undefined;
+  timestamp?: Date | undefined;
   /** app hash of the current block */
   appHash: Uint8Array;
   /** validator hash provided by the consensus header */
@@ -77,15 +78,15 @@ export interface StatusResponseProtoMsg {
 /** StateResponse defines the response structure for the status of a node. */
 export interface StatusResponseAmino {
   /** earliest block height available in the store */
-  earliest_store_height: string;
+  earliest_store_height?: string;
   /** current block height */
-  height: string;
+  height?: string;
   /** block height timestamp */
-  timestamp?: Date | undefined;
+  timestamp?: string | undefined;
   /** app hash of the current block */
-  app_hash: Uint8Array;
+  app_hash?: string;
   /** validator hash provided by the consensus header */
-  validator_hash: Uint8Array;
+  validator_hash?: string;
 }
 export interface StatusResponseAminoMsg {
   type: "cosmos-sdk/StatusResponse";
@@ -95,7 +96,7 @@ export interface StatusResponseAminoMsg {
 export interface StatusResponseSDKType {
   earliest_store_height: bigint;
   height: bigint;
-  timestamp: Date | undefined;
+  timestamp?: Date | undefined;
   app_hash: Uint8Array;
   validator_hash: Uint8Array;
 }
@@ -105,6 +106,15 @@ function createBaseConfigRequest(): ConfigRequest {
 export const ConfigRequest = {
   typeUrl: "/cosmos.base.node.v1beta1.ConfigRequest",
   aminoType: "cosmos-sdk/ConfigRequest",
+  is(o: any): o is ConfigRequest {
+    return o && o.$typeUrl === ConfigRequest.typeUrl;
+  },
+  isSDK(o: any): o is ConfigRequestSDKType {
+    return o && o.$typeUrl === ConfigRequest.typeUrl;
+  },
+  isAmino(o: any): o is ConfigRequestAmino {
+    return o && o.$typeUrl === ConfigRequest.typeUrl;
+  },
   encode(_: ConfigRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -141,7 +151,8 @@ export const ConfigRequest = {
     return obj;
   },
   fromAmino(_: ConfigRequestAmino): ConfigRequest {
-    return {};
+    const message = createBaseConfigRequest();
+    return message;
   },
   toAmino(_: ConfigRequest): ConfigRequestAmino {
     const obj: any = {};
@@ -169,6 +180,8 @@ export const ConfigRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(ConfigRequest.typeUrl, ConfigRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(ConfigRequest.aminoType, ConfigRequest.typeUrl);
 function createBaseConfigResponse(): ConfigResponse {
   return {
     minimumGasPrice: "",
@@ -179,6 +192,15 @@ function createBaseConfigResponse(): ConfigResponse {
 export const ConfigResponse = {
   typeUrl: "/cosmos.base.node.v1beta1.ConfigResponse",
   aminoType: "cosmos-sdk/ConfigResponse",
+  is(o: any): o is ConfigResponse {
+    return o && (o.$typeUrl === ConfigResponse.typeUrl || typeof o.minimumGasPrice === "string" && typeof o.pruningKeepRecent === "string" && typeof o.pruningInterval === "string");
+  },
+  isSDK(o: any): o is ConfigResponseSDKType {
+    return o && (o.$typeUrl === ConfigResponse.typeUrl || typeof o.minimum_gas_price === "string" && typeof o.pruning_keep_recent === "string" && typeof o.pruning_interval === "string");
+  },
+  isAmino(o: any): o is ConfigResponseAmino {
+    return o && (o.$typeUrl === ConfigResponse.typeUrl || typeof o.minimum_gas_price === "string" && typeof o.pruning_keep_recent === "string" && typeof o.pruning_interval === "string");
+  },
   encode(message: ConfigResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.minimumGasPrice !== "") {
       writer.uint32(10).string(message.minimumGasPrice);
@@ -250,11 +272,17 @@ export const ConfigResponse = {
     return obj;
   },
   fromAmino(object: ConfigResponseAmino): ConfigResponse {
-    return {
-      minimumGasPrice: object.minimum_gas_price,
-      pruningKeepRecent: object.pruning_keep_recent,
-      pruningInterval: object.pruning_interval
-    };
+    const message = createBaseConfigResponse();
+    if (object.minimum_gas_price !== undefined && object.minimum_gas_price !== null) {
+      message.minimumGasPrice = object.minimum_gas_price;
+    }
+    if (object.pruning_keep_recent !== undefined && object.pruning_keep_recent !== null) {
+      message.pruningKeepRecent = object.pruning_keep_recent;
+    }
+    if (object.pruning_interval !== undefined && object.pruning_interval !== null) {
+      message.pruningInterval = object.pruning_interval;
+    }
+    return message;
   },
   toAmino(message: ConfigResponse): ConfigResponseAmino {
     const obj: any = {};
@@ -285,12 +313,23 @@ export const ConfigResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(ConfigResponse.typeUrl, ConfigResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(ConfigResponse.aminoType, ConfigResponse.typeUrl);
 function createBaseStatusRequest(): StatusRequest {
   return {};
 }
 export const StatusRequest = {
   typeUrl: "/cosmos.base.node.v1beta1.StatusRequest",
   aminoType: "cosmos-sdk/StatusRequest",
+  is(o: any): o is StatusRequest {
+    return o && o.$typeUrl === StatusRequest.typeUrl;
+  },
+  isSDK(o: any): o is StatusRequestSDKType {
+    return o && o.$typeUrl === StatusRequest.typeUrl;
+  },
+  isAmino(o: any): o is StatusRequestAmino {
+    return o && o.$typeUrl === StatusRequest.typeUrl;
+  },
   encode(_: StatusRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -327,7 +366,8 @@ export const StatusRequest = {
     return obj;
   },
   fromAmino(_: StatusRequestAmino): StatusRequest {
-    return {};
+    const message = createBaseStatusRequest();
+    return message;
   },
   toAmino(_: StatusRequest): StatusRequestAmino {
     const obj: any = {};
@@ -355,11 +395,13 @@ export const StatusRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(StatusRequest.typeUrl, StatusRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(StatusRequest.aminoType, StatusRequest.typeUrl);
 function createBaseStatusResponse(): StatusResponse {
   return {
     earliestStoreHeight: BigInt(0),
     height: BigInt(0),
-    timestamp: new Date(),
+    timestamp: undefined,
     appHash: new Uint8Array(),
     validatorHash: new Uint8Array()
   };
@@ -367,6 +409,15 @@ function createBaseStatusResponse(): StatusResponse {
 export const StatusResponse = {
   typeUrl: "/cosmos.base.node.v1beta1.StatusResponse",
   aminoType: "cosmos-sdk/StatusResponse",
+  is(o: any): o is StatusResponse {
+    return o && (o.$typeUrl === StatusResponse.typeUrl || typeof o.earliestStoreHeight === "bigint" && typeof o.height === "bigint" && (o.appHash instanceof Uint8Array || typeof o.appHash === "string") && (o.validatorHash instanceof Uint8Array || typeof o.validatorHash === "string"));
+  },
+  isSDK(o: any): o is StatusResponseSDKType {
+    return o && (o.$typeUrl === StatusResponse.typeUrl || typeof o.earliest_store_height === "bigint" && typeof o.height === "bigint" && (o.app_hash instanceof Uint8Array || typeof o.app_hash === "string") && (o.validator_hash instanceof Uint8Array || typeof o.validator_hash === "string"));
+  },
+  isAmino(o: any): o is StatusResponseAmino {
+    return o && (o.$typeUrl === StatusResponse.typeUrl || typeof o.earliest_store_height === "bigint" && typeof o.height === "bigint" && (o.app_hash instanceof Uint8Array || typeof o.app_hash === "string") && (o.validator_hash instanceof Uint8Array || typeof o.validator_hash === "string"));
+  },
   encode(message: StatusResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.earliestStoreHeight !== BigInt(0)) {
       writer.uint32(8).uint64(message.earliestStoreHeight);
@@ -460,21 +511,31 @@ export const StatusResponse = {
     return obj;
   },
   fromAmino(object: StatusResponseAmino): StatusResponse {
-    return {
-      earliestStoreHeight: BigInt(object.earliest_store_height),
-      height: BigInt(object.height),
-      timestamp: object.timestamp,
-      appHash: object.app_hash,
-      validatorHash: object.validator_hash
-    };
+    const message = createBaseStatusResponse();
+    if (object.earliest_store_height !== undefined && object.earliest_store_height !== null) {
+      message.earliestStoreHeight = BigInt(object.earliest_store_height);
+    }
+    if (object.height !== undefined && object.height !== null) {
+      message.height = BigInt(object.height);
+    }
+    if (object.timestamp !== undefined && object.timestamp !== null) {
+      message.timestamp = fromTimestamp(Timestamp.fromAmino(object.timestamp));
+    }
+    if (object.app_hash !== undefined && object.app_hash !== null) {
+      message.appHash = bytesFromBase64(object.app_hash);
+    }
+    if (object.validator_hash !== undefined && object.validator_hash !== null) {
+      message.validatorHash = bytesFromBase64(object.validator_hash);
+    }
+    return message;
   },
   toAmino(message: StatusResponse): StatusResponseAmino {
     const obj: any = {};
     obj.earliest_store_height = message.earliestStoreHeight ? message.earliestStoreHeight.toString() : undefined;
     obj.height = message.height ? message.height.toString() : undefined;
-    obj.timestamp = message.timestamp;
-    obj.app_hash = message.appHash;
-    obj.validator_hash = message.validatorHash;
+    obj.timestamp = message.timestamp ? Timestamp.toAmino(toTimestamp(message.timestamp)) : undefined;
+    obj.app_hash = message.appHash ? base64FromBytes(message.appHash) : undefined;
+    obj.validator_hash = message.validatorHash ? base64FromBytes(message.validatorHash) : undefined;
     return obj;
   },
   fromAminoMsg(object: StatusResponseAminoMsg): StatusResponse {
@@ -499,3 +560,5 @@ export const StatusResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(StatusResponse.typeUrl, StatusResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(StatusResponse.aminoType, StatusResponse.typeUrl);

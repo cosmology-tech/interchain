@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** ModuleDescriptor describes an app module. */
 export interface ModuleDescriptor {
   /**
@@ -37,14 +38,14 @@ export interface ModuleDescriptorAmino {
    * module in the runtime module registry. It is required to make debugging
    * of configuration errors easier for users.
    */
-  go_import: string;
+  go_import?: string;
   /**
    * use_package refers to a protobuf package that this module
    * uses and exposes to the world. In an app, only one module should "use"
    * or own a single protobuf package. It is assumed that the module uses
    * all of the .proto files in a single package.
    */
-  use_package: PackageReferenceAmino[];
+  use_package?: PackageReferenceAmino[];
   /**
    * can_migrate_from defines which module versions this module can migrate
    * state from. The framework will check that one module version is able to
@@ -54,7 +55,7 @@ export interface ModuleDescriptorAmino {
    * declares it can migrate from v1, the framework knows how to migrate
    * from v1 to v3, assuming all 3 module versions are registered at runtime.
    */
-  can_migrate_from: MigrateFromInfoAmino[];
+  can_migrate_from?: MigrateFromInfoAmino[];
 }
 export interface ModuleDescriptorAminoMsg {
   type: "cosmos-sdk/ModuleDescriptor";
@@ -116,7 +117,7 @@ export interface PackageReferenceProtoMsg {
 /** PackageReference is a reference to a protobuf package used by a module. */
 export interface PackageReferenceAmino {
   /** name is the fully-qualified name of the package. */
-  name: string;
+  name?: string;
   /**
    * revision is the optional revision of the package that is being used.
    * Protobuf packages used in Cosmos should generally have a major version
@@ -154,7 +155,7 @@ export interface PackageReferenceAmino {
    *   are important good client UX
    * * protobuf files are changed in backwards and forwards compatible ways
    */
-  revision: number;
+  revision?: number;
 }
 export interface PackageReferenceAminoMsg {
   type: "cosmos-sdk/PackageReference";
@@ -189,7 +190,7 @@ export interface MigrateFromInfoAmino {
    * module is the fully-qualified protobuf name of the module config object
    * for the previous module version, ex: "cosmos.group.module.v1.Module".
    */
-  module: string;
+  module?: string;
 }
 export interface MigrateFromInfoAminoMsg {
   type: "cosmos-sdk/MigrateFromInfo";
@@ -212,6 +213,15 @@ function createBaseModuleDescriptor(): ModuleDescriptor {
 export const ModuleDescriptor = {
   typeUrl: "/cosmos.app.v1alpha1.ModuleDescriptor",
   aminoType: "cosmos-sdk/ModuleDescriptor",
+  is(o: any): o is ModuleDescriptor {
+    return o && (o.$typeUrl === ModuleDescriptor.typeUrl || typeof o.goImport === "string" && Array.isArray(o.usePackage) && (!o.usePackage.length || PackageReference.is(o.usePackage[0])) && Array.isArray(o.canMigrateFrom) && (!o.canMigrateFrom.length || MigrateFromInfo.is(o.canMigrateFrom[0])));
+  },
+  isSDK(o: any): o is ModuleDescriptorSDKType {
+    return o && (o.$typeUrl === ModuleDescriptor.typeUrl || typeof o.go_import === "string" && Array.isArray(o.use_package) && (!o.use_package.length || PackageReference.isSDK(o.use_package[0])) && Array.isArray(o.can_migrate_from) && (!o.can_migrate_from.length || MigrateFromInfo.isSDK(o.can_migrate_from[0])));
+  },
+  isAmino(o: any): o is ModuleDescriptorAmino {
+    return o && (o.$typeUrl === ModuleDescriptor.typeUrl || typeof o.go_import === "string" && Array.isArray(o.use_package) && (!o.use_package.length || PackageReference.isAmino(o.use_package[0])) && Array.isArray(o.can_migrate_from) && (!o.can_migrate_from.length || MigrateFromInfo.isAmino(o.can_migrate_from[0])));
+  },
   encode(message: ModuleDescriptor, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.goImport !== "") {
       writer.uint32(10).string(message.goImport);
@@ -299,11 +309,13 @@ export const ModuleDescriptor = {
     return obj;
   },
   fromAmino(object: ModuleDescriptorAmino): ModuleDescriptor {
-    return {
-      goImport: object.go_import,
-      usePackage: Array.isArray(object?.use_package) ? object.use_package.map((e: any) => PackageReference.fromAmino(e)) : [],
-      canMigrateFrom: Array.isArray(object?.can_migrate_from) ? object.can_migrate_from.map((e: any) => MigrateFromInfo.fromAmino(e)) : []
-    };
+    const message = createBaseModuleDescriptor();
+    if (object.go_import !== undefined && object.go_import !== null) {
+      message.goImport = object.go_import;
+    }
+    message.usePackage = object.use_package?.map(e => PackageReference.fromAmino(e)) || [];
+    message.canMigrateFrom = object.can_migrate_from?.map(e => MigrateFromInfo.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: ModuleDescriptor): ModuleDescriptorAmino {
     const obj: any = {};
@@ -342,6 +354,8 @@ export const ModuleDescriptor = {
     };
   }
 };
+GlobalDecoderRegistry.register(ModuleDescriptor.typeUrl, ModuleDescriptor);
+GlobalDecoderRegistry.registerAminoProtoMapping(ModuleDescriptor.aminoType, ModuleDescriptor.typeUrl);
 function createBasePackageReference(): PackageReference {
   return {
     name: "",
@@ -351,6 +365,15 @@ function createBasePackageReference(): PackageReference {
 export const PackageReference = {
   typeUrl: "/cosmos.app.v1alpha1.PackageReference",
   aminoType: "cosmos-sdk/PackageReference",
+  is(o: any): o is PackageReference {
+    return o && (o.$typeUrl === PackageReference.typeUrl || typeof o.name === "string" && typeof o.revision === "number");
+  },
+  isSDK(o: any): o is PackageReferenceSDKType {
+    return o && (o.$typeUrl === PackageReference.typeUrl || typeof o.name === "string" && typeof o.revision === "number");
+  },
+  isAmino(o: any): o is PackageReferenceAmino {
+    return o && (o.$typeUrl === PackageReference.typeUrl || typeof o.name === "string" && typeof o.revision === "number");
+  },
   encode(message: PackageReference, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -411,10 +434,14 @@ export const PackageReference = {
     return obj;
   },
   fromAmino(object: PackageReferenceAmino): PackageReference {
-    return {
-      name: object.name,
-      revision: object.revision
-    };
+    const message = createBasePackageReference();
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    }
+    if (object.revision !== undefined && object.revision !== null) {
+      message.revision = object.revision;
+    }
+    return message;
   },
   toAmino(message: PackageReference): PackageReferenceAmino {
     const obj: any = {};
@@ -444,6 +471,8 @@ export const PackageReference = {
     };
   }
 };
+GlobalDecoderRegistry.register(PackageReference.typeUrl, PackageReference);
+GlobalDecoderRegistry.registerAminoProtoMapping(PackageReference.aminoType, PackageReference.typeUrl);
 function createBaseMigrateFromInfo(): MigrateFromInfo {
   return {
     module: ""
@@ -452,6 +481,15 @@ function createBaseMigrateFromInfo(): MigrateFromInfo {
 export const MigrateFromInfo = {
   typeUrl: "/cosmos.app.v1alpha1.MigrateFromInfo",
   aminoType: "cosmos-sdk/MigrateFromInfo",
+  is(o: any): o is MigrateFromInfo {
+    return o && (o.$typeUrl === MigrateFromInfo.typeUrl || typeof o.module === "string");
+  },
+  isSDK(o: any): o is MigrateFromInfoSDKType {
+    return o && (o.$typeUrl === MigrateFromInfo.typeUrl || typeof o.module === "string");
+  },
+  isAmino(o: any): o is MigrateFromInfoAmino {
+    return o && (o.$typeUrl === MigrateFromInfo.typeUrl || typeof o.module === "string");
+  },
   encode(message: MigrateFromInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.module !== "") {
       writer.uint32(10).string(message.module);
@@ -501,9 +539,11 @@ export const MigrateFromInfo = {
     return obj;
   },
   fromAmino(object: MigrateFromInfoAmino): MigrateFromInfo {
-    return {
-      module: object.module
-    };
+    const message = createBaseMigrateFromInfo();
+    if (object.module !== undefined && object.module !== null) {
+      message.module = object.module;
+    }
+    return message;
   },
   toAmino(message: MigrateFromInfo): MigrateFromInfoAmino {
     const obj: any = {};
@@ -532,3 +572,5 @@ export const MigrateFromInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(MigrateFromInfo.typeUrl, MigrateFromInfo);
+GlobalDecoderRegistry.registerAminoProtoMapping(MigrateFromInfo.aminoType, MigrateFromInfo.typeUrl);

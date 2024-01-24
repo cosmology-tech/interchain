@@ -2,6 +2,7 @@ import { Fee, FeeAmino, FeeSDKType, PacketFee, PacketFeeAmino, PacketFeeSDKType 
 import { PacketId, PacketIdAmino, PacketIdSDKType } from "../../../core/channel/v1/channel";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** MsgRegisterPayee defines the request type for the RegisterPayee rpc */
 export interface MsgRegisterPayee {
   /** unique port identifier */
@@ -20,13 +21,13 @@ export interface MsgRegisterPayeeProtoMsg {
 /** MsgRegisterPayee defines the request type for the RegisterPayee rpc */
 export interface MsgRegisterPayeeAmino {
   /** unique port identifier */
-  port_id: string;
+  port_id?: string;
   /** unique channel identifier */
-  channel_id: string;
+  channel_id?: string;
   /** the relayer address */
-  relayer: string;
+  relayer?: string;
   /** the payee address */
-  payee: string;
+  payee?: string;
 }
 export interface MsgRegisterPayeeAminoMsg {
   type: "cosmos-sdk/MsgRegisterPayee";
@@ -71,13 +72,13 @@ export interface MsgRegisterCounterpartyPayeeProtoMsg {
 /** MsgRegisterCounterpartyPayee defines the request type for the RegisterCounterpartyPayee rpc */
 export interface MsgRegisterCounterpartyPayeeAmino {
   /** unique port identifier */
-  port_id: string;
+  port_id?: string;
   /** unique channel identifier */
-  channel_id: string;
+  channel_id?: string;
   /** the relayer address */
-  relayer: string;
+  relayer?: string;
   /** the counterparty payee address */
-  counterparty_payee: string;
+  counterparty_payee?: string;
 }
 export interface MsgRegisterCounterpartyPayeeAminoMsg {
   type: "cosmos-sdk/MsgRegisterCounterpartyPayee";
@@ -134,13 +135,13 @@ export interface MsgPayPacketFeeAmino {
   /** fee encapsulates the recv, ack and timeout fees associated with an IBC packet */
   fee?: FeeAmino | undefined;
   /** the source port unique identifier */
-  source_port_id: string;
+  source_port_id?: string;
   /** the source channel unique identifer */
-  source_channel_id: string;
+  source_channel_id?: string;
   /** account address to refund fee if necessary */
-  signer: string;
+  signer?: string;
   /** optional list of relayers permitted to the receive packet fees */
-  relayers: string[];
+  relayers?: string[];
 }
 export interface MsgPayPacketFeeAminoMsg {
   type: "cosmos-sdk/MsgPayPacketFee";
@@ -233,6 +234,15 @@ function createBaseMsgRegisterPayee(): MsgRegisterPayee {
 export const MsgRegisterPayee = {
   typeUrl: "/ibc.applications.fee.v1.MsgRegisterPayee",
   aminoType: "cosmos-sdk/MsgRegisterPayee",
+  is(o: any): o is MsgRegisterPayee {
+    return o && (o.$typeUrl === MsgRegisterPayee.typeUrl || typeof o.portId === "string" && typeof o.channelId === "string" && typeof o.relayer === "string" && typeof o.payee === "string");
+  },
+  isSDK(o: any): o is MsgRegisterPayeeSDKType {
+    return o && (o.$typeUrl === MsgRegisterPayee.typeUrl || typeof o.port_id === "string" && typeof o.channel_id === "string" && typeof o.relayer === "string" && typeof o.payee === "string");
+  },
+  isAmino(o: any): o is MsgRegisterPayeeAmino {
+    return o && (o.$typeUrl === MsgRegisterPayee.typeUrl || typeof o.port_id === "string" && typeof o.channel_id === "string" && typeof o.relayer === "string" && typeof o.payee === "string");
+  },
   encode(message: MsgRegisterPayee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
@@ -315,12 +325,20 @@ export const MsgRegisterPayee = {
     return obj;
   },
   fromAmino(object: MsgRegisterPayeeAmino): MsgRegisterPayee {
-    return {
-      portId: object.port_id,
-      channelId: object.channel_id,
-      relayer: object.relayer,
-      payee: object.payee
-    };
+    const message = createBaseMsgRegisterPayee();
+    if (object.port_id !== undefined && object.port_id !== null) {
+      message.portId = object.port_id;
+    }
+    if (object.channel_id !== undefined && object.channel_id !== null) {
+      message.channelId = object.channel_id;
+    }
+    if (object.relayer !== undefined && object.relayer !== null) {
+      message.relayer = object.relayer;
+    }
+    if (object.payee !== undefined && object.payee !== null) {
+      message.payee = object.payee;
+    }
+    return message;
   },
   toAmino(message: MsgRegisterPayee): MsgRegisterPayeeAmino {
     const obj: any = {};
@@ -352,12 +370,23 @@ export const MsgRegisterPayee = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRegisterPayee.typeUrl, MsgRegisterPayee);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRegisterPayee.aminoType, MsgRegisterPayee.typeUrl);
 function createBaseMsgRegisterPayeeResponse(): MsgRegisterPayeeResponse {
   return {};
 }
 export const MsgRegisterPayeeResponse = {
   typeUrl: "/ibc.applications.fee.v1.MsgRegisterPayeeResponse",
   aminoType: "cosmos-sdk/MsgRegisterPayeeResponse",
+  is(o: any): o is MsgRegisterPayeeResponse {
+    return o && o.$typeUrl === MsgRegisterPayeeResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgRegisterPayeeResponseSDKType {
+    return o && o.$typeUrl === MsgRegisterPayeeResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgRegisterPayeeResponseAmino {
+    return o && o.$typeUrl === MsgRegisterPayeeResponse.typeUrl;
+  },
   encode(_: MsgRegisterPayeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -394,7 +423,8 @@ export const MsgRegisterPayeeResponse = {
     return obj;
   },
   fromAmino(_: MsgRegisterPayeeResponseAmino): MsgRegisterPayeeResponse {
-    return {};
+    const message = createBaseMsgRegisterPayeeResponse();
+    return message;
   },
   toAmino(_: MsgRegisterPayeeResponse): MsgRegisterPayeeResponseAmino {
     const obj: any = {};
@@ -422,6 +452,8 @@ export const MsgRegisterPayeeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRegisterPayeeResponse.typeUrl, MsgRegisterPayeeResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRegisterPayeeResponse.aminoType, MsgRegisterPayeeResponse.typeUrl);
 function createBaseMsgRegisterCounterpartyPayee(): MsgRegisterCounterpartyPayee {
   return {
     portId: "",
@@ -433,6 +465,15 @@ function createBaseMsgRegisterCounterpartyPayee(): MsgRegisterCounterpartyPayee 
 export const MsgRegisterCounterpartyPayee = {
   typeUrl: "/ibc.applications.fee.v1.MsgRegisterCounterpartyPayee",
   aminoType: "cosmos-sdk/MsgRegisterCounterpartyPayee",
+  is(o: any): o is MsgRegisterCounterpartyPayee {
+    return o && (o.$typeUrl === MsgRegisterCounterpartyPayee.typeUrl || typeof o.portId === "string" && typeof o.channelId === "string" && typeof o.relayer === "string" && typeof o.counterpartyPayee === "string");
+  },
+  isSDK(o: any): o is MsgRegisterCounterpartyPayeeSDKType {
+    return o && (o.$typeUrl === MsgRegisterCounterpartyPayee.typeUrl || typeof o.port_id === "string" && typeof o.channel_id === "string" && typeof o.relayer === "string" && typeof o.counterparty_payee === "string");
+  },
+  isAmino(o: any): o is MsgRegisterCounterpartyPayeeAmino {
+    return o && (o.$typeUrl === MsgRegisterCounterpartyPayee.typeUrl || typeof o.port_id === "string" && typeof o.channel_id === "string" && typeof o.relayer === "string" && typeof o.counterparty_payee === "string");
+  },
   encode(message: MsgRegisterCounterpartyPayee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.portId !== "") {
       writer.uint32(10).string(message.portId);
@@ -515,12 +556,20 @@ export const MsgRegisterCounterpartyPayee = {
     return obj;
   },
   fromAmino(object: MsgRegisterCounterpartyPayeeAmino): MsgRegisterCounterpartyPayee {
-    return {
-      portId: object.port_id,
-      channelId: object.channel_id,
-      relayer: object.relayer,
-      counterpartyPayee: object.counterparty_payee
-    };
+    const message = createBaseMsgRegisterCounterpartyPayee();
+    if (object.port_id !== undefined && object.port_id !== null) {
+      message.portId = object.port_id;
+    }
+    if (object.channel_id !== undefined && object.channel_id !== null) {
+      message.channelId = object.channel_id;
+    }
+    if (object.relayer !== undefined && object.relayer !== null) {
+      message.relayer = object.relayer;
+    }
+    if (object.counterparty_payee !== undefined && object.counterparty_payee !== null) {
+      message.counterpartyPayee = object.counterparty_payee;
+    }
+    return message;
   },
   toAmino(message: MsgRegisterCounterpartyPayee): MsgRegisterCounterpartyPayeeAmino {
     const obj: any = {};
@@ -552,12 +601,23 @@ export const MsgRegisterCounterpartyPayee = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRegisterCounterpartyPayee.typeUrl, MsgRegisterCounterpartyPayee);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRegisterCounterpartyPayee.aminoType, MsgRegisterCounterpartyPayee.typeUrl);
 function createBaseMsgRegisterCounterpartyPayeeResponse(): MsgRegisterCounterpartyPayeeResponse {
   return {};
 }
 export const MsgRegisterCounterpartyPayeeResponse = {
   typeUrl: "/ibc.applications.fee.v1.MsgRegisterCounterpartyPayeeResponse",
   aminoType: "cosmos-sdk/MsgRegisterCounterpartyPayeeResponse",
+  is(o: any): o is MsgRegisterCounterpartyPayeeResponse {
+    return o && o.$typeUrl === MsgRegisterCounterpartyPayeeResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgRegisterCounterpartyPayeeResponseSDKType {
+    return o && o.$typeUrl === MsgRegisterCounterpartyPayeeResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgRegisterCounterpartyPayeeResponseAmino {
+    return o && o.$typeUrl === MsgRegisterCounterpartyPayeeResponse.typeUrl;
+  },
   encode(_: MsgRegisterCounterpartyPayeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -594,7 +654,8 @@ export const MsgRegisterCounterpartyPayeeResponse = {
     return obj;
   },
   fromAmino(_: MsgRegisterCounterpartyPayeeResponseAmino): MsgRegisterCounterpartyPayeeResponse {
-    return {};
+    const message = createBaseMsgRegisterCounterpartyPayeeResponse();
+    return message;
   },
   toAmino(_: MsgRegisterCounterpartyPayeeResponse): MsgRegisterCounterpartyPayeeResponseAmino {
     const obj: any = {};
@@ -622,6 +683,8 @@ export const MsgRegisterCounterpartyPayeeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRegisterCounterpartyPayeeResponse.typeUrl, MsgRegisterCounterpartyPayeeResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRegisterCounterpartyPayeeResponse.aminoType, MsgRegisterCounterpartyPayeeResponse.typeUrl);
 function createBaseMsgPayPacketFee(): MsgPayPacketFee {
   return {
     fee: Fee.fromPartial({}),
@@ -634,6 +697,15 @@ function createBaseMsgPayPacketFee(): MsgPayPacketFee {
 export const MsgPayPacketFee = {
   typeUrl: "/ibc.applications.fee.v1.MsgPayPacketFee",
   aminoType: "cosmos-sdk/MsgPayPacketFee",
+  is(o: any): o is MsgPayPacketFee {
+    return o && (o.$typeUrl === MsgPayPacketFee.typeUrl || Fee.is(o.fee) && typeof o.sourcePortId === "string" && typeof o.sourceChannelId === "string" && typeof o.signer === "string" && Array.isArray(o.relayers) && (!o.relayers.length || typeof o.relayers[0] === "string"));
+  },
+  isSDK(o: any): o is MsgPayPacketFeeSDKType {
+    return o && (o.$typeUrl === MsgPayPacketFee.typeUrl || Fee.isSDK(o.fee) && typeof o.source_port_id === "string" && typeof o.source_channel_id === "string" && typeof o.signer === "string" && Array.isArray(o.relayers) && (!o.relayers.length || typeof o.relayers[0] === "string"));
+  },
+  isAmino(o: any): o is MsgPayPacketFeeAmino {
+    return o && (o.$typeUrl === MsgPayPacketFee.typeUrl || Fee.isAmino(o.fee) && typeof o.source_port_id === "string" && typeof o.source_channel_id === "string" && typeof o.signer === "string" && Array.isArray(o.relayers) && (!o.relayers.length || typeof o.relayers[0] === "string"));
+  },
   encode(message: MsgPayPacketFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.fee !== undefined) {
       Fee.encode(message.fee, writer.uint32(10).fork()).ldelim();
@@ -735,13 +807,21 @@ export const MsgPayPacketFee = {
     return obj;
   },
   fromAmino(object: MsgPayPacketFeeAmino): MsgPayPacketFee {
-    return {
-      fee: object?.fee ? Fee.fromAmino(object.fee) : undefined,
-      sourcePortId: object.source_port_id,
-      sourceChannelId: object.source_channel_id,
-      signer: object.signer,
-      relayers: Array.isArray(object?.relayers) ? object.relayers.map((e: any) => e) : []
-    };
+    const message = createBaseMsgPayPacketFee();
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Fee.fromAmino(object.fee);
+    }
+    if (object.source_port_id !== undefined && object.source_port_id !== null) {
+      message.sourcePortId = object.source_port_id;
+    }
+    if (object.source_channel_id !== undefined && object.source_channel_id !== null) {
+      message.sourceChannelId = object.source_channel_id;
+    }
+    if (object.signer !== undefined && object.signer !== null) {
+      message.signer = object.signer;
+    }
+    message.relayers = object.relayers?.map(e => e) || [];
+    return message;
   },
   toAmino(message: MsgPayPacketFee): MsgPayPacketFeeAmino {
     const obj: any = {};
@@ -778,12 +858,23 @@ export const MsgPayPacketFee = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgPayPacketFee.typeUrl, MsgPayPacketFee);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgPayPacketFee.aminoType, MsgPayPacketFee.typeUrl);
 function createBaseMsgPayPacketFeeResponse(): MsgPayPacketFeeResponse {
   return {};
 }
 export const MsgPayPacketFeeResponse = {
   typeUrl: "/ibc.applications.fee.v1.MsgPayPacketFeeResponse",
   aminoType: "cosmos-sdk/MsgPayPacketFeeResponse",
+  is(o: any): o is MsgPayPacketFeeResponse {
+    return o && o.$typeUrl === MsgPayPacketFeeResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgPayPacketFeeResponseSDKType {
+    return o && o.$typeUrl === MsgPayPacketFeeResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgPayPacketFeeResponseAmino {
+    return o && o.$typeUrl === MsgPayPacketFeeResponse.typeUrl;
+  },
   encode(_: MsgPayPacketFeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -820,7 +911,8 @@ export const MsgPayPacketFeeResponse = {
     return obj;
   },
   fromAmino(_: MsgPayPacketFeeResponseAmino): MsgPayPacketFeeResponse {
-    return {};
+    const message = createBaseMsgPayPacketFeeResponse();
+    return message;
   },
   toAmino(_: MsgPayPacketFeeResponse): MsgPayPacketFeeResponseAmino {
     const obj: any = {};
@@ -848,6 +940,8 @@ export const MsgPayPacketFeeResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgPayPacketFeeResponse.typeUrl, MsgPayPacketFeeResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgPayPacketFeeResponse.aminoType, MsgPayPacketFeeResponse.typeUrl);
 function createBaseMsgPayPacketFeeAsync(): MsgPayPacketFeeAsync {
   return {
     packetId: PacketId.fromPartial({}),
@@ -857,6 +951,15 @@ function createBaseMsgPayPacketFeeAsync(): MsgPayPacketFeeAsync {
 export const MsgPayPacketFeeAsync = {
   typeUrl: "/ibc.applications.fee.v1.MsgPayPacketFeeAsync",
   aminoType: "cosmos-sdk/MsgPayPacketFeeAsync",
+  is(o: any): o is MsgPayPacketFeeAsync {
+    return o && (o.$typeUrl === MsgPayPacketFeeAsync.typeUrl || PacketId.is(o.packetId) && PacketFee.is(o.packetFee));
+  },
+  isSDK(o: any): o is MsgPayPacketFeeAsyncSDKType {
+    return o && (o.$typeUrl === MsgPayPacketFeeAsync.typeUrl || PacketId.isSDK(o.packet_id) && PacketFee.isSDK(o.packet_fee));
+  },
+  isAmino(o: any): o is MsgPayPacketFeeAsyncAmino {
+    return o && (o.$typeUrl === MsgPayPacketFeeAsync.typeUrl || PacketId.isAmino(o.packet_id) && PacketFee.isAmino(o.packet_fee));
+  },
   encode(message: MsgPayPacketFeeAsync, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.packetId !== undefined) {
       PacketId.encode(message.packetId, writer.uint32(10).fork()).ldelim();
@@ -917,10 +1020,14 @@ export const MsgPayPacketFeeAsync = {
     return obj;
   },
   fromAmino(object: MsgPayPacketFeeAsyncAmino): MsgPayPacketFeeAsync {
-    return {
-      packetId: object?.packet_id ? PacketId.fromAmino(object.packet_id) : undefined,
-      packetFee: object?.packet_fee ? PacketFee.fromAmino(object.packet_fee) : undefined
-    };
+    const message = createBaseMsgPayPacketFeeAsync();
+    if (object.packet_id !== undefined && object.packet_id !== null) {
+      message.packetId = PacketId.fromAmino(object.packet_id);
+    }
+    if (object.packet_fee !== undefined && object.packet_fee !== null) {
+      message.packetFee = PacketFee.fromAmino(object.packet_fee);
+    }
+    return message;
   },
   toAmino(message: MsgPayPacketFeeAsync): MsgPayPacketFeeAsyncAmino {
     const obj: any = {};
@@ -950,12 +1057,23 @@ export const MsgPayPacketFeeAsync = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgPayPacketFeeAsync.typeUrl, MsgPayPacketFeeAsync);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgPayPacketFeeAsync.aminoType, MsgPayPacketFeeAsync.typeUrl);
 function createBaseMsgPayPacketFeeAsyncResponse(): MsgPayPacketFeeAsyncResponse {
   return {};
 }
 export const MsgPayPacketFeeAsyncResponse = {
   typeUrl: "/ibc.applications.fee.v1.MsgPayPacketFeeAsyncResponse",
   aminoType: "cosmos-sdk/MsgPayPacketFeeAsyncResponse",
+  is(o: any): o is MsgPayPacketFeeAsyncResponse {
+    return o && o.$typeUrl === MsgPayPacketFeeAsyncResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgPayPacketFeeAsyncResponseSDKType {
+    return o && o.$typeUrl === MsgPayPacketFeeAsyncResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgPayPacketFeeAsyncResponseAmino {
+    return o && o.$typeUrl === MsgPayPacketFeeAsyncResponse.typeUrl;
+  },
   encode(_: MsgPayPacketFeeAsyncResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -992,7 +1110,8 @@ export const MsgPayPacketFeeAsyncResponse = {
     return obj;
   },
   fromAmino(_: MsgPayPacketFeeAsyncResponseAmino): MsgPayPacketFeeAsyncResponse {
-    return {};
+    const message = createBaseMsgPayPacketFeeAsyncResponse();
+    return message;
   },
   toAmino(_: MsgPayPacketFeeAsyncResponse): MsgPayPacketFeeAsyncResponseAmino {
     const obj: any = {};
@@ -1020,3 +1139,5 @@ export const MsgPayPacketFeeAsyncResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgPayPacketFeeAsyncResponse.typeUrl, MsgPayPacketFeeAsyncResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgPayPacketFeeAsyncResponse.aminoType, MsgPayPacketFeeAsyncResponse.typeUrl);

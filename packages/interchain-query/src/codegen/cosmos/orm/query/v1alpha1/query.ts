@@ -4,6 +4,7 @@ import { Timestamp } from "../../../../google/protobuf/timestamp";
 import { Duration, DurationAmino, DurationSDKType } from "../../../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, toTimestamp, fromTimestamp, bytesFromBase64, base64FromBytes } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** GetRequest is the Query/Get request type. */
 export interface GetRequest {
   /** message_name is the fully-qualified message name of the ORM table being queried. */
@@ -28,19 +29,19 @@ export interface GetRequestProtoMsg {
 /** GetRequest is the Query/Get request type. */
 export interface GetRequestAmino {
   /** message_name is the fully-qualified message name of the ORM table being queried. */
-  message_name: string;
+  message_name?: string;
   /**
    * index is the index fields expression used in orm definitions. If it
    * is empty, the table's primary key is assumed. If it is non-empty, it must
    * refer to an unique index.
    */
-  index: string;
+  index?: string;
   /**
    * values are the values of the fields corresponding to the requested index.
    * There must be as many values provided as there are fields in the index and
    * these values must correspond to the index field types.
    */
-  values: IndexValueAmino[];
+  values?: IndexValueAmino[];
 }
 export interface GetRequestAminoMsg {
   type: "cosmos-sdk/GetRequest";
@@ -58,7 +59,7 @@ export interface GetResponse {
    * result is the result of the get query. If no value is found, the gRPC
    * status code NOT_FOUND will be returned.
    */
-  result: Any | undefined;
+  result?: Any | undefined;
 }
 export interface GetResponseProtoMsg {
   typeUrl: "/cosmos.orm.query.v1alpha1.GetResponse";
@@ -78,7 +79,7 @@ export interface GetResponseAminoMsg {
 }
 /** GetResponse is the Query/Get response type. */
 export interface GetResponseSDKType {
-  result: AnySDKType | undefined;
+  result?: AnySDKType | undefined;
 }
 /** ListRequest is the Query/List request type. */
 export interface ListRequest {
@@ -94,7 +95,7 @@ export interface ListRequest {
   /** range defines a range query. */
   range?: ListRequest_Range | undefined;
   /** pagination is the pagination request. */
-  pagination: PageRequest | undefined;
+  pagination?: PageRequest | undefined;
 }
 export interface ListRequestProtoMsg {
   typeUrl: "/cosmos.orm.query.v1alpha1.ListRequest";
@@ -103,12 +104,12 @@ export interface ListRequestProtoMsg {
 /** ListRequest is the Query/List request type. */
 export interface ListRequestAmino {
   /** message_name is the fully-qualified message name of the ORM table being queried. */
-  message_name: string;
+  message_name?: string;
   /**
    * index is the index fields expression used in orm definitions. If it
    * is empty, the table's primary key is assumed.
    */
-  index: string;
+  index?: string;
   /** prefix defines a prefix query. */
   prefix?: ListRequest_PrefixAmino | undefined;
   /** range defines a range query. */
@@ -126,7 +127,7 @@ export interface ListRequestSDKType {
   index: string;
   prefix?: ListRequest_PrefixSDKType | undefined;
   range?: ListRequest_RangeSDKType | undefined;
-  pagination: PageRequestSDKType | undefined;
+  pagination?: PageRequestSDKType | undefined;
 }
 /** Prefix specifies the arguments to a prefix query. */
 export interface ListRequest_Prefix {
@@ -148,7 +149,7 @@ export interface ListRequest_PrefixAmino {
    * It is valid to special a partial prefix with fewer values than
    * the number of fields in the index.
    */
-  values: IndexValueAmino[];
+  values?: IndexValueAmino[];
 }
 export interface ListRequest_PrefixAminoMsg {
   type: "cosmos-sdk/Prefix";
@@ -184,13 +185,13 @@ export interface ListRequest_RangeAmino {
    * It is valid to provide fewer values than the number of fields in the
    * index.
    */
-  start: IndexValueAmino[];
+  start?: IndexValueAmino[];
   /**
    * end specifies the inclusive ending index values for the range query.
    * It is valid to provide fewer values than the number of fields in the
    * index.
    */
-  end: IndexValueAmino[];
+  end?: IndexValueAmino[];
 }
 export interface ListRequest_RangeAminoMsg {
   type: "cosmos-sdk/Range";
@@ -206,7 +207,7 @@ export interface ListResponse {
   /** results are the results of the query. */
   results: Any[];
   /** pagination is the pagination response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface ListResponseProtoMsg {
   typeUrl: "/cosmos.orm.query.v1alpha1.ListResponse";
@@ -215,7 +216,7 @@ export interface ListResponseProtoMsg {
 /** ListResponse is the Query/List response type. */
 export interface ListResponseAmino {
   /** results are the results of the query. */
-  results: AnyAmino[];
+  results?: AnyAmino[];
   /** pagination is the pagination response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -226,7 +227,7 @@ export interface ListResponseAminoMsg {
 /** ListResponse is the Query/List response type. */
 export interface ListResponseSDKType {
   results: AnySDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /** IndexValue represents the value of a field in an ORM index expression. */
 export interface IndexValue {
@@ -272,13 +273,13 @@ export interface IndexValueAmino {
   /** str specifies a value for a string index field. */
   str?: string;
   /** bytes specifies a value for a bytes index field. */
-  bytes?: Uint8Array;
+  bytes?: string;
   /** enum specifies a value for an enum index field. */
   enum?: string;
   /** bool specifies a value for a bool index field. */
   bool?: boolean;
   /** timestamp specifies a value for a timestamp index field. */
-  timestamp?: Date | undefined;
+  timestamp?: string | undefined;
   /** duration specifies a value for a duration index field. */
   duration?: DurationAmino | undefined;
 }
@@ -307,6 +308,15 @@ function createBaseGetRequest(): GetRequest {
 export const GetRequest = {
   typeUrl: "/cosmos.orm.query.v1alpha1.GetRequest",
   aminoType: "cosmos-sdk/GetRequest",
+  is(o: any): o is GetRequest {
+    return o && (o.$typeUrl === GetRequest.typeUrl || typeof o.messageName === "string" && typeof o.index === "string" && Array.isArray(o.values) && (!o.values.length || IndexValue.is(o.values[0])));
+  },
+  isSDK(o: any): o is GetRequestSDKType {
+    return o && (o.$typeUrl === GetRequest.typeUrl || typeof o.message_name === "string" && typeof o.index === "string" && Array.isArray(o.values) && (!o.values.length || IndexValue.isSDK(o.values[0])));
+  },
+  isAmino(o: any): o is GetRequestAmino {
+    return o && (o.$typeUrl === GetRequest.typeUrl || typeof o.message_name === "string" && typeof o.index === "string" && Array.isArray(o.values) && (!o.values.length || IndexValue.isAmino(o.values[0])));
+  },
   encode(message: GetRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.messageName !== "") {
       writer.uint32(10).string(message.messageName);
@@ -386,11 +396,15 @@ export const GetRequest = {
     return obj;
   },
   fromAmino(object: GetRequestAmino): GetRequest {
-    return {
-      messageName: object.message_name,
-      index: object.index,
-      values: Array.isArray(object?.values) ? object.values.map((e: any) => IndexValue.fromAmino(e)) : []
-    };
+    const message = createBaseGetRequest();
+    if (object.message_name !== undefined && object.message_name !== null) {
+      message.messageName = object.message_name;
+    }
+    if (object.index !== undefined && object.index !== null) {
+      message.index = object.index;
+    }
+    message.values = object.values?.map(e => IndexValue.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: GetRequest): GetRequestAmino {
     const obj: any = {};
@@ -425,14 +439,25 @@ export const GetRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetRequest.typeUrl, GetRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetRequest.aminoType, GetRequest.typeUrl);
 function createBaseGetResponse(): GetResponse {
   return {
-    result: Any.fromPartial({})
+    result: undefined
   };
 }
 export const GetResponse = {
   typeUrl: "/cosmos.orm.query.v1alpha1.GetResponse",
   aminoType: "cosmos-sdk/GetResponse",
+  is(o: any): o is GetResponse {
+    return o && o.$typeUrl === GetResponse.typeUrl;
+  },
+  isSDK(o: any): o is GetResponseSDKType {
+    return o && o.$typeUrl === GetResponse.typeUrl;
+  },
+  isAmino(o: any): o is GetResponseAmino {
+    return o && o.$typeUrl === GetResponse.typeUrl;
+  },
   encode(message: GetResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.result !== undefined) {
       Any.encode(message.result, writer.uint32(10).fork()).ldelim();
@@ -482,9 +507,11 @@ export const GetResponse = {
     return obj;
   },
   fromAmino(object: GetResponseAmino): GetResponse {
-    return {
-      result: object?.result ? Any.fromAmino(object.result) : undefined
-    };
+    const message = createBaseGetResponse();
+    if (object.result !== undefined && object.result !== null) {
+      message.result = Any.fromAmino(object.result);
+    }
+    return message;
   },
   toAmino(message: GetResponse): GetResponseAmino {
     const obj: any = {};
@@ -513,18 +540,29 @@ export const GetResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetResponse.typeUrl, GetResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetResponse.aminoType, GetResponse.typeUrl);
 function createBaseListRequest(): ListRequest {
   return {
     messageName: "",
     index: "",
     prefix: undefined,
     range: undefined,
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const ListRequest = {
   typeUrl: "/cosmos.orm.query.v1alpha1.ListRequest",
   aminoType: "cosmos-sdk/ListRequest",
+  is(o: any): o is ListRequest {
+    return o && (o.$typeUrl === ListRequest.typeUrl || typeof o.messageName === "string" && typeof o.index === "string");
+  },
+  isSDK(o: any): o is ListRequestSDKType {
+    return o && (o.$typeUrl === ListRequest.typeUrl || typeof o.message_name === "string" && typeof o.index === "string");
+  },
+  isAmino(o: any): o is ListRequestAmino {
+    return o && (o.$typeUrl === ListRequest.typeUrl || typeof o.message_name === "string" && typeof o.index === "string");
+  },
   encode(message: ListRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.messageName !== "") {
       writer.uint32(10).string(message.messageName);
@@ -618,13 +656,23 @@ export const ListRequest = {
     return obj;
   },
   fromAmino(object: ListRequestAmino): ListRequest {
-    return {
-      messageName: object.message_name,
-      index: object.index,
-      prefix: object?.prefix ? ListRequest_Prefix.fromAmino(object.prefix) : undefined,
-      range: object?.range ? ListRequest_Range.fromAmino(object.range) : undefined,
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseListRequest();
+    if (object.message_name !== undefined && object.message_name !== null) {
+      message.messageName = object.message_name;
+    }
+    if (object.index !== undefined && object.index !== null) {
+      message.index = object.index;
+    }
+    if (object.prefix !== undefined && object.prefix !== null) {
+      message.prefix = ListRequest_Prefix.fromAmino(object.prefix);
+    }
+    if (object.range !== undefined && object.range !== null) {
+      message.range = ListRequest_Range.fromAmino(object.range);
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: ListRequest): ListRequestAmino {
     const obj: any = {};
@@ -657,6 +705,8 @@ export const ListRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(ListRequest.typeUrl, ListRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(ListRequest.aminoType, ListRequest.typeUrl);
 function createBaseListRequest_Prefix(): ListRequest_Prefix {
   return {
     values: []
@@ -665,6 +715,15 @@ function createBaseListRequest_Prefix(): ListRequest_Prefix {
 export const ListRequest_Prefix = {
   typeUrl: "/cosmos.orm.query.v1alpha1.Prefix",
   aminoType: "cosmos-sdk/Prefix",
+  is(o: any): o is ListRequest_Prefix {
+    return o && (o.$typeUrl === ListRequest_Prefix.typeUrl || Array.isArray(o.values) && (!o.values.length || IndexValue.is(o.values[0])));
+  },
+  isSDK(o: any): o is ListRequest_PrefixSDKType {
+    return o && (o.$typeUrl === ListRequest_Prefix.typeUrl || Array.isArray(o.values) && (!o.values.length || IndexValue.isSDK(o.values[0])));
+  },
+  isAmino(o: any): o is ListRequest_PrefixAmino {
+    return o && (o.$typeUrl === ListRequest_Prefix.typeUrl || Array.isArray(o.values) && (!o.values.length || IndexValue.isAmino(o.values[0])));
+  },
   encode(message: ListRequest_Prefix, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.values) {
       IndexValue.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -722,9 +781,9 @@ export const ListRequest_Prefix = {
     return obj;
   },
   fromAmino(object: ListRequest_PrefixAmino): ListRequest_Prefix {
-    return {
-      values: Array.isArray(object?.values) ? object.values.map((e: any) => IndexValue.fromAmino(e)) : []
-    };
+    const message = createBaseListRequest_Prefix();
+    message.values = object.values?.map(e => IndexValue.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: ListRequest_Prefix): ListRequest_PrefixAmino {
     const obj: any = {};
@@ -757,6 +816,8 @@ export const ListRequest_Prefix = {
     };
   }
 };
+GlobalDecoderRegistry.register(ListRequest_Prefix.typeUrl, ListRequest_Prefix);
+GlobalDecoderRegistry.registerAminoProtoMapping(ListRequest_Prefix.aminoType, ListRequest_Prefix.typeUrl);
 function createBaseListRequest_Range(): ListRequest_Range {
   return {
     start: [],
@@ -766,6 +827,15 @@ function createBaseListRequest_Range(): ListRequest_Range {
 export const ListRequest_Range = {
   typeUrl: "/cosmos.orm.query.v1alpha1.Range",
   aminoType: "cosmos-sdk/Range",
+  is(o: any): o is ListRequest_Range {
+    return o && (o.$typeUrl === ListRequest_Range.typeUrl || Array.isArray(o.start) && (!o.start.length || IndexValue.is(o.start[0])) && Array.isArray(o.end) && (!o.end.length || IndexValue.is(o.end[0])));
+  },
+  isSDK(o: any): o is ListRequest_RangeSDKType {
+    return o && (o.$typeUrl === ListRequest_Range.typeUrl || Array.isArray(o.start) && (!o.start.length || IndexValue.isSDK(o.start[0])) && Array.isArray(o.end) && (!o.end.length || IndexValue.isSDK(o.end[0])));
+  },
+  isAmino(o: any): o is ListRequest_RangeAmino {
+    return o && (o.$typeUrl === ListRequest_Range.typeUrl || Array.isArray(o.start) && (!o.start.length || IndexValue.isAmino(o.start[0])) && Array.isArray(o.end) && (!o.end.length || IndexValue.isAmino(o.end[0])));
+  },
   encode(message: ListRequest_Range, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.start) {
       IndexValue.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -842,10 +912,10 @@ export const ListRequest_Range = {
     return obj;
   },
   fromAmino(object: ListRequest_RangeAmino): ListRequest_Range {
-    return {
-      start: Array.isArray(object?.start) ? object.start.map((e: any) => IndexValue.fromAmino(e)) : [],
-      end: Array.isArray(object?.end) ? object.end.map((e: any) => IndexValue.fromAmino(e)) : []
-    };
+    const message = createBaseListRequest_Range();
+    message.start = object.start?.map(e => IndexValue.fromAmino(e)) || [];
+    message.end = object.end?.map(e => IndexValue.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: ListRequest_Range): ListRequest_RangeAmino {
     const obj: any = {};
@@ -883,15 +953,26 @@ export const ListRequest_Range = {
     };
   }
 };
+GlobalDecoderRegistry.register(ListRequest_Range.typeUrl, ListRequest_Range);
+GlobalDecoderRegistry.registerAminoProtoMapping(ListRequest_Range.aminoType, ListRequest_Range.typeUrl);
 function createBaseListResponse(): ListResponse {
   return {
     results: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const ListResponse = {
   typeUrl: "/cosmos.orm.query.v1alpha1.ListResponse",
   aminoType: "cosmos-sdk/ListResponse",
+  is(o: any): o is ListResponse {
+    return o && (o.$typeUrl === ListResponse.typeUrl || Array.isArray(o.results) && (!o.results.length || Any.is(o.results[0])));
+  },
+  isSDK(o: any): o is ListResponseSDKType {
+    return o && (o.$typeUrl === ListResponse.typeUrl || Array.isArray(o.results) && (!o.results.length || Any.isSDK(o.results[0])));
+  },
+  isAmino(o: any): o is ListResponseAmino {
+    return o && (o.$typeUrl === ListResponse.typeUrl || Array.isArray(o.results) && (!o.results.length || Any.isAmino(o.results[0])));
+  },
   encode(message: ListResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.results) {
       Any.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -960,10 +1041,12 @@ export const ListResponse = {
     return obj;
   },
   fromAmino(object: ListResponseAmino): ListResponse {
-    return {
-      results: Array.isArray(object?.results) ? object.results.map((e: any) => Any.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseListResponse();
+    message.results = object.results?.map(e => Any.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: ListResponse): ListResponseAmino {
     const obj: any = {};
@@ -997,6 +1080,8 @@ export const ListResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(ListResponse.typeUrl, ListResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(ListResponse.aminoType, ListResponse.typeUrl);
 function createBaseIndexValue(): IndexValue {
   return {
     uint: undefined,
@@ -1012,6 +1097,15 @@ function createBaseIndexValue(): IndexValue {
 export const IndexValue = {
   typeUrl: "/cosmos.orm.query.v1alpha1.IndexValue",
   aminoType: "cosmos-sdk/IndexValue",
+  is(o: any): o is IndexValue {
+    return o && o.$typeUrl === IndexValue.typeUrl;
+  },
+  isSDK(o: any): o is IndexValueSDKType {
+    return o && o.$typeUrl === IndexValue.typeUrl;
+  },
+  isAmino(o: any): o is IndexValueAmino {
+    return o && o.$typeUrl === IndexValue.typeUrl;
+  },
   encode(message: IndexValue, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.uint !== undefined) {
       writer.uint32(8).uint64(message.uint);
@@ -1142,26 +1236,42 @@ export const IndexValue = {
     return obj;
   },
   fromAmino(object: IndexValueAmino): IndexValue {
-    return {
-      uint: object?.uint ? BigInt(object.uint) : undefined,
-      int: object?.int ? BigInt(object.int) : undefined,
-      str: object?.str,
-      bytes: object?.bytes,
-      enum: object?.enum,
-      bool: object?.bool,
-      timestamp: object?.timestamp,
-      duration: object?.duration ? Duration.fromAmino(object.duration) : undefined
-    };
+    const message = createBaseIndexValue();
+    if (object.uint !== undefined && object.uint !== null) {
+      message.uint = BigInt(object.uint);
+    }
+    if (object.int !== undefined && object.int !== null) {
+      message.int = BigInt(object.int);
+    }
+    if (object.str !== undefined && object.str !== null) {
+      message.str = object.str;
+    }
+    if (object.bytes !== undefined && object.bytes !== null) {
+      message.bytes = bytesFromBase64(object.bytes);
+    }
+    if (object.enum !== undefined && object.enum !== null) {
+      message.enum = object.enum;
+    }
+    if (object.bool !== undefined && object.bool !== null) {
+      message.bool = object.bool;
+    }
+    if (object.timestamp !== undefined && object.timestamp !== null) {
+      message.timestamp = fromTimestamp(Timestamp.fromAmino(object.timestamp));
+    }
+    if (object.duration !== undefined && object.duration !== null) {
+      message.duration = Duration.fromAmino(object.duration);
+    }
+    return message;
   },
   toAmino(message: IndexValue): IndexValueAmino {
     const obj: any = {};
     obj.uint = message.uint ? message.uint.toString() : undefined;
     obj.int = message.int ? message.int.toString() : undefined;
     obj.str = message.str;
-    obj.bytes = message.bytes;
+    obj.bytes = message.bytes ? base64FromBytes(message.bytes) : undefined;
     obj.enum = message.enum;
     obj.bool = message.bool;
-    obj.timestamp = message.timestamp;
+    obj.timestamp = message.timestamp ? Timestamp.toAmino(toTimestamp(message.timestamp)) : undefined;
     obj.duration = message.duration ? Duration.toAmino(message.duration) : undefined;
     return obj;
   },
@@ -1187,3 +1297,5 @@ export const IndexValue = {
     };
   }
 };
+GlobalDecoderRegistry.register(IndexValue.typeUrl, IndexValue);
+GlobalDecoderRegistry.registerAminoProtoMapping(IndexValue.aminoType, IndexValue.typeUrl);

@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /**
  * Metadata defines the ICS29 channel specific metadata encoded into the channel version bytestring
  * See ICS004: https://github.com/cosmos/ibc/tree/master/spec/core/ics-004-channel-and-packet-semantics#Versioning
@@ -20,9 +21,9 @@ export interface MetadataProtoMsg {
  */
 export interface MetadataAmino {
   /** fee_version defines the ICS29 fee version */
-  fee_version: string;
+  fee_version?: string;
   /** app_version defines the underlying application version, which may or may not be a JSON encoded bytestring */
-  app_version: string;
+  app_version?: string;
 }
 export interface MetadataAminoMsg {
   type: "cosmos-sdk/Metadata";
@@ -45,6 +46,15 @@ function createBaseMetadata(): Metadata {
 export const Metadata = {
   typeUrl: "/ibc.applications.fee.v1.Metadata",
   aminoType: "cosmos-sdk/Metadata",
+  is(o: any): o is Metadata {
+    return o && (o.$typeUrl === Metadata.typeUrl || typeof o.feeVersion === "string" && typeof o.appVersion === "string");
+  },
+  isSDK(o: any): o is MetadataSDKType {
+    return o && (o.$typeUrl === Metadata.typeUrl || typeof o.fee_version === "string" && typeof o.app_version === "string");
+  },
+  isAmino(o: any): o is MetadataAmino {
+    return o && (o.$typeUrl === Metadata.typeUrl || typeof o.fee_version === "string" && typeof o.app_version === "string");
+  },
   encode(message: Metadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeVersion !== "") {
       writer.uint32(10).string(message.feeVersion);
@@ -105,10 +115,14 @@ export const Metadata = {
     return obj;
   },
   fromAmino(object: MetadataAmino): Metadata {
-    return {
-      feeVersion: object.fee_version,
-      appVersion: object.app_version
-    };
+    const message = createBaseMetadata();
+    if (object.fee_version !== undefined && object.fee_version !== null) {
+      message.feeVersion = object.fee_version;
+    }
+    if (object.app_version !== undefined && object.app_version !== null) {
+      message.appVersion = object.app_version;
+    }
+    return message;
   },
   toAmino(message: Metadata): MetadataAmino {
     const obj: any = {};
@@ -138,3 +152,5 @@ export const Metadata = {
     };
   }
 };
+GlobalDecoderRegistry.register(Metadata.typeUrl, Metadata);
+GlobalDecoderRegistry.registerAminoProtoMapping(Metadata.aminoType, Metadata.typeUrl);

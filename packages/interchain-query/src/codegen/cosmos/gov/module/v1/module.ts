@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** Module is the config object of the gov module. */
 export interface Module {
   /**
@@ -20,9 +21,9 @@ export interface ModuleAmino {
    * max_metadata_len defines the maximum proposal metadata length.
    * Defaults to 255 if not explicitly set.
    */
-  max_metadata_len: string;
+  max_metadata_len?: string;
   /** authority defines the custom module authority. If not set, defaults to the governance module. */
-  authority: string;
+  authority?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -42,6 +43,15 @@ function createBaseModule(): Module {
 export const Module = {
   typeUrl: "/cosmos.gov.module.v1.Module",
   aminoType: "cosmos-sdk/Module",
+  is(o: any): o is Module {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.maxMetadataLen === "bigint" && typeof o.authority === "string");
+  },
+  isSDK(o: any): o is ModuleSDKType {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.max_metadata_len === "bigint" && typeof o.authority === "string");
+  },
+  isAmino(o: any): o is ModuleAmino {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.max_metadata_len === "bigint" && typeof o.authority === "string");
+  },
   encode(message: Module, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.maxMetadataLen !== BigInt(0)) {
       writer.uint32(8).uint64(message.maxMetadataLen);
@@ -102,10 +112,14 @@ export const Module = {
     return obj;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      maxMetadataLen: BigInt(object.max_metadata_len),
-      authority: object.authority
-    };
+    const message = createBaseModule();
+    if (object.max_metadata_len !== undefined && object.max_metadata_len !== null) {
+      message.maxMetadataLen = BigInt(object.max_metadata_len);
+    }
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
@@ -135,3 +149,5 @@ export const Module = {
     };
   }
 };
+GlobalDecoderRegistry.register(Module.typeUrl, Module);
+GlobalDecoderRegistry.registerAminoProtoMapping(Module.aminoType, Module.typeUrl);

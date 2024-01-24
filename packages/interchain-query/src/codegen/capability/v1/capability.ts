@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { isSet, DeepPartial } from "../../helpers";
+import { GlobalDecoderRegistry } from "../../registry";
 /**
  * Capability defines an implementation of an object capability. The index
  * provided to a Capability must be globally unique.
@@ -16,7 +17,7 @@ export interface CapabilityProtoMsg {
  * provided to a Capability must be globally unique.
  */
 export interface CapabilityAmino {
-  index: string;
+  index?: string;
 }
 export interface CapabilityAminoMsg {
   type: "/capability.v1.Capability";
@@ -46,8 +47,8 @@ export interface OwnerProtoMsg {
  * capability and the module name.
  */
 export interface OwnerAmino {
-  module: string;
-  name: string;
+  module?: string;
+  name?: string;
 }
 export interface OwnerAminoMsg {
   type: "/capability.v1.Owner";
@@ -97,6 +98,15 @@ function createBaseCapability(): Capability {
 }
 export const Capability = {
   typeUrl: "/capability.v1.Capability",
+  is(o: any): o is Capability {
+    return o && (o.$typeUrl === Capability.typeUrl || typeof o.index === "bigint");
+  },
+  isSDK(o: any): o is CapabilitySDKType {
+    return o && (o.$typeUrl === Capability.typeUrl || typeof o.index === "bigint");
+  },
+  isAmino(o: any): o is CapabilityAmino {
+    return o && (o.$typeUrl === Capability.typeUrl || typeof o.index === "bigint");
+  },
   encode(message: Capability, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.index !== BigInt(0)) {
       writer.uint32(8).uint64(message.index);
@@ -146,9 +156,11 @@ export const Capability = {
     return obj;
   },
   fromAmino(object: CapabilityAmino): Capability {
-    return {
-      index: BigInt(object.index)
-    };
+    const message = createBaseCapability();
+    if (object.index !== undefined && object.index !== null) {
+      message.index = BigInt(object.index);
+    }
+    return message;
   },
   toAmino(message: Capability): CapabilityAmino {
     const obj: any = {};
@@ -171,6 +183,7 @@ export const Capability = {
     };
   }
 };
+GlobalDecoderRegistry.register(Capability.typeUrl, Capability);
 function createBaseOwner(): Owner {
   return {
     module: "",
@@ -179,6 +192,15 @@ function createBaseOwner(): Owner {
 }
 export const Owner = {
   typeUrl: "/capability.v1.Owner",
+  is(o: any): o is Owner {
+    return o && (o.$typeUrl === Owner.typeUrl || typeof o.module === "string" && typeof o.name === "string");
+  },
+  isSDK(o: any): o is OwnerSDKType {
+    return o && (o.$typeUrl === Owner.typeUrl || typeof o.module === "string" && typeof o.name === "string");
+  },
+  isAmino(o: any): o is OwnerAmino {
+    return o && (o.$typeUrl === Owner.typeUrl || typeof o.module === "string" && typeof o.name === "string");
+  },
   encode(message: Owner, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.module !== "") {
       writer.uint32(10).string(message.module);
@@ -239,10 +261,14 @@ export const Owner = {
     return obj;
   },
   fromAmino(object: OwnerAmino): Owner {
-    return {
-      module: object.module,
-      name: object.name
-    };
+    const message = createBaseOwner();
+    if (object.module !== undefined && object.module !== null) {
+      message.module = object.module;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    }
+    return message;
   },
   toAmino(message: Owner): OwnerAmino {
     const obj: any = {};
@@ -266,6 +292,7 @@ export const Owner = {
     };
   }
 };
+GlobalDecoderRegistry.register(Owner.typeUrl, Owner);
 function createBaseCapabilityOwners(): CapabilityOwners {
   return {
     owners: []
@@ -273,6 +300,15 @@ function createBaseCapabilityOwners(): CapabilityOwners {
 }
 export const CapabilityOwners = {
   typeUrl: "/capability.v1.CapabilityOwners",
+  is(o: any): o is CapabilityOwners {
+    return o && (o.$typeUrl === CapabilityOwners.typeUrl || Array.isArray(o.owners) && (!o.owners.length || Owner.is(o.owners[0])));
+  },
+  isSDK(o: any): o is CapabilityOwnersSDKType {
+    return o && (o.$typeUrl === CapabilityOwners.typeUrl || Array.isArray(o.owners) && (!o.owners.length || Owner.isSDK(o.owners[0])));
+  },
+  isAmino(o: any): o is CapabilityOwnersAmino {
+    return o && (o.$typeUrl === CapabilityOwners.typeUrl || Array.isArray(o.owners) && (!o.owners.length || Owner.isAmino(o.owners[0])));
+  },
   encode(message: CapabilityOwners, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.owners) {
       Owner.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -330,9 +366,9 @@ export const CapabilityOwners = {
     return obj;
   },
   fromAmino(object: CapabilityOwnersAmino): CapabilityOwners {
-    return {
-      owners: Array.isArray(object?.owners) ? object.owners.map((e: any) => Owner.fromAmino(e)) : []
-    };
+    const message = createBaseCapabilityOwners();
+    message.owners = object.owners?.map(e => Owner.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: CapabilityOwners): CapabilityOwnersAmino {
     const obj: any = {};
@@ -359,3 +395,4 @@ export const CapabilityOwners = {
     };
   }
 };
+GlobalDecoderRegistry.register(CapabilityOwners.typeUrl, CapabilityOwners);

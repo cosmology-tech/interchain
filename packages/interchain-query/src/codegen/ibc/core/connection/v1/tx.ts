@@ -3,6 +3,7 @@ import { Any, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
 import { Height, HeightAmino, HeightSDKType, Params, ParamsAmino, ParamsSDKType } from "../../client/v1/client";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial, bytesFromBase64, base64FromBytes } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /**
  * MsgConnectionOpenInit defines the msg sent by an account on Chain A to
  * initialize a connection with Chain B.
@@ -10,7 +11,7 @@ import { isSet, DeepPartial, bytesFromBase64, base64FromBytes } from "../../../.
 export interface MsgConnectionOpenInit {
   clientId: string;
   counterparty: Counterparty | undefined;
-  version: Version | undefined;
+  version?: Version | undefined;
   delayPeriod: bigint;
   signer: string;
 }
@@ -23,11 +24,11 @@ export interface MsgConnectionOpenInitProtoMsg {
  * initialize a connection with Chain B.
  */
 export interface MsgConnectionOpenInitAmino {
-  client_id: string;
+  client_id?: string;
   counterparty?: CounterpartyAmino | undefined;
   version?: VersionAmino | undefined;
-  delay_period: string;
-  signer: string;
+  delay_period?: string;
+  signer?: string;
 }
 export interface MsgConnectionOpenInitAminoMsg {
   type: "cosmos-sdk/MsgConnectionOpenInit";
@@ -40,7 +41,7 @@ export interface MsgConnectionOpenInitAminoMsg {
 export interface MsgConnectionOpenInitSDKType {
   client_id: string;
   counterparty: CounterpartySDKType | undefined;
-  version: VersionSDKType | undefined;
+  version?: VersionSDKType | undefined;
   delay_period: bigint;
   signer: string;
 }
@@ -76,7 +77,7 @@ export interface MsgConnectionOpenTry {
   /** Deprecated: this field is unused. Crossing hellos are no longer supported in core IBC. */
   /** @deprecated */
   previousConnectionId: string;
-  clientState: Any | undefined;
+  clientState?: Any | undefined;
   counterparty: Counterparty | undefined;
   delayPeriod: bigint;
   counterpartyVersions: Version[];
@@ -104,28 +105,28 @@ export interface MsgConnectionOpenTryProtoMsg {
  * connection on Chain B.
  */
 export interface MsgConnectionOpenTryAmino {
-  client_id: string;
+  client_id?: string;
   /** Deprecated: this field is unused. Crossing hellos are no longer supported in core IBC. */
   /** @deprecated */
-  previous_connection_id: string;
+  previous_connection_id?: string;
   client_state?: AnyAmino | undefined;
   counterparty?: CounterpartyAmino | undefined;
-  delay_period: string;
-  counterparty_versions: VersionAmino[];
+  delay_period?: string;
+  counterparty_versions?: VersionAmino[];
   proof_height?: HeightAmino | undefined;
   /**
    * proof of the initialization the connection on Chain A: `UNITIALIZED ->
    * INIT`
    */
-  proof_init: Uint8Array;
+  proof_init?: string;
   /** proof of client state included in message */
-  proof_client: Uint8Array;
+  proof_client?: string;
   /** proof of client consensus state */
-  proof_consensus: Uint8Array;
+  proof_consensus?: string;
   consensus_height?: HeightAmino | undefined;
-  signer: string;
+  signer?: string;
   /** optional proof data for host state machines that are unable to introspect their own consensus state */
-  host_consensus_state_proof: Uint8Array;
+  host_consensus_state_proof?: string;
 }
 export interface MsgConnectionOpenTryAminoMsg {
   type: "cosmos-sdk/MsgConnectionOpenTry";
@@ -139,7 +140,7 @@ export interface MsgConnectionOpenTrySDKType {
   client_id: string;
   /** @deprecated */
   previous_connection_id: string;
-  client_state: AnySDKType | undefined;
+  client_state?: AnySDKType | undefined;
   counterparty: CounterpartySDKType | undefined;
   delay_period: bigint;
   counterparty_versions: VersionSDKType[];
@@ -172,8 +173,8 @@ export interface MsgConnectionOpenTryResponseSDKType {}
 export interface MsgConnectionOpenAck {
   connectionId: string;
   counterpartyConnectionId: string;
-  version: Version | undefined;
-  clientState: Any | undefined;
+  version?: Version | undefined;
+  clientState?: Any | undefined;
   proofHeight: Height | undefined;
   /**
    * proof of the initialization the connection on Chain B: `UNITIALIZED ->
@@ -198,8 +199,8 @@ export interface MsgConnectionOpenAckProtoMsg {
  * acknowledge the change of connection state to TRYOPEN on Chain B.
  */
 export interface MsgConnectionOpenAckAmino {
-  connection_id: string;
-  counterparty_connection_id: string;
+  connection_id?: string;
+  counterparty_connection_id?: string;
   version?: VersionAmino | undefined;
   client_state?: AnyAmino | undefined;
   proof_height?: HeightAmino | undefined;
@@ -207,15 +208,15 @@ export interface MsgConnectionOpenAckAmino {
    * proof of the initialization the connection on Chain B: `UNITIALIZED ->
    * TRYOPEN`
    */
-  proof_try: Uint8Array;
+  proof_try?: string;
   /** proof of client state included in message */
-  proof_client: Uint8Array;
+  proof_client?: string;
   /** proof of client consensus state */
-  proof_consensus: Uint8Array;
+  proof_consensus?: string;
   consensus_height?: HeightAmino | undefined;
-  signer: string;
+  signer?: string;
   /** optional proof data for host state machines that are unable to introspect their own consensus state */
-  host_consensus_state_proof: Uint8Array;
+  host_consensus_state_proof?: string;
 }
 export interface MsgConnectionOpenAckAminoMsg {
   type: "cosmos-sdk/MsgConnectionOpenAck";
@@ -228,8 +229,8 @@ export interface MsgConnectionOpenAckAminoMsg {
 export interface MsgConnectionOpenAckSDKType {
   connection_id: string;
   counterparty_connection_id: string;
-  version: VersionSDKType | undefined;
-  client_state: AnySDKType | undefined;
+  version?: VersionSDKType | undefined;
+  client_state?: AnySDKType | undefined;
   proof_height: HeightSDKType | undefined;
   proof_try: Uint8Array;
   proof_client: Uint8Array;
@@ -272,11 +273,11 @@ export interface MsgConnectionOpenConfirmProtoMsg {
  * acknowledge the change of connection state to OPEN on Chain A.
  */
 export interface MsgConnectionOpenConfirmAmino {
-  connection_id: string;
+  connection_id?: string;
   /** proof for the change of the connection state on Chain A: `INIT -> OPEN` */
-  proof_ack: Uint8Array;
+  proof_ack?: string;
   proof_height?: HeightAmino | undefined;
-  signer: string;
+  signer?: string;
 }
 export interface MsgConnectionOpenConfirmAminoMsg {
   type: "cosmos-sdk/MsgConnectionOpenConfirm";
@@ -333,7 +334,7 @@ export interface MsgUpdateParamsProtoMsg {
 /** MsgUpdateParams defines the sdk.Msg type to update the connection parameters. */
 export interface MsgUpdateParamsAmino {
   /** signer address */
-  signer: string;
+  signer?: string;
   /**
    * params defines the connection parameters to update.
    * 
@@ -368,7 +369,7 @@ function createBaseMsgConnectionOpenInit(): MsgConnectionOpenInit {
   return {
     clientId: "",
     counterparty: Counterparty.fromPartial({}),
-    version: Version.fromPartial({}),
+    version: undefined,
     delayPeriod: BigInt(0),
     signer: ""
   };
@@ -376,6 +377,15 @@ function createBaseMsgConnectionOpenInit(): MsgConnectionOpenInit {
 export const MsgConnectionOpenInit = {
   typeUrl: "/ibc.core.connection.v1.MsgConnectionOpenInit",
   aminoType: "cosmos-sdk/MsgConnectionOpenInit",
+  is(o: any): o is MsgConnectionOpenInit {
+    return o && (o.$typeUrl === MsgConnectionOpenInit.typeUrl || typeof o.clientId === "string" && Counterparty.is(o.counterparty) && typeof o.delayPeriod === "bigint" && typeof o.signer === "string");
+  },
+  isSDK(o: any): o is MsgConnectionOpenInitSDKType {
+    return o && (o.$typeUrl === MsgConnectionOpenInit.typeUrl || typeof o.client_id === "string" && Counterparty.isSDK(o.counterparty) && typeof o.delay_period === "bigint" && typeof o.signer === "string");
+  },
+  isAmino(o: any): o is MsgConnectionOpenInitAmino {
+    return o && (o.$typeUrl === MsgConnectionOpenInit.typeUrl || typeof o.client_id === "string" && Counterparty.isAmino(o.counterparty) && typeof o.delay_period === "bigint" && typeof o.signer === "string");
+  },
   encode(message: MsgConnectionOpenInit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -469,13 +479,23 @@ export const MsgConnectionOpenInit = {
     return obj;
   },
   fromAmino(object: MsgConnectionOpenInitAmino): MsgConnectionOpenInit {
-    return {
-      clientId: object.client_id,
-      counterparty: object?.counterparty ? Counterparty.fromAmino(object.counterparty) : undefined,
-      version: object?.version ? Version.fromAmino(object.version) : undefined,
-      delayPeriod: BigInt(object.delay_period),
-      signer: object.signer
-    };
+    const message = createBaseMsgConnectionOpenInit();
+    if (object.client_id !== undefined && object.client_id !== null) {
+      message.clientId = object.client_id;
+    }
+    if (object.counterparty !== undefined && object.counterparty !== null) {
+      message.counterparty = Counterparty.fromAmino(object.counterparty);
+    }
+    if (object.version !== undefined && object.version !== null) {
+      message.version = Version.fromAmino(object.version);
+    }
+    if (object.delay_period !== undefined && object.delay_period !== null) {
+      message.delayPeriod = BigInt(object.delay_period);
+    }
+    if (object.signer !== undefined && object.signer !== null) {
+      message.signer = object.signer;
+    }
+    return message;
   },
   toAmino(message: MsgConnectionOpenInit): MsgConnectionOpenInitAmino {
     const obj: any = {};
@@ -508,12 +528,23 @@ export const MsgConnectionOpenInit = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgConnectionOpenInit.typeUrl, MsgConnectionOpenInit);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgConnectionOpenInit.aminoType, MsgConnectionOpenInit.typeUrl);
 function createBaseMsgConnectionOpenInitResponse(): MsgConnectionOpenInitResponse {
   return {};
 }
 export const MsgConnectionOpenInitResponse = {
   typeUrl: "/ibc.core.connection.v1.MsgConnectionOpenInitResponse",
   aminoType: "cosmos-sdk/MsgConnectionOpenInitResponse",
+  is(o: any): o is MsgConnectionOpenInitResponse {
+    return o && o.$typeUrl === MsgConnectionOpenInitResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgConnectionOpenInitResponseSDKType {
+    return o && o.$typeUrl === MsgConnectionOpenInitResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgConnectionOpenInitResponseAmino {
+    return o && o.$typeUrl === MsgConnectionOpenInitResponse.typeUrl;
+  },
   encode(_: MsgConnectionOpenInitResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -550,7 +581,8 @@ export const MsgConnectionOpenInitResponse = {
     return obj;
   },
   fromAmino(_: MsgConnectionOpenInitResponseAmino): MsgConnectionOpenInitResponse {
-    return {};
+    const message = createBaseMsgConnectionOpenInitResponse();
+    return message;
   },
   toAmino(_: MsgConnectionOpenInitResponse): MsgConnectionOpenInitResponseAmino {
     const obj: any = {};
@@ -578,11 +610,13 @@ export const MsgConnectionOpenInitResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgConnectionOpenInitResponse.typeUrl, MsgConnectionOpenInitResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgConnectionOpenInitResponse.aminoType, MsgConnectionOpenInitResponse.typeUrl);
 function createBaseMsgConnectionOpenTry(): MsgConnectionOpenTry {
   return {
     clientId: "",
     previousConnectionId: "",
-    clientState: Any.fromPartial({}),
+    clientState: undefined,
     counterparty: Counterparty.fromPartial({}),
     delayPeriod: BigInt(0),
     counterpartyVersions: [],
@@ -598,6 +632,15 @@ function createBaseMsgConnectionOpenTry(): MsgConnectionOpenTry {
 export const MsgConnectionOpenTry = {
   typeUrl: "/ibc.core.connection.v1.MsgConnectionOpenTry",
   aminoType: "cosmos-sdk/MsgConnectionOpenTry",
+  is(o: any): o is MsgConnectionOpenTry {
+    return o && (o.$typeUrl === MsgConnectionOpenTry.typeUrl || typeof o.clientId === "string" && typeof o.previousConnectionId === "string" && Counterparty.is(o.counterparty) && typeof o.delayPeriod === "bigint" && Array.isArray(o.counterpartyVersions) && (!o.counterpartyVersions.length || Version.is(o.counterpartyVersions[0])) && Height.is(o.proofHeight) && (o.proofInit instanceof Uint8Array || typeof o.proofInit === "string") && (o.proofClient instanceof Uint8Array || typeof o.proofClient === "string") && (o.proofConsensus instanceof Uint8Array || typeof o.proofConsensus === "string") && Height.is(o.consensusHeight) && typeof o.signer === "string" && (o.hostConsensusStateProof instanceof Uint8Array || typeof o.hostConsensusStateProof === "string"));
+  },
+  isSDK(o: any): o is MsgConnectionOpenTrySDKType {
+    return o && (o.$typeUrl === MsgConnectionOpenTry.typeUrl || typeof o.client_id === "string" && typeof o.previous_connection_id === "string" && Counterparty.isSDK(o.counterparty) && typeof o.delay_period === "bigint" && Array.isArray(o.counterparty_versions) && (!o.counterparty_versions.length || Version.isSDK(o.counterparty_versions[0])) && Height.isSDK(o.proof_height) && (o.proof_init instanceof Uint8Array || typeof o.proof_init === "string") && (o.proof_client instanceof Uint8Array || typeof o.proof_client === "string") && (o.proof_consensus instanceof Uint8Array || typeof o.proof_consensus === "string") && Height.isSDK(o.consensus_height) && typeof o.signer === "string" && (o.host_consensus_state_proof instanceof Uint8Array || typeof o.host_consensus_state_proof === "string"));
+  },
+  isAmino(o: any): o is MsgConnectionOpenTryAmino {
+    return o && (o.$typeUrl === MsgConnectionOpenTry.typeUrl || typeof o.client_id === "string" && typeof o.previous_connection_id === "string" && Counterparty.isAmino(o.counterparty) && typeof o.delay_period === "bigint" && Array.isArray(o.counterparty_versions) && (!o.counterparty_versions.length || Version.isAmino(o.counterparty_versions[0])) && Height.isAmino(o.proof_height) && (o.proof_init instanceof Uint8Array || typeof o.proof_init === "string") && (o.proof_client instanceof Uint8Array || typeof o.proof_client === "string") && (o.proof_consensus instanceof Uint8Array || typeof o.proof_consensus === "string") && Height.isAmino(o.consensus_height) && typeof o.signer === "string" && (o.host_consensus_state_proof instanceof Uint8Array || typeof o.host_consensus_state_proof === "string"));
+  },
   encode(message: MsgConnectionOpenTry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
@@ -787,21 +830,45 @@ export const MsgConnectionOpenTry = {
     return obj;
   },
   fromAmino(object: MsgConnectionOpenTryAmino): MsgConnectionOpenTry {
-    return {
-      clientId: object.client_id,
-      previousConnectionId: object.previous_connection_id,
-      clientState: object?.client_state ? Any.fromAmino(object.client_state) : undefined,
-      counterparty: object?.counterparty ? Counterparty.fromAmino(object.counterparty) : undefined,
-      delayPeriod: BigInt(object.delay_period),
-      counterpartyVersions: Array.isArray(object?.counterparty_versions) ? object.counterparty_versions.map((e: any) => Version.fromAmino(e)) : [],
-      proofHeight: object?.proof_height ? Height.fromAmino(object.proof_height) : undefined,
-      proofInit: object.proof_init,
-      proofClient: object.proof_client,
-      proofConsensus: object.proof_consensus,
-      consensusHeight: object?.consensus_height ? Height.fromAmino(object.consensus_height) : undefined,
-      signer: object.signer,
-      hostConsensusStateProof: object.host_consensus_state_proof
-    };
+    const message = createBaseMsgConnectionOpenTry();
+    if (object.client_id !== undefined && object.client_id !== null) {
+      message.clientId = object.client_id;
+    }
+    if (object.previous_connection_id !== undefined && object.previous_connection_id !== null) {
+      message.previousConnectionId = object.previous_connection_id;
+    }
+    if (object.client_state !== undefined && object.client_state !== null) {
+      message.clientState = Any.fromAmino(object.client_state);
+    }
+    if (object.counterparty !== undefined && object.counterparty !== null) {
+      message.counterparty = Counterparty.fromAmino(object.counterparty);
+    }
+    if (object.delay_period !== undefined && object.delay_period !== null) {
+      message.delayPeriod = BigInt(object.delay_period);
+    }
+    message.counterpartyVersions = object.counterparty_versions?.map(e => Version.fromAmino(e)) || [];
+    if (object.proof_height !== undefined && object.proof_height !== null) {
+      message.proofHeight = Height.fromAmino(object.proof_height);
+    }
+    if (object.proof_init !== undefined && object.proof_init !== null) {
+      message.proofInit = bytesFromBase64(object.proof_init);
+    }
+    if (object.proof_client !== undefined && object.proof_client !== null) {
+      message.proofClient = bytesFromBase64(object.proof_client);
+    }
+    if (object.proof_consensus !== undefined && object.proof_consensus !== null) {
+      message.proofConsensus = bytesFromBase64(object.proof_consensus);
+    }
+    if (object.consensus_height !== undefined && object.consensus_height !== null) {
+      message.consensusHeight = Height.fromAmino(object.consensus_height);
+    }
+    if (object.signer !== undefined && object.signer !== null) {
+      message.signer = object.signer;
+    }
+    if (object.host_consensus_state_proof !== undefined && object.host_consensus_state_proof !== null) {
+      message.hostConsensusStateProof = bytesFromBase64(object.host_consensus_state_proof);
+    }
+    return message;
   },
   toAmino(message: MsgConnectionOpenTry): MsgConnectionOpenTryAmino {
     const obj: any = {};
@@ -816,12 +883,12 @@ export const MsgConnectionOpenTry = {
       obj.counterparty_versions = [];
     }
     obj.proof_height = message.proofHeight ? Height.toAmino(message.proofHeight) : {};
-    obj.proof_init = message.proofInit;
-    obj.proof_client = message.proofClient;
-    obj.proof_consensus = message.proofConsensus;
+    obj.proof_init = message.proofInit ? base64FromBytes(message.proofInit) : undefined;
+    obj.proof_client = message.proofClient ? base64FromBytes(message.proofClient) : undefined;
+    obj.proof_consensus = message.proofConsensus ? base64FromBytes(message.proofConsensus) : undefined;
     obj.consensus_height = message.consensusHeight ? Height.toAmino(message.consensusHeight) : {};
     obj.signer = message.signer;
-    obj.host_consensus_state_proof = message.hostConsensusStateProof;
+    obj.host_consensus_state_proof = message.hostConsensusStateProof ? base64FromBytes(message.hostConsensusStateProof) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgConnectionOpenTryAminoMsg): MsgConnectionOpenTry {
@@ -846,12 +913,23 @@ export const MsgConnectionOpenTry = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgConnectionOpenTry.typeUrl, MsgConnectionOpenTry);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgConnectionOpenTry.aminoType, MsgConnectionOpenTry.typeUrl);
 function createBaseMsgConnectionOpenTryResponse(): MsgConnectionOpenTryResponse {
   return {};
 }
 export const MsgConnectionOpenTryResponse = {
   typeUrl: "/ibc.core.connection.v1.MsgConnectionOpenTryResponse",
   aminoType: "cosmos-sdk/MsgConnectionOpenTryResponse",
+  is(o: any): o is MsgConnectionOpenTryResponse {
+    return o && o.$typeUrl === MsgConnectionOpenTryResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgConnectionOpenTryResponseSDKType {
+    return o && o.$typeUrl === MsgConnectionOpenTryResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgConnectionOpenTryResponseAmino {
+    return o && o.$typeUrl === MsgConnectionOpenTryResponse.typeUrl;
+  },
   encode(_: MsgConnectionOpenTryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -888,7 +966,8 @@ export const MsgConnectionOpenTryResponse = {
     return obj;
   },
   fromAmino(_: MsgConnectionOpenTryResponseAmino): MsgConnectionOpenTryResponse {
-    return {};
+    const message = createBaseMsgConnectionOpenTryResponse();
+    return message;
   },
   toAmino(_: MsgConnectionOpenTryResponse): MsgConnectionOpenTryResponseAmino {
     const obj: any = {};
@@ -916,12 +995,14 @@ export const MsgConnectionOpenTryResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgConnectionOpenTryResponse.typeUrl, MsgConnectionOpenTryResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgConnectionOpenTryResponse.aminoType, MsgConnectionOpenTryResponse.typeUrl);
 function createBaseMsgConnectionOpenAck(): MsgConnectionOpenAck {
   return {
     connectionId: "",
     counterpartyConnectionId: "",
-    version: Version.fromPartial({}),
-    clientState: Any.fromPartial({}),
+    version: undefined,
+    clientState: undefined,
     proofHeight: Height.fromPartial({}),
     proofTry: new Uint8Array(),
     proofClient: new Uint8Array(),
@@ -934,6 +1015,15 @@ function createBaseMsgConnectionOpenAck(): MsgConnectionOpenAck {
 export const MsgConnectionOpenAck = {
   typeUrl: "/ibc.core.connection.v1.MsgConnectionOpenAck",
   aminoType: "cosmos-sdk/MsgConnectionOpenAck",
+  is(o: any): o is MsgConnectionOpenAck {
+    return o && (o.$typeUrl === MsgConnectionOpenAck.typeUrl || typeof o.connectionId === "string" && typeof o.counterpartyConnectionId === "string" && Height.is(o.proofHeight) && (o.proofTry instanceof Uint8Array || typeof o.proofTry === "string") && (o.proofClient instanceof Uint8Array || typeof o.proofClient === "string") && (o.proofConsensus instanceof Uint8Array || typeof o.proofConsensus === "string") && Height.is(o.consensusHeight) && typeof o.signer === "string" && (o.hostConsensusStateProof instanceof Uint8Array || typeof o.hostConsensusStateProof === "string"));
+  },
+  isSDK(o: any): o is MsgConnectionOpenAckSDKType {
+    return o && (o.$typeUrl === MsgConnectionOpenAck.typeUrl || typeof o.connection_id === "string" && typeof o.counterparty_connection_id === "string" && Height.isSDK(o.proof_height) && (o.proof_try instanceof Uint8Array || typeof o.proof_try === "string") && (o.proof_client instanceof Uint8Array || typeof o.proof_client === "string") && (o.proof_consensus instanceof Uint8Array || typeof o.proof_consensus === "string") && Height.isSDK(o.consensus_height) && typeof o.signer === "string" && (o.host_consensus_state_proof instanceof Uint8Array || typeof o.host_consensus_state_proof === "string"));
+  },
+  isAmino(o: any): o is MsgConnectionOpenAckAmino {
+    return o && (o.$typeUrl === MsgConnectionOpenAck.typeUrl || typeof o.connection_id === "string" && typeof o.counterparty_connection_id === "string" && Height.isAmino(o.proof_height) && (o.proof_try instanceof Uint8Array || typeof o.proof_try === "string") && (o.proof_client instanceof Uint8Array || typeof o.proof_client === "string") && (o.proof_consensus instanceof Uint8Array || typeof o.proof_consensus === "string") && Height.isAmino(o.consensus_height) && typeof o.signer === "string" && (o.host_consensus_state_proof instanceof Uint8Array || typeof o.host_consensus_state_proof === "string"));
+  },
   encode(message: MsgConnectionOpenAck, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.connectionId !== "") {
       writer.uint32(10).string(message.connectionId);
@@ -1093,19 +1183,41 @@ export const MsgConnectionOpenAck = {
     return obj;
   },
   fromAmino(object: MsgConnectionOpenAckAmino): MsgConnectionOpenAck {
-    return {
-      connectionId: object.connection_id,
-      counterpartyConnectionId: object.counterparty_connection_id,
-      version: object?.version ? Version.fromAmino(object.version) : undefined,
-      clientState: object?.client_state ? Any.fromAmino(object.client_state) : undefined,
-      proofHeight: object?.proof_height ? Height.fromAmino(object.proof_height) : undefined,
-      proofTry: object.proof_try,
-      proofClient: object.proof_client,
-      proofConsensus: object.proof_consensus,
-      consensusHeight: object?.consensus_height ? Height.fromAmino(object.consensus_height) : undefined,
-      signer: object.signer,
-      hostConsensusStateProof: object.host_consensus_state_proof
-    };
+    const message = createBaseMsgConnectionOpenAck();
+    if (object.connection_id !== undefined && object.connection_id !== null) {
+      message.connectionId = object.connection_id;
+    }
+    if (object.counterparty_connection_id !== undefined && object.counterparty_connection_id !== null) {
+      message.counterpartyConnectionId = object.counterparty_connection_id;
+    }
+    if (object.version !== undefined && object.version !== null) {
+      message.version = Version.fromAmino(object.version);
+    }
+    if (object.client_state !== undefined && object.client_state !== null) {
+      message.clientState = Any.fromAmino(object.client_state);
+    }
+    if (object.proof_height !== undefined && object.proof_height !== null) {
+      message.proofHeight = Height.fromAmino(object.proof_height);
+    }
+    if (object.proof_try !== undefined && object.proof_try !== null) {
+      message.proofTry = bytesFromBase64(object.proof_try);
+    }
+    if (object.proof_client !== undefined && object.proof_client !== null) {
+      message.proofClient = bytesFromBase64(object.proof_client);
+    }
+    if (object.proof_consensus !== undefined && object.proof_consensus !== null) {
+      message.proofConsensus = bytesFromBase64(object.proof_consensus);
+    }
+    if (object.consensus_height !== undefined && object.consensus_height !== null) {
+      message.consensusHeight = Height.fromAmino(object.consensus_height);
+    }
+    if (object.signer !== undefined && object.signer !== null) {
+      message.signer = object.signer;
+    }
+    if (object.host_consensus_state_proof !== undefined && object.host_consensus_state_proof !== null) {
+      message.hostConsensusStateProof = bytesFromBase64(object.host_consensus_state_proof);
+    }
+    return message;
   },
   toAmino(message: MsgConnectionOpenAck): MsgConnectionOpenAckAmino {
     const obj: any = {};
@@ -1114,12 +1226,12 @@ export const MsgConnectionOpenAck = {
     obj.version = message.version ? Version.toAmino(message.version) : undefined;
     obj.client_state = message.clientState ? Any.toAmino(message.clientState) : undefined;
     obj.proof_height = message.proofHeight ? Height.toAmino(message.proofHeight) : {};
-    obj.proof_try = message.proofTry;
-    obj.proof_client = message.proofClient;
-    obj.proof_consensus = message.proofConsensus;
+    obj.proof_try = message.proofTry ? base64FromBytes(message.proofTry) : undefined;
+    obj.proof_client = message.proofClient ? base64FromBytes(message.proofClient) : undefined;
+    obj.proof_consensus = message.proofConsensus ? base64FromBytes(message.proofConsensus) : undefined;
     obj.consensus_height = message.consensusHeight ? Height.toAmino(message.consensusHeight) : {};
     obj.signer = message.signer;
-    obj.host_consensus_state_proof = message.hostConsensusStateProof;
+    obj.host_consensus_state_proof = message.hostConsensusStateProof ? base64FromBytes(message.hostConsensusStateProof) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgConnectionOpenAckAminoMsg): MsgConnectionOpenAck {
@@ -1144,12 +1256,23 @@ export const MsgConnectionOpenAck = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgConnectionOpenAck.typeUrl, MsgConnectionOpenAck);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgConnectionOpenAck.aminoType, MsgConnectionOpenAck.typeUrl);
 function createBaseMsgConnectionOpenAckResponse(): MsgConnectionOpenAckResponse {
   return {};
 }
 export const MsgConnectionOpenAckResponse = {
   typeUrl: "/ibc.core.connection.v1.MsgConnectionOpenAckResponse",
   aminoType: "cosmos-sdk/MsgConnectionOpenAckResponse",
+  is(o: any): o is MsgConnectionOpenAckResponse {
+    return o && o.$typeUrl === MsgConnectionOpenAckResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgConnectionOpenAckResponseSDKType {
+    return o && o.$typeUrl === MsgConnectionOpenAckResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgConnectionOpenAckResponseAmino {
+    return o && o.$typeUrl === MsgConnectionOpenAckResponse.typeUrl;
+  },
   encode(_: MsgConnectionOpenAckResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -1186,7 +1309,8 @@ export const MsgConnectionOpenAckResponse = {
     return obj;
   },
   fromAmino(_: MsgConnectionOpenAckResponseAmino): MsgConnectionOpenAckResponse {
-    return {};
+    const message = createBaseMsgConnectionOpenAckResponse();
+    return message;
   },
   toAmino(_: MsgConnectionOpenAckResponse): MsgConnectionOpenAckResponseAmino {
     const obj: any = {};
@@ -1214,6 +1338,8 @@ export const MsgConnectionOpenAckResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgConnectionOpenAckResponse.typeUrl, MsgConnectionOpenAckResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgConnectionOpenAckResponse.aminoType, MsgConnectionOpenAckResponse.typeUrl);
 function createBaseMsgConnectionOpenConfirm(): MsgConnectionOpenConfirm {
   return {
     connectionId: "",
@@ -1225,6 +1351,15 @@ function createBaseMsgConnectionOpenConfirm(): MsgConnectionOpenConfirm {
 export const MsgConnectionOpenConfirm = {
   typeUrl: "/ibc.core.connection.v1.MsgConnectionOpenConfirm",
   aminoType: "cosmos-sdk/MsgConnectionOpenConfirm",
+  is(o: any): o is MsgConnectionOpenConfirm {
+    return o && (o.$typeUrl === MsgConnectionOpenConfirm.typeUrl || typeof o.connectionId === "string" && (o.proofAck instanceof Uint8Array || typeof o.proofAck === "string") && Height.is(o.proofHeight) && typeof o.signer === "string");
+  },
+  isSDK(o: any): o is MsgConnectionOpenConfirmSDKType {
+    return o && (o.$typeUrl === MsgConnectionOpenConfirm.typeUrl || typeof o.connection_id === "string" && (o.proof_ack instanceof Uint8Array || typeof o.proof_ack === "string") && Height.isSDK(o.proof_height) && typeof o.signer === "string");
+  },
+  isAmino(o: any): o is MsgConnectionOpenConfirmAmino {
+    return o && (o.$typeUrl === MsgConnectionOpenConfirm.typeUrl || typeof o.connection_id === "string" && (o.proof_ack instanceof Uint8Array || typeof o.proof_ack === "string") && Height.isAmino(o.proof_height) && typeof o.signer === "string");
+  },
   encode(message: MsgConnectionOpenConfirm, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.connectionId !== "") {
       writer.uint32(10).string(message.connectionId);
@@ -1307,17 +1442,25 @@ export const MsgConnectionOpenConfirm = {
     return obj;
   },
   fromAmino(object: MsgConnectionOpenConfirmAmino): MsgConnectionOpenConfirm {
-    return {
-      connectionId: object.connection_id,
-      proofAck: object.proof_ack,
-      proofHeight: object?.proof_height ? Height.fromAmino(object.proof_height) : undefined,
-      signer: object.signer
-    };
+    const message = createBaseMsgConnectionOpenConfirm();
+    if (object.connection_id !== undefined && object.connection_id !== null) {
+      message.connectionId = object.connection_id;
+    }
+    if (object.proof_ack !== undefined && object.proof_ack !== null) {
+      message.proofAck = bytesFromBase64(object.proof_ack);
+    }
+    if (object.proof_height !== undefined && object.proof_height !== null) {
+      message.proofHeight = Height.fromAmino(object.proof_height);
+    }
+    if (object.signer !== undefined && object.signer !== null) {
+      message.signer = object.signer;
+    }
+    return message;
   },
   toAmino(message: MsgConnectionOpenConfirm): MsgConnectionOpenConfirmAmino {
     const obj: any = {};
     obj.connection_id = message.connectionId;
-    obj.proof_ack = message.proofAck;
+    obj.proof_ack = message.proofAck ? base64FromBytes(message.proofAck) : undefined;
     obj.proof_height = message.proofHeight ? Height.toAmino(message.proofHeight) : {};
     obj.signer = message.signer;
     return obj;
@@ -1344,12 +1487,23 @@ export const MsgConnectionOpenConfirm = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgConnectionOpenConfirm.typeUrl, MsgConnectionOpenConfirm);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgConnectionOpenConfirm.aminoType, MsgConnectionOpenConfirm.typeUrl);
 function createBaseMsgConnectionOpenConfirmResponse(): MsgConnectionOpenConfirmResponse {
   return {};
 }
 export const MsgConnectionOpenConfirmResponse = {
   typeUrl: "/ibc.core.connection.v1.MsgConnectionOpenConfirmResponse",
   aminoType: "cosmos-sdk/MsgConnectionOpenConfirmResponse",
+  is(o: any): o is MsgConnectionOpenConfirmResponse {
+    return o && o.$typeUrl === MsgConnectionOpenConfirmResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgConnectionOpenConfirmResponseSDKType {
+    return o && o.$typeUrl === MsgConnectionOpenConfirmResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgConnectionOpenConfirmResponseAmino {
+    return o && o.$typeUrl === MsgConnectionOpenConfirmResponse.typeUrl;
+  },
   encode(_: MsgConnectionOpenConfirmResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -1386,7 +1540,8 @@ export const MsgConnectionOpenConfirmResponse = {
     return obj;
   },
   fromAmino(_: MsgConnectionOpenConfirmResponseAmino): MsgConnectionOpenConfirmResponse {
-    return {};
+    const message = createBaseMsgConnectionOpenConfirmResponse();
+    return message;
   },
   toAmino(_: MsgConnectionOpenConfirmResponse): MsgConnectionOpenConfirmResponseAmino {
     const obj: any = {};
@@ -1414,6 +1569,8 @@ export const MsgConnectionOpenConfirmResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgConnectionOpenConfirmResponse.typeUrl, MsgConnectionOpenConfirmResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgConnectionOpenConfirmResponse.aminoType, MsgConnectionOpenConfirmResponse.typeUrl);
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return {
     signer: "",
@@ -1423,6 +1580,15 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 export const MsgUpdateParams = {
   typeUrl: "/ibc.core.connection.v1.MsgUpdateParams",
   aminoType: "cosmos-sdk/MsgUpdateParams",
+  is(o: any): o is MsgUpdateParams {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.signer === "string" && Params.is(o.params));
+  },
+  isSDK(o: any): o is MsgUpdateParamsSDKType {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.signer === "string" && Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is MsgUpdateParamsAmino {
+    return o && (o.$typeUrl === MsgUpdateParams.typeUrl || typeof o.signer === "string" && Params.isAmino(o.params));
+  },
   encode(message: MsgUpdateParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.signer !== "") {
       writer.uint32(10).string(message.signer);
@@ -1483,10 +1649,14 @@ export const MsgUpdateParams = {
     return obj;
   },
   fromAmino(object: MsgUpdateParamsAmino): MsgUpdateParams {
-    return {
-      signer: object.signer,
-      params: object?.params ? Params.fromAmino(object.params) : undefined
-    };
+    const message = createBaseMsgUpdateParams();
+    if (object.signer !== undefined && object.signer !== null) {
+      message.signer = object.signer;
+    }
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromAmino(object.params);
+    }
+    return message;
   },
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
@@ -1516,12 +1686,23 @@ export const MsgUpdateParams = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParams.typeUrl, MsgUpdateParams);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateParams.aminoType, MsgUpdateParams.typeUrl);
 function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
   return {};
 }
 export const MsgUpdateParamsResponse = {
   typeUrl: "/ibc.core.connection.v1.MsgUpdateParamsResponse",
   aminoType: "cosmos-sdk/MsgUpdateParamsResponse",
+  is(o: any): o is MsgUpdateParamsResponse {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUpdateParamsResponseSDKType {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUpdateParamsResponseAmino {
+    return o && o.$typeUrl === MsgUpdateParamsResponse.typeUrl;
+  },
   encode(_: MsgUpdateParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -1558,7 +1739,8 @@ export const MsgUpdateParamsResponse = {
     return obj;
   },
   fromAmino(_: MsgUpdateParamsResponseAmino): MsgUpdateParamsResponse {
-    return {};
+    const message = createBaseMsgUpdateParamsResponse();
+    return message;
   },
   toAmino(_: MsgUpdateParamsResponse): MsgUpdateParamsResponseAmino {
     const obj: any = {};
@@ -1586,3 +1768,5 @@ export const MsgUpdateParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUpdateParamsResponse.typeUrl, MsgUpdateParamsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUpdateParamsResponse.aminoType, MsgUpdateParamsResponse.typeUrl);

@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** IncentivizedAcknowledgement is the acknowledgement format to be used by applications wrapped in the fee middleware */
 export interface IncentivizedAcknowledgement {
   /** the underlying app acknowledgement bytes */
@@ -16,11 +17,11 @@ export interface IncentivizedAcknowledgementProtoMsg {
 /** IncentivizedAcknowledgement is the acknowledgement format to be used by applications wrapped in the fee middleware */
 export interface IncentivizedAcknowledgementAmino {
   /** the underlying app acknowledgement bytes */
-  app_acknowledgement: Uint8Array;
+  app_acknowledgement?: string;
   /** the relayer address which submits the recv packet message */
-  forward_relayer_address: string;
+  forward_relayer_address?: string;
   /** success flag of the base application callback */
-  underlying_app_success: boolean;
+  underlying_app_success?: boolean;
 }
 export interface IncentivizedAcknowledgementAminoMsg {
   type: "cosmos-sdk/IncentivizedAcknowledgement";
@@ -42,6 +43,15 @@ function createBaseIncentivizedAcknowledgement(): IncentivizedAcknowledgement {
 export const IncentivizedAcknowledgement = {
   typeUrl: "/ibc.applications.fee.v1.IncentivizedAcknowledgement",
   aminoType: "cosmos-sdk/IncentivizedAcknowledgement",
+  is(o: any): o is IncentivizedAcknowledgement {
+    return o && (o.$typeUrl === IncentivizedAcknowledgement.typeUrl || (o.appAcknowledgement instanceof Uint8Array || typeof o.appAcknowledgement === "string") && typeof o.forwardRelayerAddress === "string" && typeof o.underlyingAppSuccess === "boolean");
+  },
+  isSDK(o: any): o is IncentivizedAcknowledgementSDKType {
+    return o && (o.$typeUrl === IncentivizedAcknowledgement.typeUrl || (o.app_acknowledgement instanceof Uint8Array || typeof o.app_acknowledgement === "string") && typeof o.forward_relayer_address === "string" && typeof o.underlying_app_success === "boolean");
+  },
+  isAmino(o: any): o is IncentivizedAcknowledgementAmino {
+    return o && (o.$typeUrl === IncentivizedAcknowledgement.typeUrl || (o.app_acknowledgement instanceof Uint8Array || typeof o.app_acknowledgement === "string") && typeof o.forward_relayer_address === "string" && typeof o.underlying_app_success === "boolean");
+  },
   encode(message: IncentivizedAcknowledgement, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.appAcknowledgement.length !== 0) {
       writer.uint32(10).bytes(message.appAcknowledgement);
@@ -113,15 +123,21 @@ export const IncentivizedAcknowledgement = {
     return obj;
   },
   fromAmino(object: IncentivizedAcknowledgementAmino): IncentivizedAcknowledgement {
-    return {
-      appAcknowledgement: object.app_acknowledgement,
-      forwardRelayerAddress: object.forward_relayer_address,
-      underlyingAppSuccess: object.underlying_app_success
-    };
+    const message = createBaseIncentivizedAcknowledgement();
+    if (object.app_acknowledgement !== undefined && object.app_acknowledgement !== null) {
+      message.appAcknowledgement = bytesFromBase64(object.app_acknowledgement);
+    }
+    if (object.forward_relayer_address !== undefined && object.forward_relayer_address !== null) {
+      message.forwardRelayerAddress = object.forward_relayer_address;
+    }
+    if (object.underlying_app_success !== undefined && object.underlying_app_success !== null) {
+      message.underlyingAppSuccess = object.underlying_app_success;
+    }
+    return message;
   },
   toAmino(message: IncentivizedAcknowledgement): IncentivizedAcknowledgementAmino {
     const obj: any = {};
-    obj.app_acknowledgement = message.appAcknowledgement;
+    obj.app_acknowledgement = message.appAcknowledgement ? base64FromBytes(message.appAcknowledgement) : undefined;
     obj.forward_relayer_address = message.forwardRelayerAddress;
     obj.underlying_app_success = message.underlyingAppSuccess;
     return obj;
@@ -148,3 +164,5 @@ export const IncentivizedAcknowledgement = {
     };
   }
 };
+GlobalDecoderRegistry.register(IncentivizedAcknowledgement.typeUrl, IncentivizedAcknowledgement);
+GlobalDecoderRegistry.registerAminoProtoMapping(IncentivizedAcknowledgement.aminoType, IncentivizedAcknowledgement.typeUrl);

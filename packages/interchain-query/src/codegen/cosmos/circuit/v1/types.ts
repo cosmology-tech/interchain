@@ -1,5 +1,6 @@
-import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial } from "../../../helpers";
+import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** Level is the permission level. */
 export enum Permissions_Level {
   /**
@@ -87,13 +88,13 @@ export interface PermissionsProtoMsg {
  */
 export interface PermissionsAmino {
   /** level is the level of permissions granted to this account. */
-  level: Permissions_Level;
+  level?: Permissions_Level;
   /**
    * limit_type_urls is used with LEVEL_SOME_MSGS to limit the lists of Msg type
    * URLs that the account can trip. It is an error to use limit_type_urls with
    * a level other than LEVEL_SOME_MSGS.
    */
-  limit_type_urls: string[];
+  limit_type_urls?: string[];
 }
 export interface PermissionsAminoMsg {
   type: "cosmos-sdk/Permissions";
@@ -110,7 +111,7 @@ export interface PermissionsSDKType {
 /** GenesisAccountPermissions is the account permissions for the circuit breaker in genesis */
 export interface GenesisAccountPermissions {
   address: string;
-  permissions: Permissions | undefined;
+  permissions?: Permissions | undefined;
 }
 export interface GenesisAccountPermissionsProtoMsg {
   typeUrl: "/cosmos.circuit.v1.GenesisAccountPermissions";
@@ -118,7 +119,7 @@ export interface GenesisAccountPermissionsProtoMsg {
 }
 /** GenesisAccountPermissions is the account permissions for the circuit breaker in genesis */
 export interface GenesisAccountPermissionsAmino {
-  address: string;
+  address?: string;
   permissions?: PermissionsAmino | undefined;
 }
 export interface GenesisAccountPermissionsAminoMsg {
@@ -128,7 +129,7 @@ export interface GenesisAccountPermissionsAminoMsg {
 /** GenesisAccountPermissions is the account permissions for the circuit breaker in genesis */
 export interface GenesisAccountPermissionsSDKType {
   address: string;
-  permissions: PermissionsSDKType | undefined;
+  permissions?: PermissionsSDKType | undefined;
 }
 /** GenesisState is the state that must be provided at genesis. */
 export interface GenesisState {
@@ -141,8 +142,8 @@ export interface GenesisStateProtoMsg {
 }
 /** GenesisState is the state that must be provided at genesis. */
 export interface GenesisStateAmino {
-  account_permissions: GenesisAccountPermissionsAmino[];
-  disabled_type_urls: string[];
+  account_permissions?: GenesisAccountPermissionsAmino[];
+  disabled_type_urls?: string[];
 }
 export interface GenesisStateAminoMsg {
   type: "cosmos-sdk/GenesisState";
@@ -162,6 +163,15 @@ function createBasePermissions(): Permissions {
 export const Permissions = {
   typeUrl: "/cosmos.circuit.v1.Permissions",
   aminoType: "cosmos-sdk/Permissions",
+  is(o: any): o is Permissions {
+    return o && (o.$typeUrl === Permissions.typeUrl || isSet(o.level) && Array.isArray(o.limitTypeUrls) && (!o.limitTypeUrls.length || typeof o.limitTypeUrls[0] === "string"));
+  },
+  isSDK(o: any): o is PermissionsSDKType {
+    return o && (o.$typeUrl === Permissions.typeUrl || isSet(o.level) && Array.isArray(o.limit_type_urls) && (!o.limit_type_urls.length || typeof o.limit_type_urls[0] === "string"));
+  },
+  isAmino(o: any): o is PermissionsAmino {
+    return o && (o.$typeUrl === Permissions.typeUrl || isSet(o.level) && Array.isArray(o.limit_type_urls) && (!o.limit_type_urls.length || typeof o.limit_type_urls[0] === "string"));
+  },
   encode(message: Permissions, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.level !== 0) {
       writer.uint32(8).int32(message.level);
@@ -230,10 +240,12 @@ export const Permissions = {
     return obj;
   },
   fromAmino(object: PermissionsAmino): Permissions {
-    return {
-      level: isSet(object.level) ? permissions_LevelFromJSON(object.level) : -1,
-      limitTypeUrls: Array.isArray(object?.limit_type_urls) ? object.limit_type_urls.map((e: any) => e) : []
-    };
+    const message = createBasePermissions();
+    if (object.level !== undefined && object.level !== null) {
+      message.level = permissions_LevelFromJSON(object.level);
+    }
+    message.limitTypeUrls = object.limit_type_urls?.map(e => e) || [];
+    return message;
   },
   toAmino(message: Permissions): PermissionsAmino {
     const obj: any = {};
@@ -267,15 +279,26 @@ export const Permissions = {
     };
   }
 };
+GlobalDecoderRegistry.register(Permissions.typeUrl, Permissions);
+GlobalDecoderRegistry.registerAminoProtoMapping(Permissions.aminoType, Permissions.typeUrl);
 function createBaseGenesisAccountPermissions(): GenesisAccountPermissions {
   return {
     address: "",
-    permissions: Permissions.fromPartial({})
+    permissions: undefined
   };
 }
 export const GenesisAccountPermissions = {
   typeUrl: "/cosmos.circuit.v1.GenesisAccountPermissions",
   aminoType: "cosmos-sdk/GenesisAccountPermissions",
+  is(o: any): o is GenesisAccountPermissions {
+    return o && (o.$typeUrl === GenesisAccountPermissions.typeUrl || typeof o.address === "string");
+  },
+  isSDK(o: any): o is GenesisAccountPermissionsSDKType {
+    return o && (o.$typeUrl === GenesisAccountPermissions.typeUrl || typeof o.address === "string");
+  },
+  isAmino(o: any): o is GenesisAccountPermissionsAmino {
+    return o && (o.$typeUrl === GenesisAccountPermissions.typeUrl || typeof o.address === "string");
+  },
   encode(message: GenesisAccountPermissions, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -336,10 +359,14 @@ export const GenesisAccountPermissions = {
     return obj;
   },
   fromAmino(object: GenesisAccountPermissionsAmino): GenesisAccountPermissions {
-    return {
-      address: object.address,
-      permissions: object?.permissions ? Permissions.fromAmino(object.permissions) : undefined
-    };
+    const message = createBaseGenesisAccountPermissions();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.permissions !== undefined && object.permissions !== null) {
+      message.permissions = Permissions.fromAmino(object.permissions);
+    }
+    return message;
   },
   toAmino(message: GenesisAccountPermissions): GenesisAccountPermissionsAmino {
     const obj: any = {};
@@ -369,6 +396,8 @@ export const GenesisAccountPermissions = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisAccountPermissions.typeUrl, GenesisAccountPermissions);
+GlobalDecoderRegistry.registerAminoProtoMapping(GenesisAccountPermissions.aminoType, GenesisAccountPermissions.typeUrl);
 function createBaseGenesisState(): GenesisState {
   return {
     accountPermissions: [],
@@ -378,6 +407,15 @@ function createBaseGenesisState(): GenesisState {
 export const GenesisState = {
   typeUrl: "/cosmos.circuit.v1.GenesisState",
   aminoType: "cosmos-sdk/GenesisState",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Array.isArray(o.accountPermissions) && (!o.accountPermissions.length || GenesisAccountPermissions.is(o.accountPermissions[0])) && Array.isArray(o.disabledTypeUrls) && (!o.disabledTypeUrls.length || typeof o.disabledTypeUrls[0] === "string"));
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Array.isArray(o.account_permissions) && (!o.account_permissions.length || GenesisAccountPermissions.isSDK(o.account_permissions[0])) && Array.isArray(o.disabled_type_urls) && (!o.disabled_type_urls.length || typeof o.disabled_type_urls[0] === "string"));
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Array.isArray(o.account_permissions) && (!o.account_permissions.length || GenesisAccountPermissions.isAmino(o.account_permissions[0])) && Array.isArray(o.disabled_type_urls) && (!o.disabled_type_urls.length || typeof o.disabled_type_urls[0] === "string"));
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.accountPermissions) {
       GenesisAccountPermissions.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -454,10 +492,10 @@ export const GenesisState = {
     return obj;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
-    return {
-      accountPermissions: Array.isArray(object?.account_permissions) ? object.account_permissions.map((e: any) => GenesisAccountPermissions.fromAmino(e)) : [],
-      disabledTypeUrls: Array.isArray(object?.disabled_type_urls) ? object.disabled_type_urls.map((e: any) => e) : []
-    };
+    const message = createBaseGenesisState();
+    message.accountPermissions = object.account_permissions?.map(e => GenesisAccountPermissions.fromAmino(e)) || [];
+    message.disabledTypeUrls = object.disabled_type_urls?.map(e => e) || [];
+    return message;
   },
   toAmino(message: GenesisState): GenesisStateAmino {
     const obj: any = {};
@@ -495,3 +533,5 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);
+GlobalDecoderRegistry.registerAminoProtoMapping(GenesisState.aminoType, GenesisState.typeUrl);

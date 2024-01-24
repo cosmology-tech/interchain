@@ -1,6 +1,7 @@
 import { ProposalExecutorResult, ProposalStatus, TallyResult, TallyResultAmino, TallyResultSDKType, proposalExecutorResultFromJSON, proposalExecutorResultToJSON, proposalStatusFromJSON, proposalStatusToJSON } from "./types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** EventCreateGroup is an event emitted when a group is created. */
 export interface EventCreateGroup {
   /** group_id is the unique ID of the group. */
@@ -13,7 +14,7 @@ export interface EventCreateGroupProtoMsg {
 /** EventCreateGroup is an event emitted when a group is created. */
 export interface EventCreateGroupAmino {
   /** group_id is the unique ID of the group. */
-  group_id: string;
+  group_id?: string;
 }
 export interface EventCreateGroupAminoMsg {
   type: "cosmos-sdk/EventCreateGroup";
@@ -35,7 +36,7 @@ export interface EventUpdateGroupProtoMsg {
 /** EventUpdateGroup is an event emitted when a group is updated. */
 export interface EventUpdateGroupAmino {
   /** group_id is the unique ID of the group. */
-  group_id: string;
+  group_id?: string;
 }
 export interface EventUpdateGroupAminoMsg {
   type: "cosmos-sdk/EventUpdateGroup";
@@ -57,7 +58,7 @@ export interface EventCreateGroupPolicyProtoMsg {
 /** EventCreateGroupPolicy is an event emitted when a group policy is created. */
 export interface EventCreateGroupPolicyAmino {
   /** address is the account address of the group policy. */
-  address: string;
+  address?: string;
 }
 export interface EventCreateGroupPolicyAminoMsg {
   type: "cosmos-sdk/EventCreateGroupPolicy";
@@ -79,7 +80,7 @@ export interface EventUpdateGroupPolicyProtoMsg {
 /** EventUpdateGroupPolicy is an event emitted when a group policy is updated. */
 export interface EventUpdateGroupPolicyAmino {
   /** address is the account address of the group policy. */
-  address: string;
+  address?: string;
 }
 export interface EventUpdateGroupPolicyAminoMsg {
   type: "cosmos-sdk/EventUpdateGroupPolicy";
@@ -101,7 +102,7 @@ export interface EventSubmitProposalProtoMsg {
 /** EventSubmitProposal is an event emitted when a proposal is created. */
 export interface EventSubmitProposalAmino {
   /** proposal_id is the unique ID of the proposal. */
-  proposal_id: string;
+  proposal_id?: string;
 }
 export interface EventSubmitProposalAminoMsg {
   type: "cosmos-sdk/EventSubmitProposal";
@@ -123,7 +124,7 @@ export interface EventWithdrawProposalProtoMsg {
 /** EventWithdrawProposal is an event emitted when a proposal is withdrawn. */
 export interface EventWithdrawProposalAmino {
   /** proposal_id is the unique ID of the proposal. */
-  proposal_id: string;
+  proposal_id?: string;
 }
 export interface EventWithdrawProposalAminoMsg {
   type: "cosmos-sdk/EventWithdrawProposal";
@@ -145,7 +146,7 @@ export interface EventVoteProtoMsg {
 /** EventVote is an event emitted when a voter votes on a proposal. */
 export interface EventVoteAmino {
   /** proposal_id is the unique ID of the proposal. */
-  proposal_id: string;
+  proposal_id?: string;
 }
 export interface EventVoteAminoMsg {
   type: "cosmos-sdk/EventVote";
@@ -171,11 +172,11 @@ export interface EventExecProtoMsg {
 /** EventExec is an event emitted when a proposal is executed. */
 export interface EventExecAmino {
   /** proposal_id is the unique ID of the proposal. */
-  proposal_id: string;
+  proposal_id?: string;
   /** result is the proposal execution result. */
-  result: ProposalExecutorResult;
+  result?: ProposalExecutorResult;
   /** logs contains error logs in case the execution result is FAILURE. */
-  logs: string;
+  logs?: string;
 }
 export interface EventExecAminoMsg {
   type: "cosmos-sdk/EventExec";
@@ -201,9 +202,9 @@ export interface EventLeaveGroupProtoMsg {
 /** EventLeaveGroup is an event emitted when group member leaves the group. */
 export interface EventLeaveGroupAmino {
   /** group_id is the unique ID of the group. */
-  group_id: string;
+  group_id?: string;
   /** address is the account address of the group member. */
-  address: string;
+  address?: string;
 }
 export interface EventLeaveGroupAminoMsg {
   type: "cosmos-sdk/EventLeaveGroup";
@@ -221,7 +222,7 @@ export interface EventProposalPruned {
   /** status is the proposal status (UNSPECIFIED, SUBMITTED, ACCEPTED, REJECTED, ABORTED, WITHDRAWN). */
   status: ProposalStatus;
   /** tally_result is the proposal tally result (when applicable). */
-  tallyResult: TallyResult | undefined;
+  tallyResult?: TallyResult | undefined;
 }
 export interface EventProposalPrunedProtoMsg {
   typeUrl: "/cosmos.group.v1.EventProposalPruned";
@@ -230,9 +231,9 @@ export interface EventProposalPrunedProtoMsg {
 /** EventProposalPruned is an event emitted when a proposal is pruned. */
 export interface EventProposalPrunedAmino {
   /** proposal_id is the unique ID of the proposal. */
-  proposal_id: string;
+  proposal_id?: string;
   /** status is the proposal status (UNSPECIFIED, SUBMITTED, ACCEPTED, REJECTED, ABORTED, WITHDRAWN). */
-  status: ProposalStatus;
+  status?: ProposalStatus;
   /** tally_result is the proposal tally result (when applicable). */
   tally_result?: TallyResultAmino | undefined;
 }
@@ -244,7 +245,7 @@ export interface EventProposalPrunedAminoMsg {
 export interface EventProposalPrunedSDKType {
   proposal_id: bigint;
   status: ProposalStatus;
-  tally_result: TallyResultSDKType | undefined;
+  tally_result?: TallyResultSDKType | undefined;
 }
 function createBaseEventCreateGroup(): EventCreateGroup {
   return {
@@ -254,6 +255,15 @@ function createBaseEventCreateGroup(): EventCreateGroup {
 export const EventCreateGroup = {
   typeUrl: "/cosmos.group.v1.EventCreateGroup",
   aminoType: "cosmos-sdk/EventCreateGroup",
+  is(o: any): o is EventCreateGroup {
+    return o && (o.$typeUrl === EventCreateGroup.typeUrl || typeof o.groupId === "bigint");
+  },
+  isSDK(o: any): o is EventCreateGroupSDKType {
+    return o && (o.$typeUrl === EventCreateGroup.typeUrl || typeof o.group_id === "bigint");
+  },
+  isAmino(o: any): o is EventCreateGroupAmino {
+    return o && (o.$typeUrl === EventCreateGroup.typeUrl || typeof o.group_id === "bigint");
+  },
   encode(message: EventCreateGroup, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.groupId !== BigInt(0)) {
       writer.uint32(8).uint64(message.groupId);
@@ -303,9 +313,11 @@ export const EventCreateGroup = {
     return obj;
   },
   fromAmino(object: EventCreateGroupAmino): EventCreateGroup {
-    return {
-      groupId: BigInt(object.group_id)
-    };
+    const message = createBaseEventCreateGroup();
+    if (object.group_id !== undefined && object.group_id !== null) {
+      message.groupId = BigInt(object.group_id);
+    }
+    return message;
   },
   toAmino(message: EventCreateGroup): EventCreateGroupAmino {
     const obj: any = {};
@@ -334,6 +346,8 @@ export const EventCreateGroup = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventCreateGroup.typeUrl, EventCreateGroup);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventCreateGroup.aminoType, EventCreateGroup.typeUrl);
 function createBaseEventUpdateGroup(): EventUpdateGroup {
   return {
     groupId: BigInt(0)
@@ -342,6 +356,15 @@ function createBaseEventUpdateGroup(): EventUpdateGroup {
 export const EventUpdateGroup = {
   typeUrl: "/cosmos.group.v1.EventUpdateGroup",
   aminoType: "cosmos-sdk/EventUpdateGroup",
+  is(o: any): o is EventUpdateGroup {
+    return o && (o.$typeUrl === EventUpdateGroup.typeUrl || typeof o.groupId === "bigint");
+  },
+  isSDK(o: any): o is EventUpdateGroupSDKType {
+    return o && (o.$typeUrl === EventUpdateGroup.typeUrl || typeof o.group_id === "bigint");
+  },
+  isAmino(o: any): o is EventUpdateGroupAmino {
+    return o && (o.$typeUrl === EventUpdateGroup.typeUrl || typeof o.group_id === "bigint");
+  },
   encode(message: EventUpdateGroup, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.groupId !== BigInt(0)) {
       writer.uint32(8).uint64(message.groupId);
@@ -391,9 +414,11 @@ export const EventUpdateGroup = {
     return obj;
   },
   fromAmino(object: EventUpdateGroupAmino): EventUpdateGroup {
-    return {
-      groupId: BigInt(object.group_id)
-    };
+    const message = createBaseEventUpdateGroup();
+    if (object.group_id !== undefined && object.group_id !== null) {
+      message.groupId = BigInt(object.group_id);
+    }
+    return message;
   },
   toAmino(message: EventUpdateGroup): EventUpdateGroupAmino {
     const obj: any = {};
@@ -422,6 +447,8 @@ export const EventUpdateGroup = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventUpdateGroup.typeUrl, EventUpdateGroup);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventUpdateGroup.aminoType, EventUpdateGroup.typeUrl);
 function createBaseEventCreateGroupPolicy(): EventCreateGroupPolicy {
   return {
     address: ""
@@ -430,6 +457,15 @@ function createBaseEventCreateGroupPolicy(): EventCreateGroupPolicy {
 export const EventCreateGroupPolicy = {
   typeUrl: "/cosmos.group.v1.EventCreateGroupPolicy",
   aminoType: "cosmos-sdk/EventCreateGroupPolicy",
+  is(o: any): o is EventCreateGroupPolicy {
+    return o && (o.$typeUrl === EventCreateGroupPolicy.typeUrl || typeof o.address === "string");
+  },
+  isSDK(o: any): o is EventCreateGroupPolicySDKType {
+    return o && (o.$typeUrl === EventCreateGroupPolicy.typeUrl || typeof o.address === "string");
+  },
+  isAmino(o: any): o is EventCreateGroupPolicyAmino {
+    return o && (o.$typeUrl === EventCreateGroupPolicy.typeUrl || typeof o.address === "string");
+  },
   encode(message: EventCreateGroupPolicy, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -479,9 +515,11 @@ export const EventCreateGroupPolicy = {
     return obj;
   },
   fromAmino(object: EventCreateGroupPolicyAmino): EventCreateGroupPolicy {
-    return {
-      address: object.address
-    };
+    const message = createBaseEventCreateGroupPolicy();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
   },
   toAmino(message: EventCreateGroupPolicy): EventCreateGroupPolicyAmino {
     const obj: any = {};
@@ -510,6 +548,8 @@ export const EventCreateGroupPolicy = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventCreateGroupPolicy.typeUrl, EventCreateGroupPolicy);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventCreateGroupPolicy.aminoType, EventCreateGroupPolicy.typeUrl);
 function createBaseEventUpdateGroupPolicy(): EventUpdateGroupPolicy {
   return {
     address: ""
@@ -518,6 +558,15 @@ function createBaseEventUpdateGroupPolicy(): EventUpdateGroupPolicy {
 export const EventUpdateGroupPolicy = {
   typeUrl: "/cosmos.group.v1.EventUpdateGroupPolicy",
   aminoType: "cosmos-sdk/EventUpdateGroupPolicy",
+  is(o: any): o is EventUpdateGroupPolicy {
+    return o && (o.$typeUrl === EventUpdateGroupPolicy.typeUrl || typeof o.address === "string");
+  },
+  isSDK(o: any): o is EventUpdateGroupPolicySDKType {
+    return o && (o.$typeUrl === EventUpdateGroupPolicy.typeUrl || typeof o.address === "string");
+  },
+  isAmino(o: any): o is EventUpdateGroupPolicyAmino {
+    return o && (o.$typeUrl === EventUpdateGroupPolicy.typeUrl || typeof o.address === "string");
+  },
   encode(message: EventUpdateGroupPolicy, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -567,9 +616,11 @@ export const EventUpdateGroupPolicy = {
     return obj;
   },
   fromAmino(object: EventUpdateGroupPolicyAmino): EventUpdateGroupPolicy {
-    return {
-      address: object.address
-    };
+    const message = createBaseEventUpdateGroupPolicy();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
   },
   toAmino(message: EventUpdateGroupPolicy): EventUpdateGroupPolicyAmino {
     const obj: any = {};
@@ -598,6 +649,8 @@ export const EventUpdateGroupPolicy = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventUpdateGroupPolicy.typeUrl, EventUpdateGroupPolicy);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventUpdateGroupPolicy.aminoType, EventUpdateGroupPolicy.typeUrl);
 function createBaseEventSubmitProposal(): EventSubmitProposal {
   return {
     proposalId: BigInt(0)
@@ -606,6 +659,15 @@ function createBaseEventSubmitProposal(): EventSubmitProposal {
 export const EventSubmitProposal = {
   typeUrl: "/cosmos.group.v1.EventSubmitProposal",
   aminoType: "cosmos-sdk/EventSubmitProposal",
+  is(o: any): o is EventSubmitProposal {
+    return o && (o.$typeUrl === EventSubmitProposal.typeUrl || typeof o.proposalId === "bigint");
+  },
+  isSDK(o: any): o is EventSubmitProposalSDKType {
+    return o && (o.$typeUrl === EventSubmitProposal.typeUrl || typeof o.proposal_id === "bigint");
+  },
+  isAmino(o: any): o is EventSubmitProposalAmino {
+    return o && (o.$typeUrl === EventSubmitProposal.typeUrl || typeof o.proposal_id === "bigint");
+  },
   encode(message: EventSubmitProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -655,9 +717,11 @@ export const EventSubmitProposal = {
     return obj;
   },
   fromAmino(object: EventSubmitProposalAmino): EventSubmitProposal {
-    return {
-      proposalId: BigInt(object.proposal_id)
-    };
+    const message = createBaseEventSubmitProposal();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    return message;
   },
   toAmino(message: EventSubmitProposal): EventSubmitProposalAmino {
     const obj: any = {};
@@ -686,6 +750,8 @@ export const EventSubmitProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventSubmitProposal.typeUrl, EventSubmitProposal);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventSubmitProposal.aminoType, EventSubmitProposal.typeUrl);
 function createBaseEventWithdrawProposal(): EventWithdrawProposal {
   return {
     proposalId: BigInt(0)
@@ -694,6 +760,15 @@ function createBaseEventWithdrawProposal(): EventWithdrawProposal {
 export const EventWithdrawProposal = {
   typeUrl: "/cosmos.group.v1.EventWithdrawProposal",
   aminoType: "cosmos-sdk/EventWithdrawProposal",
+  is(o: any): o is EventWithdrawProposal {
+    return o && (o.$typeUrl === EventWithdrawProposal.typeUrl || typeof o.proposalId === "bigint");
+  },
+  isSDK(o: any): o is EventWithdrawProposalSDKType {
+    return o && (o.$typeUrl === EventWithdrawProposal.typeUrl || typeof o.proposal_id === "bigint");
+  },
+  isAmino(o: any): o is EventWithdrawProposalAmino {
+    return o && (o.$typeUrl === EventWithdrawProposal.typeUrl || typeof o.proposal_id === "bigint");
+  },
   encode(message: EventWithdrawProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -743,9 +818,11 @@ export const EventWithdrawProposal = {
     return obj;
   },
   fromAmino(object: EventWithdrawProposalAmino): EventWithdrawProposal {
-    return {
-      proposalId: BigInt(object.proposal_id)
-    };
+    const message = createBaseEventWithdrawProposal();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    return message;
   },
   toAmino(message: EventWithdrawProposal): EventWithdrawProposalAmino {
     const obj: any = {};
@@ -774,6 +851,8 @@ export const EventWithdrawProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventWithdrawProposal.typeUrl, EventWithdrawProposal);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventWithdrawProposal.aminoType, EventWithdrawProposal.typeUrl);
 function createBaseEventVote(): EventVote {
   return {
     proposalId: BigInt(0)
@@ -782,6 +861,15 @@ function createBaseEventVote(): EventVote {
 export const EventVote = {
   typeUrl: "/cosmos.group.v1.EventVote",
   aminoType: "cosmos-sdk/EventVote",
+  is(o: any): o is EventVote {
+    return o && (o.$typeUrl === EventVote.typeUrl || typeof o.proposalId === "bigint");
+  },
+  isSDK(o: any): o is EventVoteSDKType {
+    return o && (o.$typeUrl === EventVote.typeUrl || typeof o.proposal_id === "bigint");
+  },
+  isAmino(o: any): o is EventVoteAmino {
+    return o && (o.$typeUrl === EventVote.typeUrl || typeof o.proposal_id === "bigint");
+  },
   encode(message: EventVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -831,9 +919,11 @@ export const EventVote = {
     return obj;
   },
   fromAmino(object: EventVoteAmino): EventVote {
-    return {
-      proposalId: BigInt(object.proposal_id)
-    };
+    const message = createBaseEventVote();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    return message;
   },
   toAmino(message: EventVote): EventVoteAmino {
     const obj: any = {};
@@ -862,6 +952,8 @@ export const EventVote = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventVote.typeUrl, EventVote);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventVote.aminoType, EventVote.typeUrl);
 function createBaseEventExec(): EventExec {
   return {
     proposalId: BigInt(0),
@@ -872,6 +964,15 @@ function createBaseEventExec(): EventExec {
 export const EventExec = {
   typeUrl: "/cosmos.group.v1.EventExec",
   aminoType: "cosmos-sdk/EventExec",
+  is(o: any): o is EventExec {
+    return o && (o.$typeUrl === EventExec.typeUrl || typeof o.proposalId === "bigint" && isSet(o.result) && typeof o.logs === "string");
+  },
+  isSDK(o: any): o is EventExecSDKType {
+    return o && (o.$typeUrl === EventExec.typeUrl || typeof o.proposal_id === "bigint" && isSet(o.result) && typeof o.logs === "string");
+  },
+  isAmino(o: any): o is EventExecAmino {
+    return o && (o.$typeUrl === EventExec.typeUrl || typeof o.proposal_id === "bigint" && isSet(o.result) && typeof o.logs === "string");
+  },
   encode(message: EventExec, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -943,11 +1044,17 @@ export const EventExec = {
     return obj;
   },
   fromAmino(object: EventExecAmino): EventExec {
-    return {
-      proposalId: BigInt(object.proposal_id),
-      result: isSet(object.result) ? proposalExecutorResultFromJSON(object.result) : -1,
-      logs: object.logs
-    };
+    const message = createBaseEventExec();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    if (object.result !== undefined && object.result !== null) {
+      message.result = proposalExecutorResultFromJSON(object.result);
+    }
+    if (object.logs !== undefined && object.logs !== null) {
+      message.logs = object.logs;
+    }
+    return message;
   },
   toAmino(message: EventExec): EventExecAmino {
     const obj: any = {};
@@ -978,6 +1085,8 @@ export const EventExec = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventExec.typeUrl, EventExec);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventExec.aminoType, EventExec.typeUrl);
 function createBaseEventLeaveGroup(): EventLeaveGroup {
   return {
     groupId: BigInt(0),
@@ -987,6 +1096,15 @@ function createBaseEventLeaveGroup(): EventLeaveGroup {
 export const EventLeaveGroup = {
   typeUrl: "/cosmos.group.v1.EventLeaveGroup",
   aminoType: "cosmos-sdk/EventLeaveGroup",
+  is(o: any): o is EventLeaveGroup {
+    return o && (o.$typeUrl === EventLeaveGroup.typeUrl || typeof o.groupId === "bigint" && typeof o.address === "string");
+  },
+  isSDK(o: any): o is EventLeaveGroupSDKType {
+    return o && (o.$typeUrl === EventLeaveGroup.typeUrl || typeof o.group_id === "bigint" && typeof o.address === "string");
+  },
+  isAmino(o: any): o is EventLeaveGroupAmino {
+    return o && (o.$typeUrl === EventLeaveGroup.typeUrl || typeof o.group_id === "bigint" && typeof o.address === "string");
+  },
   encode(message: EventLeaveGroup, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.groupId !== BigInt(0)) {
       writer.uint32(8).uint64(message.groupId);
@@ -1047,10 +1165,14 @@ export const EventLeaveGroup = {
     return obj;
   },
   fromAmino(object: EventLeaveGroupAmino): EventLeaveGroup {
-    return {
-      groupId: BigInt(object.group_id),
-      address: object.address
-    };
+    const message = createBaseEventLeaveGroup();
+    if (object.group_id !== undefined && object.group_id !== null) {
+      message.groupId = BigInt(object.group_id);
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
   },
   toAmino(message: EventLeaveGroup): EventLeaveGroupAmino {
     const obj: any = {};
@@ -1080,16 +1202,27 @@ export const EventLeaveGroup = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventLeaveGroup.typeUrl, EventLeaveGroup);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventLeaveGroup.aminoType, EventLeaveGroup.typeUrl);
 function createBaseEventProposalPruned(): EventProposalPruned {
   return {
     proposalId: BigInt(0),
     status: 0,
-    tallyResult: TallyResult.fromPartial({})
+    tallyResult: undefined
   };
 }
 export const EventProposalPruned = {
   typeUrl: "/cosmos.group.v1.EventProposalPruned",
   aminoType: "cosmos-sdk/EventProposalPruned",
+  is(o: any): o is EventProposalPruned {
+    return o && (o.$typeUrl === EventProposalPruned.typeUrl || typeof o.proposalId === "bigint" && isSet(o.status));
+  },
+  isSDK(o: any): o is EventProposalPrunedSDKType {
+    return o && (o.$typeUrl === EventProposalPruned.typeUrl || typeof o.proposal_id === "bigint" && isSet(o.status));
+  },
+  isAmino(o: any): o is EventProposalPrunedAmino {
+    return o && (o.$typeUrl === EventProposalPruned.typeUrl || typeof o.proposal_id === "bigint" && isSet(o.status));
+  },
   encode(message: EventProposalPruned, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
@@ -1161,11 +1294,17 @@ export const EventProposalPruned = {
     return obj;
   },
   fromAmino(object: EventProposalPrunedAmino): EventProposalPruned {
-    return {
-      proposalId: BigInt(object.proposal_id),
-      status: isSet(object.status) ? proposalStatusFromJSON(object.status) : -1,
-      tallyResult: object?.tally_result ? TallyResult.fromAmino(object.tally_result) : undefined
-    };
+    const message = createBaseEventProposalPruned();
+    if (object.proposal_id !== undefined && object.proposal_id !== null) {
+      message.proposalId = BigInt(object.proposal_id);
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = proposalStatusFromJSON(object.status);
+    }
+    if (object.tally_result !== undefined && object.tally_result !== null) {
+      message.tallyResult = TallyResult.fromAmino(object.tally_result);
+    }
+    return message;
   },
   toAmino(message: EventProposalPruned): EventProposalPrunedAmino {
     const obj: any = {};
@@ -1196,3 +1335,5 @@ export const EventProposalPruned = {
     };
   }
 };
+GlobalDecoderRegistry.register(EventProposalPruned.typeUrl, EventProposalPruned);
+GlobalDecoderRegistry.registerAminoProtoMapping(EventProposalPruned.aminoType, EventProposalPruned.typeUrl);

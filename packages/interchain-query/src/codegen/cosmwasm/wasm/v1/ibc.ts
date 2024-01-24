@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** MsgIBCSend */
 export interface MsgIBCSend {
   /** the channel by which the packet will be sent */
@@ -27,22 +28,22 @@ export interface MsgIBCSendProtoMsg {
 /** MsgIBCSend */
 export interface MsgIBCSendAmino {
   /** the channel by which the packet will be sent */
-  channel: string;
+  channel?: string;
   /**
    * Timeout height relative to the current block height.
    * The timeout is disabled when set to 0.
    */
-  timeout_height: string;
+  timeout_height?: string;
   /**
    * Timeout timestamp (in nanoseconds) relative to the current block timestamp.
    * The timeout is disabled when set to 0.
    */
-  timeout_timestamp: string;
+  timeout_timestamp?: string;
   /**
    * Data is the payload to transfer. We must not make assumption what format or
    * content is in here.
    */
-  data: Uint8Array;
+  data?: string;
 }
 export interface MsgIBCSendAminoMsg {
   type: "wasm/MsgIBCSend";
@@ -67,7 +68,7 @@ export interface MsgIBCSendResponseProtoMsg {
 /** MsgIBCSendResponse */
 export interface MsgIBCSendResponseAmino {
   /** Sequence number of the IBC packet sent */
-  sequence: string;
+  sequence?: string;
 }
 export interface MsgIBCSendResponseAminoMsg {
   type: "wasm/MsgIBCSendResponse";
@@ -87,7 +88,7 @@ export interface MsgIBCCloseChannelProtoMsg {
 }
 /** MsgIBCCloseChannel port and channel need to be owned by the contract */
 export interface MsgIBCCloseChannelAmino {
-  channel: string;
+  channel?: string;
 }
 export interface MsgIBCCloseChannelAminoMsg {
   type: "wasm/MsgIBCCloseChannel";
@@ -108,6 +109,15 @@ function createBaseMsgIBCSend(): MsgIBCSend {
 export const MsgIBCSend = {
   typeUrl: "/cosmwasm.wasm.v1.MsgIBCSend",
   aminoType: "wasm/MsgIBCSend",
+  is(o: any): o is MsgIBCSend {
+    return o && (o.$typeUrl === MsgIBCSend.typeUrl || typeof o.channel === "string" && typeof o.timeoutHeight === "bigint" && typeof o.timeoutTimestamp === "bigint" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isSDK(o: any): o is MsgIBCSendSDKType {
+    return o && (o.$typeUrl === MsgIBCSend.typeUrl || typeof o.channel === "string" && typeof o.timeout_height === "bigint" && typeof o.timeout_timestamp === "bigint" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isAmino(o: any): o is MsgIBCSendAmino {
+    return o && (o.$typeUrl === MsgIBCSend.typeUrl || typeof o.channel === "string" && typeof o.timeout_height === "bigint" && typeof o.timeout_timestamp === "bigint" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
   encode(message: MsgIBCSend, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channel !== "") {
       writer.uint32(18).string(message.channel);
@@ -190,19 +200,27 @@ export const MsgIBCSend = {
     return obj;
   },
   fromAmino(object: MsgIBCSendAmino): MsgIBCSend {
-    return {
-      channel: object.channel,
-      timeoutHeight: BigInt(object.timeout_height),
-      timeoutTimestamp: BigInt(object.timeout_timestamp),
-      data: object.data
-    };
+    const message = createBaseMsgIBCSend();
+    if (object.channel !== undefined && object.channel !== null) {
+      message.channel = object.channel;
+    }
+    if (object.timeout_height !== undefined && object.timeout_height !== null) {
+      message.timeoutHeight = BigInt(object.timeout_height);
+    }
+    if (object.timeout_timestamp !== undefined && object.timeout_timestamp !== null) {
+      message.timeoutTimestamp = BigInt(object.timeout_timestamp);
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = bytesFromBase64(object.data);
+    }
+    return message;
   },
   toAmino(message: MsgIBCSend): MsgIBCSendAmino {
     const obj: any = {};
     obj.channel = message.channel;
     obj.timeout_height = message.timeoutHeight ? message.timeoutHeight.toString() : undefined;
     obj.timeout_timestamp = message.timeoutTimestamp ? message.timeoutTimestamp.toString() : undefined;
-    obj.data = message.data;
+    obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgIBCSendAminoMsg): MsgIBCSend {
@@ -227,6 +245,8 @@ export const MsgIBCSend = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgIBCSend.typeUrl, MsgIBCSend);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgIBCSend.aminoType, MsgIBCSend.typeUrl);
 function createBaseMsgIBCSendResponse(): MsgIBCSendResponse {
   return {
     sequence: BigInt(0)
@@ -235,6 +255,15 @@ function createBaseMsgIBCSendResponse(): MsgIBCSendResponse {
 export const MsgIBCSendResponse = {
   typeUrl: "/cosmwasm.wasm.v1.MsgIBCSendResponse",
   aminoType: "wasm/MsgIBCSendResponse",
+  is(o: any): o is MsgIBCSendResponse {
+    return o && (o.$typeUrl === MsgIBCSendResponse.typeUrl || typeof o.sequence === "bigint");
+  },
+  isSDK(o: any): o is MsgIBCSendResponseSDKType {
+    return o && (o.$typeUrl === MsgIBCSendResponse.typeUrl || typeof o.sequence === "bigint");
+  },
+  isAmino(o: any): o is MsgIBCSendResponseAmino {
+    return o && (o.$typeUrl === MsgIBCSendResponse.typeUrl || typeof o.sequence === "bigint");
+  },
   encode(message: MsgIBCSendResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sequence !== BigInt(0)) {
       writer.uint32(8).uint64(message.sequence);
@@ -284,9 +313,11 @@ export const MsgIBCSendResponse = {
     return obj;
   },
   fromAmino(object: MsgIBCSendResponseAmino): MsgIBCSendResponse {
-    return {
-      sequence: BigInt(object.sequence)
-    };
+    const message = createBaseMsgIBCSendResponse();
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = BigInt(object.sequence);
+    }
+    return message;
   },
   toAmino(message: MsgIBCSendResponse): MsgIBCSendResponseAmino {
     const obj: any = {};
@@ -315,6 +346,8 @@ export const MsgIBCSendResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgIBCSendResponse.typeUrl, MsgIBCSendResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgIBCSendResponse.aminoType, MsgIBCSendResponse.typeUrl);
 function createBaseMsgIBCCloseChannel(): MsgIBCCloseChannel {
   return {
     channel: ""
@@ -323,6 +356,15 @@ function createBaseMsgIBCCloseChannel(): MsgIBCCloseChannel {
 export const MsgIBCCloseChannel = {
   typeUrl: "/cosmwasm.wasm.v1.MsgIBCCloseChannel",
   aminoType: "wasm/MsgIBCCloseChannel",
+  is(o: any): o is MsgIBCCloseChannel {
+    return o && (o.$typeUrl === MsgIBCCloseChannel.typeUrl || typeof o.channel === "string");
+  },
+  isSDK(o: any): o is MsgIBCCloseChannelSDKType {
+    return o && (o.$typeUrl === MsgIBCCloseChannel.typeUrl || typeof o.channel === "string");
+  },
+  isAmino(o: any): o is MsgIBCCloseChannelAmino {
+    return o && (o.$typeUrl === MsgIBCCloseChannel.typeUrl || typeof o.channel === "string");
+  },
   encode(message: MsgIBCCloseChannel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.channel !== "") {
       writer.uint32(18).string(message.channel);
@@ -372,9 +414,11 @@ export const MsgIBCCloseChannel = {
     return obj;
   },
   fromAmino(object: MsgIBCCloseChannelAmino): MsgIBCCloseChannel {
-    return {
-      channel: object.channel
-    };
+    const message = createBaseMsgIBCCloseChannel();
+    if (object.channel !== undefined && object.channel !== null) {
+      message.channel = object.channel;
+    }
+    return message;
   },
   toAmino(message: MsgIBCCloseChannel): MsgIBCCloseChannelAmino {
     const obj: any = {};
@@ -403,3 +447,5 @@ export const MsgIBCCloseChannel = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgIBCCloseChannel.typeUrl, MsgIBCCloseChannel);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgIBCCloseChannel.aminoType, MsgIBCCloseChannel.typeUrl);

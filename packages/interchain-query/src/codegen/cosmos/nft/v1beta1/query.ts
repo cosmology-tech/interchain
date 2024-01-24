@@ -2,6 +2,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { NFT, NFTAmino, NFTSDKType, Class, ClassAmino, ClassSDKType } from "./nft";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** QueryBalanceRequest is the request type for the Query/Balance RPC method */
 export interface QueryBalanceRequest {
   /** class_id associated with the nft */
@@ -16,9 +17,9 @@ export interface QueryBalanceRequestProtoMsg {
 /** QueryBalanceRequest is the request type for the Query/Balance RPC method */
 export interface QueryBalanceRequestAmino {
   /** class_id associated with the nft */
-  class_id: string;
+  class_id?: string;
   /** owner is the owner address of the nft */
-  owner: string;
+  owner?: string;
 }
 export interface QueryBalanceRequestAminoMsg {
   type: "cosmos-sdk/QueryBalanceRequest";
@@ -41,7 +42,7 @@ export interface QueryBalanceResponseProtoMsg {
 /** QueryBalanceResponse is the response type for the Query/Balance RPC method */
 export interface QueryBalanceResponseAmino {
   /** amount is the number of all NFTs of a given class owned by the owner */
-  amount: string;
+  amount?: string;
 }
 export interface QueryBalanceResponseAminoMsg {
   type: "cosmos-sdk/QueryBalanceResponse";
@@ -65,9 +66,9 @@ export interface QueryOwnerRequestProtoMsg {
 /** QueryOwnerRequest is the request type for the Query/Owner RPC method */
 export interface QueryOwnerRequestAmino {
   /** class_id associated with the nft */
-  class_id: string;
+  class_id?: string;
   /** id is a unique identifier of the NFT */
-  id: string;
+  id?: string;
 }
 export interface QueryOwnerRequestAminoMsg {
   type: "cosmos-sdk/QueryOwnerRequest";
@@ -90,7 +91,7 @@ export interface QueryOwnerResponseProtoMsg {
 /** QueryOwnerResponse is the response type for the Query/Owner RPC method */
 export interface QueryOwnerResponseAmino {
   /** owner is the owner address of the nft */
-  owner: string;
+  owner?: string;
 }
 export interface QueryOwnerResponseAminoMsg {
   type: "cosmos-sdk/QueryOwnerResponse";
@@ -112,7 +113,7 @@ export interface QuerySupplyRequestProtoMsg {
 /** QuerySupplyRequest is the request type for the Query/Supply RPC method */
 export interface QuerySupplyRequestAmino {
   /** class_id associated with the nft */
-  class_id: string;
+  class_id?: string;
 }
 export interface QuerySupplyRequestAminoMsg {
   type: "cosmos-sdk/QuerySupplyRequest";
@@ -134,7 +135,7 @@ export interface QuerySupplyResponseProtoMsg {
 /** QuerySupplyResponse is the response type for the Query/Supply RPC method */
 export interface QuerySupplyResponseAmino {
   /** amount is the number of all NFTs from the given class */
-  amount: string;
+  amount?: string;
 }
 export interface QuerySupplyResponseAminoMsg {
   type: "cosmos-sdk/QuerySupplyResponse";
@@ -160,9 +161,9 @@ export interface QueryNFTsRequestProtoMsg {
 /** QueryNFTstRequest is the request type for the Query/NFTs RPC method */
 export interface QueryNFTsRequestAmino {
   /** class_id associated with the nft */
-  class_id: string;
+  class_id?: string;
   /** owner is the owner address of the nft */
-  owner: string;
+  owner?: string;
   /** pagination defines an optional pagination for the request. */
   pagination?: PageRequestAmino | undefined;
 }
@@ -181,7 +182,7 @@ export interface QueryNFTsResponse {
   /** NFT defines the NFT */
   nfts: NFT[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryNFTsResponseProtoMsg {
   typeUrl: "/cosmos.nft.v1beta1.QueryNFTsResponse";
@@ -190,7 +191,7 @@ export interface QueryNFTsResponseProtoMsg {
 /** QueryNFTsResponse is the response type for the Query/NFTs RPC methods */
 export interface QueryNFTsResponseAmino {
   /** NFT defines the NFT */
-  nfts: NFTAmino[];
+  nfts?: NFTAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -201,7 +202,7 @@ export interface QueryNFTsResponseAminoMsg {
 /** QueryNFTsResponse is the response type for the Query/NFTs RPC methods */
 export interface QueryNFTsResponseSDKType {
   nfts: NFTSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 /** QueryNFTRequest is the request type for the Query/NFT RPC method */
 export interface QueryNFTRequest {
@@ -217,9 +218,9 @@ export interface QueryNFTRequestProtoMsg {
 /** QueryNFTRequest is the request type for the Query/NFT RPC method */
 export interface QueryNFTRequestAmino {
   /** class_id associated with the nft */
-  class_id: string;
+  class_id?: string;
   /** id is a unique identifier of the NFT */
-  id: string;
+  id?: string;
 }
 export interface QueryNFTRequestAminoMsg {
   type: "cosmos-sdk/QueryNFTRequest";
@@ -233,7 +234,7 @@ export interface QueryNFTRequestSDKType {
 /** QueryNFTResponse is the response type for the Query/NFT RPC method */
 export interface QueryNFTResponse {
   /** owner is the owner address of the nft */
-  nft: NFT | undefined;
+  nft?: NFT | undefined;
 }
 export interface QueryNFTResponseProtoMsg {
   typeUrl: "/cosmos.nft.v1beta1.QueryNFTResponse";
@@ -250,7 +251,7 @@ export interface QueryNFTResponseAminoMsg {
 }
 /** QueryNFTResponse is the response type for the Query/NFT RPC method */
 export interface QueryNFTResponseSDKType {
-  nft: NFTSDKType | undefined;
+  nft?: NFTSDKType | undefined;
 }
 /** QueryClassRequest is the request type for the Query/Class RPC method */
 export interface QueryClassRequest {
@@ -264,7 +265,7 @@ export interface QueryClassRequestProtoMsg {
 /** QueryClassRequest is the request type for the Query/Class RPC method */
 export interface QueryClassRequestAmino {
   /** class_id associated with the nft */
-  class_id: string;
+  class_id?: string;
 }
 export interface QueryClassRequestAminoMsg {
   type: "cosmos-sdk/QueryClassRequest";
@@ -277,7 +278,7 @@ export interface QueryClassRequestSDKType {
 /** QueryClassResponse is the response type for the Query/Class RPC method */
 export interface QueryClassResponse {
   /** class defines the class of the nft type. */
-  class: Class | undefined;
+  class?: Class | undefined;
 }
 export interface QueryClassResponseProtoMsg {
   typeUrl: "/cosmos.nft.v1beta1.QueryClassResponse";
@@ -294,7 +295,7 @@ export interface QueryClassResponseAminoMsg {
 }
 /** QueryClassResponse is the response type for the Query/Class RPC method */
 export interface QueryClassResponseSDKType {
-  class: ClassSDKType | undefined;
+  class?: ClassSDKType | undefined;
 }
 /** QueryClassesRequest is the request type for the Query/Classes RPC method */
 export interface QueryClassesRequest {
@@ -323,7 +324,7 @@ export interface QueryClassesResponse {
   /** class defines the class of the nft type. */
   classes: Class[];
   /** pagination defines the pagination in the response. */
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse | undefined;
 }
 export interface QueryClassesResponseProtoMsg {
   typeUrl: "/cosmos.nft.v1beta1.QueryClassesResponse";
@@ -332,7 +333,7 @@ export interface QueryClassesResponseProtoMsg {
 /** QueryClassesResponse is the response type for the Query/Classes RPC method */
 export interface QueryClassesResponseAmino {
   /** class defines the class of the nft type. */
-  classes: ClassAmino[];
+  classes?: ClassAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino | undefined;
 }
@@ -343,7 +344,7 @@ export interface QueryClassesResponseAminoMsg {
 /** QueryClassesResponse is the response type for the Query/Classes RPC method */
 export interface QueryClassesResponseSDKType {
   classes: ClassSDKType[];
-  pagination: PageResponseSDKType | undefined;
+  pagination?: PageResponseSDKType | undefined;
 }
 function createBaseQueryBalanceRequest(): QueryBalanceRequest {
   return {
@@ -354,6 +355,15 @@ function createBaseQueryBalanceRequest(): QueryBalanceRequest {
 export const QueryBalanceRequest = {
   typeUrl: "/cosmos.nft.v1beta1.QueryBalanceRequest",
   aminoType: "cosmos-sdk/QueryBalanceRequest",
+  is(o: any): o is QueryBalanceRequest {
+    return o && (o.$typeUrl === QueryBalanceRequest.typeUrl || typeof o.classId === "string" && typeof o.owner === "string");
+  },
+  isSDK(o: any): o is QueryBalanceRequestSDKType {
+    return o && (o.$typeUrl === QueryBalanceRequest.typeUrl || typeof o.class_id === "string" && typeof o.owner === "string");
+  },
+  isAmino(o: any): o is QueryBalanceRequestAmino {
+    return o && (o.$typeUrl === QueryBalanceRequest.typeUrl || typeof o.class_id === "string" && typeof o.owner === "string");
+  },
   encode(message: QueryBalanceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.classId !== "") {
       writer.uint32(10).string(message.classId);
@@ -414,10 +424,14 @@ export const QueryBalanceRequest = {
     return obj;
   },
   fromAmino(object: QueryBalanceRequestAmino): QueryBalanceRequest {
-    return {
-      classId: object.class_id,
-      owner: object.owner
-    };
+    const message = createBaseQueryBalanceRequest();
+    if (object.class_id !== undefined && object.class_id !== null) {
+      message.classId = object.class_id;
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner;
+    }
+    return message;
   },
   toAmino(message: QueryBalanceRequest): QueryBalanceRequestAmino {
     const obj: any = {};
@@ -447,6 +461,8 @@ export const QueryBalanceRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryBalanceRequest.typeUrl, QueryBalanceRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryBalanceRequest.aminoType, QueryBalanceRequest.typeUrl);
 function createBaseQueryBalanceResponse(): QueryBalanceResponse {
   return {
     amount: BigInt(0)
@@ -455,6 +471,15 @@ function createBaseQueryBalanceResponse(): QueryBalanceResponse {
 export const QueryBalanceResponse = {
   typeUrl: "/cosmos.nft.v1beta1.QueryBalanceResponse",
   aminoType: "cosmos-sdk/QueryBalanceResponse",
+  is(o: any): o is QueryBalanceResponse {
+    return o && (o.$typeUrl === QueryBalanceResponse.typeUrl || typeof o.amount === "bigint");
+  },
+  isSDK(o: any): o is QueryBalanceResponseSDKType {
+    return o && (o.$typeUrl === QueryBalanceResponse.typeUrl || typeof o.amount === "bigint");
+  },
+  isAmino(o: any): o is QueryBalanceResponseAmino {
+    return o && (o.$typeUrl === QueryBalanceResponse.typeUrl || typeof o.amount === "bigint");
+  },
   encode(message: QueryBalanceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== BigInt(0)) {
       writer.uint32(8).uint64(message.amount);
@@ -504,9 +529,11 @@ export const QueryBalanceResponse = {
     return obj;
   },
   fromAmino(object: QueryBalanceResponseAmino): QueryBalanceResponse {
-    return {
-      amount: BigInt(object.amount)
-    };
+    const message = createBaseQueryBalanceResponse();
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = BigInt(object.amount);
+    }
+    return message;
   },
   toAmino(message: QueryBalanceResponse): QueryBalanceResponseAmino {
     const obj: any = {};
@@ -535,6 +562,8 @@ export const QueryBalanceResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryBalanceResponse.typeUrl, QueryBalanceResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryBalanceResponse.aminoType, QueryBalanceResponse.typeUrl);
 function createBaseQueryOwnerRequest(): QueryOwnerRequest {
   return {
     classId: "",
@@ -544,6 +573,15 @@ function createBaseQueryOwnerRequest(): QueryOwnerRequest {
 export const QueryOwnerRequest = {
   typeUrl: "/cosmos.nft.v1beta1.QueryOwnerRequest",
   aminoType: "cosmos-sdk/QueryOwnerRequest",
+  is(o: any): o is QueryOwnerRequest {
+    return o && (o.$typeUrl === QueryOwnerRequest.typeUrl || typeof o.classId === "string" && typeof o.id === "string");
+  },
+  isSDK(o: any): o is QueryOwnerRequestSDKType {
+    return o && (o.$typeUrl === QueryOwnerRequest.typeUrl || typeof o.class_id === "string" && typeof o.id === "string");
+  },
+  isAmino(o: any): o is QueryOwnerRequestAmino {
+    return o && (o.$typeUrl === QueryOwnerRequest.typeUrl || typeof o.class_id === "string" && typeof o.id === "string");
+  },
   encode(message: QueryOwnerRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.classId !== "") {
       writer.uint32(10).string(message.classId);
@@ -604,10 +642,14 @@ export const QueryOwnerRequest = {
     return obj;
   },
   fromAmino(object: QueryOwnerRequestAmino): QueryOwnerRequest {
-    return {
-      classId: object.class_id,
-      id: object.id
-    };
+    const message = createBaseQueryOwnerRequest();
+    if (object.class_id !== undefined && object.class_id !== null) {
+      message.classId = object.class_id;
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    return message;
   },
   toAmino(message: QueryOwnerRequest): QueryOwnerRequestAmino {
     const obj: any = {};
@@ -637,6 +679,8 @@ export const QueryOwnerRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryOwnerRequest.typeUrl, QueryOwnerRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryOwnerRequest.aminoType, QueryOwnerRequest.typeUrl);
 function createBaseQueryOwnerResponse(): QueryOwnerResponse {
   return {
     owner: ""
@@ -645,6 +689,15 @@ function createBaseQueryOwnerResponse(): QueryOwnerResponse {
 export const QueryOwnerResponse = {
   typeUrl: "/cosmos.nft.v1beta1.QueryOwnerResponse",
   aminoType: "cosmos-sdk/QueryOwnerResponse",
+  is(o: any): o is QueryOwnerResponse {
+    return o && (o.$typeUrl === QueryOwnerResponse.typeUrl || typeof o.owner === "string");
+  },
+  isSDK(o: any): o is QueryOwnerResponseSDKType {
+    return o && (o.$typeUrl === QueryOwnerResponse.typeUrl || typeof o.owner === "string");
+  },
+  isAmino(o: any): o is QueryOwnerResponseAmino {
+    return o && (o.$typeUrl === QueryOwnerResponse.typeUrl || typeof o.owner === "string");
+  },
   encode(message: QueryOwnerResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
@@ -694,9 +747,11 @@ export const QueryOwnerResponse = {
     return obj;
   },
   fromAmino(object: QueryOwnerResponseAmino): QueryOwnerResponse {
-    return {
-      owner: object.owner
-    };
+    const message = createBaseQueryOwnerResponse();
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner;
+    }
+    return message;
   },
   toAmino(message: QueryOwnerResponse): QueryOwnerResponseAmino {
     const obj: any = {};
@@ -725,6 +780,8 @@ export const QueryOwnerResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryOwnerResponse.typeUrl, QueryOwnerResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryOwnerResponse.aminoType, QueryOwnerResponse.typeUrl);
 function createBaseQuerySupplyRequest(): QuerySupplyRequest {
   return {
     classId: ""
@@ -733,6 +790,15 @@ function createBaseQuerySupplyRequest(): QuerySupplyRequest {
 export const QuerySupplyRequest = {
   typeUrl: "/cosmos.nft.v1beta1.QuerySupplyRequest",
   aminoType: "cosmos-sdk/QuerySupplyRequest",
+  is(o: any): o is QuerySupplyRequest {
+    return o && (o.$typeUrl === QuerySupplyRequest.typeUrl || typeof o.classId === "string");
+  },
+  isSDK(o: any): o is QuerySupplyRequestSDKType {
+    return o && (o.$typeUrl === QuerySupplyRequest.typeUrl || typeof o.class_id === "string");
+  },
+  isAmino(o: any): o is QuerySupplyRequestAmino {
+    return o && (o.$typeUrl === QuerySupplyRequest.typeUrl || typeof o.class_id === "string");
+  },
   encode(message: QuerySupplyRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.classId !== "") {
       writer.uint32(10).string(message.classId);
@@ -782,9 +848,11 @@ export const QuerySupplyRequest = {
     return obj;
   },
   fromAmino(object: QuerySupplyRequestAmino): QuerySupplyRequest {
-    return {
-      classId: object.class_id
-    };
+    const message = createBaseQuerySupplyRequest();
+    if (object.class_id !== undefined && object.class_id !== null) {
+      message.classId = object.class_id;
+    }
+    return message;
   },
   toAmino(message: QuerySupplyRequest): QuerySupplyRequestAmino {
     const obj: any = {};
@@ -813,6 +881,8 @@ export const QuerySupplyRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySupplyRequest.typeUrl, QuerySupplyRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QuerySupplyRequest.aminoType, QuerySupplyRequest.typeUrl);
 function createBaseQuerySupplyResponse(): QuerySupplyResponse {
   return {
     amount: BigInt(0)
@@ -821,6 +891,15 @@ function createBaseQuerySupplyResponse(): QuerySupplyResponse {
 export const QuerySupplyResponse = {
   typeUrl: "/cosmos.nft.v1beta1.QuerySupplyResponse",
   aminoType: "cosmos-sdk/QuerySupplyResponse",
+  is(o: any): o is QuerySupplyResponse {
+    return o && (o.$typeUrl === QuerySupplyResponse.typeUrl || typeof o.amount === "bigint");
+  },
+  isSDK(o: any): o is QuerySupplyResponseSDKType {
+    return o && (o.$typeUrl === QuerySupplyResponse.typeUrl || typeof o.amount === "bigint");
+  },
+  isAmino(o: any): o is QuerySupplyResponseAmino {
+    return o && (o.$typeUrl === QuerySupplyResponse.typeUrl || typeof o.amount === "bigint");
+  },
   encode(message: QuerySupplyResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.amount !== BigInt(0)) {
       writer.uint32(8).uint64(message.amount);
@@ -870,9 +949,11 @@ export const QuerySupplyResponse = {
     return obj;
   },
   fromAmino(object: QuerySupplyResponseAmino): QuerySupplyResponse {
-    return {
-      amount: BigInt(object.amount)
-    };
+    const message = createBaseQuerySupplyResponse();
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = BigInt(object.amount);
+    }
+    return message;
   },
   toAmino(message: QuerySupplyResponse): QuerySupplyResponseAmino {
     const obj: any = {};
@@ -901,16 +982,27 @@ export const QuerySupplyResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QuerySupplyResponse.typeUrl, QuerySupplyResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QuerySupplyResponse.aminoType, QuerySupplyResponse.typeUrl);
 function createBaseQueryNFTsRequest(): QueryNFTsRequest {
   return {
     classId: "",
     owner: "",
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryNFTsRequest = {
   typeUrl: "/cosmos.nft.v1beta1.QueryNFTsRequest",
   aminoType: "cosmos-sdk/QueryNFTsRequest",
+  is(o: any): o is QueryNFTsRequest {
+    return o && (o.$typeUrl === QueryNFTsRequest.typeUrl || typeof o.classId === "string" && typeof o.owner === "string");
+  },
+  isSDK(o: any): o is QueryNFTsRequestSDKType {
+    return o && (o.$typeUrl === QueryNFTsRequest.typeUrl || typeof o.class_id === "string" && typeof o.owner === "string");
+  },
+  isAmino(o: any): o is QueryNFTsRequestAmino {
+    return o && (o.$typeUrl === QueryNFTsRequest.typeUrl || typeof o.class_id === "string" && typeof o.owner === "string");
+  },
   encode(message: QueryNFTsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.classId !== "") {
       writer.uint32(10).string(message.classId);
@@ -982,11 +1074,17 @@ export const QueryNFTsRequest = {
     return obj;
   },
   fromAmino(object: QueryNFTsRequestAmino): QueryNFTsRequest {
-    return {
-      classId: object.class_id,
-      owner: object.owner,
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryNFTsRequest();
+    if (object.class_id !== undefined && object.class_id !== null) {
+      message.classId = object.class_id;
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryNFTsRequest): QueryNFTsRequestAmino {
     const obj: any = {};
@@ -1017,15 +1115,26 @@ export const QueryNFTsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryNFTsRequest.typeUrl, QueryNFTsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryNFTsRequest.aminoType, QueryNFTsRequest.typeUrl);
 function createBaseQueryNFTsResponse(): QueryNFTsResponse {
   return {
     nfts: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryNFTsResponse = {
   typeUrl: "/cosmos.nft.v1beta1.QueryNFTsResponse",
   aminoType: "cosmos-sdk/QueryNFTsResponse",
+  is(o: any): o is QueryNFTsResponse {
+    return o && (o.$typeUrl === QueryNFTsResponse.typeUrl || Array.isArray(o.nfts) && (!o.nfts.length || NFT.is(o.nfts[0])));
+  },
+  isSDK(o: any): o is QueryNFTsResponseSDKType {
+    return o && (o.$typeUrl === QueryNFTsResponse.typeUrl || Array.isArray(o.nfts) && (!o.nfts.length || NFT.isSDK(o.nfts[0])));
+  },
+  isAmino(o: any): o is QueryNFTsResponseAmino {
+    return o && (o.$typeUrl === QueryNFTsResponse.typeUrl || Array.isArray(o.nfts) && (!o.nfts.length || NFT.isAmino(o.nfts[0])));
+  },
   encode(message: QueryNFTsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.nfts) {
       NFT.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1094,10 +1203,12 @@ export const QueryNFTsResponse = {
     return obj;
   },
   fromAmino(object: QueryNFTsResponseAmino): QueryNFTsResponse {
-    return {
-      nfts: Array.isArray(object?.nfts) ? object.nfts.map((e: any) => NFT.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryNFTsResponse();
+    message.nfts = object.nfts?.map(e => NFT.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryNFTsResponse): QueryNFTsResponseAmino {
     const obj: any = {};
@@ -1131,6 +1242,8 @@ export const QueryNFTsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryNFTsResponse.typeUrl, QueryNFTsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryNFTsResponse.aminoType, QueryNFTsResponse.typeUrl);
 function createBaseQueryNFTRequest(): QueryNFTRequest {
   return {
     classId: "",
@@ -1140,6 +1253,15 @@ function createBaseQueryNFTRequest(): QueryNFTRequest {
 export const QueryNFTRequest = {
   typeUrl: "/cosmos.nft.v1beta1.QueryNFTRequest",
   aminoType: "cosmos-sdk/QueryNFTRequest",
+  is(o: any): o is QueryNFTRequest {
+    return o && (o.$typeUrl === QueryNFTRequest.typeUrl || typeof o.classId === "string" && typeof o.id === "string");
+  },
+  isSDK(o: any): o is QueryNFTRequestSDKType {
+    return o && (o.$typeUrl === QueryNFTRequest.typeUrl || typeof o.class_id === "string" && typeof o.id === "string");
+  },
+  isAmino(o: any): o is QueryNFTRequestAmino {
+    return o && (o.$typeUrl === QueryNFTRequest.typeUrl || typeof o.class_id === "string" && typeof o.id === "string");
+  },
   encode(message: QueryNFTRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.classId !== "") {
       writer.uint32(10).string(message.classId);
@@ -1200,10 +1322,14 @@ export const QueryNFTRequest = {
     return obj;
   },
   fromAmino(object: QueryNFTRequestAmino): QueryNFTRequest {
-    return {
-      classId: object.class_id,
-      id: object.id
-    };
+    const message = createBaseQueryNFTRequest();
+    if (object.class_id !== undefined && object.class_id !== null) {
+      message.classId = object.class_id;
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    }
+    return message;
   },
   toAmino(message: QueryNFTRequest): QueryNFTRequestAmino {
     const obj: any = {};
@@ -1233,14 +1359,25 @@ export const QueryNFTRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryNFTRequest.typeUrl, QueryNFTRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryNFTRequest.aminoType, QueryNFTRequest.typeUrl);
 function createBaseQueryNFTResponse(): QueryNFTResponse {
   return {
-    nft: NFT.fromPartial({})
+    nft: undefined
   };
 }
 export const QueryNFTResponse = {
   typeUrl: "/cosmos.nft.v1beta1.QueryNFTResponse",
   aminoType: "cosmos-sdk/QueryNFTResponse",
+  is(o: any): o is QueryNFTResponse {
+    return o && o.$typeUrl === QueryNFTResponse.typeUrl;
+  },
+  isSDK(o: any): o is QueryNFTResponseSDKType {
+    return o && o.$typeUrl === QueryNFTResponse.typeUrl;
+  },
+  isAmino(o: any): o is QueryNFTResponseAmino {
+    return o && o.$typeUrl === QueryNFTResponse.typeUrl;
+  },
   encode(message: QueryNFTResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.nft !== undefined) {
       NFT.encode(message.nft, writer.uint32(10).fork()).ldelim();
@@ -1290,9 +1427,11 @@ export const QueryNFTResponse = {
     return obj;
   },
   fromAmino(object: QueryNFTResponseAmino): QueryNFTResponse {
-    return {
-      nft: object?.nft ? NFT.fromAmino(object.nft) : undefined
-    };
+    const message = createBaseQueryNFTResponse();
+    if (object.nft !== undefined && object.nft !== null) {
+      message.nft = NFT.fromAmino(object.nft);
+    }
+    return message;
   },
   toAmino(message: QueryNFTResponse): QueryNFTResponseAmino {
     const obj: any = {};
@@ -1321,6 +1460,8 @@ export const QueryNFTResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryNFTResponse.typeUrl, QueryNFTResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryNFTResponse.aminoType, QueryNFTResponse.typeUrl);
 function createBaseQueryClassRequest(): QueryClassRequest {
   return {
     classId: ""
@@ -1329,6 +1470,15 @@ function createBaseQueryClassRequest(): QueryClassRequest {
 export const QueryClassRequest = {
   typeUrl: "/cosmos.nft.v1beta1.QueryClassRequest",
   aminoType: "cosmos-sdk/QueryClassRequest",
+  is(o: any): o is QueryClassRequest {
+    return o && (o.$typeUrl === QueryClassRequest.typeUrl || typeof o.classId === "string");
+  },
+  isSDK(o: any): o is QueryClassRequestSDKType {
+    return o && (o.$typeUrl === QueryClassRequest.typeUrl || typeof o.class_id === "string");
+  },
+  isAmino(o: any): o is QueryClassRequestAmino {
+    return o && (o.$typeUrl === QueryClassRequest.typeUrl || typeof o.class_id === "string");
+  },
   encode(message: QueryClassRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.classId !== "") {
       writer.uint32(10).string(message.classId);
@@ -1378,9 +1528,11 @@ export const QueryClassRequest = {
     return obj;
   },
   fromAmino(object: QueryClassRequestAmino): QueryClassRequest {
-    return {
-      classId: object.class_id
-    };
+    const message = createBaseQueryClassRequest();
+    if (object.class_id !== undefined && object.class_id !== null) {
+      message.classId = object.class_id;
+    }
+    return message;
   },
   toAmino(message: QueryClassRequest): QueryClassRequestAmino {
     const obj: any = {};
@@ -1409,14 +1561,25 @@ export const QueryClassRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryClassRequest.typeUrl, QueryClassRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryClassRequest.aminoType, QueryClassRequest.typeUrl);
 function createBaseQueryClassResponse(): QueryClassResponse {
   return {
-    class: Class.fromPartial({})
+    class: undefined
   };
 }
 export const QueryClassResponse = {
   typeUrl: "/cosmos.nft.v1beta1.QueryClassResponse",
   aminoType: "cosmos-sdk/QueryClassResponse",
+  is(o: any): o is QueryClassResponse {
+    return o && o.$typeUrl === QueryClassResponse.typeUrl;
+  },
+  isSDK(o: any): o is QueryClassResponseSDKType {
+    return o && o.$typeUrl === QueryClassResponse.typeUrl;
+  },
+  isAmino(o: any): o is QueryClassResponseAmino {
+    return o && o.$typeUrl === QueryClassResponse.typeUrl;
+  },
   encode(message: QueryClassResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.class !== undefined) {
       Class.encode(message.class, writer.uint32(10).fork()).ldelim();
@@ -1466,9 +1629,11 @@ export const QueryClassResponse = {
     return obj;
   },
   fromAmino(object: QueryClassResponseAmino): QueryClassResponse {
-    return {
-      class: object?.class ? Class.fromAmino(object.class) : undefined
-    };
+    const message = createBaseQueryClassResponse();
+    if (object.class !== undefined && object.class !== null) {
+      message.class = Class.fromAmino(object.class);
+    }
+    return message;
   },
   toAmino(message: QueryClassResponse): QueryClassResponseAmino {
     const obj: any = {};
@@ -1497,14 +1662,25 @@ export const QueryClassResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryClassResponse.typeUrl, QueryClassResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryClassResponse.aminoType, QueryClassResponse.typeUrl);
 function createBaseQueryClassesRequest(): QueryClassesRequest {
   return {
-    pagination: PageRequest.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryClassesRequest = {
   typeUrl: "/cosmos.nft.v1beta1.QueryClassesRequest",
   aminoType: "cosmos-sdk/QueryClassesRequest",
+  is(o: any): o is QueryClassesRequest {
+    return o && o.$typeUrl === QueryClassesRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryClassesRequestSDKType {
+    return o && o.$typeUrl === QueryClassesRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryClassesRequestAmino {
+    return o && o.$typeUrl === QueryClassesRequest.typeUrl;
+  },
   encode(message: QueryClassesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
@@ -1554,9 +1730,11 @@ export const QueryClassesRequest = {
     return obj;
   },
   fromAmino(object: QueryClassesRequestAmino): QueryClassesRequest {
-    return {
-      pagination: object?.pagination ? PageRequest.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryClassesRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryClassesRequest): QueryClassesRequestAmino {
     const obj: any = {};
@@ -1585,15 +1763,26 @@ export const QueryClassesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryClassesRequest.typeUrl, QueryClassesRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryClassesRequest.aminoType, QueryClassesRequest.typeUrl);
 function createBaseQueryClassesResponse(): QueryClassesResponse {
   return {
     classes: [],
-    pagination: PageResponse.fromPartial({})
+    pagination: undefined
   };
 }
 export const QueryClassesResponse = {
   typeUrl: "/cosmos.nft.v1beta1.QueryClassesResponse",
   aminoType: "cosmos-sdk/QueryClassesResponse",
+  is(o: any): o is QueryClassesResponse {
+    return o && (o.$typeUrl === QueryClassesResponse.typeUrl || Array.isArray(o.classes) && (!o.classes.length || Class.is(o.classes[0])));
+  },
+  isSDK(o: any): o is QueryClassesResponseSDKType {
+    return o && (o.$typeUrl === QueryClassesResponse.typeUrl || Array.isArray(o.classes) && (!o.classes.length || Class.isSDK(o.classes[0])));
+  },
+  isAmino(o: any): o is QueryClassesResponseAmino {
+    return o && (o.$typeUrl === QueryClassesResponse.typeUrl || Array.isArray(o.classes) && (!o.classes.length || Class.isAmino(o.classes[0])));
+  },
   encode(message: QueryClassesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.classes) {
       Class.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1662,10 +1851,12 @@ export const QueryClassesResponse = {
     return obj;
   },
   fromAmino(object: QueryClassesResponseAmino): QueryClassesResponse {
-    return {
-      classes: Array.isArray(object?.classes) ? object.classes.map((e: any) => Class.fromAmino(e)) : [],
-      pagination: object?.pagination ? PageResponse.fromAmino(object.pagination) : undefined
-    };
+    const message = createBaseQueryClassesResponse();
+    message.classes = object.classes?.map(e => Class.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
   },
   toAmino(message: QueryClassesResponse): QueryClassesResponseAmino {
     const obj: any = {};
@@ -1699,3 +1890,5 @@ export const QueryClassesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryClassesResponse.typeUrl, QueryClassesResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryClassesResponse.aminoType, QueryClassesResponse.typeUrl);

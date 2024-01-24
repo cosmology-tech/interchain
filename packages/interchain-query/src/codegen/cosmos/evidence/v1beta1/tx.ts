@@ -1,6 +1,7 @@
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, DeepPartial, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /**
  * MsgSubmitEvidence represents a message that supports submitting arbitrary
  * Evidence of misbehavior such as equivocation or counterfactual signing.
@@ -9,7 +10,7 @@ export interface MsgSubmitEvidence {
   /** submitter is the signer account address of evidence. */
   submitter: string;
   /** evidence defines the evidence of misbehavior. */
-  evidence: Any | undefined;
+  evidence?: Any | undefined;
 }
 export interface MsgSubmitEvidenceProtoMsg {
   typeUrl: "/cosmos.evidence.v1beta1.MsgSubmitEvidence";
@@ -24,7 +25,7 @@ export type MsgSubmitEvidenceEncoded = Omit<MsgSubmitEvidence, "evidence"> & {
  */
 export interface MsgSubmitEvidenceAmino {
   /** submitter is the signer account address of evidence. */
-  submitter: string;
+  submitter?: string;
   /** evidence defines the evidence of misbehavior. */
   evidence?: AnyAmino | undefined;
 }
@@ -38,7 +39,7 @@ export interface MsgSubmitEvidenceAminoMsg {
  */
 export interface MsgSubmitEvidenceSDKType {
   submitter: string;
-  evidence: AnySDKType | undefined;
+  evidence?: AnySDKType | undefined;
 }
 /** MsgSubmitEvidenceResponse defines the Msg/SubmitEvidence response type. */
 export interface MsgSubmitEvidenceResponse {
@@ -52,7 +53,7 @@ export interface MsgSubmitEvidenceResponseProtoMsg {
 /** MsgSubmitEvidenceResponse defines the Msg/SubmitEvidence response type. */
 export interface MsgSubmitEvidenceResponseAmino {
   /** hash defines the hash of the evidence. */
-  hash: Uint8Array;
+  hash?: string;
 }
 export interface MsgSubmitEvidenceResponseAminoMsg {
   type: "cosmos-sdk/MsgSubmitEvidenceResponse";
@@ -65,18 +66,27 @@ export interface MsgSubmitEvidenceResponseSDKType {
 function createBaseMsgSubmitEvidence(): MsgSubmitEvidence {
   return {
     submitter: "",
-    evidence: Any.fromPartial({})
+    evidence: undefined
   };
 }
 export const MsgSubmitEvidence = {
   typeUrl: "/cosmos.evidence.v1beta1.MsgSubmitEvidence",
   aminoType: "cosmos-sdk/MsgSubmitEvidence",
+  is(o: any): o is MsgSubmitEvidence {
+    return o && (o.$typeUrl === MsgSubmitEvidence.typeUrl || typeof o.submitter === "string");
+  },
+  isSDK(o: any): o is MsgSubmitEvidenceSDKType {
+    return o && (o.$typeUrl === MsgSubmitEvidence.typeUrl || typeof o.submitter === "string");
+  },
+  isAmino(o: any): o is MsgSubmitEvidenceAmino {
+    return o && (o.$typeUrl === MsgSubmitEvidence.typeUrl || typeof o.submitter === "string");
+  },
   encode(message: MsgSubmitEvidence, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.submitter !== "") {
       writer.uint32(10).string(message.submitter);
     }
     if (message.evidence !== undefined) {
-      Any.encode((message.evidence as Any), writer.uint32(18).fork()).ldelim();
+      Any.encode(GlobalDecoderRegistry.wrapAny(message.evidence), writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -91,7 +101,7 @@ export const MsgSubmitEvidence = {
           message.submitter = reader.string();
           break;
         case 2:
-          message.evidence = (Cosmos_evidencev1beta1Evidence_InterfaceDecoder(reader) as Any);
+          message.evidence = GlobalDecoderRegistry.unwrapAny(reader);
           break;
         default:
           reader.skipType(tag & 7);
@@ -103,43 +113,47 @@ export const MsgSubmitEvidence = {
   fromJSON(object: any): MsgSubmitEvidence {
     return {
       submitter: isSet(object.submitter) ? String(object.submitter) : "",
-      evidence: isSet(object.evidence) ? Any.fromJSON(object.evidence) : undefined
+      evidence: isSet(object.evidence) ? GlobalDecoderRegistry.fromJSON(object.evidence) : undefined
     };
   },
   toJSON(message: MsgSubmitEvidence): unknown {
     const obj: any = {};
     message.submitter !== undefined && (obj.submitter = message.submitter);
-    message.evidence !== undefined && (obj.evidence = message.evidence ? Any.toJSON(message.evidence) : undefined);
+    message.evidence !== undefined && (obj.evidence = message.evidence ? GlobalDecoderRegistry.toJSON(message.evidence) : undefined);
     return obj;
   },
   fromPartial(object: DeepPartial<MsgSubmitEvidence>): MsgSubmitEvidence {
     const message = createBaseMsgSubmitEvidence();
     message.submitter = object.submitter ?? "";
-    message.evidence = object.evidence !== undefined && object.evidence !== null ? Any.fromPartial(object.evidence) : undefined;
+    message.evidence = object.evidence !== undefined && object.evidence !== null ? GlobalDecoderRegistry.fromPartial(object.evidence) : undefined;
     return message;
   },
   fromSDK(object: MsgSubmitEvidenceSDKType): MsgSubmitEvidence {
     return {
       submitter: object?.submitter,
-      evidence: object.evidence ? Any.fromSDK(object.evidence) : undefined
+      evidence: object.evidence ? GlobalDecoderRegistry.fromSDK(object.evidence) : undefined
     };
   },
   toSDK(message: MsgSubmitEvidence): MsgSubmitEvidenceSDKType {
     const obj: any = {};
     obj.submitter = message.submitter;
-    message.evidence !== undefined && (obj.evidence = message.evidence ? Any.toSDK(message.evidence) : undefined);
+    message.evidence !== undefined && (obj.evidence = message.evidence ? GlobalDecoderRegistry.toSDK(message.evidence) : undefined);
     return obj;
   },
   fromAmino(object: MsgSubmitEvidenceAmino): MsgSubmitEvidence {
-    return {
-      submitter: object.submitter,
-      evidence: object?.evidence ? Cosmos_evidencev1beta1Evidence_FromAmino(object.evidence) : undefined
-    };
+    const message = createBaseMsgSubmitEvidence();
+    if (object.submitter !== undefined && object.submitter !== null) {
+      message.submitter = object.submitter;
+    }
+    if (object.evidence !== undefined && object.evidence !== null) {
+      message.evidence = GlobalDecoderRegistry.fromAminoMsg(object.evidence);
+    }
+    return message;
   },
   toAmino(message: MsgSubmitEvidence): MsgSubmitEvidenceAmino {
     const obj: any = {};
     obj.submitter = message.submitter;
-    obj.evidence = message.evidence ? Cosmos_evidencev1beta1Evidence_ToAmino((message.evidence as Any)) : undefined;
+    obj.evidence = message.evidence ? GlobalDecoderRegistry.toAminoMsg(message.evidence) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSubmitEvidenceAminoMsg): MsgSubmitEvidence {
@@ -164,6 +178,8 @@ export const MsgSubmitEvidence = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSubmitEvidence.typeUrl, MsgSubmitEvidence);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSubmitEvidence.aminoType, MsgSubmitEvidence.typeUrl);
 function createBaseMsgSubmitEvidenceResponse(): MsgSubmitEvidenceResponse {
   return {
     hash: new Uint8Array()
@@ -172,6 +188,15 @@ function createBaseMsgSubmitEvidenceResponse(): MsgSubmitEvidenceResponse {
 export const MsgSubmitEvidenceResponse = {
   typeUrl: "/cosmos.evidence.v1beta1.MsgSubmitEvidenceResponse",
   aminoType: "cosmos-sdk/MsgSubmitEvidenceResponse",
+  is(o: any): o is MsgSubmitEvidenceResponse {
+    return o && (o.$typeUrl === MsgSubmitEvidenceResponse.typeUrl || o.hash instanceof Uint8Array || typeof o.hash === "string");
+  },
+  isSDK(o: any): o is MsgSubmitEvidenceResponseSDKType {
+    return o && (o.$typeUrl === MsgSubmitEvidenceResponse.typeUrl || o.hash instanceof Uint8Array || typeof o.hash === "string");
+  },
+  isAmino(o: any): o is MsgSubmitEvidenceResponseAmino {
+    return o && (o.$typeUrl === MsgSubmitEvidenceResponse.typeUrl || o.hash instanceof Uint8Array || typeof o.hash === "string");
+  },
   encode(message: MsgSubmitEvidenceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.hash.length !== 0) {
       writer.uint32(34).bytes(message.hash);
@@ -221,13 +246,15 @@ export const MsgSubmitEvidenceResponse = {
     return obj;
   },
   fromAmino(object: MsgSubmitEvidenceResponseAmino): MsgSubmitEvidenceResponse {
-    return {
-      hash: object.hash
-    };
+    const message = createBaseMsgSubmitEvidenceResponse();
+    if (object.hash !== undefined && object.hash !== null) {
+      message.hash = bytesFromBase64(object.hash);
+    }
+    return message;
   },
   toAmino(message: MsgSubmitEvidenceResponse): MsgSubmitEvidenceResponseAmino {
     const obj: any = {};
-    obj.hash = message.hash;
+    obj.hash = message.hash ? base64FromBytes(message.hash) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSubmitEvidenceResponseAminoMsg): MsgSubmitEvidenceResponse {
@@ -252,17 +279,5 @@ export const MsgSubmitEvidenceResponse = {
     };
   }
 };
-export const Cosmos_evidencev1beta1Evidence_InterfaceDecoder = (input: BinaryReader | Uint8Array): Any => {
-  const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-  const data = Any.decode(reader, reader.uint32());
-  switch (data.typeUrl) {
-    default:
-      return data;
-  }
-};
-export const Cosmos_evidencev1beta1Evidence_FromAmino = (content: AnyAmino) => {
-  return Any.fromAmino(content);
-};
-export const Cosmos_evidencev1beta1Evidence_ToAmino = (content: Any) => {
-  return Any.toAmino(content);
-};
+GlobalDecoderRegistry.register(MsgSubmitEvidenceResponse.typeUrl, MsgSubmitEvidenceResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSubmitEvidenceResponse.aminoType, MsgSubmitEvidenceResponse.typeUrl);

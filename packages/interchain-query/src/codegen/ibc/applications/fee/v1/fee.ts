@@ -2,6 +2,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../../../cosmos/base/v1beta1/co
 import { PacketId, PacketIdAmino, PacketIdSDKType } from "../../../core/channel/v1/channel";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { DeepPartial, isSet } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** Fee defines the ICS29 receive, acknowledgement and timeout fees */
 export interface Fee {
   /** the packet receive fee */
@@ -18,11 +19,11 @@ export interface FeeProtoMsg {
 /** Fee defines the ICS29 receive, acknowledgement and timeout fees */
 export interface FeeAmino {
   /** the packet receive fee */
-  recv_fee: CoinAmino[];
+  recv_fee?: CoinAmino[];
   /** the packet acknowledgement fee */
-  ack_fee: CoinAmino[];
+  ack_fee?: CoinAmino[];
   /** the packet timeout fee */
-  timeout_fee: CoinAmino[];
+  timeout_fee?: CoinAmino[];
 }
 export interface FeeAminoMsg {
   type: "cosmos-sdk/Fee";
@@ -52,9 +53,9 @@ export interface PacketFeeAmino {
   /** fee encapsulates the recv, ack and timeout fees associated with an IBC packet */
   fee?: FeeAmino | undefined;
   /** the refund address for unspent fees */
-  refund_address: string;
+  refund_address?: string;
   /** optional list of relayers permitted to receive fees */
-  relayers: string[];
+  relayers?: string[];
 }
 export interface PacketFeeAminoMsg {
   type: "cosmos-sdk/PacketFee";
@@ -78,7 +79,7 @@ export interface PacketFeesProtoMsg {
 /** PacketFees contains a list of type PacketFee */
 export interface PacketFeesAmino {
   /** list of packet fees */
-  packet_fees: PacketFeeAmino[];
+  packet_fees?: PacketFeeAmino[];
 }
 export interface PacketFeesAminoMsg {
   type: "cosmos-sdk/PacketFees";
@@ -104,7 +105,7 @@ export interface IdentifiedPacketFeesAmino {
   /** unique packet identifier comprised of the channel ID, port ID and sequence */
   packet_id?: PacketIdAmino | undefined;
   /** list of packet fees */
-  packet_fees: PacketFeeAmino[];
+  packet_fees?: PacketFeeAmino[];
 }
 export interface IdentifiedPacketFeesAminoMsg {
   type: "cosmos-sdk/IdentifiedPacketFees";
@@ -125,6 +126,15 @@ function createBaseFee(): Fee {
 export const Fee = {
   typeUrl: "/ibc.applications.fee.v1.Fee",
   aminoType: "cosmos-sdk/Fee",
+  is(o: any): o is Fee {
+    return o && (o.$typeUrl === Fee.typeUrl || Array.isArray(o.recvFee) && (!o.recvFee.length || Coin.is(o.recvFee[0])) && Array.isArray(o.ackFee) && (!o.ackFee.length || Coin.is(o.ackFee[0])) && Array.isArray(o.timeoutFee) && (!o.timeoutFee.length || Coin.is(o.timeoutFee[0])));
+  },
+  isSDK(o: any): o is FeeSDKType {
+    return o && (o.$typeUrl === Fee.typeUrl || Array.isArray(o.recv_fee) && (!o.recv_fee.length || Coin.isSDK(o.recv_fee[0])) && Array.isArray(o.ack_fee) && (!o.ack_fee.length || Coin.isSDK(o.ack_fee[0])) && Array.isArray(o.timeout_fee) && (!o.timeout_fee.length || Coin.isSDK(o.timeout_fee[0])));
+  },
+  isAmino(o: any): o is FeeAmino {
+    return o && (o.$typeUrl === Fee.typeUrl || Array.isArray(o.recv_fee) && (!o.recv_fee.length || Coin.isAmino(o.recv_fee[0])) && Array.isArray(o.ack_fee) && (!o.ack_fee.length || Coin.isAmino(o.ack_fee[0])) && Array.isArray(o.timeout_fee) && (!o.timeout_fee.length || Coin.isAmino(o.timeout_fee[0])));
+  },
   encode(message: Fee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.recvFee) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -220,11 +230,11 @@ export const Fee = {
     return obj;
   },
   fromAmino(object: FeeAmino): Fee {
-    return {
-      recvFee: Array.isArray(object?.recv_fee) ? object.recv_fee.map((e: any) => Coin.fromAmino(e)) : [],
-      ackFee: Array.isArray(object?.ack_fee) ? object.ack_fee.map((e: any) => Coin.fromAmino(e)) : [],
-      timeoutFee: Array.isArray(object?.timeout_fee) ? object.timeout_fee.map((e: any) => Coin.fromAmino(e)) : []
-    };
+    const message = createBaseFee();
+    message.recvFee = object.recv_fee?.map(e => Coin.fromAmino(e)) || [];
+    message.ackFee = object.ack_fee?.map(e => Coin.fromAmino(e)) || [];
+    message.timeoutFee = object.timeout_fee?.map(e => Coin.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: Fee): FeeAmino {
     const obj: any = {};
@@ -267,6 +277,8 @@ export const Fee = {
     };
   }
 };
+GlobalDecoderRegistry.register(Fee.typeUrl, Fee);
+GlobalDecoderRegistry.registerAminoProtoMapping(Fee.aminoType, Fee.typeUrl);
 function createBasePacketFee(): PacketFee {
   return {
     fee: Fee.fromPartial({}),
@@ -277,6 +289,15 @@ function createBasePacketFee(): PacketFee {
 export const PacketFee = {
   typeUrl: "/ibc.applications.fee.v1.PacketFee",
   aminoType: "cosmos-sdk/PacketFee",
+  is(o: any): o is PacketFee {
+    return o && (o.$typeUrl === PacketFee.typeUrl || Fee.is(o.fee) && typeof o.refundAddress === "string" && Array.isArray(o.relayers) && (!o.relayers.length || typeof o.relayers[0] === "string"));
+  },
+  isSDK(o: any): o is PacketFeeSDKType {
+    return o && (o.$typeUrl === PacketFee.typeUrl || Fee.isSDK(o.fee) && typeof o.refund_address === "string" && Array.isArray(o.relayers) && (!o.relayers.length || typeof o.relayers[0] === "string"));
+  },
+  isAmino(o: any): o is PacketFeeAmino {
+    return o && (o.$typeUrl === PacketFee.typeUrl || Fee.isAmino(o.fee) && typeof o.refund_address === "string" && Array.isArray(o.relayers) && (!o.relayers.length || typeof o.relayers[0] === "string"));
+  },
   encode(message: PacketFee, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.fee !== undefined) {
       Fee.encode(message.fee, writer.uint32(10).fork()).ldelim();
@@ -356,11 +377,15 @@ export const PacketFee = {
     return obj;
   },
   fromAmino(object: PacketFeeAmino): PacketFee {
-    return {
-      fee: object?.fee ? Fee.fromAmino(object.fee) : undefined,
-      refundAddress: object.refund_address,
-      relayers: Array.isArray(object?.relayers) ? object.relayers.map((e: any) => e) : []
-    };
+    const message = createBasePacketFee();
+    if (object.fee !== undefined && object.fee !== null) {
+      message.fee = Fee.fromAmino(object.fee);
+    }
+    if (object.refund_address !== undefined && object.refund_address !== null) {
+      message.refundAddress = object.refund_address;
+    }
+    message.relayers = object.relayers?.map(e => e) || [];
+    return message;
   },
   toAmino(message: PacketFee): PacketFeeAmino {
     const obj: any = {};
@@ -395,6 +420,8 @@ export const PacketFee = {
     };
   }
 };
+GlobalDecoderRegistry.register(PacketFee.typeUrl, PacketFee);
+GlobalDecoderRegistry.registerAminoProtoMapping(PacketFee.aminoType, PacketFee.typeUrl);
 function createBasePacketFees(): PacketFees {
   return {
     packetFees: []
@@ -403,6 +430,15 @@ function createBasePacketFees(): PacketFees {
 export const PacketFees = {
   typeUrl: "/ibc.applications.fee.v1.PacketFees",
   aminoType: "cosmos-sdk/PacketFees",
+  is(o: any): o is PacketFees {
+    return o && (o.$typeUrl === PacketFees.typeUrl || Array.isArray(o.packetFees) && (!o.packetFees.length || PacketFee.is(o.packetFees[0])));
+  },
+  isSDK(o: any): o is PacketFeesSDKType {
+    return o && (o.$typeUrl === PacketFees.typeUrl || Array.isArray(o.packet_fees) && (!o.packet_fees.length || PacketFee.isSDK(o.packet_fees[0])));
+  },
+  isAmino(o: any): o is PacketFeesAmino {
+    return o && (o.$typeUrl === PacketFees.typeUrl || Array.isArray(o.packet_fees) && (!o.packet_fees.length || PacketFee.isAmino(o.packet_fees[0])));
+  },
   encode(message: PacketFees, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.packetFees) {
       PacketFee.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -460,9 +496,9 @@ export const PacketFees = {
     return obj;
   },
   fromAmino(object: PacketFeesAmino): PacketFees {
-    return {
-      packetFees: Array.isArray(object?.packet_fees) ? object.packet_fees.map((e: any) => PacketFee.fromAmino(e)) : []
-    };
+    const message = createBasePacketFees();
+    message.packetFees = object.packet_fees?.map(e => PacketFee.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: PacketFees): PacketFeesAmino {
     const obj: any = {};
@@ -495,6 +531,8 @@ export const PacketFees = {
     };
   }
 };
+GlobalDecoderRegistry.register(PacketFees.typeUrl, PacketFees);
+GlobalDecoderRegistry.registerAminoProtoMapping(PacketFees.aminoType, PacketFees.typeUrl);
 function createBaseIdentifiedPacketFees(): IdentifiedPacketFees {
   return {
     packetId: PacketId.fromPartial({}),
@@ -504,6 +542,15 @@ function createBaseIdentifiedPacketFees(): IdentifiedPacketFees {
 export const IdentifiedPacketFees = {
   typeUrl: "/ibc.applications.fee.v1.IdentifiedPacketFees",
   aminoType: "cosmos-sdk/IdentifiedPacketFees",
+  is(o: any): o is IdentifiedPacketFees {
+    return o && (o.$typeUrl === IdentifiedPacketFees.typeUrl || PacketId.is(o.packetId) && Array.isArray(o.packetFees) && (!o.packetFees.length || PacketFee.is(o.packetFees[0])));
+  },
+  isSDK(o: any): o is IdentifiedPacketFeesSDKType {
+    return o && (o.$typeUrl === IdentifiedPacketFees.typeUrl || PacketId.isSDK(o.packet_id) && Array.isArray(o.packet_fees) && (!o.packet_fees.length || PacketFee.isSDK(o.packet_fees[0])));
+  },
+  isAmino(o: any): o is IdentifiedPacketFeesAmino {
+    return o && (o.$typeUrl === IdentifiedPacketFees.typeUrl || PacketId.isAmino(o.packet_id) && Array.isArray(o.packet_fees) && (!o.packet_fees.length || PacketFee.isAmino(o.packet_fees[0])));
+  },
   encode(message: IdentifiedPacketFees, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.packetId !== undefined) {
       PacketId.encode(message.packetId, writer.uint32(10).fork()).ldelim();
@@ -572,10 +619,12 @@ export const IdentifiedPacketFees = {
     return obj;
   },
   fromAmino(object: IdentifiedPacketFeesAmino): IdentifiedPacketFees {
-    return {
-      packetId: object?.packet_id ? PacketId.fromAmino(object.packet_id) : undefined,
-      packetFees: Array.isArray(object?.packet_fees) ? object.packet_fees.map((e: any) => PacketFee.fromAmino(e)) : []
-    };
+    const message = createBaseIdentifiedPacketFees();
+    if (object.packet_id !== undefined && object.packet_id !== null) {
+      message.packetId = PacketId.fromAmino(object.packet_id);
+    }
+    message.packetFees = object.packet_fees?.map(e => PacketFee.fromAmino(e)) || [];
+    return message;
   },
   toAmino(message: IdentifiedPacketFees): IdentifiedPacketFeesAmino {
     const obj: any = {};
@@ -609,3 +658,5 @@ export const IdentifiedPacketFees = {
     };
   }
 };
+GlobalDecoderRegistry.register(IdentifiedPacketFees.typeUrl, IdentifiedPacketFees);
+GlobalDecoderRegistry.registerAminoProtoMapping(IdentifiedPacketFees.aminoType, IdentifiedPacketFees.typeUrl);

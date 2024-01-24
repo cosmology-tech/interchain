@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { isSet, bytesFromBase64, base64FromBytes, DeepPartial } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** MsgInit defines the Create request type for the Msg/Create RPC method. */
 export interface MsgInit {
   /** sender is the address of the sender of this message. */
@@ -20,15 +21,15 @@ export interface MsgInitProtoMsg {
 /** MsgInit defines the Create request type for the Msg/Create RPC method. */
 export interface MsgInitAmino {
   /** sender is the address of the sender of this message. */
-  sender: string;
+  sender?: string;
   /** account_type is the type of the account to be created. */
-  account_type: string;
+  account_type?: string;
   /**
    * message is the message to be sent to the account, it's up to the account
    * implementation to decide what encoding format should be used to interpret
    * this message.
    */
-  message: Uint8Array;
+  message?: string;
 }
 export interface MsgInitAminoMsg {
   type: "cosmos-sdk/MsgInit";
@@ -54,9 +55,9 @@ export interface MsgInitResponseProtoMsg {
 /** MsgInitResponse defines the Create response type for the Msg/Create RPC method. */
 export interface MsgInitResponseAmino {
   /** account_address is the address of the newly created account. */
-  account_address: string;
+  account_address?: string;
   /** response is the response returned by the account implementation. */
-  response: Uint8Array;
+  response?: string;
 }
 export interface MsgInitResponseAminoMsg {
   type: "cosmos-sdk/MsgInitResponse";
@@ -83,11 +84,11 @@ export interface MsgExecuteProtoMsg {
 /** MsgExecute defines the Execute request type for the Msg/Execute RPC method. */
 export interface MsgExecuteAmino {
   /** sender is the address of the sender of this message. */
-  sender: string;
+  sender?: string;
   /** target is the address of the account to be executed. */
-  target: string;
+  target?: string;
   /** message is the message to be sent to the account, it's up to the account */
-  message: Uint8Array;
+  message?: string;
 }
 export interface MsgExecuteAminoMsg {
   type: "cosmos-sdk/MsgExecute";
@@ -111,7 +112,7 @@ export interface MsgExecuteResponseProtoMsg {
 /** MsgExecuteResponse defines the Execute response type for the Msg/Execute RPC method. */
 export interface MsgExecuteResponseAmino {
   /** response is the response returned by the account implementation. */
-  response: Uint8Array;
+  response?: string;
 }
 export interface MsgExecuteResponseAminoMsg {
   type: "cosmos-sdk/MsgExecuteResponse";
@@ -131,6 +132,15 @@ function createBaseMsgInit(): MsgInit {
 export const MsgInit = {
   typeUrl: "/cosmos.accounts.v1.MsgInit",
   aminoType: "cosmos-sdk/MsgInit",
+  is(o: any): o is MsgInit {
+    return o && (o.$typeUrl === MsgInit.typeUrl || typeof o.sender === "string" && typeof o.accountType === "string" && (o.message instanceof Uint8Array || typeof o.message === "string"));
+  },
+  isSDK(o: any): o is MsgInitSDKType {
+    return o && (o.$typeUrl === MsgInit.typeUrl || typeof o.sender === "string" && typeof o.account_type === "string" && (o.message instanceof Uint8Array || typeof o.message === "string"));
+  },
+  isAmino(o: any): o is MsgInitAmino {
+    return o && (o.$typeUrl === MsgInit.typeUrl || typeof o.sender === "string" && typeof o.account_type === "string" && (o.message instanceof Uint8Array || typeof o.message === "string"));
+  },
   encode(message: MsgInit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
@@ -202,17 +212,23 @@ export const MsgInit = {
     return obj;
   },
   fromAmino(object: MsgInitAmino): MsgInit {
-    return {
-      sender: object.sender,
-      accountType: object.account_type,
-      message: object.message
-    };
+    const message = createBaseMsgInit();
+    if (object.sender !== undefined && object.sender !== null) {
+      message.sender = object.sender;
+    }
+    if (object.account_type !== undefined && object.account_type !== null) {
+      message.accountType = object.account_type;
+    }
+    if (object.message !== undefined && object.message !== null) {
+      message.message = bytesFromBase64(object.message);
+    }
+    return message;
   },
   toAmino(message: MsgInit): MsgInitAmino {
     const obj: any = {};
     obj.sender = message.sender;
     obj.account_type = message.accountType;
-    obj.message = message.message;
+    obj.message = message.message ? base64FromBytes(message.message) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgInitAminoMsg): MsgInit {
@@ -237,6 +253,8 @@ export const MsgInit = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgInit.typeUrl, MsgInit);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgInit.aminoType, MsgInit.typeUrl);
 function createBaseMsgInitResponse(): MsgInitResponse {
   return {
     accountAddress: "",
@@ -246,6 +264,15 @@ function createBaseMsgInitResponse(): MsgInitResponse {
 export const MsgInitResponse = {
   typeUrl: "/cosmos.accounts.v1.MsgInitResponse",
   aminoType: "cosmos-sdk/MsgInitResponse",
+  is(o: any): o is MsgInitResponse {
+    return o && (o.$typeUrl === MsgInitResponse.typeUrl || typeof o.accountAddress === "string" && (o.response instanceof Uint8Array || typeof o.response === "string"));
+  },
+  isSDK(o: any): o is MsgInitResponseSDKType {
+    return o && (o.$typeUrl === MsgInitResponse.typeUrl || typeof o.account_address === "string" && (o.response instanceof Uint8Array || typeof o.response === "string"));
+  },
+  isAmino(o: any): o is MsgInitResponseAmino {
+    return o && (o.$typeUrl === MsgInitResponse.typeUrl || typeof o.account_address === "string" && (o.response instanceof Uint8Array || typeof o.response === "string"));
+  },
   encode(message: MsgInitResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
@@ -306,15 +333,19 @@ export const MsgInitResponse = {
     return obj;
   },
   fromAmino(object: MsgInitResponseAmino): MsgInitResponse {
-    return {
-      accountAddress: object.account_address,
-      response: object.response
-    };
+    const message = createBaseMsgInitResponse();
+    if (object.account_address !== undefined && object.account_address !== null) {
+      message.accountAddress = object.account_address;
+    }
+    if (object.response !== undefined && object.response !== null) {
+      message.response = bytesFromBase64(object.response);
+    }
+    return message;
   },
   toAmino(message: MsgInitResponse): MsgInitResponseAmino {
     const obj: any = {};
     obj.account_address = message.accountAddress;
-    obj.response = message.response;
+    obj.response = message.response ? base64FromBytes(message.response) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgInitResponseAminoMsg): MsgInitResponse {
@@ -339,6 +370,8 @@ export const MsgInitResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgInitResponse.typeUrl, MsgInitResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgInitResponse.aminoType, MsgInitResponse.typeUrl);
 function createBaseMsgExecute(): MsgExecute {
   return {
     sender: "",
@@ -349,6 +382,15 @@ function createBaseMsgExecute(): MsgExecute {
 export const MsgExecute = {
   typeUrl: "/cosmos.accounts.v1.MsgExecute",
   aminoType: "cosmos-sdk/MsgExecute",
+  is(o: any): o is MsgExecute {
+    return o && (o.$typeUrl === MsgExecute.typeUrl || typeof o.sender === "string" && typeof o.target === "string" && (o.message instanceof Uint8Array || typeof o.message === "string"));
+  },
+  isSDK(o: any): o is MsgExecuteSDKType {
+    return o && (o.$typeUrl === MsgExecute.typeUrl || typeof o.sender === "string" && typeof o.target === "string" && (o.message instanceof Uint8Array || typeof o.message === "string"));
+  },
+  isAmino(o: any): o is MsgExecuteAmino {
+    return o && (o.$typeUrl === MsgExecute.typeUrl || typeof o.sender === "string" && typeof o.target === "string" && (o.message instanceof Uint8Array || typeof o.message === "string"));
+  },
   encode(message: MsgExecute, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
@@ -420,17 +462,23 @@ export const MsgExecute = {
     return obj;
   },
   fromAmino(object: MsgExecuteAmino): MsgExecute {
-    return {
-      sender: object.sender,
-      target: object.target,
-      message: object.message
-    };
+    const message = createBaseMsgExecute();
+    if (object.sender !== undefined && object.sender !== null) {
+      message.sender = object.sender;
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = object.target;
+    }
+    if (object.message !== undefined && object.message !== null) {
+      message.message = bytesFromBase64(object.message);
+    }
+    return message;
   },
   toAmino(message: MsgExecute): MsgExecuteAmino {
     const obj: any = {};
     obj.sender = message.sender;
     obj.target = message.target;
-    obj.message = message.message;
+    obj.message = message.message ? base64FromBytes(message.message) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgExecuteAminoMsg): MsgExecute {
@@ -455,6 +503,8 @@ export const MsgExecute = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgExecute.typeUrl, MsgExecute);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgExecute.aminoType, MsgExecute.typeUrl);
 function createBaseMsgExecuteResponse(): MsgExecuteResponse {
   return {
     response: new Uint8Array()
@@ -463,6 +513,15 @@ function createBaseMsgExecuteResponse(): MsgExecuteResponse {
 export const MsgExecuteResponse = {
   typeUrl: "/cosmos.accounts.v1.MsgExecuteResponse",
   aminoType: "cosmos-sdk/MsgExecuteResponse",
+  is(o: any): o is MsgExecuteResponse {
+    return o && (o.$typeUrl === MsgExecuteResponse.typeUrl || o.response instanceof Uint8Array || typeof o.response === "string");
+  },
+  isSDK(o: any): o is MsgExecuteResponseSDKType {
+    return o && (o.$typeUrl === MsgExecuteResponse.typeUrl || o.response instanceof Uint8Array || typeof o.response === "string");
+  },
+  isAmino(o: any): o is MsgExecuteResponseAmino {
+    return o && (o.$typeUrl === MsgExecuteResponse.typeUrl || o.response instanceof Uint8Array || typeof o.response === "string");
+  },
   encode(message: MsgExecuteResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.response.length !== 0) {
       writer.uint32(10).bytes(message.response);
@@ -512,13 +571,15 @@ export const MsgExecuteResponse = {
     return obj;
   },
   fromAmino(object: MsgExecuteResponseAmino): MsgExecuteResponse {
-    return {
-      response: object.response
-    };
+    const message = createBaseMsgExecuteResponse();
+    if (object.response !== undefined && object.response !== null) {
+      message.response = bytesFromBase64(object.response);
+    }
+    return message;
   },
   toAmino(message: MsgExecuteResponse): MsgExecuteResponseAmino {
     const obj: any = {};
-    obj.response = message.response;
+    obj.response = message.response ? base64FromBytes(message.response) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgExecuteResponseAminoMsg): MsgExecuteResponse {
@@ -543,3 +604,5 @@ export const MsgExecuteResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgExecuteResponse.typeUrl, MsgExecuteResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgExecuteResponse.aminoType, MsgExecuteResponse.typeUrl);

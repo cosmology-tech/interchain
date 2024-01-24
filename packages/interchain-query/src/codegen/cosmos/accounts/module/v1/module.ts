@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** Module is the config object of the accounts module. */
 export interface Module {}
 export interface ModuleProtoMsg {
@@ -20,6 +21,15 @@ function createBaseModule(): Module {
 export const Module = {
   typeUrl: "/cosmos.accounts.module.v1.Module",
   aminoType: "cosmos-sdk/Module",
+  is(o: any): o is Module {
+    return o && o.$typeUrl === Module.typeUrl;
+  },
+  isSDK(o: any): o is ModuleSDKType {
+    return o && o.$typeUrl === Module.typeUrl;
+  },
+  isAmino(o: any): o is ModuleAmino {
+    return o && o.$typeUrl === Module.typeUrl;
+  },
   encode(_: Module, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -56,7 +66,8 @@ export const Module = {
     return obj;
   },
   fromAmino(_: ModuleAmino): Module {
-    return {};
+    const message = createBaseModule();
+    return message;
   },
   toAmino(_: Module): ModuleAmino {
     const obj: any = {};
@@ -84,3 +95,5 @@ export const Module = {
     };
   }
 };
+GlobalDecoderRegistry.register(Module.typeUrl, Module);
+GlobalDecoderRegistry.registerAminoProtoMapping(Module.aminoType, Module.typeUrl);

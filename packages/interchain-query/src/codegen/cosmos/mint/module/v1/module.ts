@@ -1,5 +1,6 @@
 import { BinaryReader, BinaryWriter } from "../../../../binary";
 import { isSet, DeepPartial } from "../../../../helpers";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** Module is the config object of the mint module. */
 export interface Module {
   feeCollectorName: string;
@@ -12,9 +13,9 @@ export interface ModuleProtoMsg {
 }
 /** Module is the config object of the mint module. */
 export interface ModuleAmino {
-  fee_collector_name: string;
+  fee_collector_name?: string;
   /** authority defines the custom module authority. If not set, defaults to the governance module. */
-  authority: string;
+  authority?: string;
 }
 export interface ModuleAminoMsg {
   type: "cosmos-sdk/Module";
@@ -34,6 +35,15 @@ function createBaseModule(): Module {
 export const Module = {
   typeUrl: "/cosmos.mint.module.v1.Module",
   aminoType: "cosmos-sdk/Module",
+  is(o: any): o is Module {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.feeCollectorName === "string" && typeof o.authority === "string");
+  },
+  isSDK(o: any): o is ModuleSDKType {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.fee_collector_name === "string" && typeof o.authority === "string");
+  },
+  isAmino(o: any): o is ModuleAmino {
+    return o && (o.$typeUrl === Module.typeUrl || typeof o.fee_collector_name === "string" && typeof o.authority === "string");
+  },
   encode(message: Module, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.feeCollectorName !== "") {
       writer.uint32(10).string(message.feeCollectorName);
@@ -94,10 +104,14 @@ export const Module = {
     return obj;
   },
   fromAmino(object: ModuleAmino): Module {
-    return {
-      feeCollectorName: object.fee_collector_name,
-      authority: object.authority
-    };
+    const message = createBaseModule();
+    if (object.fee_collector_name !== undefined && object.fee_collector_name !== null) {
+      message.feeCollectorName = object.fee_collector_name;
+    }
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    return message;
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
@@ -127,3 +141,5 @@ export const Module = {
     };
   }
 };
+GlobalDecoderRegistry.register(Module.typeUrl, Module);
+GlobalDecoderRegistry.registerAminoProtoMapping(Module.aminoType, Module.typeUrl);
