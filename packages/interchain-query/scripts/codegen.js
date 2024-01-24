@@ -90,9 +90,25 @@ telescope({
           patterns: ["**"],
         },
         nameMapping: {
-          useAuthModuleAccounts: "cosmos.auth.v1beta1.useModuleAccounts",
+          useCosmosAuthAccount: "cosmos.auth.v1beta1.useAccount",
+          useCosmosCircuitAccount: "cosmos.circuit.v1.useAccount",
+
+          useCosmosAuthAccounts: "cosmos.auth.v1beta1.useAccounts",
+          useCosmosCircuitAccounts: "cosmos.circuit.v1.useAccounts",
+
           useBankBalance: "cosmos.bank.v1beta1.useBalance",
           useNftBalance: "cosmos.nft.v1beta1.useBalance",
+
+          useIBCUpgradedConsensusState:
+            "ibc.core.client.v1.useUpgradedConsensusState",
+
+          useCosmosStakingDelegatorValidators:
+            "cosmos.staking.v1beta1.useDelegatorValidators",
+          useCosmosDistDelegatorValidators:
+            "cosmos.distribution.v1beta1.useDelegatorValidators",
+
+          useCosmosAppConfig: "cosmos.app.v1alpha1.useConfig",
+          useCosmosBaseNodeConfig: "cosmos.base.node.v1beta1.useConfig",
         },
       },
     },

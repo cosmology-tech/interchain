@@ -1,6 +1,6 @@
 {
   "name": "interchain-query",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "description": "Cosmos RPC with React Query",
   "author": "Dan Lynch <pyramation@gmail.com>",
   "homepage": "https://github.com/pyramation/interchain-query#readme",
@@ -16,8 +16,8 @@
     "build:copy": "publish-scripts --cmd copy --srcDir main --outDir dist --findExt js,map,mjs,d.ts --stripPath codegen",
     "clean": "rimraf main && rimraf dist",
     "build": "yarn clean && yarn build:cjs && yarn build:copy",
+    "prepub": "copy package.json dist && copy README.md dist && copy LICENSE dist",
     "codegen": "node scripts/codegen.js",
-    "prepare": "npm run build",
     "lint": "eslint src --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -34,13 +34,11 @@
   "bugs": {
     "url": "https://github.com/pyramation/interchain-query/issues"
   },
-  "peerDependencies": {
-    "@tanstack/react-query": "^4.29.12"
-  },
   "devDependencies": {
     "@cosmology/telescope": "^1.4.12",
     "@tanstack/react-query": "^4.29.12",
     "@types/jest": "^29.5.0",
+    "copy": "^0.3.2",
     "cross-env": "^7.0.2",
     "eslint": "8.38.0",
     "eslint-config-prettier": "^8.8.0",
@@ -54,6 +52,9 @@
     "ts-jest": "^29.1.0",
     "tsup": "^7.1.0",
     "typescript": "^5.0.4"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^4.29.12"
   },
   "dependencies": {
     "@cosmjs/amino": "0.32.2",

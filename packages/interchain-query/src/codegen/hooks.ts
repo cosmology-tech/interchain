@@ -152,7 +152,7 @@ export const createRpcQueryHooks = ({
      * cosmos.app.v1alpha1.useConfig
      * Config returns the current app config.
      */
-    useConfig: _CosmosAppV1alpha1Queryrpc.createRpcQueryHooks(rpc).useConfig,
+    useCosmosAppConfig: _CosmosAppV1alpha1Queryrpc.createRpcQueryHooks(rpc).useConfig,
     /**
      * cosmos.auth.v1beta1.useAccounts
      * Accounts returns all the existing accounts.
@@ -162,12 +162,12 @@ export const createRpcQueryHooks = ({
      * 
      * Since: cosmos-sdk 0.43
      */
-    useAccounts: _CosmosAuthV1beta1Queryrpc.createRpcQueryHooks(rpc).useAccounts,
+    useCosmosAuthAccounts: _CosmosAuthV1beta1Queryrpc.createRpcQueryHooks(rpc).useAccounts,
     /**
      * cosmos.auth.v1beta1.useAccount
      * Account returns account details based on address.
      */
-    useAccount: _CosmosAuthV1beta1Queryrpc.createRpcQueryHooks(rpc).useAccount,
+    useCosmosAuthAccount: _CosmosAuthV1beta1Queryrpc.createRpcQueryHooks(rpc).useAccount,
     /**
      * cosmos.auth.v1beta1.useAccountAddressByID
      * AccountAddressByID returns account address based on account number.
@@ -186,7 +186,7 @@ export const createRpcQueryHooks = ({
      * 
      * Since: cosmos-sdk 0.46
      */
-    useAuthModuleAccounts: _CosmosAuthV1beta1Queryrpc.createRpcQueryHooks(rpc).useModuleAccounts,
+    useModuleAccounts: _CosmosAuthV1beta1Queryrpc.createRpcQueryHooks(rpc).useModuleAccounts,
     /**
      * cosmos.auth.v1beta1.useModuleAccountByName
      * ModuleAccountByName returns the module account info by module name
@@ -337,7 +337,7 @@ export const createRpcQueryHooks = ({
      * cosmos.base.node.v1beta1.useConfig
      * Config queries for the operator configuration.
      */
-    useCosmosBaseNodeV1beta1Config: _CosmosBaseNodeV1beta1Queryrpc.createRpcQueryHooks(rpc).useConfig,
+    useCosmosBaseNodeConfig: _CosmosBaseNodeV1beta1Queryrpc.createRpcQueryHooks(rpc).useConfig,
     /**
      * cosmos.base.node.v1beta1.useStatus
      * Status queries for the node status.
@@ -386,12 +386,12 @@ export const createRpcQueryHooks = ({
      * cosmos.circuit.v1.useAccount
      * Account returns account permissions.
      */
-    useCosmosCircuitV1Account: _CosmosCircuitV1Queryrpc.createRpcQueryHooks(rpc).useAccount,
+    useCosmosCircuitAccount: _CosmosCircuitV1Queryrpc.createRpcQueryHooks(rpc).useAccount,
     /**
      * cosmos.circuit.v1.useAccounts
      * Account returns account permissions.
      */
-    useCosmosCircuitV1Accounts: _CosmosCircuitV1Queryrpc.createRpcQueryHooks(rpc).useAccounts,
+    useCosmosCircuitAccounts: _CosmosCircuitV1Queryrpc.createRpcQueryHooks(rpc).useAccounts,
     /**
      * cosmos.circuit.v1.useDisabledList
      * DisabledList returns a list of disabled message urls
@@ -442,7 +442,7 @@ export const createRpcQueryHooks = ({
      * cosmos.distribution.v1beta1.useDelegatorValidators
      * DelegatorValidators queries the validators of a delegator.
      */
-    useDelegatorValidators: _CosmosDistributionV1beta1Queryrpc.createRpcQueryHooks(rpc).useDelegatorValidators,
+    useCosmosDistDelegatorValidators: _CosmosDistributionV1beta1Queryrpc.createRpcQueryHooks(rpc).useDelegatorValidators,
     /**
      * cosmos.distribution.v1beta1.useDelegatorWithdrawAddress
      * DelegatorWithdrawAddress queries withdraw address of a delegator.
@@ -804,7 +804,7 @@ export const createRpcQueryHooks = ({
      * When called from another module, this query might consume a high amount of
      * gas if the pagination field is incorrectly set.
      */
-    useCosmosStakingV1beta1DelegatorValidators: _CosmosStakingV1beta1Queryrpc.createRpcQueryHooks(rpc).useDelegatorValidators,
+    useCosmosStakingDelegatorValidators: _CosmosStakingV1beta1Queryrpc.createRpcQueryHooks(rpc).useDelegatorValidators,
     /**
      * cosmos.staking.v1beta1.useDelegatorValidator
      * DelegatorValidator queries validator info for given delegator validator
@@ -1134,7 +1134,7 @@ export const createRpcQueryHooks = ({
      * ibc.core.client.v1.useUpgradedConsensusState
      * UpgradedConsensusState queries an Upgraded IBC consensus state.
      */
-    useIbcCoreClientV1UpgradedConsensusState: _IbcCoreClientV1Queryrpc.createRpcQueryHooks(rpc).useUpgradedConsensusState,
+    useIBCUpgradedConsensusState: _IbcCoreClientV1Queryrpc.createRpcQueryHooks(rpc).useUpgradedConsensusState,
     /**
      * ibc.core.connection.v1.useConnection
      * Connection queries an IBC connection end.
