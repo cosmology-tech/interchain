@@ -5,7 +5,8 @@
   "author": "Dan Lynch <pyramation@gmail.com>",
   "homepage": "https://github.com/cosmology-tech/interchain#readme",
   "license": "SEE LICENSE IN LICENSE",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "directories": {
     "lib": "src"
@@ -15,10 +16,11 @@
     "!CHANGELOG.md"
   ],
   "scripts": {
-    "build:cjs": "yarn tsc -p tsconfig.json --outDir dist --module commonjs || true",
+    "build:cjs": "yarn tsc -p tsconfig.json --outDir dist/cjs --module commonjs --declaration false || true",
+    "build:mjs": "yarn tsc -p tsconfig.json --outDir dist --module es2022 || true",
     "clean:dist": "rimraf dist",
     "clean": "npm run clean:dist",
-    "build": "npm run clean && npm run build:cjs",
+    "build": "npm run clean && npm run build:mjs && npm run build:cjs",
     "codegen": "node scripts/codegen.js",
     "prepare": "npm run build",
     "lint": "eslint src --fix",
