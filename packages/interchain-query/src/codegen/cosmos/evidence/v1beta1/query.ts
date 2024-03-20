@@ -226,7 +226,7 @@ export const QueryEvidenceRequest = {
   toAmino(message: QueryEvidenceRequest): QueryEvidenceRequestAmino {
     const obj: any = {};
     obj.evidence_hash = message.evidenceHash ? base64FromBytes(message.evidenceHash) : undefined;
-    obj.hash = message.hash;
+    obj.hash = message.hash === "" ? undefined : message.hash;
     return obj;
   },
   fromAminoMsg(object: QueryEvidenceRequestAminoMsg): QueryEvidenceRequest {
@@ -553,7 +553,7 @@ export const QueryAllEvidenceResponse = {
     if (message.evidence) {
       obj.evidence = message.evidence.map(e => e ? Any.toAmino(e) : undefined);
     } else {
-      obj.evidence = [];
+      obj.evidence = message.evidence;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;

@@ -134,9 +134,9 @@ export const Module = {
     if (message.blockedModuleAccountsOverride) {
       obj.blocked_module_accounts_override = message.blockedModuleAccountsOverride.map(e => e);
     } else {
-      obj.blocked_module_accounts_override = [];
+      obj.blocked_module_accounts_override = message.blockedModuleAccountsOverride;
     }
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     return obj;
   },
   fromAminoMsg(object: ModuleAminoMsg): Module {

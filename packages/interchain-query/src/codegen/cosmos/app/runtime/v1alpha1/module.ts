@@ -437,51 +437,51 @@ export const Module = {
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
-    obj.app_name = message.appName;
+    obj.app_name = message.appName === "" ? undefined : message.appName;
     if (message.beginBlockers) {
       obj.begin_blockers = message.beginBlockers.map(e => e);
     } else {
-      obj.begin_blockers = [];
+      obj.begin_blockers = message.beginBlockers;
     }
     if (message.endBlockers) {
       obj.end_blockers = message.endBlockers.map(e => e);
     } else {
-      obj.end_blockers = [];
+      obj.end_blockers = message.endBlockers;
     }
     if (message.initGenesis) {
       obj.init_genesis = message.initGenesis.map(e => e);
     } else {
-      obj.init_genesis = [];
+      obj.init_genesis = message.initGenesis;
     }
     if (message.exportGenesis) {
       obj.export_genesis = message.exportGenesis.map(e => e);
     } else {
-      obj.export_genesis = [];
+      obj.export_genesis = message.exportGenesis;
     }
     if (message.overrideStoreKeys) {
       obj.override_store_keys = message.overrideStoreKeys.map(e => e ? StoreKeyConfig.toAmino(e) : undefined);
     } else {
-      obj.override_store_keys = [];
+      obj.override_store_keys = message.overrideStoreKeys;
     }
     if (message.orderMigrations) {
       obj.order_migrations = message.orderMigrations.map(e => e);
     } else {
-      obj.order_migrations = [];
+      obj.order_migrations = message.orderMigrations;
     }
     if (message.precommiters) {
       obj.precommiters = message.precommiters.map(e => e);
     } else {
-      obj.precommiters = [];
+      obj.precommiters = message.precommiters;
     }
     if (message.prepareCheckStaters) {
       obj.prepare_check_staters = message.prepareCheckStaters.map(e => e);
     } else {
-      obj.prepare_check_staters = [];
+      obj.prepare_check_staters = message.prepareCheckStaters;
     }
     if (message.preBlockers) {
       obj.pre_blockers = message.preBlockers.map(e => e);
     } else {
-      obj.pre_blockers = [];
+      obj.pre_blockers = message.preBlockers;
     }
     return obj;
   },
@@ -598,8 +598,8 @@ export const StoreKeyConfig = {
   },
   toAmino(message: StoreKeyConfig): StoreKeyConfigAmino {
     const obj: any = {};
-    obj.module_name = message.moduleName;
-    obj.kv_store_key = message.kvStoreKey;
+    obj.module_name = message.moduleName === "" ? undefined : message.moduleName;
+    obj.kv_store_key = message.kvStoreKey === "" ? undefined : message.kvStoreKey;
     return obj;
   },
   fromAminoMsg(object: StoreKeyConfigAminoMsg): StoreKeyConfig {

@@ -601,7 +601,7 @@ export const QueryIncentivizedPacketsRequest = {
   toAmino(message: QueryIncentivizedPacketsRequest): QueryIncentivizedPacketsRequestAmino {
     const obj: any = {};
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
-    obj.query_height = message.queryHeight ? message.queryHeight.toString() : undefined;
+    obj.query_height = message.queryHeight !== BigInt(0) ? message.queryHeight.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryIncentivizedPacketsRequestAminoMsg): QueryIncentivizedPacketsRequest {
@@ -726,7 +726,7 @@ export const QueryIncentivizedPacketsResponse = {
     if (message.incentivizedPackets) {
       obj.incentivized_packets = message.incentivizedPackets.map(e => e ? IdentifiedPacketFees.toAmino(e) : undefined);
     } else {
-      obj.incentivized_packets = [];
+      obj.incentivized_packets = message.incentivizedPackets;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -845,7 +845,7 @@ export const QueryIncentivizedPacketRequest = {
   toAmino(message: QueryIncentivizedPacketRequest): QueryIncentivizedPacketRequestAmino {
     const obj: any = {};
     obj.packet_id = message.packetId ? PacketId.toAmino(message.packetId) : undefined;
-    obj.query_height = message.queryHeight ? message.queryHeight.toString() : undefined;
+    obj.query_height = message.queryHeight !== BigInt(0) ? message.queryHeight.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryIncentivizedPacketRequestAminoMsg): QueryIncentivizedPacketRequest {
@@ -1093,9 +1093,9 @@ export const QueryIncentivizedPacketsForChannelRequest = {
   toAmino(message: QueryIncentivizedPacketsForChannelRequest): QueryIncentivizedPacketsForChannelRequestAmino {
     const obj: any = {};
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
-    obj.port_id = message.portId;
-    obj.channel_id = message.channelId;
-    obj.query_height = message.queryHeight ? message.queryHeight.toString() : undefined;
+    obj.port_id = message.portId === "" ? undefined : message.portId;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
+    obj.query_height = message.queryHeight !== BigInt(0) ? message.queryHeight.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryIncentivizedPacketsForChannelRequestAminoMsg): QueryIncentivizedPacketsForChannelRequest {
@@ -1220,7 +1220,7 @@ export const QueryIncentivizedPacketsForChannelResponse = {
     if (message.incentivizedPackets) {
       obj.incentivized_packets = message.incentivizedPackets.map(e => e ? IdentifiedPacketFees.toAmino(e) : undefined);
     } else {
-      obj.incentivized_packets = [];
+      obj.incentivized_packets = message.incentivizedPackets;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -1433,7 +1433,7 @@ export const QueryTotalRecvFeesResponse = {
     if (message.recvFees) {
       obj.recv_fees = message.recvFees.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.recv_fees = [];
+      obj.recv_fees = message.recvFees;
     }
     return obj;
   },
@@ -1645,7 +1645,7 @@ export const QueryTotalAckFeesResponse = {
     if (message.ackFees) {
       obj.ack_fees = message.ackFees.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.ack_fees = [];
+      obj.ack_fees = message.ackFees;
     }
     return obj;
   },
@@ -1857,7 +1857,7 @@ export const QueryTotalTimeoutFeesResponse = {
     if (message.timeoutFees) {
       obj.timeout_fees = message.timeoutFees.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.timeout_fees = [];
+      obj.timeout_fees = message.timeoutFees;
     }
     return obj;
   },
@@ -1974,8 +1974,8 @@ export const QueryPayeeRequest = {
   },
   toAmino(message: QueryPayeeRequest): QueryPayeeRequestAmino {
     const obj: any = {};
-    obj.channel_id = message.channelId;
-    obj.relayer = message.relayer;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
+    obj.relayer = message.relayer === "" ? undefined : message.relayer;
     return obj;
   },
   fromAminoMsg(object: QueryPayeeRequestAminoMsg): QueryPayeeRequest {
@@ -2076,7 +2076,7 @@ export const QueryPayeeResponse = {
   },
   toAmino(message: QueryPayeeResponse): QueryPayeeResponseAmino {
     const obj: any = {};
-    obj.payee_address = message.payeeAddress;
+    obj.payee_address = message.payeeAddress === "" ? undefined : message.payeeAddress;
     return obj;
   },
   fromAminoMsg(object: QueryPayeeResponseAminoMsg): QueryPayeeResponse {
@@ -2192,8 +2192,8 @@ export const QueryCounterpartyPayeeRequest = {
   },
   toAmino(message: QueryCounterpartyPayeeRequest): QueryCounterpartyPayeeRequestAmino {
     const obj: any = {};
-    obj.channel_id = message.channelId;
-    obj.relayer = message.relayer;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
+    obj.relayer = message.relayer === "" ? undefined : message.relayer;
     return obj;
   },
   fromAminoMsg(object: QueryCounterpartyPayeeRequestAminoMsg): QueryCounterpartyPayeeRequest {
@@ -2294,7 +2294,7 @@ export const QueryCounterpartyPayeeResponse = {
   },
   toAmino(message: QueryCounterpartyPayeeResponse): QueryCounterpartyPayeeResponseAmino {
     const obj: any = {};
-    obj.counterparty_payee = message.counterpartyPayee;
+    obj.counterparty_payee = message.counterpartyPayee === "" ? undefined : message.counterpartyPayee;
     return obj;
   },
   fromAminoMsg(object: QueryCounterpartyPayeeResponseAminoMsg): QueryCounterpartyPayeeResponse {
@@ -2411,7 +2411,7 @@ export const QueryFeeEnabledChannelsRequest = {
   toAmino(message: QueryFeeEnabledChannelsRequest): QueryFeeEnabledChannelsRequestAmino {
     const obj: any = {};
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
-    obj.query_height = message.queryHeight ? message.queryHeight.toString() : undefined;
+    obj.query_height = message.queryHeight !== BigInt(0) ? message.queryHeight.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryFeeEnabledChannelsRequestAminoMsg): QueryFeeEnabledChannelsRequest {
@@ -2536,7 +2536,7 @@ export const QueryFeeEnabledChannelsResponse = {
     if (message.feeEnabledChannels) {
       obj.fee_enabled_channels = message.feeEnabledChannels.map(e => e ? FeeEnabledChannel.toAmino(e) : undefined);
     } else {
-      obj.fee_enabled_channels = [];
+      obj.fee_enabled_channels = message.feeEnabledChannels;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -2654,8 +2654,8 @@ export const QueryFeeEnabledChannelRequest = {
   },
   toAmino(message: QueryFeeEnabledChannelRequest): QueryFeeEnabledChannelRequestAmino {
     const obj: any = {};
-    obj.port_id = message.portId;
-    obj.channel_id = message.channelId;
+    obj.port_id = message.portId === "" ? undefined : message.portId;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
     return obj;
   },
   fromAminoMsg(object: QueryFeeEnabledChannelRequestAminoMsg): QueryFeeEnabledChannelRequest {
@@ -2756,7 +2756,7 @@ export const QueryFeeEnabledChannelResponse = {
   },
   toAmino(message: QueryFeeEnabledChannelResponse): QueryFeeEnabledChannelResponseAmino {
     const obj: any = {};
-    obj.fee_enabled = message.feeEnabled;
+    obj.fee_enabled = message.feeEnabled === false ? undefined : message.feeEnabled;
     return obj;
   },
   fromAminoMsg(object: QueryFeeEnabledChannelResponseAminoMsg): QueryFeeEnabledChannelResponse {

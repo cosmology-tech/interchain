@@ -260,12 +260,12 @@ export const Config = {
     if (message.modules) {
       obj.modules = message.modules.map(e => e ? ModuleConfig.toAmino(e) : undefined);
     } else {
-      obj.modules = [];
+      obj.modules = message.modules;
     }
     if (message.golangBindings) {
       obj.golang_bindings = message.golangBindings.map(e => e ? GolangBinding.toAmino(e) : undefined);
     } else {
-      obj.golang_bindings = [];
+      obj.golang_bindings = message.golangBindings;
     }
     return obj;
   },
@@ -403,12 +403,12 @@ export const ModuleConfig = {
   },
   toAmino(message: ModuleConfig): ModuleConfigAmino {
     const obj: any = {};
-    obj.name = message.name;
+    obj.name = message.name === "" ? undefined : message.name;
     obj.config = message.config ? Any.toAmino(message.config) : undefined;
     if (message.golangBindings) {
       obj.golang_bindings = message.golangBindings.map(e => e ? GolangBinding.toAmino(e) : undefined);
     } else {
-      obj.golang_bindings = [];
+      obj.golang_bindings = message.golangBindings;
     }
     return obj;
   },
@@ -525,8 +525,8 @@ export const GolangBinding = {
   },
   toAmino(message: GolangBinding): GolangBindingAmino {
     const obj: any = {};
-    obj.interface_type = message.interfaceType;
-    obj.implementation = message.implementation;
+    obj.interface_type = message.interfaceType === "" ? undefined : message.interfaceType;
+    obj.implementation = message.implementation === "" ? undefined : message.implementation;
     return obj;
   },
   fromAminoMsg(object: GolangBindingAminoMsg): GolangBinding {

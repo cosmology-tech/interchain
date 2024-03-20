@@ -394,7 +394,7 @@ export const QueryDenomTraceRequest = {
   },
   toAmino(message: QueryDenomTraceRequest): QueryDenomTraceRequestAmino {
     const obj: any = {};
-    obj.hash = message.hash;
+    obj.hash = message.hash === "" ? undefined : message.hash;
     return obj;
   },
   fromAminoMsg(object: QueryDenomTraceRequestAminoMsg): QueryDenomTraceRequest {
@@ -721,7 +721,7 @@ export const QueryDenomTracesResponse = {
     if (message.denomTraces) {
       obj.denom_traces = message.denomTraces.map(e => e ? DenomTrace.toAmino(e) : undefined);
     } else {
-      obj.denom_traces = [];
+      obj.denom_traces = message.denomTraces;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -1007,7 +1007,7 @@ export const QueryDenomHashRequest = {
   },
   toAmino(message: QueryDenomHashRequest): QueryDenomHashRequestAmino {
     const obj: any = {};
-    obj.trace = message.trace;
+    obj.trace = message.trace === "" ? undefined : message.trace;
     return obj;
   },
   fromAminoMsg(object: QueryDenomHashRequestAminoMsg): QueryDenomHashRequest {
@@ -1108,7 +1108,7 @@ export const QueryDenomHashResponse = {
   },
   toAmino(message: QueryDenomHashResponse): QueryDenomHashResponseAmino {
     const obj: any = {};
-    obj.hash = message.hash;
+    obj.hash = message.hash === "" ? undefined : message.hash;
     return obj;
   },
   fromAminoMsg(object: QueryDenomHashResponseAminoMsg): QueryDenomHashResponse {
@@ -1224,8 +1224,8 @@ export const QueryEscrowAddressRequest = {
   },
   toAmino(message: QueryEscrowAddressRequest): QueryEscrowAddressRequestAmino {
     const obj: any = {};
-    obj.port_id = message.portId;
-    obj.channel_id = message.channelId;
+    obj.port_id = message.portId === "" ? undefined : message.portId;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
     return obj;
   },
   fromAminoMsg(object: QueryEscrowAddressRequestAminoMsg): QueryEscrowAddressRequest {
@@ -1326,7 +1326,7 @@ export const QueryEscrowAddressResponse = {
   },
   toAmino(message: QueryEscrowAddressResponse): QueryEscrowAddressResponseAmino {
     const obj: any = {};
-    obj.escrow_address = message.escrowAddress;
+    obj.escrow_address = message.escrowAddress === "" ? undefined : message.escrowAddress;
     return obj;
   },
   fromAminoMsg(object: QueryEscrowAddressResponseAminoMsg): QueryEscrowAddressResponse {
@@ -1427,7 +1427,7 @@ export const QueryTotalEscrowForDenomRequest = {
   },
   toAmino(message: QueryTotalEscrowForDenomRequest): QueryTotalEscrowForDenomRequestAmino {
     const obj: any = {};
-    obj.denom = message.denom;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: QueryTotalEscrowForDenomRequestAminoMsg): QueryTotalEscrowForDenomRequest {

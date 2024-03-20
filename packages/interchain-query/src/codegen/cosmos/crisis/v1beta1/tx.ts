@@ -220,9 +220,9 @@ export const MsgVerifyInvariant = {
   },
   toAmino(message: MsgVerifyInvariant): MsgVerifyInvariantAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.invariant_module_name = message.invariantModuleName;
-    obj.invariant_route = message.invariantRoute;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.invariant_module_name = message.invariantModuleName === "" ? undefined : message.invariantModuleName;
+    obj.invariant_route = message.invariantRoute === "" ? undefined : message.invariantRoute;
     return obj;
   },
   fromAminoMsg(object: MsgVerifyInvariantAminoMsg): MsgVerifyInvariant {
@@ -420,8 +420,8 @@ export const MsgUpdateParams = {
   },
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.constant_fee = message.constantFee ? Coin.toAmino(message.constantFee) : Coin.fromPartial({});
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.constant_fee = message.constantFee ? Coin.toAmino(message.constantFee) : Coin.toAmino(Coin.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {

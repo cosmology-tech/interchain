@@ -152,7 +152,7 @@ export const MsgSubmitEvidence = {
   },
   toAmino(message: MsgSubmitEvidence): MsgSubmitEvidenceAmino {
     const obj: any = {};
-    obj.submitter = message.submitter;
+    obj.submitter = message.submitter === "" ? undefined : message.submitter;
     obj.evidence = message.evidence ? GlobalDecoderRegistry.toAminoMsg(message.evidence) : undefined;
     return obj;
   },

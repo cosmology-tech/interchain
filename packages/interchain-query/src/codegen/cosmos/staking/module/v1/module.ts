@@ -174,11 +174,11 @@ export const Module = {
     if (message.hooksOrder) {
       obj.hooks_order = message.hooksOrder.map(e => e);
     } else {
-      obj.hooks_order = [];
+      obj.hooks_order = message.hooksOrder;
     }
-    obj.authority = message.authority;
-    obj.bech32_prefix_validator = message.bech32PrefixValidator;
-    obj.bech32_prefix_consensus = message.bech32PrefixConsensus;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.bech32_prefix_validator = message.bech32PrefixValidator === "" ? undefined : message.bech32PrefixValidator;
+    obj.bech32_prefix_consensus = message.bech32PrefixConsensus === "" ? undefined : message.bech32PrefixConsensus;
     return obj;
   },
   fromAminoMsg(object: ModuleAminoMsg): Module {

@@ -427,12 +427,12 @@ export const MsgSend = {
   },
   toAmino(message: MsgSend): MsgSendAmino {
     const obj: any = {};
-    obj.from_address = message.fromAddress;
-    obj.to_address = message.toAddress;
+    obj.from_address = message.fromAddress === "" ? undefined : message.fromAddress;
+    obj.to_address = message.toAddress === "" ? undefined : message.toAddress;
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.amount = [];
+      obj.amount = message.amount;
     }
     return obj;
   },
@@ -646,12 +646,12 @@ export const MsgMultiSend = {
     if (message.inputs) {
       obj.inputs = message.inputs.map(e => e ? Input.toAmino(e) : undefined);
     } else {
-      obj.inputs = [];
+      obj.inputs = message.inputs;
     }
     if (message.outputs) {
       obj.outputs = message.outputs.map(e => e ? Output.toAmino(e) : undefined);
     } else {
-      obj.outputs = [];
+      obj.outputs = message.outputs;
     }
     return obj;
   },
@@ -850,8 +850,8 @@ export const MsgUpdateParams = {
   },
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -1076,16 +1076,16 @@ export const MsgSetSendEnabled = {
   },
   toAmino(message: MsgSetSendEnabled): MsgSetSendEnabledAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     if (message.sendEnabled) {
       obj.send_enabled = message.sendEnabled.map(e => e ? SendEnabled.toAmino(e) : undefined);
     } else {
-      obj.send_enabled = [];
+      obj.send_enabled = message.sendEnabled;
     }
     if (message.useDefaultFor) {
       obj.use_default_for = message.useDefaultFor.map(e => e);
     } else {
-      obj.use_default_for = [];
+      obj.use_default_for = message.useDefaultFor;
     }
     return obj;
   },
@@ -1290,11 +1290,11 @@ export const MsgBurn = {
   },
   toAmino(message: MsgBurn): MsgBurnAmino {
     const obj: any = {};
-    obj.from_address = message.fromAddress;
+    obj.from_address = message.fromAddress === "" ? undefined : message.fromAddress;
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.amount = [];
+      obj.amount = message.amount;
     }
     return obj;
   },

@@ -241,17 +241,17 @@ export const Fee = {
     if (message.recvFee) {
       obj.recv_fee = message.recvFee.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.recv_fee = [];
+      obj.recv_fee = message.recvFee;
     }
     if (message.ackFee) {
       obj.ack_fee = message.ackFee.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.ack_fee = [];
+      obj.ack_fee = message.ackFee;
     }
     if (message.timeoutFee) {
       obj.timeout_fee = message.timeoutFee.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.timeout_fee = [];
+      obj.timeout_fee = message.timeoutFee;
     }
     return obj;
   },
@@ -390,11 +390,11 @@ export const PacketFee = {
   toAmino(message: PacketFee): PacketFeeAmino {
     const obj: any = {};
     obj.fee = message.fee ? Fee.toAmino(message.fee) : undefined;
-    obj.refund_address = message.refundAddress;
+    obj.refund_address = message.refundAddress === "" ? undefined : message.refundAddress;
     if (message.relayers) {
       obj.relayers = message.relayers.map(e => e);
     } else {
-      obj.relayers = [];
+      obj.relayers = message.relayers;
     }
     return obj;
   },
@@ -505,7 +505,7 @@ export const PacketFees = {
     if (message.packetFees) {
       obj.packet_fees = message.packetFees.map(e => e ? PacketFee.toAmino(e) : undefined);
     } else {
-      obj.packet_fees = [];
+      obj.packet_fees = message.packetFees;
     }
     return obj;
   },
@@ -632,7 +632,7 @@ export const IdentifiedPacketFees = {
     if (message.packetFees) {
       obj.packet_fees = message.packetFees.map(e => e ? PacketFee.toAmino(e) : undefined);
     } else {
-      obj.packet_fees = [];
+      obj.packet_fees = message.packetFees;
     }
     return obj;
   },

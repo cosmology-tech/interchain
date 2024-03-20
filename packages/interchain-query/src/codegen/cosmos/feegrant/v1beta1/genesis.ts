@@ -105,7 +105,7 @@ export const GenesisState = {
     if (message.allowances) {
       obj.allowances = message.allowances.map(e => e ? Grant.toAmino(e) : undefined);
     } else {
-      obj.allowances = [];
+      obj.allowances = message.allowances;
     }
     return obj;
   },

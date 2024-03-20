@@ -339,27 +339,27 @@ export const GenesisState = {
     if (message.identifiedFees) {
       obj.identified_fees = message.identifiedFees.map(e => e ? IdentifiedPacketFees.toAmino(e) : undefined);
     } else {
-      obj.identified_fees = [];
+      obj.identified_fees = message.identifiedFees;
     }
     if (message.feeEnabledChannels) {
       obj.fee_enabled_channels = message.feeEnabledChannels.map(e => e ? FeeEnabledChannel.toAmino(e) : undefined);
     } else {
-      obj.fee_enabled_channels = [];
+      obj.fee_enabled_channels = message.feeEnabledChannels;
     }
     if (message.registeredPayees) {
       obj.registered_payees = message.registeredPayees.map(e => e ? RegisteredPayee.toAmino(e) : undefined);
     } else {
-      obj.registered_payees = [];
+      obj.registered_payees = message.registeredPayees;
     }
     if (message.registeredCounterpartyPayees) {
       obj.registered_counterparty_payees = message.registeredCounterpartyPayees.map(e => e ? RegisteredCounterpartyPayee.toAmino(e) : undefined);
     } else {
-      obj.registered_counterparty_payees = [];
+      obj.registered_counterparty_payees = message.registeredCounterpartyPayees;
     }
     if (message.forwardRelayers) {
       obj.forward_relayers = message.forwardRelayers.map(e => e ? ForwardRelayerAddress.toAmino(e) : undefined);
     } else {
-      obj.forward_relayers = [];
+      obj.forward_relayers = message.forwardRelayers;
     }
     return obj;
   },
@@ -476,8 +476,8 @@ export const FeeEnabledChannel = {
   },
   toAmino(message: FeeEnabledChannel): FeeEnabledChannelAmino {
     const obj: any = {};
-    obj.port_id = message.portId;
-    obj.channel_id = message.channelId;
+    obj.port_id = message.portId === "" ? undefined : message.portId;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
     return obj;
   },
   fromAminoMsg(object: FeeEnabledChannelAminoMsg): FeeEnabledChannel {
@@ -608,9 +608,9 @@ export const RegisteredPayee = {
   },
   toAmino(message: RegisteredPayee): RegisteredPayeeAmino {
     const obj: any = {};
-    obj.channel_id = message.channelId;
-    obj.relayer = message.relayer;
-    obj.payee = message.payee;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
+    obj.relayer = message.relayer === "" ? undefined : message.relayer;
+    obj.payee = message.payee === "" ? undefined : message.payee;
     return obj;
   },
   fromAminoMsg(object: RegisteredPayeeAminoMsg): RegisteredPayee {
@@ -741,9 +741,9 @@ export const RegisteredCounterpartyPayee = {
   },
   toAmino(message: RegisteredCounterpartyPayee): RegisteredCounterpartyPayeeAmino {
     const obj: any = {};
-    obj.channel_id = message.channelId;
-    obj.relayer = message.relayer;
-    obj.counterparty_payee = message.counterpartyPayee;
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
+    obj.relayer = message.relayer === "" ? undefined : message.relayer;
+    obj.counterparty_payee = message.counterpartyPayee === "" ? undefined : message.counterpartyPayee;
     return obj;
   },
   fromAminoMsg(object: RegisteredCounterpartyPayeeAminoMsg): RegisteredCounterpartyPayee {
@@ -859,7 +859,7 @@ export const ForwardRelayerAddress = {
   },
   toAmino(message: ForwardRelayerAddress): ForwardRelayerAddressAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.packet_id = message.packetId ? PacketId.toAmino(message.packetId) : undefined;
     return obj;
   },

@@ -189,11 +189,11 @@ export const FungibleTokenPacketData = {
   },
   toAmino(message: FungibleTokenPacketData): FungibleTokenPacketDataAmino {
     const obj: any = {};
-    obj.denom = message.denom;
-    obj.amount = message.amount;
-    obj.sender = message.sender;
-    obj.receiver = message.receiver;
-    obj.memo = message.memo;
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.receiver = message.receiver === "" ? undefined : message.receiver;
+    obj.memo = message.memo === "" ? undefined : message.memo;
     return obj;
   },
   fromAminoMsg(object: FungibleTokenPacketDataAminoMsg): FungibleTokenPacketData {

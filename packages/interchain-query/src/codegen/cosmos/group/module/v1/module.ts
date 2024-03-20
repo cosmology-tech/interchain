@@ -130,8 +130,8 @@ export const Module = {
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
-    obj.max_execution_period = message.maxExecutionPeriod ? Duration.toAmino(message.maxExecutionPeriod) : Duration.fromPartial({});
-    obj.max_metadata_len = message.maxMetadataLen ? message.maxMetadataLen.toString() : undefined;
+    obj.max_execution_period = message.maxExecutionPeriod ? Duration.toAmino(message.maxExecutionPeriod) : Duration.toAmino(Duration.fromPartial({}));
+    obj.max_metadata_len = message.maxMetadataLen !== BigInt(0) ? message.maxMetadataLen.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ModuleAminoMsg): Module {

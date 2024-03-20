@@ -242,18 +242,18 @@ export const Permissions = {
   fromAmino(object: PermissionsAmino): Permissions {
     const message = createBasePermissions();
     if (object.level !== undefined && object.level !== null) {
-      message.level = permissions_LevelFromJSON(object.level);
+      message.level = object.level;
     }
     message.limitTypeUrls = object.limit_type_urls?.map(e => e) || [];
     return message;
   },
   toAmino(message: Permissions): PermissionsAmino {
     const obj: any = {};
-    obj.level = message.level;
+    obj.level = message.level === 0 ? undefined : message.level;
     if (message.limitTypeUrls) {
       obj.limit_type_urls = message.limitTypeUrls.map(e => e);
     } else {
-      obj.limit_type_urls = [];
+      obj.limit_type_urls = message.limitTypeUrls;
     }
     return obj;
   },
@@ -370,7 +370,7 @@ export const GenesisAccountPermissions = {
   },
   toAmino(message: GenesisAccountPermissions): GenesisAccountPermissionsAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.permissions = message.permissions ? Permissions.toAmino(message.permissions) : undefined;
     return obj;
   },
@@ -502,12 +502,12 @@ export const GenesisState = {
     if (message.accountPermissions) {
       obj.account_permissions = message.accountPermissions.map(e => e ? GenesisAccountPermissions.toAmino(e) : undefined);
     } else {
-      obj.account_permissions = [];
+      obj.account_permissions = message.accountPermissions;
     }
     if (message.disabledTypeUrls) {
       obj.disabled_type_urls = message.disabledTypeUrls.map(e => e);
     } else {
-      obj.disabled_type_urls = [];
+      obj.disabled_type_urls = message.disabledTypeUrls;
     }
     return obj;
   },

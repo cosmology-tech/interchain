@@ -140,7 +140,7 @@ export const MsgUpdateParams = {
   },
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.signer = message.signer;
+    obj.signer = message.signer === "" ? undefined : message.signer;
     obj.params = message.params ? Params.toAmino(message.params) : undefined;
     return obj;
   },

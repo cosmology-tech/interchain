@@ -247,9 +247,9 @@ export const Block = {
   },
   toAmino(message: Block): BlockAmino {
     const obj: any = {};
-    obj.header = message.header ? Header.toAmino(message.header) : Header.fromPartial({});
-    obj.data = message.data ? Data.toAmino(message.data) : Data.fromPartial({});
-    obj.evidence = message.evidence ? EvidenceList.toAmino(message.evidence) : EvidenceList.fromPartial({});
+    obj.header = message.header ? Header.toAmino(message.header) : Header.toAmino(Header.fromPartial({}));
+    obj.data = message.data ? Data.toAmino(message.data) : Data.toAmino(Data.fromPartial({}));
+    obj.evidence = message.evidence ? EvidenceList.toAmino(message.evidence) : EvidenceList.toAmino(EvidenceList.fromPartial({}));
     obj.last_commit = message.lastCommit ? Commit.toAmino(message.lastCommit) : undefined;
     return obj;
   },
@@ -546,11 +546,11 @@ export const Header = {
   },
   toAmino(message: Header): HeaderAmino {
     const obj: any = {};
-    obj.version = message.version ? Consensus.toAmino(message.version) : Consensus.fromPartial({});
-    obj.chain_id = message.chainId;
-    obj.height = message.height ? message.height.toString() : undefined;
+    obj.version = message.version ? Consensus.toAmino(message.version) : Consensus.toAmino(Consensus.fromPartial({}));
+    obj.chain_id = message.chainId === "" ? undefined : message.chainId;
+    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
     obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : new Date();
-    obj.last_block_id = message.lastBlockId ? BlockID.toAmino(message.lastBlockId) : BlockID.fromPartial({});
+    obj.last_block_id = message.lastBlockId ? BlockID.toAmino(message.lastBlockId) : BlockID.toAmino(BlockID.fromPartial({}));
     obj.last_commit_hash = message.lastCommitHash ? base64FromBytes(message.lastCommitHash) : undefined;
     obj.data_hash = message.dataHash ? base64FromBytes(message.dataHash) : undefined;
     obj.validators_hash = message.validatorsHash ? base64FromBytes(message.validatorsHash) : undefined;
@@ -559,7 +559,7 @@ export const Header = {
     obj.app_hash = message.appHash ? base64FromBytes(message.appHash) : undefined;
     obj.last_results_hash = message.lastResultsHash ? base64FromBytes(message.lastResultsHash) : undefined;
     obj.evidence_hash = message.evidenceHash ? base64FromBytes(message.evidenceHash) : undefined;
-    obj.proposer_address = message.proposerAddress;
+    obj.proposer_address = message.proposerAddress === "" ? undefined : message.proposerAddress;
     return obj;
   },
   fromAminoMsg(object: HeaderAminoMsg): Header {

@@ -926,8 +926,8 @@ export const QueryBalanceRequest = {
   },
   toAmino(message: QueryBalanceRequest): QueryBalanceRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.denom = message.denom;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: QueryBalanceRequestAminoMsg): QueryBalanceRequest {
@@ -1159,9 +1159,9 @@ export const QueryAllBalancesRequest = {
   },
   toAmino(message: QueryAllBalancesRequest): QueryAllBalancesRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
-    obj.resolve_denom = message.resolveDenom;
+    obj.resolve_denom = message.resolveDenom === false ? undefined : message.resolveDenom;
     return obj;
   },
   fromAminoMsg(object: QueryAllBalancesRequestAminoMsg): QueryAllBalancesRequest {
@@ -1286,7 +1286,7 @@ export const QueryAllBalancesResponse = {
     if (message.balances) {
       obj.balances = message.balances.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.balances = [];
+      obj.balances = message.balances;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -1404,7 +1404,7 @@ export const QuerySpendableBalancesRequest = {
   },
   toAmino(message: QuerySpendableBalancesRequest): QuerySpendableBalancesRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
     return obj;
   },
@@ -1530,7 +1530,7 @@ export const QuerySpendableBalancesResponse = {
     if (message.balances) {
       obj.balances = message.balances.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.balances = [];
+      obj.balances = message.balances;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -1648,8 +1648,8 @@ export const QuerySpendableBalanceByDenomRequest = {
   },
   toAmino(message: QuerySpendableBalanceByDenomRequest): QuerySpendableBalanceByDenomRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.denom = message.denom;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: QuerySpendableBalanceByDenomRequestAminoMsg): QuerySpendableBalanceByDenomRequest {
@@ -1976,7 +1976,7 @@ export const QueryTotalSupplyResponse = {
     if (message.supply) {
       obj.supply = message.supply.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.supply = [];
+      obj.supply = message.supply;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -2079,7 +2079,7 @@ export const QuerySupplyOfRequest = {
   },
   toAmino(message: QuerySupplyOfRequest): QuerySupplyOfRequestAmino {
     const obj: any = {};
-    obj.denom = message.denom;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: QuerySupplyOfRequestAminoMsg): QuerySupplyOfRequest {
@@ -2180,7 +2180,7 @@ export const QuerySupplyOfResponse = {
   },
   toAmino(message: QuerySupplyOfResponse): QuerySupplyOfResponseAmino {
     const obj: any = {};
-    obj.amount = message.amount ? Coin.toAmino(message.amount) : Coin.fromPartial({});
+    obj.amount = message.amount ? Coin.toAmino(message.amount) : Coin.toAmino(Coin.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QuerySupplyOfResponseAminoMsg): QuerySupplyOfResponse {
@@ -2363,7 +2363,7 @@ export const QueryParamsResponse = {
   },
   toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
+    obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
@@ -2589,7 +2589,7 @@ export const QueryDenomsMetadataResponse = {
     if (message.metadatas) {
       obj.metadatas = message.metadatas.map(e => e ? Metadata.toAmino(e) : undefined);
     } else {
-      obj.metadatas = [];
+      obj.metadatas = message.metadatas;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -2692,7 +2692,7 @@ export const QueryDenomMetadataRequest = {
   },
   toAmino(message: QueryDenomMetadataRequest): QueryDenomMetadataRequestAmino {
     const obj: any = {};
-    obj.denom = message.denom;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: QueryDenomMetadataRequestAminoMsg): QueryDenomMetadataRequest {
@@ -2793,7 +2793,7 @@ export const QueryDenomMetadataResponse = {
   },
   toAmino(message: QueryDenomMetadataResponse): QueryDenomMetadataResponseAmino {
     const obj: any = {};
-    obj.metadata = message.metadata ? Metadata.toAmino(message.metadata) : Metadata.fromPartial({});
+    obj.metadata = message.metadata ? Metadata.toAmino(message.metadata) : Metadata.toAmino(Metadata.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryDenomMetadataResponseAminoMsg): QueryDenomMetadataResponse {
@@ -2894,7 +2894,7 @@ export const QueryDenomMetadataByQueryStringRequest = {
   },
   toAmino(message: QueryDenomMetadataByQueryStringRequest): QueryDenomMetadataByQueryStringRequestAmino {
     const obj: any = {};
-    obj.denom = message.denom;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     return obj;
   },
   fromAminoMsg(object: QueryDenomMetadataByQueryStringRequestAminoMsg): QueryDenomMetadataByQueryStringRequest {
@@ -2995,7 +2995,7 @@ export const QueryDenomMetadataByQueryStringResponse = {
   },
   toAmino(message: QueryDenomMetadataByQueryStringResponse): QueryDenomMetadataByQueryStringResponseAmino {
     const obj: any = {};
-    obj.metadata = message.metadata ? Metadata.toAmino(message.metadata) : Metadata.fromPartial({});
+    obj.metadata = message.metadata ? Metadata.toAmino(message.metadata) : Metadata.toAmino(Metadata.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryDenomMetadataByQueryStringResponseAminoMsg): QueryDenomMetadataByQueryStringResponse {
@@ -3111,7 +3111,7 @@ export const QueryDenomOwnersRequest = {
   },
   toAmino(message: QueryDenomOwnersRequest): QueryDenomOwnersRequestAmino {
     const obj: any = {};
-    obj.denom = message.denom;
+    obj.denom = message.denom === "" ? undefined : message.denom;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
     return obj;
   },
@@ -3228,8 +3228,8 @@ export const DenomOwner = {
   },
   toAmino(message: DenomOwner): DenomOwnerAmino {
     const obj: any = {};
-    obj.address = message.address;
-    obj.balance = message.balance ? Coin.toAmino(message.balance) : Coin.fromPartial({});
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.balance = message.balance ? Coin.toAmino(message.balance) : Coin.toAmino(Coin.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: DenomOwnerAminoMsg): DenomOwner {
@@ -3354,7 +3354,7 @@ export const QueryDenomOwnersResponse = {
     if (message.denomOwners) {
       obj.denom_owners = message.denomOwners.map(e => e ? DenomOwner.toAmino(e) : undefined);
     } else {
-      obj.denom_owners = [];
+      obj.denom_owners = message.denomOwners;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -3481,7 +3481,7 @@ export const QuerySendEnabledRequest = {
     if (message.denoms) {
       obj.denoms = message.denoms.map(e => e);
     } else {
-      obj.denoms = [];
+      obj.denoms = message.denoms;
     }
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
     return obj;
@@ -3608,7 +3608,7 @@ export const QuerySendEnabledResponse = {
     if (message.sendEnabled) {
       obj.send_enabled = message.sendEnabled.map(e => e ? SendEnabled.toAmino(e) : undefined);
     } else {
-      obj.send_enabled = [];
+      obj.send_enabled = message.sendEnabled;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;

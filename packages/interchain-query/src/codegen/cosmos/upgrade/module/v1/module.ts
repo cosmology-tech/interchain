@@ -97,7 +97,7 @@ export const Module = {
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     return obj;
   },
   fromAminoMsg(object: ModuleAminoMsg): Module {

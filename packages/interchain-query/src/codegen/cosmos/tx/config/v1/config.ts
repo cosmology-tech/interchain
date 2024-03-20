@@ -129,8 +129,8 @@ export const Config = {
   },
   toAmino(message: Config): ConfigAmino {
     const obj: any = {};
-    obj.skip_ante_handler = message.skipAnteHandler;
-    obj.skip_post_handler = message.skipPostHandler;
+    obj.skip_ante_handler = message.skipAnteHandler === false ? undefined : message.skipAnteHandler;
+    obj.skip_post_handler = message.skipPostHandler === false ? undefined : message.skipPostHandler;
     return obj;
   },
   fromAminoMsg(object: ConfigAminoMsg): Config {

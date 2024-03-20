@@ -289,7 +289,7 @@ export const IdentifiedClientState = {
   },
   toAmino(message: IdentifiedClientState): IdentifiedClientStateAmino {
     const obj: any = {};
-    obj.client_id = message.clientId;
+    obj.client_id = message.clientId === "" ? undefined : message.clientId;
     obj.client_state = message.clientState ? Any.toAmino(message.clientState) : undefined;
     return obj;
   },
@@ -529,11 +529,11 @@ export const ClientConsensusStates = {
   },
   toAmino(message: ClientConsensusStates): ClientConsensusStatesAmino {
     const obj: any = {};
-    obj.client_id = message.clientId;
+    obj.client_id = message.clientId === "" ? undefined : message.clientId;
     if (message.consensusStates) {
       obj.consensus_states = message.consensusStates.map(e => e ? ConsensusStateWithHeight.toAmino(e) : undefined);
     } else {
-      obj.consensus_states = [];
+      obj.consensus_states = message.consensusStates;
     }
     return obj;
   },
@@ -646,8 +646,8 @@ export const Height = {
   },
   toAmino(message: Height): HeightAmino {
     const obj: any = {};
-    obj.revision_number = message.revisionNumber ? message.revisionNumber.toString() : undefined;
-    obj.revision_height = message.revisionHeight ? message.revisionHeight.toString() : undefined;
+    obj.revision_number = message.revisionNumber !== BigInt(0) ? message.revisionNumber.toString() : undefined;
+    obj.revision_height = message.revisionHeight !== BigInt(0) ? message.revisionHeight.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: HeightAminoMsg): Height {
@@ -757,7 +757,7 @@ export const Params = {
     if (message.allowedClients) {
       obj.allowed_clients = message.allowedClients.map(e => e);
     } else {
-      obj.allowed_clients = [];
+      obj.allowed_clients = message.allowedClients;
     }
     return obj;
   },

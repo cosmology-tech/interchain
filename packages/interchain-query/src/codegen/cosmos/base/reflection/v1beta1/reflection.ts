@@ -262,7 +262,7 @@ export const ListAllInterfacesResponse = {
     if (message.interfaceNames) {
       obj.interface_names = message.interfaceNames.map(e => e);
     } else {
-      obj.interface_names = [];
+      obj.interface_names = message.interfaceNames;
     }
     return obj;
   },
@@ -364,7 +364,7 @@ export const ListImplementationsRequest = {
   },
   toAmino(message: ListImplementationsRequest): ListImplementationsRequestAmino {
     const obj: any = {};
-    obj.interface_name = message.interfaceName;
+    obj.interface_name = message.interfaceName === "" ? undefined : message.interfaceName;
     return obj;
   },
   fromAminoMsg(object: ListImplementationsRequestAminoMsg): ListImplementationsRequest {
@@ -474,7 +474,7 @@ export const ListImplementationsResponse = {
     if (message.implementationMessageNames) {
       obj.implementation_message_names = message.implementationMessageNames.map(e => e);
     } else {
-      obj.implementation_message_names = [];
+      obj.implementation_message_names = message.implementationMessageNames;
     }
     return obj;
   },

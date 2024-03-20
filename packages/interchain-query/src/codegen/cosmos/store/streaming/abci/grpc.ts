@@ -391,12 +391,12 @@ export const ListenCommitRequest = {
   },
   toAmino(message: ListenCommitRequest): ListenCommitRequestAmino {
     const obj: any = {};
-    obj.block_height = message.blockHeight ? message.blockHeight.toString() : undefined;
+    obj.block_height = message.blockHeight !== BigInt(0) ? message.blockHeight.toString() : undefined;
     obj.res = message.res ? ResponseCommit.toAmino(message.res) : undefined;
     if (message.changeSet) {
       obj.change_set = message.changeSet.map(e => e ? StoreKVPair.toAmino(e) : undefined);
     } else {
-      obj.change_set = [];
+      obj.change_set = message.changeSet;
     }
     return obj;
   },

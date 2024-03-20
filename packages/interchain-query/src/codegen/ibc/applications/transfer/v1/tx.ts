@@ -343,14 +343,14 @@ export const MsgTransfer = {
   },
   toAmino(message: MsgTransfer): MsgTransferAmino {
     const obj: any = {};
-    obj.source_port = message.sourcePort;
-    obj.source_channel = message.sourceChannel;
+    obj.source_port = message.sourcePort === "" ? undefined : message.sourcePort;
+    obj.source_channel = message.sourceChannel === "" ? undefined : message.sourceChannel;
     obj.token = message.token ? Coin.toAmino(message.token) : undefined;
-    obj.sender = message.sender;
-    obj.receiver = message.receiver;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.receiver = message.receiver === "" ? undefined : message.receiver;
     obj.timeout_height = message.timeoutHeight ? Height.toAmino(message.timeoutHeight) : {};
-    obj.timeout_timestamp = message.timeoutTimestamp ? message.timeoutTimestamp.toString() : undefined;
-    obj.memo = message.memo;
+    obj.timeout_timestamp = message.timeoutTimestamp !== BigInt(0) ? message.timeoutTimestamp.toString() : undefined;
+    obj.memo = message.memo === "" ? undefined : message.memo;
     return obj;
   },
   fromAminoMsg(object: MsgTransferAminoMsg): MsgTransfer {
@@ -451,7 +451,7 @@ export const MsgTransferResponse = {
   },
   toAmino(message: MsgTransferResponse): MsgTransferResponseAmino {
     const obj: any = {};
-    obj.sequence = message.sequence ? message.sequence.toString() : undefined;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgTransferResponseAminoMsg): MsgTransferResponse {
@@ -567,7 +567,7 @@ export const MsgUpdateParams = {
   },
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.signer = message.signer;
+    obj.signer = message.signer === "" ? undefined : message.signer;
     obj.params = message.params ? Params.toAmino(message.params) : undefined;
     return obj;
   },

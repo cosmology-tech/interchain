@@ -207,8 +207,8 @@ export const MsgGrantAllowance = {
   },
   toAmino(message: MsgGrantAllowance): MsgGrantAllowanceAmino {
     const obj: any = {};
-    obj.granter = message.granter;
-    obj.grantee = message.grantee;
+    obj.granter = message.granter === "" ? undefined : message.granter;
+    obj.grantee = message.grantee === "" ? undefined : message.grantee;
     obj.allowance = message.allowance ? GlobalDecoderRegistry.toAminoMsg(message.allowance) : undefined;
     return obj;
   },
@@ -407,8 +407,8 @@ export const MsgRevokeAllowance = {
   },
   toAmino(message: MsgRevokeAllowance): MsgRevokeAllowanceAmino {
     const obj: any = {};
-    obj.granter = message.granter;
-    obj.grantee = message.grantee;
+    obj.granter = message.granter === "" ? undefined : message.granter;
+    obj.grantee = message.grantee === "" ? undefined : message.grantee;
     return obj;
   },
   fromAminoMsg(object: MsgRevokeAllowanceAminoMsg): MsgRevokeAllowance {
