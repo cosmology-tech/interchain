@@ -105,7 +105,7 @@ export const AccountQueryRequest = {
   },
   toAmino(message: AccountQueryRequest): AccountQueryRequestAmino {
     const obj: any = {};
-    obj.target = message.target;
+    obj.target = message.target === "" ? undefined : message.target;
     obj.request = message.request ? base64FromBytes(message.request) : undefined;
     return obj;
   },

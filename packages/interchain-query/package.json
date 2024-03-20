@@ -39,7 +39,7 @@
     "url": "https://github.com/pyramation/interchain-query/issues"
   },
   "devDependencies": {
-    "@cosmology/telescope": "^1.4.12",
+    "@cosmology/telescope": "^1.5.0",
     "@tanstack/react-query": "^4.29.12",
     "@types/jest": "^29.5.0",
     "copy": "^0.3.2",

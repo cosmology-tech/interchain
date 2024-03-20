@@ -226,7 +226,7 @@ export const Record = {
   },
   toAmino(message: Record): RecordAmino {
     const obj: any = {};
-    obj.name = message.name;
+    obj.name = message.name === "" ? undefined : message.name;
     obj.pub_key = message.pubKey ? Any.toAmino(message.pubKey) : undefined;
     obj.local = message.local ? Record_Local.toAmino(message.local) : undefined;
     obj.ledger = message.ledger ? Record_Ledger.toAmino(message.ledger) : undefined;

@@ -140,7 +140,7 @@ export const FileDescriptorsResponse = {
     if (message.files) {
       obj.files = message.files.map(e => e ? FileDescriptorProto.toAmino(e) : undefined);
     } else {
-      obj.files = [];
+      obj.files = message.files;
     }
     return obj;
   },

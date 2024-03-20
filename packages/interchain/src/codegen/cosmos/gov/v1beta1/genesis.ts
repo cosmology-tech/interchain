@@ -158,25 +158,25 @@ export const GenesisState = {
   },
   toAmino(message: GenesisState): GenesisStateAmino {
     const obj: any = {};
-    obj.starting_proposal_id = message.startingProposalId ? message.startingProposalId.toString() : undefined;
+    obj.starting_proposal_id = message.startingProposalId !== BigInt(0) ? message.startingProposalId.toString() : undefined;
     if (message.deposits) {
       obj.deposits = message.deposits.map(e => e ? Deposit.toAmino(e) : undefined);
     } else {
-      obj.deposits = [];
+      obj.deposits = message.deposits;
     }
     if (message.votes) {
       obj.votes = message.votes.map(e => e ? Vote.toAmino(e) : undefined);
     } else {
-      obj.votes = [];
+      obj.votes = message.votes;
     }
     if (message.proposals) {
       obj.proposals = message.proposals.map(e => e ? Proposal.toAmino(e) : undefined);
     } else {
-      obj.proposals = [];
+      obj.proposals = message.proposals;
     }
-    obj.deposit_params = message.depositParams ? DepositParams.toAmino(message.depositParams) : DepositParams.fromPartial({});
-    obj.voting_params = message.votingParams ? VotingParams.toAmino(message.votingParams) : VotingParams.fromPartial({});
-    obj.tally_params = message.tallyParams ? TallyParams.toAmino(message.tallyParams) : TallyParams.fromPartial({});
+    obj.deposit_params = message.depositParams ? DepositParams.toAmino(message.depositParams) : DepositParams.toAmino(DepositParams.fromPartial({}));
+    obj.voting_params = message.votingParams ? VotingParams.toAmino(message.votingParams) : VotingParams.toAmino(VotingParams.fromPartial({}));
+    obj.tally_params = message.tallyParams ? TallyParams.toAmino(message.tallyParams) : TallyParams.toAmino(TallyParams.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {

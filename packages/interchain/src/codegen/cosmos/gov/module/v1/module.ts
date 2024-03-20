@@ -89,8 +89,8 @@ export const Module = {
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
-    obj.max_metadata_len = message.maxMetadataLen ? message.maxMetadataLen.toString() : undefined;
-    obj.authority = message.authority;
+    obj.max_metadata_len = message.maxMetadataLen !== BigInt(0) ? message.maxMetadataLen.toString() : undefined;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     return obj;
   },
   fromAminoMsg(object: ModuleAminoMsg): Module {

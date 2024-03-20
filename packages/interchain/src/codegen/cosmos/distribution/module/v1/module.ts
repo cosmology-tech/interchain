@@ -81,8 +81,8 @@ export const Module = {
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
-    obj.fee_collector_name = message.feeCollectorName;
-    obj.authority = message.authority;
+    obj.fee_collector_name = message.feeCollectorName === "" ? undefined : message.feeCollectorName;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     return obj;
   },
   fromAminoMsg(object: ModuleAminoMsg): Module {

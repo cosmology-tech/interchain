@@ -248,8 +248,8 @@ export const MsgAuthorizeCircuitBreaker = {
   },
   toAmino(message: MsgAuthorizeCircuitBreaker): MsgAuthorizeCircuitBreakerAmino {
     const obj: any = {};
-    obj.granter = message.granter;
-    obj.grantee = message.grantee;
+    obj.granter = message.granter === "" ? undefined : message.granter;
+    obj.grantee = message.grantee === "" ? undefined : message.grantee;
     obj.permissions = message.permissions ? Permissions.toAmino(message.permissions) : undefined;
     return obj;
   },
@@ -320,7 +320,7 @@ export const MsgAuthorizeCircuitBreakerResponse = {
   },
   toAmino(message: MsgAuthorizeCircuitBreakerResponse): MsgAuthorizeCircuitBreakerResponseAmino {
     const obj: any = {};
-    obj.success = message.success;
+    obj.success = message.success === false ? undefined : message.success;
     return obj;
   },
   fromAminoMsg(object: MsgAuthorizeCircuitBreakerResponseAminoMsg): MsgAuthorizeCircuitBreakerResponse {
@@ -399,11 +399,11 @@ export const MsgTripCircuitBreaker = {
   },
   toAmino(message: MsgTripCircuitBreaker): MsgTripCircuitBreakerAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     if (message.msgTypeUrls) {
       obj.msg_type_urls = message.msgTypeUrls.map(e => e);
     } else {
-      obj.msg_type_urls = [];
+      obj.msg_type_urls = message.msgTypeUrls;
     }
     return obj;
   },
@@ -474,7 +474,7 @@ export const MsgTripCircuitBreakerResponse = {
   },
   toAmino(message: MsgTripCircuitBreakerResponse): MsgTripCircuitBreakerResponseAmino {
     const obj: any = {};
-    obj.success = message.success;
+    obj.success = message.success === false ? undefined : message.success;
     return obj;
   },
   fromAminoMsg(object: MsgTripCircuitBreakerResponseAminoMsg): MsgTripCircuitBreakerResponse {
@@ -553,11 +553,11 @@ export const MsgResetCircuitBreaker = {
   },
   toAmino(message: MsgResetCircuitBreaker): MsgResetCircuitBreakerAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     if (message.msgTypeUrls) {
       obj.msg_type_urls = message.msgTypeUrls.map(e => e);
     } else {
-      obj.msg_type_urls = [];
+      obj.msg_type_urls = message.msgTypeUrls;
     }
     return obj;
   },
@@ -628,7 +628,7 @@ export const MsgResetCircuitBreakerResponse = {
   },
   toAmino(message: MsgResetCircuitBreakerResponse): MsgResetCircuitBreakerResponseAmino {
     const obj: any = {};
-    obj.success = message.success;
+    obj.success = message.success === false ? undefined : message.success;
     return obj;
   },
   fromAminoMsg(object: MsgResetCircuitBreakerResponseAminoMsg): MsgResetCircuitBreakerResponse {

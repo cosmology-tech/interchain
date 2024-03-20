@@ -130,13 +130,13 @@ export const Module = {
   },
   toAmino(message: Module): ModuleAmino {
     const obj: any = {};
-    obj.bech32_prefix = message.bech32Prefix;
+    obj.bech32_prefix = message.bech32Prefix === "" ? undefined : message.bech32Prefix;
     if (message.moduleAccountPermissions) {
       obj.module_account_permissions = message.moduleAccountPermissions.map(e => e ? ModuleAccountPermission.toAmino(e) : undefined);
     } else {
-      obj.module_account_permissions = [];
+      obj.module_account_permissions = message.moduleAccountPermissions;
     }
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     return obj;
   },
   fromAminoMsg(object: ModuleAminoMsg): Module {
@@ -215,11 +215,11 @@ export const ModuleAccountPermission = {
   },
   toAmino(message: ModuleAccountPermission): ModuleAccountPermissionAmino {
     const obj: any = {};
-    obj.account = message.account;
+    obj.account = message.account === "" ? undefined : message.account;
     if (message.permissions) {
       obj.permissions = message.permissions.map(e => e);
     } else {
-      obj.permissions = [];
+      obj.permissions = message.permissions;
     }
     return obj;
   },

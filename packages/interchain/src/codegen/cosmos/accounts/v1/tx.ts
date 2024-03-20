@@ -188,8 +188,8 @@ export const MsgInit = {
   },
   toAmino(message: MsgInit): MsgInitAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.account_type = message.accountType;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.account_type = message.accountType === "" ? undefined : message.accountType;
     obj.message = message.message ? base64FromBytes(message.message) : undefined;
     return obj;
   },
@@ -271,7 +271,7 @@ export const MsgInitResponse = {
   },
   toAmino(message: MsgInitResponse): MsgInitResponseAmino {
     const obj: any = {};
-    obj.account_address = message.accountAddress;
+    obj.account_address = message.accountAddress === "" ? undefined : message.accountAddress;
     obj.response = message.response ? base64FromBytes(message.response) : undefined;
     return obj;
   },
@@ -364,8 +364,8 @@ export const MsgExecute = {
   },
   toAmino(message: MsgExecute): MsgExecuteAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.target = message.target;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.target = message.target === "" ? undefined : message.target;
     obj.message = message.message ? base64FromBytes(message.message) : undefined;
     return obj;
   },

@@ -83,11 +83,11 @@ export const GenesisState = {
   },
   toAmino(message: GenesisState): GenesisStateAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
+    obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
     if (message.accounts) {
       obj.accounts = message.accounts.map(e => e ? Any.toAmino(e) : undefined);
     } else {
-      obj.accounts = [];
+      obj.accounts = message.accounts;
     }
     return obj;
   },

@@ -711,7 +711,7 @@ export const QueryParamsResponse = {
   },
   toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
+    obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
@@ -781,7 +781,7 @@ export const QueryValidatorDistributionInfoRequest = {
   },
   toAmino(message: QueryValidatorDistributionInfoRequest): QueryValidatorDistributionInfoRequestAmino {
     const obj: any = {};
-    obj.validator_address = message.validatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
     return obj;
   },
   fromAminoMsg(object: QueryValidatorDistributionInfoRequestAminoMsg): QueryValidatorDistributionInfoRequest {
@@ -869,16 +869,16 @@ export const QueryValidatorDistributionInfoResponse = {
   },
   toAmino(message: QueryValidatorDistributionInfoResponse): QueryValidatorDistributionInfoResponseAmino {
     const obj: any = {};
-    obj.operator_address = message.operatorAddress;
+    obj.operator_address = message.operatorAddress === "" ? undefined : message.operatorAddress;
     if (message.selfBondRewards) {
       obj.self_bond_rewards = message.selfBondRewards.map(e => e ? DecCoin.toAmino(e) : undefined);
     } else {
-      obj.self_bond_rewards = [];
+      obj.self_bond_rewards = message.selfBondRewards;
     }
     if (message.commission) {
       obj.commission = message.commission.map(e => e ? DecCoin.toAmino(e) : undefined);
     } else {
-      obj.commission = [];
+      obj.commission = message.commission;
     }
     return obj;
   },
@@ -949,7 +949,7 @@ export const QueryValidatorOutstandingRewardsRequest = {
   },
   toAmino(message: QueryValidatorOutstandingRewardsRequest): QueryValidatorOutstandingRewardsRequestAmino {
     const obj: any = {};
-    obj.validator_address = message.validatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
     return obj;
   },
   fromAminoMsg(object: QueryValidatorOutstandingRewardsRequestAminoMsg): QueryValidatorOutstandingRewardsRequest {
@@ -1019,7 +1019,7 @@ export const QueryValidatorOutstandingRewardsResponse = {
   },
   toAmino(message: QueryValidatorOutstandingRewardsResponse): QueryValidatorOutstandingRewardsResponseAmino {
     const obj: any = {};
-    obj.rewards = message.rewards ? ValidatorOutstandingRewards.toAmino(message.rewards) : ValidatorOutstandingRewards.fromPartial({});
+    obj.rewards = message.rewards ? ValidatorOutstandingRewards.toAmino(message.rewards) : ValidatorOutstandingRewards.toAmino(ValidatorOutstandingRewards.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryValidatorOutstandingRewardsResponseAminoMsg): QueryValidatorOutstandingRewardsResponse {
@@ -1089,7 +1089,7 @@ export const QueryValidatorCommissionRequest = {
   },
   toAmino(message: QueryValidatorCommissionRequest): QueryValidatorCommissionRequestAmino {
     const obj: any = {};
-    obj.validator_address = message.validatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
     return obj;
   },
   fromAminoMsg(object: QueryValidatorCommissionRequestAminoMsg): QueryValidatorCommissionRequest {
@@ -1159,7 +1159,7 @@ export const QueryValidatorCommissionResponse = {
   },
   toAmino(message: QueryValidatorCommissionResponse): QueryValidatorCommissionResponseAmino {
     const obj: any = {};
-    obj.commission = message.commission ? ValidatorAccumulatedCommission.toAmino(message.commission) : ValidatorAccumulatedCommission.fromPartial({});
+    obj.commission = message.commission ? ValidatorAccumulatedCommission.toAmino(message.commission) : ValidatorAccumulatedCommission.toAmino(ValidatorAccumulatedCommission.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryValidatorCommissionResponseAminoMsg): QueryValidatorCommissionResponse {
@@ -1262,9 +1262,9 @@ export const QueryValidatorSlashesRequest = {
   },
   toAmino(message: QueryValidatorSlashesRequest): QueryValidatorSlashesRequestAmino {
     const obj: any = {};
-    obj.validator_address = message.validatorAddress;
-    obj.starting_height = message.startingHeight ? message.startingHeight.toString() : undefined;
-    obj.ending_height = message.endingHeight ? message.endingHeight.toString() : undefined;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
+    obj.starting_height = message.startingHeight !== BigInt(0) ? message.startingHeight.toString() : undefined;
+    obj.ending_height = message.endingHeight !== BigInt(0) ? message.endingHeight.toString() : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
     return obj;
   },
@@ -1347,7 +1347,7 @@ export const QueryValidatorSlashesResponse = {
     if (message.slashes) {
       obj.slashes = message.slashes.map(e => e ? ValidatorSlashEvent.toAmino(e) : undefined);
     } else {
-      obj.slashes = [];
+      obj.slashes = message.slashes;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -1430,8 +1430,8 @@ export const QueryDelegationRewardsRequest = {
   },
   toAmino(message: QueryDelegationRewardsRequest): QueryDelegationRewardsRequestAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
-    obj.validator_address = message.validatorAddress;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
+    obj.validator_address = message.validatorAddress === "" ? undefined : message.validatorAddress;
     return obj;
   },
   fromAminoMsg(object: QueryDelegationRewardsRequestAminoMsg): QueryDelegationRewardsRequest {
@@ -1502,7 +1502,7 @@ export const QueryDelegationRewardsResponse = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? DecCoin.toAmino(e) : undefined);
     } else {
-      obj.rewards = [];
+      obj.rewards = message.rewards;
     }
     return obj;
   },
@@ -1573,7 +1573,7 @@ export const QueryDelegationTotalRewardsRequest = {
   },
   toAmino(message: QueryDelegationTotalRewardsRequest): QueryDelegationTotalRewardsRequestAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
     return obj;
   },
   fromAminoMsg(object: QueryDelegationTotalRewardsRequestAminoMsg): QueryDelegationTotalRewardsRequest {
@@ -1653,12 +1653,12 @@ export const QueryDelegationTotalRewardsResponse = {
     if (message.rewards) {
       obj.rewards = message.rewards.map(e => e ? DelegationDelegatorReward.toAmino(e) : undefined);
     } else {
-      obj.rewards = [];
+      obj.rewards = message.rewards;
     }
     if (message.total) {
       obj.total = message.total.map(e => e ? DecCoin.toAmino(e) : undefined);
     } else {
-      obj.total = [];
+      obj.total = message.total;
     }
     return obj;
   },
@@ -1729,7 +1729,7 @@ export const QueryDelegatorValidatorsRequest = {
   },
   toAmino(message: QueryDelegatorValidatorsRequest): QueryDelegatorValidatorsRequestAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
     return obj;
   },
   fromAminoMsg(object: QueryDelegatorValidatorsRequestAminoMsg): QueryDelegatorValidatorsRequest {
@@ -1800,7 +1800,7 @@ export const QueryDelegatorValidatorsResponse = {
     if (message.validators) {
       obj.validators = message.validators.map(e => e);
     } else {
-      obj.validators = [];
+      obj.validators = message.validators;
     }
     return obj;
   },
@@ -1871,7 +1871,7 @@ export const QueryDelegatorWithdrawAddressRequest = {
   },
   toAmino(message: QueryDelegatorWithdrawAddressRequest): QueryDelegatorWithdrawAddressRequestAmino {
     const obj: any = {};
-    obj.delegator_address = message.delegatorAddress;
+    obj.delegator_address = message.delegatorAddress === "" ? undefined : message.delegatorAddress;
     return obj;
   },
   fromAminoMsg(object: QueryDelegatorWithdrawAddressRequestAminoMsg): QueryDelegatorWithdrawAddressRequest {
@@ -1941,7 +1941,7 @@ export const QueryDelegatorWithdrawAddressResponse = {
   },
   toAmino(message: QueryDelegatorWithdrawAddressResponse): QueryDelegatorWithdrawAddressResponseAmino {
     const obj: any = {};
-    obj.withdraw_address = message.withdrawAddress;
+    obj.withdraw_address = message.withdrawAddress === "" ? undefined : message.withdrawAddress;
     return obj;
   },
   fromAminoMsg(object: QueryDelegatorWithdrawAddressResponseAminoMsg): QueryDelegatorWithdrawAddressResponse {
@@ -2069,7 +2069,7 @@ export const QueryCommunityPoolResponse = {
     if (message.pool) {
       obj.pool = message.pool.map(e => e ? DecCoin.toAmino(e) : undefined);
     } else {
-      obj.pool = [];
+      obj.pool = message.pool;
     }
     return obj;
   },

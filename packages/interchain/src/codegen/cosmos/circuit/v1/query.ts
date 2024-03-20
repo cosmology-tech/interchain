@@ -168,7 +168,7 @@ export const QueryAccountRequest = {
   },
   toAmino(message: QueryAccountRequest): QueryAccountRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     return obj;
   },
   fromAminoMsg(object: QueryAccountRequestAminoMsg): QueryAccountRequest {
@@ -390,7 +390,7 @@ export const AccountsResponse = {
     if (message.accounts) {
       obj.accounts = message.accounts.map(e => e ? GenesisAccountPermissions.toAmino(e) : undefined);
     } else {
-      obj.accounts = [];
+      obj.accounts = message.accounts;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -520,7 +520,7 @@ export const DisabledListResponse = {
     if (message.disabledList) {
       obj.disabled_list = message.disabledList.map(e => e);
     } else {
-      obj.disabled_list = [];
+      obj.disabled_list = message.disabledList;
     }
     return obj;
   },

@@ -742,7 +742,7 @@ export const QueryAccountsResponse = {
     if (message.accounts) {
       obj.accounts = message.accounts.map(e => e ? Cosmos_authv1beta1AccountI_ToAmino((e as Any)) : undefined);
     } else {
-      obj.accounts = [];
+      obj.accounts = message.accounts;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -814,7 +814,7 @@ export const QueryAccountRequest = {
   },
   toAmino(message: QueryAccountRequest): QueryAccountRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     return obj;
   },
   fromAminoMsg(object: QueryAccountRequestAminoMsg): QueryAccountRequest {
@@ -1139,7 +1139,7 @@ export const QueryModuleAccountsResponse = {
     if (message.accounts) {
       obj.accounts = message.accounts.map(e => e ? Cosmos_authv1beta1ModuleAccountI_ToAmino((e as Any)) : undefined);
     } else {
-      obj.accounts = [];
+      obj.accounts = message.accounts;
     }
     return obj;
   },
@@ -1210,7 +1210,7 @@ export const QueryModuleAccountByNameRequest = {
   },
   toAmino(message: QueryModuleAccountByNameRequest): QueryModuleAccountByNameRequestAmino {
     const obj: any = {};
-    obj.name = message.name;
+    obj.name = message.name === "" ? undefined : message.name;
     return obj;
   },
   fromAminoMsg(object: QueryModuleAccountByNameRequestAminoMsg): QueryModuleAccountByNameRequest {
@@ -1407,7 +1407,7 @@ export const Bech32PrefixResponse = {
   },
   toAmino(message: Bech32PrefixResponse): Bech32PrefixResponseAmino {
     const obj: any = {};
-    obj.bech32_prefix = message.bech32Prefix;
+    obj.bech32_prefix = message.bech32Prefix === "" ? undefined : message.bech32Prefix;
     return obj;
   },
   fromAminoMsg(object: Bech32PrefixResponseAminoMsg): Bech32PrefixResponse {
@@ -1547,7 +1547,7 @@ export const AddressBytesToStringResponse = {
   },
   toAmino(message: AddressBytesToStringResponse): AddressBytesToStringResponseAmino {
     const obj: any = {};
-    obj.address_string = message.addressString;
+    obj.address_string = message.addressString === "" ? undefined : message.addressString;
     return obj;
   },
   fromAminoMsg(object: AddressBytesToStringResponseAminoMsg): AddressBytesToStringResponse {
@@ -1617,7 +1617,7 @@ export const AddressStringToBytesRequest = {
   },
   toAmino(message: AddressStringToBytesRequest): AddressStringToBytesRequestAmino {
     const obj: any = {};
-    obj.address_string = message.addressString;
+    obj.address_string = message.addressString === "" ? undefined : message.addressString;
     return obj;
   },
   fromAminoMsg(object: AddressStringToBytesRequestAminoMsg): AddressStringToBytesRequest {
@@ -1768,8 +1768,8 @@ export const QueryAccountAddressByIDRequest = {
   },
   toAmino(message: QueryAccountAddressByIDRequest): QueryAccountAddressByIDRequestAmino {
     const obj: any = {};
-    obj.id = message.id ? message.id.toString() : undefined;
-    obj.account_id = message.accountId ? message.accountId.toString() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.account_id = message.accountId !== BigInt(0) ? message.accountId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAccountAddressByIDRequestAminoMsg): QueryAccountAddressByIDRequest {
@@ -1839,7 +1839,7 @@ export const QueryAccountAddressByIDResponse = {
   },
   toAmino(message: QueryAccountAddressByIDResponse): QueryAccountAddressByIDResponseAmino {
     const obj: any = {};
-    obj.account_address = message.accountAddress;
+    obj.account_address = message.accountAddress === "" ? undefined : message.accountAddress;
     return obj;
   },
   fromAminoMsg(object: QueryAccountAddressByIDResponseAminoMsg): QueryAccountAddressByIDResponse {
@@ -1909,7 +1909,7 @@ export const QueryAccountInfoRequest = {
   },
   toAmino(message: QueryAccountInfoRequest): QueryAccountInfoRequestAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     return obj;
   },
   fromAminoMsg(object: QueryAccountInfoRequestAminoMsg): QueryAccountInfoRequest {
@@ -2014,7 +2014,7 @@ export const Cosmos_authv1beta1AccountI_InterfaceDecoder = (input: BinaryReader 
       return data;
   }
 };
-export const Cosmos_authv1beta1AccountI_FromAmino = (content: AnyAmino) => {
+export const Cosmos_authv1beta1AccountI_FromAmino = (content: AnyAmino): Any => {
   switch (content.type) {
     case "cosmos-sdk/BaseAccount":
       return Any.fromPartial({
@@ -2046,7 +2046,7 @@ export const Cosmos_authv1beta1ModuleAccountI_InterfaceDecoder = (input: BinaryR
       return data;
   }
 };
-export const Cosmos_authv1beta1ModuleAccountI_FromAmino = (content: AnyAmino) => {
+export const Cosmos_authv1beta1ModuleAccountI_FromAmino = (content: AnyAmino): Any => {
   switch (content.type) {
     case "cosmos-sdk/ModuleAccount":
       return Any.fromPartial({

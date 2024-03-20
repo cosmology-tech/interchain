@@ -163,7 +163,7 @@ export const MsgUpdateParams = {
   },
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     obj.block = message.block ? BlockParams.toAmino(message.block) : undefined;
     obj.evidence = message.evidence ? EvidenceParams.toAmino(message.evidence) : undefined;
     obj.validator = message.validator ? ValidatorParams.toAmino(message.validator) : undefined;

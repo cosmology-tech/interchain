@@ -1238,7 +1238,7 @@ export const MsgStoreCode = {
   },
   toAmino(message: MsgStoreCode): MsgStoreCodeAmino {
     const obj: any = {};
-    obj.sender = message.sender;
+    obj.sender = message.sender === "" ? undefined : message.sender;
     obj.wasm_byte_code = message.wasmByteCode ? toBase64(message.wasmByteCode) : undefined;
     obj.instantiate_permission = message.instantiatePermission ? AccessConfig.toAmino(message.instantiatePermission) : undefined;
     return obj;
@@ -1321,7 +1321,7 @@ export const MsgStoreCodeResponse = {
   },
   toAmino(message: MsgStoreCodeResponse): MsgStoreCodeResponseAmino {
     const obj: any = {};
-    obj.code_id = message.codeId ? message.codeId.toString() : undefined;
+    obj.code_id = message.codeId !== BigInt(0) ? message.codeId.toString() : undefined;
     obj.checksum = message.checksum ? base64FromBytes(message.checksum) : undefined;
     return obj;
   },
@@ -1445,15 +1445,15 @@ export const MsgInstantiateContract = {
   },
   toAmino(message: MsgInstantiateContract): MsgInstantiateContractAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.admin = message.admin;
-    obj.code_id = message.codeId ? message.codeId.toString() : undefined;
-    obj.label = message.label;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.admin = message.admin === "" ? undefined : message.admin;
+    obj.code_id = message.codeId !== BigInt(0) ? message.codeId.toString() : undefined;
+    obj.label = message.label === "" ? undefined : message.label;
     obj.msg = message.msg ? JSON.parse(fromUtf8(message.msg)) : undefined;
     if (message.funds) {
       obj.funds = message.funds.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.funds = [];
+      obj.funds = message.funds;
     }
     return obj;
   },
@@ -1535,7 +1535,7 @@ export const MsgInstantiateContractResponse = {
   },
   toAmino(message: MsgInstantiateContractResponse): MsgInstantiateContractResponseAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;
   },
@@ -1681,18 +1681,18 @@ export const MsgInstantiateContract2 = {
   },
   toAmino(message: MsgInstantiateContract2): MsgInstantiateContract2Amino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.admin = message.admin;
-    obj.code_id = message.codeId ? message.codeId.toString() : undefined;
-    obj.label = message.label;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.admin = message.admin === "" ? undefined : message.admin;
+    obj.code_id = message.codeId !== BigInt(0) ? message.codeId.toString() : undefined;
+    obj.label = message.label === "" ? undefined : message.label;
     obj.msg = message.msg ? JSON.parse(fromUtf8(message.msg)) : undefined;
     if (message.funds) {
       obj.funds = message.funds.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.funds = [];
+      obj.funds = message.funds;
     }
     obj.salt = message.salt ? base64FromBytes(message.salt) : undefined;
-    obj.fix_msg = message.fixMsg;
+    obj.fix_msg = message.fixMsg === false ? undefined : message.fixMsg;
     return obj;
   },
   fromAminoMsg(object: MsgInstantiateContract2AminoMsg): MsgInstantiateContract2 {
@@ -1773,7 +1773,7 @@ export const MsgInstantiateContract2Response = {
   },
   toAmino(message: MsgInstantiateContract2Response): MsgInstantiateContract2ResponseAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;
   },
@@ -1875,13 +1875,13 @@ export const MsgExecuteContract = {
   },
   toAmino(message: MsgExecuteContract): MsgExecuteContractAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.contract = message.contract;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.contract = message.contract === "" ? undefined : message.contract;
     obj.msg = message.msg ? JSON.parse(fromUtf8(message.msg)) : undefined;
     if (message.funds) {
       obj.funds = message.funds.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.funds = [];
+      obj.funds = message.funds;
     }
     return obj;
   },
@@ -2055,9 +2055,9 @@ export const MsgMigrateContract = {
   },
   toAmino(message: MsgMigrateContract): MsgMigrateContractAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.contract = message.contract;
-    obj.code_id = message.codeId ? message.codeId.toString() : undefined;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.contract = message.contract === "" ? undefined : message.contract;
+    obj.code_id = message.codeId !== BigInt(0) ? message.codeId.toString() : undefined;
     obj.msg = message.msg ? JSON.parse(fromUtf8(message.msg)) : undefined;
     return obj;
   },
@@ -2220,9 +2220,9 @@ export const MsgUpdateAdmin = {
   },
   toAmino(message: MsgUpdateAdmin): MsgUpdateAdminAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.new_admin = message.newAdmin;
-    obj.contract = message.contract;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.new_admin = message.newAdmin === "" ? undefined : message.newAdmin;
+    obj.contract = message.contract === "" ? undefined : message.contract;
     return obj;
   },
   fromAminoMsg(object: MsgUpdateAdminAminoMsg): MsgUpdateAdmin {
@@ -2360,8 +2360,8 @@ export const MsgClearAdmin = {
   },
   toAmino(message: MsgClearAdmin): MsgClearAdminAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.contract = message.contract;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.contract = message.contract === "" ? undefined : message.contract;
     return obj;
   },
   fromAminoMsg(object: MsgClearAdminAminoMsg): MsgClearAdmin {
@@ -2510,8 +2510,8 @@ export const MsgUpdateInstantiateConfig = {
   },
   toAmino(message: MsgUpdateInstantiateConfig): MsgUpdateInstantiateConfigAmino {
     const obj: any = {};
-    obj.sender = message.sender;
-    obj.code_id = message.codeId ? message.codeId.toString() : undefined;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.code_id = message.codeId !== BigInt(0) ? message.codeId.toString() : undefined;
     obj.new_instantiate_permission = message.newInstantiatePermission ? AccessConfig.toAmino(message.newInstantiatePermission) : undefined;
     return obj;
   },
@@ -2650,8 +2650,8 @@ export const MsgUpdateParams = {
   },
   toAmino(message: MsgUpdateParams): MsgUpdateParamsAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.params = message.params ? Params.toAmino(message.params) : Params.fromPartial({});
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: MsgUpdateParamsAminoMsg): MsgUpdateParams {
@@ -2800,8 +2800,8 @@ export const MsgSudoContract = {
   },
   toAmino(message: MsgSudoContract): MsgSudoContractAmino {
     const obj: any = {};
-    obj.authority = message.authority;
-    obj.contract = message.contract;
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.contract = message.contract === "" ? undefined : message.contract;
     obj.msg = message.msg ? JSON.parse(fromUtf8(message.msg)) : undefined;
     return obj;
   },
@@ -2960,11 +2960,11 @@ export const MsgPinCodes = {
   },
   toAmino(message: MsgPinCodes): MsgPinCodesAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     if (message.codeIds) {
       obj.code_ids = message.codeIds.map(e => e.toString());
     } else {
-      obj.code_ids = [];
+      obj.code_ids = message.codeIds;
     }
     return obj;
   },
@@ -3110,11 +3110,11 @@ export const MsgUnpinCodes = {
   },
   toAmino(message: MsgUnpinCodes): MsgUnpinCodesAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     if (message.codeIds) {
       obj.code_ids = message.codeIds.map(e => e.toString());
     } else {
-      obj.code_ids = [];
+      obj.code_ids = message.codeIds;
     }
     return obj;
   },
@@ -3350,20 +3350,20 @@ export const MsgStoreAndInstantiateContract = {
   },
   toAmino(message: MsgStoreAndInstantiateContract): MsgStoreAndInstantiateContractAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     obj.wasm_byte_code = message.wasmByteCode ? toBase64(message.wasmByteCode) : undefined;
     obj.instantiate_permission = message.instantiatePermission ? AccessConfig.toAmino(message.instantiatePermission) : undefined;
-    obj.unpin_code = message.unpinCode;
-    obj.admin = message.admin;
-    obj.label = message.label;
+    obj.unpin_code = message.unpinCode === false ? undefined : message.unpinCode;
+    obj.admin = message.admin === "" ? undefined : message.admin;
+    obj.label = message.label === "" ? undefined : message.label;
     obj.msg = message.msg ? JSON.parse(fromUtf8(message.msg)) : undefined;
     if (message.funds) {
       obj.funds = message.funds.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
-      obj.funds = [];
+      obj.funds = message.funds;
     }
-    obj.source = message.source;
-    obj.builder = message.builder;
+    obj.source = message.source === "" ? undefined : message.source;
+    obj.builder = message.builder === "" ? undefined : message.builder;
     obj.code_hash = message.codeHash ? base64FromBytes(message.codeHash) : undefined;
     return obj;
   },
@@ -3445,7 +3445,7 @@ export const MsgStoreAndInstantiateContractResponse = {
   },
   toAmino(message: MsgStoreAndInstantiateContractResponse): MsgStoreAndInstantiateContractResponseAmino {
     const obj: any = {};
-    obj.address = message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;
   },
@@ -3525,11 +3525,11 @@ export const MsgAddCodeUploadParamsAddresses = {
   },
   toAmino(message: MsgAddCodeUploadParamsAddresses): MsgAddCodeUploadParamsAddressesAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     if (message.addresses) {
       obj.addresses = message.addresses.map(e => e);
     } else {
-      obj.addresses = [];
+      obj.addresses = message.addresses;
     }
     return obj;
   },
@@ -3666,11 +3666,11 @@ export const MsgRemoveCodeUploadParamsAddresses = {
   },
   toAmino(message: MsgRemoveCodeUploadParamsAddresses): MsgRemoveCodeUploadParamsAddressesAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     if (message.addresses) {
       obj.addresses = message.addresses.map(e => e);
     } else {
-      obj.addresses = [];
+      obj.addresses = message.addresses;
     }
     return obj;
   },
@@ -3842,10 +3842,10 @@ export const MsgStoreAndMigrateContract = {
   },
   toAmino(message: MsgStoreAndMigrateContract): MsgStoreAndMigrateContractAmino {
     const obj: any = {};
-    obj.authority = message.authority;
+    obj.authority = message.authority === "" ? undefined : message.authority;
     obj.wasm_byte_code = message.wasmByteCode ? toBase64(message.wasmByteCode) : undefined;
     obj.instantiate_permission = message.instantiatePermission ? AccessConfig.toAmino(message.instantiatePermission) : undefined;
-    obj.contract = message.contract;
+    obj.contract = message.contract === "" ? undefined : message.contract;
     obj.msg = message.msg ? JSON.parse(fromUtf8(message.msg)) : undefined;
     return obj;
   },
@@ -3938,7 +3938,7 @@ export const MsgStoreAndMigrateContractResponse = {
   },
   toAmino(message: MsgStoreAndMigrateContractResponse): MsgStoreAndMigrateContractResponseAmino {
     const obj: any = {};
-    obj.code_id = message.codeId ? message.codeId.toString() : undefined;
+    obj.code_id = message.codeId !== BigInt(0) ? message.codeId.toString() : undefined;
     obj.checksum = message.checksum ? base64FromBytes(message.checksum) : undefined;
     obj.data = message.data ? base64FromBytes(message.data) : undefined;
     return obj;

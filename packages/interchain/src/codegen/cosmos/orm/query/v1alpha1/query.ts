@@ -362,12 +362,12 @@ export const GetRequest = {
   },
   toAmino(message: GetRequest): GetRequestAmino {
     const obj: any = {};
-    obj.message_name = message.messageName;
-    obj.index = message.index;
+    obj.message_name = message.messageName === "" ? undefined : message.messageName;
+    obj.index = message.index === "" ? undefined : message.index;
     if (message.values) {
       obj.values = message.values.map(e => e ? IndexValue.toAmino(e) : undefined);
     } else {
-      obj.values = [];
+      obj.values = message.values;
     }
     return obj;
   },
@@ -552,8 +552,8 @@ export const ListRequest = {
   },
   toAmino(message: ListRequest): ListRequestAmino {
     const obj: any = {};
-    obj.message_name = message.messageName;
-    obj.index = message.index;
+    obj.message_name = message.messageName === "" ? undefined : message.messageName;
+    obj.index = message.index === "" ? undefined : message.index;
     obj.prefix = message.prefix ? ListRequest_Prefix.toAmino(message.prefix) : undefined;
     obj.range = message.range ? ListRequest_Range.toAmino(message.range) : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
@@ -627,7 +627,7 @@ export const ListRequest_Prefix = {
     if (message.values) {
       obj.values = message.values.map(e => e ? IndexValue.toAmino(e) : undefined);
     } else {
-      obj.values = [];
+      obj.values = message.values;
     }
     return obj;
   },
@@ -708,12 +708,12 @@ export const ListRequest_Range = {
     if (message.start) {
       obj.start = message.start.map(e => e ? IndexValue.toAmino(e) : undefined);
     } else {
-      obj.start = [];
+      obj.start = message.start;
     }
     if (message.end) {
       obj.end = message.end.map(e => e ? IndexValue.toAmino(e) : undefined);
     } else {
-      obj.end = [];
+      obj.end = message.end;
     }
     return obj;
   },
@@ -796,7 +796,7 @@ export const ListResponse = {
     if (message.results) {
       obj.results = message.results.map(e => e ? Any.toAmino(e) : undefined);
     } else {
-      obj.results = [];
+      obj.results = message.results;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -945,12 +945,12 @@ export const IndexValue = {
   },
   toAmino(message: IndexValue): IndexValueAmino {
     const obj: any = {};
-    obj.uint = message.uint ? message.uint.toString() : undefined;
-    obj.int = message.int ? message.int.toString() : undefined;
-    obj.str = message.str;
+    obj.uint = message.uint !== BigInt(0) ? message.uint.toString() : undefined;
+    obj.int = message.int !== BigInt(0) ? message.int.toString() : undefined;
+    obj.str = message.str === null ? undefined : message.str;
     obj.bytes = message.bytes ? base64FromBytes(message.bytes) : undefined;
-    obj.enum = message.enum;
-    obj.bool = message.bool;
+    obj.enum = message.enum === null ? undefined : message.enum;
+    obj.bool = message.bool === null ? undefined : message.bool;
     obj.timestamp = message.timestamp ? Timestamp.toAmino(toTimestamp(message.timestamp)) : undefined;
     obj.duration = message.duration ? Duration.toAmino(message.duration) : undefined;
     return obj;
